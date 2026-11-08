@@ -18,8 +18,8 @@ jobs:
     name: Icons, packages and site
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -40,8 +40,8 @@ jobs:
     name: Contact sheets
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -55,7 +55,7 @@ jobs:
           git fetch --depth=1 origin ${{ github.base_ref }}
           names=$(git diff --name-only FETCH_HEAD -- icons badges | sed -n 's#^icons/\([a-z0-9-]*\)\.js$#\1*#p' | paste -sd, -)
           if [ -n "$names" ]; then node tools/check.mjs --only "$names" --with folder,mail,download; else echo "No icon changed."; fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: contact-sheets
@@ -66,8 +66,8 @@ jobs:
     name: Skill self-check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Allow Chrome's sandbox
@@ -76,7 +76,7 @@ jobs:
         run: node scripts/check.mjs
       - name: Export every gallery icon as static SVG
         run: node scripts/export.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: skill-check-out
