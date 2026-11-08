@@ -81,3 +81,14 @@ jobs:
         with:
           name: skill-check-out
           path: check-out/
+
+  # The status check required by the branch rule. A job skipped after a failed dependency
+  # counts as passing, so this one always runs and reads the results itself.
+  check:
+    name: check
+    needs: [library, skill]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require the library and skill jobs to pass
+        run: test "${{ needs.library.result }}" = success && test "${{ needs.skill.result }}" = success
