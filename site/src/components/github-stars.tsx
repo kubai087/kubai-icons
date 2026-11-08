@@ -5,6 +5,7 @@ import { Star } from "kubai-icons-react";
 import { Button } from "./ui/button";
 import { REPO, fetchStars } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { useTr } from "@/lib/use-locale";
 
 const KEY = "kubai-github-stars";
 /** How long a reading is reused. GitHub allows each visitor 60 unauthenticated requests an hour. */
@@ -25,6 +26,7 @@ function save(reading: Reading) {
 
 /** A link to the repository showing its current star count. */
 export function GitHubStars({ className }: { className?: string }) {
+  const tr = useTr();
   const [stars, setStars] = useState(AT_BUILD);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export function GitHubStars({ className }: { className?: string }) {
     };
   }, []);
 
-  const label = stars === null ? "GitHub" : `${stars.toLocaleString("en")} stars on GitHub`;
+  const label = stars === null ? "GitHub" : tr(`${stars.toLocaleString("en")} stars on GitHub`, `GitHub 星标数：${stars.toLocaleString("en")}`);
   return (
     <Button
       variant="outline"
