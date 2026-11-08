@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { RiGithubLine } from "@remixicon/react";
 import { Star } from "kubai-icons-react";
 import { Button } from "./ui/button";
@@ -29,11 +29,16 @@ export function GitHubStars({ className }: { className?: string }) {
   const tr = useTr();
   const [stars, setStars] = useState(AT_BUILD);
 
+  // A saved count is shown before the first paint of the app, so it never visibly swaps.
+  useLayoutEffect(() => {
+    const saved = load();
+    if (saved?.stars != null) setStars(saved.stars);
+  }, []);
+
   useEffect(() => {
     let live = true;
     const refresh = async () => {
       const saved = load();
-      if (saved?.stars != null) setStars(saved.stars);
       if (document.hidden || (saved && Date.now() - saved.at < FRESH)) return;
       // Stamped before asking, so other tabs wait and a failed request is not repeated at once.
       save({ stars: saved?.stars ?? null, at: Date.now() });
@@ -63,13 +68,12 @@ export function GitHubStars({ className }: { className?: string }) {
       render={<a href={REPO} target="_blank" rel="noreferrer" />}
     >
       {/* Narrow bars keep the count, which says more than the logo does. */}
-      <RiGithubLine className={cn("size-[18px]", stars !== null && "max-sm:hidden")} />
-      {stars !== null && (
-        <span className="inline-flex h-4 items-center gap-1 sm:ml-2 sm:border-l sm:pl-2">
-          <Star size={16} color="#F59E0B" trigger="parent" className="size-4" />
-          <span key={stars} className="swap-in">{compact.format(stars)}</span>
-        </span>
-      )}
+      <RiGithubLine className="size-[18px] max-sm:hidden" />
+      <span className="inline-flex h-4 items-center gap-1 sm:ml-2 sm:border-l sm:pl-2">
+        <Star size={16} color="#F59E0B" trigger="parent" className="size-4" />
+        {/* Three digits of room are held even before a count is known. */}
+        <span className="inline-block min-w-[3ch]">{stars === null ? "" : compact.format(stars)}</span>
+      </span>
     </Button>
   );
 }

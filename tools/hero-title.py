@@ -15,7 +15,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 
-PHRASES = ["一开", "一合", "一摇", "一摆", "一启", "一闭"]
+PHRASES = ["让图标", "动起来"]
 WEIGHT = 600
 ROUND = 100
 # The em box of a CJK font runs from 880 above the baseline to 120 below it.
