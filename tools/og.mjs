@@ -78,7 +78,7 @@ const page = (bundle) => `<!doctype html><meta charset="utf-8">
 <div class="stage"><div class="wall"></div></div>
 <div class="copy">
   <div class="brand">${logo}<span>Kubai Icons</span></div>
-  <h1>Folders open.<br>Bells ring.<br>Locks unlock.</h1>
+  <h1>Every icon<br>knows its move</h1>
   <div class="for"><span>React</span><span>Vue</span><span>Web</span><span>SVG</span></div>
 </div>
 <script>${bundle.replace(/<\/script/g, '<\\/script')}</script>`;
