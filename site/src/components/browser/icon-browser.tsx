@@ -15,6 +15,7 @@ import { Glide } from "@/components/kit/glide";
 import { chip, navItem, tile as tileStyle } from "@/components/kit/styles";
 import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
 import { track } from "@/lib/analytics";
+import { markIconSeen, markNewSetSeen, useNewSetSeen } from "@/lib/seen-new";
 import { agentPrompt, asset, requestUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
@@ -92,7 +93,12 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const hasNew = useMemo(() => list.some((i) => i.new), [list]);
+  const newSet = useMemo(() => list.filter((i) => i.new).map((i) => i.name).join(","), [list]);
+  const hasNew = newSet !== "";
+  const newSeen = useNewSetSeen(newSet);
+  // Opening the New category, or an icon in it, retires its mark.
+  useEffect(() => { if (hasNew && cat === NEW_CAT) markNewSetSeen(newSet); }, [hasNew, cat, newSet]);
+  useEffect(() => { if (open?.new) markIconSeen(open.name); }, [open]);
   const results = useMemo(() => (cat === NEW_CAT ? searchObjects(list.filter((i) => i.new), query) : searchObjects(list, query, cat)), [list, query, cat]);
   const hits = useMemo(() => (query.trim() ? new Map(results.map((r) => [r.name, matchedKeyword(r, query)])) : undefined), [results, query]);
 
@@ -153,7 +159,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           {hasNew && (
             <button type="button" aria-current={cat === NEW_CAT} onClick={() => pickCat(NEW_CAT)} className={navItem({ active: cat === NEW_CAT })}>
               <span className="truncate">{tr("New", "新增")}</span>
-              <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />
+              {!newSeen && <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />}
             </button>
           )}
           {cats.map((c) => (

@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Category, IconMeta } from "@/lib/icons";
 import { asset } from "@/lib/site";
+import { markIconSeen } from "@/lib/seen-new";
 import { IconDetail } from "./icon-detail";
 import { MIXED, mixedColor, usePrefs } from "./prefs";
 
@@ -9,6 +10,7 @@ import { MIXED, mixedColor, usePrefs } from "./prefs";
 export function IconPageView({ meta, related, categories, heading }: { meta: IconMeta; related: IconMeta[]; categories: Category[]; heading: string }) {
   const [prefs, setPrefs] = usePrefs();
   const [current, setCurrent] = useState(meta);
+  useEffect(() => { if (current.new) markIconSeen(current.name); }, [current]);
   return (
     <div className="max-w-3xl overflow-hidden rounded-panel border">
       <IconDetail

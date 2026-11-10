@@ -5,6 +5,7 @@ import { HoverIcon, prefetchIcon } from "@/components/kit/icon-image";
 import { PREVIEW_SIZE } from "./prefs";
 import { tile } from "@/components/kit/styles";
 import { toggleSaved, useSaved } from "@/lib/collection";
+import { useIconSeen } from "@/lib/seen-new";
 import { loadIcon, loadKeywordsLater, localName, onKeywords, peekIcon, peekKeywords, type IconMeta } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { useLocale, useTr } from "@/lib/use-locale";
@@ -38,6 +39,7 @@ type TileProps = { meta: IconMeta; size: number; raster?: number; color: string;
 export const IconTile = memo(function IconTile({ meta, size, raster, color, variant, selecting, hit, onOpen }: TileProps) {
   const icon = useIcon(meta);
   const saved = useSaved(meta.name);
+  const seen = useIconSeen(meta.name);
   const tr = useTr();
   const local = useLocalName(meta);
   const toggle = () => toggleSaved({ name: meta.name, color, variant });
@@ -61,7 +63,7 @@ export const IconTile = memo(function IconTile({ meta, size, raster, color, vari
         <span className="absolute inset-x-2 bottom-2 truncate text-center text-caption text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
           {local ?? meta.name}
         </span>
-        {meta.new && <span className="pointer-events-none absolute top-1.5 start-1.5 rounded-pill bg-brand px-1.5 text-[10px] leading-4 font-semibold text-white">{tr("New", "新")}</span>}
+        {meta.new && !seen && <span className="pointer-events-none absolute top-1.5 start-1.5 rounded-pill bg-brand px-1.5 text-[10px] leading-4 font-semibold text-white">{tr("New", "新")}</span>}
         {hit && <span className="absolute inset-x-2 bottom-2 truncate text-center text-caption text-muted-foreground transition-opacity group-hover:opacity-0">{hit}</span>}
       </button>
       {selecting ? (
