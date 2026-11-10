@@ -61,6 +61,7 @@ export const IconTile = memo(function IconTile({ meta, size, raster, color, vari
         <span className="absolute inset-x-2 bottom-2 truncate text-center text-caption text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
           {local ?? meta.name}
         </span>
+        {meta.new && <span className="pointer-events-none absolute top-1.5 start-1.5 rounded-pill bg-brand px-1.5 text-[10px] leading-4 font-semibold text-white">{tr("New", "新")}</span>}
         {hit && <span className="absolute inset-x-2 bottom-2 truncate text-center text-caption text-muted-foreground transition-opacity group-hover:opacity-0">{hit}</span>}
       </button>
       {selecting ? (

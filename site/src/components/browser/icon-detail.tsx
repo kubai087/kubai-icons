@@ -45,6 +45,8 @@ type Props = {
 };
 
 const LANG_KEY = "kubai-icons:code";
+/** The package each code tab installs, for the update command shown on new icons. */
+const UPDATE_PACKAGE = { react: "kubai-icons-react", vue: "kubai-icons-vue", html: "kubai-icons", js: "kubai-icons" };
 
 /** How long a touch preview holds the hover pose, including the move there. */
 const PLAY_MS = 1100;
@@ -246,6 +248,18 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
               ))}
             </div>
           </Tabs>
+        )}
+
+        {meta.new && (
+          <section className="space-y-2">
+            <p className="flex items-start gap-2 text-caption text-muted-foreground">
+              <span className="mt-px shrink-0 rounded-pill bg-brand px-1.5 text-[10px] leading-4 font-semibold text-white">{tr("New", "新")}</span>
+              {meta.since
+                ? tr("Added in v{version}. Projects on an earlier version need to update first.", "v{version} 新增，已安装旧版本的项目需要先更新。", { version: meta.since })
+                : tr("Coming in the next release. It can’t be installed from npm yet.", "将在下个版本发布，暂时还不能从 npm 安装。")}
+            </p>
+            {meta.since && <CodeBlock code={`npm i ${UPDATE_PACKAGE[lang as keyof typeof UPDATE_PACKAGE] ?? "kubai-icons"}@latest`} onCopy={() => track("install_copy", { icon: meta.name, via: "update" })} />}
+          </section>
         )}
 
         {keywords && (

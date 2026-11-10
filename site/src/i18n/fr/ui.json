@@ -232,5 +232,11 @@
  "{name} payment QR code": "Code QR de paiement {name}",
  "{n} icon": "{n} icône",
  "{n} icons": "{n} icônes",
- "Now with an agent skill": "Désormais avec un Agent Skill"
+ "Now with an agent skill": "Désormais avec un Agent Skill",
+ "Sort": "Tri",
+ "Default": "Par défaut",
+ "Newest": "Plus récentes",
+ "New": "Nouveau",
+ "Added in v{version}. Projects on an earlier version need to update first.": "Ajoutée dans la v{version}. Les projets sur une version antérieure doivent d’abord mettre à jour.",
+ "Coming in the next release. It can’t be installed from npm yet.": "Disponible dans la prochaine version. Pas encore installable depuis npm."
 }

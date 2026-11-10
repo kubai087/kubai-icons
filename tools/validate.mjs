@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { loadIcons, categories, root } from './registry.mjs';
+import { loadIcons, categories, root, releases } from './registry.mjs';
 import { renderInner } from '../packages/core/src/render.js';
 
 const NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -43,6 +43,16 @@ export function validate(icons, badges) {
       for (const m of [a, h]) if (/NaN|undefined|Infinity|\[object/.test(m)) { bad('markup contains NaN, undefined or Infinity'); break; }
     } catch (e) {
       bad(`fails to render: ${e.message}`);
+    }
+  }
+  // icons/versions.json may only list existing base icons, each once, under x.y.z versions.
+  const bases = new Set(icons.filter((ic) => !ic.base).map((ic) => ic.name)), listed = new Set();
+  for (const [version, names] of Object.entries(releases)) {
+    if (!/^\d+\.\d+\.\d+$/.test(version)) out.push(`icons/versions.json: "${version}" is not an x.y.z version`);
+    for (const n of names) {
+      if (!bases.has(n)) out.push(`icons/versions.json: "${n}" (${version}) is not an icon`);
+      if (listed.has(n)) out.push(`icons/versions.json: "${n}" is listed twice`);
+      listed.add(n);
     }
   }
   if (missing) console.warn(`${missing} icons have no keywords yet; CI will require them.`);

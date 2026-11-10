@@ -55,3 +55,20 @@ export async function loadIcons({ composites = true, strict = true } = {}) {
   }
   return { icons, bases, badges, failures };
 }
+
+/**
+ * The release each base icon first shipped in, from icons/versions.json ({ version: [names] }).
+ * Icons not listed there have not been released yet.
+ */
+export const releases = JSON.parse(fs.readFileSync(path.join(root, 'icons', 'versions.json'), 'utf8'));
+export function sinceMap() {
+  const since = new Map();
+  for (const [version, names] of Object.entries(releases)) for (const n of names) since.set(n, version);
+  return since;
+}
+/** Compares two x.y.z versions. */
+export const compareVersions = (a, b) => {
+  const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
+  for (let i = 0; i < 3; i++) if (pa[i] !== pb[i]) return pa[i] - pb[i];
+  return 0;
+};

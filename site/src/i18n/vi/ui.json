@@ -232,5 +232,11 @@
  "{name} payment QR code": "Mã QR thanh toán của {name}",
  "{n} icon": "{n} biểu tượng",
  "{n} icons": "{n} biểu tượng",
- "Now with an agent skill": "Nay có thêm Agent Skill"
+ "Now with an agent skill": "Nay có thêm Agent Skill",
+ "Sort": "Sắp xếp",
+ "Default": "Mặc định",
+ "Newest": "Mới nhất",
+ "New": "Mới",
+ "Added in v{version}. Projects on an earlier version need to update first.": "Thêm vào ở v{version}. Dự án dùng phiên bản cũ hơn cần cập nhật trước.",
+ "Coming in the next release. It can’t be installed from npm yet.": "Sẽ có trong bản phát hành tiếp theo. Chưa thể cài từ npm."
 }

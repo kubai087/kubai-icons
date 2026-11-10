@@ -12,6 +12,10 @@ export type IconMeta = {
   badge?: string;
   tap?: boolean;
   by?: string;
+  /** The release the icon first shipped in; absent until it is released. */
+  since?: string;
+  /** Added in the latest release that added icons, or not released yet. */
+  new?: boolean;
 };
 export type Category = { id: string; en: string; zh?: string };
 export type IconIndex = { version: string; count: number; bases: number; categories: Category[]; hashes: Record<string, string>; first: string[]; icons: IconMeta[] };
@@ -285,6 +289,14 @@ export function matchedKeyword(ic: Searchable, query: string) {
     }
   }
   return null;
+}
+
+/** Orders a list newest first: icons not yet released, then by the release they arrived in. */
+export function newestFirst<T extends IconMeta>(list: T[]): T[] {
+  const key = (m: IconMeta) => (m.since ?? "999.999.999").split(".").map(Number);
+  const newer = (a: number[], b: number[]) => b[0] - a[0] || b[1] - a[1] || b[2] - a[2];
+  // The sort is stable, so icons from one release keep their order.
+  return [...list].sort((a, b) => newer(key(a), key(b)));
 }
 
 export const pascal = (s: string) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) => c.toUpperCase());

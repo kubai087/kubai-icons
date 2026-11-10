@@ -11,7 +11,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { build, transform } from 'esbuild';
-import { loadIcons, categories, root } from './registry.mjs';
+import { loadIcons, categories, root, releases, sinceMap, compareVersions } from './registry.mjs';
 import { validate } from './validate.mjs';
 import { renderInner, renderSVG } from '../packages/core/src/render.js';
 
@@ -51,11 +51,15 @@ const englishOnly = (source) => source
   .replace(/^\s*zh:\s*(['"`]).*\1,?\n/m, '')
   .replace(/^(\s*tags:\s*\[)(.*)\]/m, (_, open, list) => `${open}${list.split(',').filter((t) => !HAN.test(t)).join(',')}]`);
 const built = icons.map((ic) => ({ ic, markup: renderInner(ic, { k: '__K__', paint: 'css', names: true }) }));
+// The release each icon first shipped in; a badged version shares its base's. Icons not yet
+// released have none.
+const since = sinceMap();
 const meta = icons.map((ic) => ({
   name: ic.name, category: ic.category, tags: (ic.tags || []).filter((t) => !HAN.test(t)),
   ...(ic.base ? { base: ic.base, badge: ic.badge } : {}),
   ...(ic.tap ? { tap: true } : {}),
-  ...(ic.by ? { by: ic.by } : {})
+  ...(ic.by ? { by: ic.by } : {}),
+  ...(since.has(ic.base ?? ic.name) ? { since: since.get(ic.base ?? ic.name) } : {})
 }));
 const version = JSON.parse(fs.readFileSync(path.join(root, 'packages/core/package.json'), 'utf8')).version;
 console.log(`${icons.length} icons (${icons.filter((i) => !i.base).length} bases) rendered in ${Date.now() - t0}ms`);
@@ -174,7 +178,12 @@ if (targets.has('site')) {
   // The index the site searches. It is revalidated on every visit and carries a hash of each
   // module, which lets the modules themselves be cached indefinitely.
   const hashes = Object.fromEntries([...chunks.keys()].map((chunk) => [chunk, crypto.createHash('sha256').update(fs.readFileSync(path.join(out, 'icons', `${chunk}.js`))).digest('hex').slice(0, 10)]));
-  write(path.join(out, 'index.json'), JSON.stringify({ version, count: icons.length, bases: icons.filter((i) => !i.base).length, categories, hashes, first: firstScreens.map((ic) => ic.name), icons: meta }));
+  // The site marks the icons of the latest release that added any, and those not released
+  // yet, as new. The first release added every icon, so it marks none.
+  const added = Object.keys(releases).sort(compareVersions);
+  const fresh = added.length > 1 ? added[added.length - 1] : null;
+  const siteMeta = meta.map((m) => (!m.since || m.since === fresh ? { ...m, new: true } : m));
+  write(path.join(out, 'index.json'), JSON.stringify({ version, count: icons.length, bases: icons.filter((i) => !i.base).length, categories, hashes, first: firstScreens.map((ic) => ic.name), icons: siteMeta }));
   // The markup behind /api/icon/<name>.svg, in one file per first two letters, so a
   // request reads only a small part of the set.
   const shards = new Map();

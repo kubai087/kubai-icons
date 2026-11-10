@@ -232,5 +232,11 @@
  "{name} payment QR code": "رمز QR للدفع: {name}",
  "{n} icon": "الأيقونات: {n}",
  "{n} icons": "الأيقونات: {n}",
- "Now with an agent skill": "متاحة الآن مع Agent Skill"
+ "Now with an agent skill": "متاحة الآن مع Agent Skill",
+ "Sort": "الترتيب",
+ "Default": "افتراضي",
+ "Newest": "الأحدث",
+ "New": "جديد",
+ "Added in v{version}. Projects on an earlier version need to update first.": "أُضيفت في v{version}. يجب تحديث المشاريع التي تستخدم إصدارًا أقدم أولًا.",
+ "Coming in the next release. It can’t be installed from npm yet.": "ستتوفر في الإصدار القادم، ولا يمكن تثبيتها من npm بعد."
 }

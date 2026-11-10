@@ -232,5 +232,11 @@
  "{name} payment QR code": "{name} の支払い用 QR コード",
  "{n} icon": "{n} 個のアイコン",
  "{n} icons": "{n} 個のアイコン",
- "Now with an agent skill": "新機能: Agent Skill"
+ "Now with an agent skill": "新機能: Agent Skill",
+ "Sort": "並び順",
+ "Default": "標準",
+ "Newest": "新着順",
+ "New": "新着",
+ "Added in v{version}. Projects on an earlier version need to update first.": "v{version} で追加。以前のバージョンを使っているプロジェクトは先に更新してください。",
+ "Coming in the next release. It can’t be installed from npm yet.": "次のリリースで公開予定です。まだ npm からはインストールできません。"
 }

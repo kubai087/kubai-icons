@@ -22,6 +22,7 @@
     "skill:check": "node scripts/check.mjs",
     "skill:pack": "node scripts/pack.mjs",
     "changeset": "changeset",
+    "version-packages": "changeset version && node tools/stamp-versions.mjs",
     "release": "npm run build:packages && changeset publish"
   },
   "devDependencies": {

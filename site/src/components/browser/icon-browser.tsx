@@ -13,7 +13,7 @@ import { SizeControl } from "@/components/kit/size-control";
 import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
 import { chip, navItem, raised, tile as tileStyle } from "@/components/kit/styles";
-import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
+import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, newestFirst, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
 import { track } from "@/lib/analytics";
 import { agentPrompt, asset, requestUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -22,15 +22,17 @@ import { IconGrid } from "./icon-grid";
 import { IconDialog } from "./icon-dialog";
 import { MIXED, MIXED_FILL, SWATCHES, mixedColor, usePrefs } from "./prefs";
 
+type Sort = "default" | "new";
 const readUrl = () => {
-  if (typeof window === "undefined") return { q: "", cat: "", icon: "" };
+  if (typeof window === "undefined") return { q: "", cat: "", icon: "", sort: "default" as Sort };
   const p = new URLSearchParams(window.location.search);
-  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "" };
+  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "", sort: (p.get("sort") === "new" ? "new" : "default") as Sort };
 };
-const writeUrl = (s: { q: string; cat: string; icon: string }) => {
+const writeUrl = (s: { q: string; cat: string; icon: string; sort: Sort }) => {
   const p = new URLSearchParams();
   if (s.q) p.set("q", s.q);
   if (s.cat) p.set("category", s.cat);
+  if (s.sort === "new") p.set("sort", "new");
   if (s.icon) p.set("icon", s.icon);
   const qs = p.toString();
   window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
@@ -50,6 +52,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
   const list = useMemo(() => (index ? prepare(index.icons, keywords ?? {}, locale) : []), [index, keywords, locale]);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
+  const [sort, setSort] = useState<Sort>("default");
   const [open, setOpen] = useState<IconMeta | null>(null);
   // The colour of the tile that opened the dialog, so the preview matches it in mixed mode.
   const [openColor, setOpenColor] = useState<string | null>(null);
@@ -74,11 +77,12 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
       else loadKeywordsLater(locale);
       setQ(u.q);
       setCat(u.cat);
+      setSort(u.sort);
       if (u.icon) setOpen(ix.icons.find((i) => i.name === u.icon) ?? null);
     }, () => setFailed(true));
   }, []);
   useEffect(load, [load]);
-  useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "" }); }, [q, cat, open, index]);
+  useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "", sort }); }, [q, cat, open, index, sort]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey))) && document.activeElement?.tagName !== "INPUT") {
@@ -90,7 +94,8 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const results = useMemo(() => searchObjects(list, query, cat), [list, query, cat]);
+  const found = useMemo(() => searchObjects(list, query, cat), [list, query, cat]);
+  const results = useMemo(() => (sort === "new" ? newestFirst(found) : found), [found, sort]);
   const hits = useMemo(() => (query.trim() ? new Map(results.map((r) => [r.name, matchedKeyword(r, query)])) : undefined), [results, query]);
 
   // A new category or query starts from the top of the grid, not somewhere in the middle
@@ -108,7 +113,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     if (first.current) { first.current = false; return; }
     const top = restScroll();
     if (window.scrollY > top) window.scrollTo({ top, behavior: "instant" });
-  }, [cat, query, restScroll]);
+  }, [cat, query, sort, restScroll]);
 
   // Search analytics: one event per settled query.
   useEffect(() => {
@@ -193,6 +198,12 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               onChange={(variant) => setPrefs({ variant })}
               label={tr("Variant", "样式")}
               options={[{ value: "color", label: tr("Color", "彩色") }, { value: "soft", label: tr("Soft", "柔和") }]}
+            />
+            <Segmented
+              value={sort}
+              onChange={(next) => { setRefiltered(true); setSort(next); if (next === "new") track("sort_newest"); }}
+              label={tr("Sort", "排序")}
+              options={[{ value: "default", label: tr("Default", "默认") }, { value: "new", label: tr("Newest", "最新") }]}
             />
             <Button className="max-lg:ms-auto" variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
               {selecting ? tr("Done", "完成") : tr("Select", "多选")}

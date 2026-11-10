@@ -35,7 +35,8 @@ jobs:
       - name: Version or publish
         uses: changesets/action@v2
         with:
-          version-script: npx changeset version
+          # Records the icons this release adds in icons/versions.json.
+          version-script: npm run version-packages
           publish-script: npm run release
           pr-title: "chore(release): version packages"
           commit-message: "chore(release): version packages"

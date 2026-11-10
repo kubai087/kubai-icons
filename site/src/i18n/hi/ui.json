@@ -232,5 +232,11 @@
  "{name} payment QR code": "{name} पेमेंट QR कोड",
  "{n} icon": "आइकन: {n}",
  "{n} icons": "आइकन: {n}",
- "Now with an agent skill": "अब उपलब्ध: Agent Skill"
+ "Now with an agent skill": "अब उपलब्ध: Agent Skill",
+ "Sort": "क्रम",
+ "Default": "डिफ़ॉल्ट",
+ "Newest": "नवीनतम",
+ "New": "नया",
+ "Added in v{version}. Projects on an earlier version need to update first.": "v{version} में जोड़ा गया। पुराने संस्करण वाले प्रोजेक्ट को पहले अपडेट करना होगा।",
+ "Coming in the next release. It can’t be installed from npm yet.": "अगली रिलीज़ में आएगा। अभी npm से इंस्टॉल नहीं किया जा सकता।"
 }
