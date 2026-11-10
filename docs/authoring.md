@@ -94,3 +94,9 @@ variant). `--only` accepts a trailing `*` (`--only 'archive*'` shows every compo
 in section 10 of `PROMPT.md` has to pass, and the command has to finish without errors.
 
 `npm run validate` checks every icon's metadata, names and markup.
+
+## Release versions
+
+`icons/versions.json` records the release each icon first shipped in. Leave a new icon out of
+it: releasing lists every icon not yet there under the new version (`npm run version-packages`),
+and the website marks those icons as new until a later release adds more.
