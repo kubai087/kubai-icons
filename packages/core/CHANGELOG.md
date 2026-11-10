@@ -1,5 +1,11 @@
 # kubai-icons
 
+## 0.4.1
+
+### Patch Changes
+
+- [#50](https://github.com/kubai087/kubai-icons/pull/50) [`8eecbe4`](https://github.com/kubai087/kubai-icons/commit/8eecbe4842d7ec922ee687d82361602705c8675b) Thanks [@kubai087](https://github.com/kubai087)! - Keep keyholes still on hover. The padlock (`lock`) now only lifts and swings its shackle, and `lock-keyhole` only presses its cylinder in; neither turns its keyhole.
+
 ## 0.4.0
 
 ### Minor Changes
