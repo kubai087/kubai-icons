@@ -220,5 +220,9 @@
  "dark gray": "ダークグレー",
  "inherited, else \"color\"": "継承、なければ \"color\"",
  "the feedback link or the author link opened.": "フィードバックのリンクまたは作者のリンクを開いた",
- "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>アイコンごとに 1 モジュール。</0> アイコンのモジュールには副作用がないため、バンドラーはインポートしていないアイコンを取り除きます。圧縮して gzip をかけると、最初の React または Vue アイコンは共有ランタイムを含めて約 4 KB、以降のアイコンは 1 つあたり約 0.6 KB 増えます。"
+ "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>アイコンごとに 1 モジュール。</0> アイコンのモジュールには副作用がないため、バンドラーはインポートしていないアイコンを取り除きます。圧縮して gzip をかけると、最初の React または Vue アイコンは共有ランタイムを含めて約 4 KB、以降のアイコンは 1 つあたり約 0.6 KB 増えます。",
+ "Updating": "アップデート",
+ "New icons come out in new releases. To use them, update the package your project installs:": "新しいアイコンは新しいリリースで追加されます。使うには、プロジェクトでインストールしているパッケージを更新してください。",
+ "CDN links that use <0>@0</0>, such as <1>kubai-icons@0</1>, load the latest 0.x release, so they get new icons without any change. The CDN can take a while to switch to a new release.": "<1>kubai-icons@0</1> のように <0>@0</0> を使う CDN リンクは最新の 0.x リリースを読み込むため、変更なしで新しいアイコンを使えます。新しいリリースに切り替わるまで、CDN では少し時間がかかることがあります。",
+ "In the <0>icon browser</0>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.": "<0>アイコンブラウザー</0>では、「新着」カテゴリーに最新リリースで追加されたアイコンが表示され、新しいアイコンのパネルには必要なリリースが表示されます。"
 }

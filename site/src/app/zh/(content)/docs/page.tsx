@@ -52,6 +52,20 @@ export default function App() {
           <p>
             各个软件包遵循语义化版本规范，并同时发布。重命名或移除图标属于破坏性变更，重新绘制图标则不算。发布说明见 <a href={`${REPO}/releases`}>GitHub</a>。
           </p>
+          <h2>更新</h2>
+          <p>新图标随新版本发布。要使用新图标，请更新项目安装的软件包：</p>
+        </div>
+      <Code lang="bash" code={`npm install kubai-icons-react@latest    # React
+npm install kubai-icons-vue@latest      # Vue
+npm install kubai-icons@latest          # JavaScript and the web component
+npm install kubai-icons-static@latest   # static SVG files`} />
+      <div className="my-5 space-y-5">
+          <p>
+            使用 <code>@0</code> 的 CDN 链接（例如 <code>kubai-icons@0</code>）会加载最新的 0.x 版本，不用改代码就能用上新图标。新版本发布后，CDN 可能需要一段时间才会切换过去。
+          </p>
+          <p>
+            在<Link href="/zh/icons/">图标页</Link>中，“新增”分类列出最新版本加入的图标，每个新图标的详情面板会注明需要哪个版本。
+          </p>
         </div>
     </Prose>
   );

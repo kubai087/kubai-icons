@@ -220,5 +220,9 @@
  "dark gray": "тёмно-серый",
  "inherited, else \"color\"": "наследуется, иначе \"color\"",
  "the feedback link or the author link opened.": "переход по ссылке обратной связи или ссылке на автора.",
- "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>Один модуль на иконку.</0> Модули иконок не имеют побочных эффектов, поэтому сборщики удаляют иконки, которые вы не импортируете. После минификации и gzip первая иконка React или Vue добавляет около 4 КБ вместе с общей средой выполнения, а каждая следующая — около 0,6 КБ."
+ "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>Один модуль на иконку.</0> Модули иконок не имеют побочных эффектов, поэтому сборщики удаляют иконки, которые вы не импортируете. После минификации и gzip первая иконка React или Vue добавляет около 4 КБ вместе с общей средой выполнения, а каждая следующая — около 0,6 КБ.",
+ "Updating": "Обновление",
+ "New icons come out in new releases. To use them, update the package your project installs:": "Новые иконки выходят в новых релизах. Чтобы пользоваться ими, обновите пакет, установленный в проекте:",
+ "CDN links that use <0>@0</0>, such as <1>kubai-icons@0</1>, load the latest 0.x release, so they get new icons without any change. The CDN can take a while to switch to a new release.": "Ссылки на CDN с <0>@0</0>, например <1>kubai-icons@0</1>, загружают последний релиз 0.x, поэтому новые иконки появляются без изменений в коде. CDN может переключиться на новый релиз не сразу.",
+ "In the <0>icon browser</0>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.": "В <0>каталоге иконок</0> категория «Новое» показывает иконки из последнего релиза, а на панели каждой новой иконки указан нужный ей релиз."
 }

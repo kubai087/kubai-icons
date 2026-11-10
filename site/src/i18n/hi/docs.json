@@ -220,5 +220,9 @@
  "dark gray": "गहरा स्लेटी",
  "inherited, else \"color\"": "इनहेरिट होता है, नहीं तो \"color\"",
  "the feedback link or the author link opened.": "खोला गया फ़ीडबैक लिंक या रचयिता का लिंक।",
- "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>हर आइकन का एक मॉड्यूल।</0> आइकन मॉड्यूल में कोई side effect नहीं होता, इसलिए bundler उन आइकन को हटा देते हैं जिन्हें आप इंपोर्ट नहीं करते। Minify और gzip करने के बाद पहला React या Vue आइकन, साझा रनटाइम सहित, लगभग 4 KB जोड़ता है और हर अगला आइकन लगभग 0.6 KB।"
+ "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>हर आइकन का एक मॉड्यूल।</0> आइकन मॉड्यूल में कोई side effect नहीं होता, इसलिए bundler उन आइकन को हटा देते हैं जिन्हें आप इंपोर्ट नहीं करते। Minify और gzip करने के बाद पहला React या Vue आइकन, साझा रनटाइम सहित, लगभग 4 KB जोड़ता है और हर अगला आइकन लगभग 0.6 KB।",
+ "Updating": "अपडेट करना",
+ "New icons come out in new releases. To use them, update the package your project installs:": "नए आइकन नई रिलीज़ के साथ आते हैं। उन्हें इस्तेमाल करने के लिए वह पैकेज अपडेट करें जो आपका प्रोजेक्ट इंस्टॉल करता है:",
+ "CDN links that use <0>@0</0>, such as <1>kubai-icons@0</1>, load the latest 0.x release, so they get new icons without any change. The CDN can take a while to switch to a new release.": "<0>@0</0> वाले CDN लिंक, जैसे <1>kubai-icons@0</1>, नवीनतम 0.x रिलीज़ लोड करते हैं, इसलिए बिना कोई बदलाव किए नए आइकन मिल जाते हैं। नई रिलीज़ पर जाने में CDN को कुछ समय लग सकता है।",
+ "In the <0>icon browser</0>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.": "<0>आइकन ब्राउज़र</0> में “नया” श्रेणी नवीनतम रिलीज़ में जोड़े गए आइकन दिखाती है, और हर नए आइकन का पैनल बताता है कि उसे कौन-सी रिलीज़ चाहिए।"
 }

@@ -52,6 +52,20 @@ export default function App() {
           <p>
             The packages follow semantic versioning and are released together. Renaming or removing an icon is a breaking change; redrawing one is not. Release notes are published on <a href={`${REPO}/releases`}>GitHub</a>.
           </p>
+          <h2>Updating</h2>
+          <p>New icons come out in new releases. To use them, update the package your project installs:</p>
+        </div>
+      <Code lang="bash" code={`npm install kubai-icons-react@latest    # React
+npm install kubai-icons-vue@latest      # Vue
+npm install kubai-icons@latest          # JavaScript and the web component
+npm install kubai-icons-static@latest   # static SVG files`} />
+      <div className="my-5 space-y-5">
+          <p>
+            CDN links that use <code>@0</code>, such as <code>kubai-icons@0</code>, load the latest 0.x release, so they get new icons without any change. The CDN can take a while to switch to a new release.
+          </p>
+          <p>
+            In the <Link href="/icons/">icon browser</Link>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.
+          </p>
         </div>
     </Prose>
   );

@@ -220,5 +220,9 @@
  "dark gray": "رمادي داكن",
  "inherited, else \"color\"": "موروث، وإلا \"color\"",
  "the feedback link or the author link opened.": "فتح رابط الملاحظات أو رابط المؤلف.",
- "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>وحدة لكل أيقونة.</0> وحدات الأيقونات خالية من الآثار الجانبية، فتزيل أدوات التجميع الأيقونات التي لا تستوردها. بعد التصغير والضغط بـ gzip، تضيف أول أيقونة React أو Vue نحو 4 كيلوبايت، بما في ذلك وقت التشغيل المشترك، وتضيف كل أيقونة لاحقة نحو 0.6 كيلوبايت."
+ "<0>One module per icon.</0> Icon modules are side-effect free, so bundlers remove icons you do not import. Minified and gzipped, the first React or Vue icon adds about 4 KB, including the shared runtime, and each further icon about 0.6 KB.": "<0>وحدة لكل أيقونة.</0> وحدات الأيقونات خالية من الآثار الجانبية، فتزيل أدوات التجميع الأيقونات التي لا تستوردها. بعد التصغير والضغط بـ gzip، تضيف أول أيقونة React أو Vue نحو 4 كيلوبايت، بما في ذلك وقت التشغيل المشترك، وتضيف كل أيقونة لاحقة نحو 0.6 كيلوبايت.",
+ "Updating": "التحديث",
+ "New icons come out in new releases. To use them, update the package your project installs:": "تصدر الأيقونات الجديدة مع الإصدارات الجديدة. لاستخدامها، حدّث الحزمة التي يثبّتها مشروعك:",
+ "CDN links that use <0>@0</0>, such as <1>kubai-icons@0</1>, load the latest 0.x release, so they get new icons without any change. The CDN can take a while to switch to a new release.": "روابط CDN التي تستخدم <0>@0</0>، مثل <1>kubai-icons@0</1>، تحمّل أحدث إصدار من 0.x، فتحصل على الأيقونات الجديدة دون أي تغيير. قد تحتاج شبكة CDN بعض الوقت للانتقال إلى إصدار جديد.",
+ "In the <0>icon browser</0>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.": "في <0>متصفح الأيقونات</0>، تعرض فئة «جديد» الأيقونات المضافة في أحدث إصدار، وتبيّن لوحة كل أيقونة جديدة الإصدار الذي تحتاجه."
 }
