@@ -97,7 +97,7 @@ export function HeroWall() {
   }, []);
 
   return (
-    <div ref={ref} className="mx-auto grid w-full max-w-xl grid-cols-5 gap-tiles lg:max-w-none">
+    <div ref={ref} className="grid w-full max-w-xl grid-cols-5 gap-tiles lg:max-w-none">
       {WALL.map((Icon, i) => {
         const line = STORY.findIndex((s) => s.Icon === Icon);
         return <WallTile key={i} Icon={Icon} color={COLORS[i % COLORS.length]} offset={offsetOf(i)} running={running} index={i} told={line >= 0} playing={line >= 0 && line === beat} />;

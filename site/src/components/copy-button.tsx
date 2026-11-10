@@ -8,16 +8,37 @@ import { useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
 
+/**
+ * Copies through a hidden text field. Pages served over plain http from a LAN address, and some
+ * embedded browsers, have no clipboard API or refuse it, but still allow this older way.
+ */
+function copyBySelection(text: string) {
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  Object.assign(field.style, { position: "fixed", top: "0", left: "0", opacity: "0", pointerEvents: "none" });
+  const focused = document.activeElement as HTMLElement | null;
+  document.body.append(field);
+  field.select();
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch { ok = false; }
+  field.remove();
+  focused?.focus({ preventScroll: true });
+  return ok;
+}
+
 /** Copies text and confirms it in a toast; `quiet` leaves the confirming to the caller. */
 export async function copyText(text: string, { quiet = false }: { quiet?: boolean } = {}) {
+  let ok = false;
   try {
     await navigator.clipboard.writeText(text);
-    if (!quiet) toast.success(pick(browserLocale(), "Copied", "已复制"));
-    return true;
+    ok = true;
   } catch {
-    toast.error(pick(browserLocale(), "Copy failed", "复制失败"));
-    return false;
+    ok = copyBySelection(text);
   }
+  if (ok && !quiet) toast.success(pick(browserLocale(), "Copied", "已复制"));
+  if (!ok) toast.error(pick(browserLocale(), "Copy failed", "复制失败"));
+  return ok;
 }
 
 export function CopyButton({ text, className, onCopy }: { text: string; className?: string; onCopy?: () => void }) {
