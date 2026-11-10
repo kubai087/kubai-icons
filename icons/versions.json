@@ -890,5 +890,16 @@
     "yoga-mat",
     "zoom-in",
     "zoom-out"
+  ],
+  "0.4.0": [
+    "bomb",
+    "dock",
+    "eject",
+    "item-tracker",
+    "option",
+    "retro-computer",
+    "usb-c-port",
+    "wireless-charger",
+    "wristwatch"
   ]
 }

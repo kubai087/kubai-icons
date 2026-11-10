@@ -1,5 +1,18 @@
 # kubai-icons-react
 
+## 0.4.0
+
+### Minor Changes
+
+- [#48](https://github.com/kubai087/kubai-icons/pull/48) [`c896da3`](https://github.com/kubai087/kubai-icons/commit/c896da37b8ec57ca3cef46a1d89ca601af45844e) Thanks [@kubai087](https://github.com/kubai087)! - Add nine icons for Apple devices, macOS and the classic Mac: `item-tracker`, `wireless-charger`, `dock`, `option`, `usb-c-port`, `eject`, `retro-computer`, `bomb` and `wristwatch`.
+  
+  Each icon's metadata in `icons.json` now carries `since`, the version it was first released in.
+
+### Patch Changes
+
+- Updated dependencies [[`c896da3`](https://github.com/kubai087/kubai-icons/commit/c896da37b8ec57ca3cef46a1d89ca601af45844e)]:
+  - kubai-icons@0.4.0
+
 ## 0.3.1
 
 ### Patch Changes
