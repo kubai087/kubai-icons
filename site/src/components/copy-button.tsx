@@ -8,10 +8,11 @@ import { useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
 
-export async function copyText(text: string) {
+/** Copies text and confirms it in a toast; `quiet` leaves the confirming to the caller. */
+export async function copyText(text: string, { quiet = false }: { quiet?: boolean } = {}) {
   try {
     await navigator.clipboard.writeText(text);
-    toast.success(pick(browserLocale(), "Copied", "已复制"));
+    if (!quiet) toast.success(pick(browserLocale(), "Copied", "已复制"));
     return true;
   } catch {
     toast.error(pick(browserLocale(), "Copy failed", "复制失败"));

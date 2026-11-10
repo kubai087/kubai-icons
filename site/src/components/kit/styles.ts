@@ -22,10 +22,10 @@ export const navItem = cva("focus-inset flex w-full items-center gap-2 rounded-c
   defaultVariants: { active: false },
 });
 
-/** A small rounded filter button. */
-export const chip = cva("focus-inset inline-flex h-7 shrink-0 items-center rounded-pill border px-3 text-caption transition-colors pointer-coarse:h-9", {
+/** A small filter button, plain text like the site's nav; the chosen one sits on a soft fill. */
+export const chip = cva("focus-inset inline-flex h-7 shrink-0 items-center rounded-control px-2.5 text-caption transition-colors pointer-coarse:h-9", {
   variants: {
-    active: { true: "border-foreground/30 bg-muted text-foreground in-[[data-glide]]:border-transparent in-[[data-glide]]:bg-transparent", false: "text-muted-foreground hover:text-foreground" },
+    active: { true: "bg-muted text-foreground in-[[data-glide]]:bg-transparent", false: "text-muted-foreground hover:text-foreground" },
   },
   defaultVariants: { active: false },
 });

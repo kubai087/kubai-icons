@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ElementType, type ReactNode } from "react";
-import { RiArrowRightSLine, RiBookmarkFill, RiBookmarkLine, RiDownloadLine, RiFileCopyLine, RiGithubLine, RiPlayFill } from "@remixicon/react";
+import { RiArrowRightSLine, RiBookmarkFill, RiBookmarkLine, RiCheckLine, RiDownloadLine, RiFileCopyLine, RiGithubLine, RiPlayFill } from "@remixicon/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -14,6 +14,7 @@ import { toggleSaved, useSaved } from "@/lib/collection";
 import { FACETS, loadKeywords, localBadgeName, pascal, type IconMeta, type Category, type Keywords } from "@/lib/icons";
 import { download, resolvedSvg, svgToPng } from "@/lib/export";
 import { track } from "@/lib/analytics";
+import { burst } from "@/lib/ceremony";
 import { REPO, asset } from "@/lib/site";
 import { languageOf } from "@/lib/i18n";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
@@ -52,6 +53,17 @@ const UPDATE_PACKAGE = { react: "kubai-icons-react", vue: "kubai-icons-vue", htm
 const PLAY_MS = 1100;
 /** Lets the panel finish appearing before a touch preview starts. */
 const AUTOPLAY_DELAY = 320;
+
+/** How long a button shows that its copy or download is done. */
+const DONE_MS = 1600;
+
+/** An icon that turns into a tick for a moment once its action is done. */
+const DoneIcon = ({ done, icon: Icon }: { done: boolean; icon: ElementType }) => (
+  <span data-icon="inline-start" className="grid *:[grid-area:1/1] *:transition-[opacity,scale] *:duration-200 *:ease-out motion-reduce:*:transition-none">
+    <Icon className={cn("size-4", done && "scale-50 opacity-0")} />
+    <RiCheckLine className={cn("size-4", !done && "scale-50 opacity-0")} />
+  </span>
+);
 
 /** A small label above a group of controls. */
 const Label = ({ children }: { children: React.ReactNode }) => <p className="text-caption font-medium text-muted-foreground">{children}</p>;
@@ -117,12 +129,41 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
   const source = `${REPO}/blob/master/icons/${meta.base ?? meta.name}.js`;
 
   const svgText = () => (icon ? resolvedSvg(icon, { color, variant, badgeColor: mainBc, size: 96 }) : "");
+  // The button shows a tick for a moment after a copy or a download. A copy also plays the
+  // icon's motion and blooms sparks from the button.
+  const [done, setDone] = useState<"copy" | "svg" | "png" | null>(null);
+  const doneTimer = useRef(0);
+  useEffect(() => () => window.clearTimeout(doneTimer.current), []);
+  useEffect(() => { setDone(null); }, [meta.name]);
+  const celebrate = (kind: "copy" | "svg" | "png", button: HTMLElement) => {
+    window.clearTimeout(doneTimer.current);
+    setDone(kind);
+    doneTimer.current = window.setTimeout(() => setDone(null), DONE_MS);
+    if (kind !== "copy") return;
+    play();
+    burst(button, color);
+  };
   const actions = {
     copyName: () => { copyText(meta.name); track("icon_copy", { icon: meta.name, format: "name" }); },
     copyColor: () => { copyText(hex); track("icon_copy", { icon: meta.name, format: "color" }); },
-    copySvg: () => { copyText(svgText()); track("icon_copy", { icon: meta.name, format: "svg" }); nudgeSponsor(); },
-    svg: () => { download(`${meta.name}.svg`, new Blob([svgText()], { type: "image/svg+xml" })); track("icon_download", { icon: meta.name, format: "svg" }); nudgeSponsor(); },
-    png: async () => { download(`${meta.name}.png`, await svgToPng(svgText(), 512)); track("icon_download", { icon: meta.name, format: "png" }); nudgeSponsor(); },
+    copySvg: async (e: React.MouseEvent<HTMLElement>) => {
+      const button = e.currentTarget, svg = svgText();
+      if (!(await copyText(svg, { quiet: true }))) return;
+      celebrate("copy", button);
+      track("icon_copy", { icon: meta.name, format: "svg" }); nudgeSponsor();
+    },
+    svg: (e: React.MouseEvent<HTMLElement>) => {
+      const svg = svgText();
+      download(`${meta.name}.svg`, new Blob([svg], { type: "image/svg+xml" }));
+      celebrate("svg", e.currentTarget);
+      track("icon_download", { icon: meta.name, format: "svg" }); nudgeSponsor();
+    },
+    png: async (e: React.MouseEvent<HTMLElement>) => {
+      const button = e.currentTarget, svg = svgText();
+      download(`${meta.name}.png`, await svgToPng(svg, 512));
+      celebrate("png", button);
+      track("icon_download", { icon: meta.name, format: "png" }); nudgeSponsor();
+    },
   };
   const variants = related.filter((r) => r.base);
   const root = related.find((r) => !r.base);
@@ -193,9 +234,13 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
         </header>
 
         <div className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 max-[359px]:grid-cols-2 max-[359px]:[&>*]:w-full sm:grid-cols-[1fr_auto_auto_auto_auto]">
-          <Button size="xl" className="col-span-4 has-data-[icon=inline-start]:ps-5 max-[359px]:col-span-2 sm:col-span-1" onClick={actions.copySvg}><RiFileCopyLine data-icon="inline-start" />{tr("Copy SVG", "复制 SVG")}</Button>
-          <Button size="xl" variant="outline" onClick={actions.svg}><RiDownloadLine data-icon="inline-start" />SVG</Button>
-          <Button size="xl" variant="outline" onClick={actions.png}><RiDownloadLine data-icon="inline-start" />PNG</Button>
+          <Button size="xl" className="col-span-4 has-data-[icon=inline-start]:ps-5 max-[359px]:col-span-2 sm:col-span-1" onClick={actions.copySvg}>
+            <DoneIcon done={done === "copy"} icon={RiFileCopyLine} />
+            <span key={done === "copy" ? "done" : "idle"} className="swap-in">{done === "copy" ? tr("Copied", "已复制") : tr("Copy SVG", "复制 SVG")}</span>
+          </Button>
+          <Button size="xl" variant="outline" onClick={actions.svg}><DoneIcon done={done === "svg"} icon={RiDownloadLine} />SVG</Button>
+          <Button size="xl" variant="outline" onClick={actions.png}><DoneIcon done={done === "png"} icon={RiDownloadLine} />PNG</Button>
+          <span className="sr-only" aria-live="polite">{done === "copy" ? tr("Copied", "已复制") : done ? tr("Downloaded", "已下载") : ""}</span>
           <Button size="icon-xl" variant="outline" onClick={() => toggleSaved({ name: meta.name, color, variant, badge: mainBc })} aria-pressed={saved} aria-label={tr("Save to collection", "加入收藏夹")} title={saved ? tr("Remove from collection", "移出收藏夹") : tr("Save to collection", "加入收藏夹")}>
             {saved ? <RiBookmarkFill /> : <RiBookmarkLine />}
           </Button>

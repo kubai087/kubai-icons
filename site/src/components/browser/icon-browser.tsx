@@ -12,8 +12,8 @@ import { Segmented } from "@/components/kit/segmented";
 import { SizeControl } from "@/components/kit/size-control";
 import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
-import { chip, navItem, raised, tile as tileStyle } from "@/components/kit/styles";
-import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, newestFirst, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
+import { chip, navItem, tile as tileStyle } from "@/components/kit/styles";
+import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
 import { track } from "@/lib/analytics";
 import { agentPrompt, asset, requestUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -22,23 +22,23 @@ import { IconGrid } from "./icon-grid";
 import { IconDialog } from "./icon-dialog";
 import { MIXED, MIXED_FILL, SWATCHES, mixedColor, usePrefs } from "./prefs";
 
-type Sort = "default" | "new";
 const readUrl = () => {
-  if (typeof window === "undefined") return { q: "", cat: "", icon: "", sort: "default" as Sort };
+  if (typeof window === "undefined") return { q: "", cat: "", icon: "" };
   const p = new URLSearchParams(window.location.search);
-  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "", sort: (p.get("sort") === "new" ? "new" : "default") as Sort };
+  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "" };
 };
-const writeUrl = (s: { q: string; cat: string; icon: string; sort: Sort }) => {
+const writeUrl = (s: { q: string; cat: string; icon: string }) => {
   const p = new URLSearchParams();
   if (s.q) p.set("q", s.q);
   if (s.cat) p.set("category", s.cat);
-  if (s.sort === "new") p.set("sort", "new");
   if (s.icon) p.set("icon", s.icon);
   const qs = p.toString();
   window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
 };
 
 const noKeywords = () => null;
+/** The category entry that lists the icons marked new. */
+const NEW_CAT = "new";
 
 export function IconBrowser({ categories: cats, firstChunk }: { categories: Category[]; firstChunk?: string }) {
   // Both start downloading with the page instead of waiting for the app to start.
@@ -52,7 +52,6 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
   const list = useMemo(() => (index ? prepare(index.icons, keywords ?? {}, locale) : []), [index, keywords, locale]);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
-  const [sort, setSort] = useState<Sort>("default");
   const [open, setOpen] = useState<IconMeta | null>(null);
   // The colour of the tile that opened the dialog, so the preview matches it in mixed mode.
   const [openColor, setOpenColor] = useState<string | null>(null);
@@ -77,12 +76,11 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
       else loadKeywordsLater(locale);
       setQ(u.q);
       setCat(u.cat);
-      setSort(u.sort);
       if (u.icon) setOpen(ix.icons.find((i) => i.name === u.icon) ?? null);
     }, () => setFailed(true));
   }, []);
   useEffect(load, [load]);
-  useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "", sort }); }, [q, cat, open, index, sort]);
+  useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "" }); }, [q, cat, open, index]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey))) && document.activeElement?.tagName !== "INPUT") {
@@ -94,8 +92,8 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const found = useMemo(() => searchObjects(list, query, cat), [list, query, cat]);
-  const results = useMemo(() => (sort === "new" ? newestFirst(found) : found), [found, sort]);
+  const hasNew = useMemo(() => list.some((i) => i.new), [list]);
+  const results = useMemo(() => (cat === NEW_CAT ? searchObjects(list.filter((i) => i.new), query) : searchObjects(list, query, cat)), [list, query, cat]);
   const hits = useMemo(() => (query.trim() ? new Map(results.map((r) => [r.name, matchedKeyword(r, query)])) : undefined), [results, query]);
 
   // A new category or query starts from the top of the grid, not somewhere in the middle
@@ -113,7 +111,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     if (first.current) { first.current = false; return; }
     const top = restScroll();
     if (window.scrollY > top) window.scrollTo({ top, behavior: "instant" });
-  }, [cat, query, sort, restScroll]);
+  }, [cat, query, restScroll]);
 
   // Search analytics: one event per settled query.
   useEffect(() => {
@@ -152,6 +150,12 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           <button type="button" aria-current={!cat} onClick={() => pickCat("")} className={navItem({ active: !cat })}>
             <span className="truncate">{tr("All", "全部")}</span>
           </button>
+          {hasNew && (
+            <button type="button" aria-current={cat === NEW_CAT} onClick={() => pickCat(NEW_CAT)} className={navItem({ active: cat === NEW_CAT })}>
+              <span className="truncate">{tr("New", "新增")}</span>
+              <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />
+            </button>
+          )}
           {cats.map((c) => (
             <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} onClick={(e) => filterTo(e, c.id)} className={navItem({ active: cat === c.id })}>
               <span className="truncate">{tr(c.en, c.zh ?? c.en)}</span>
@@ -199,12 +203,6 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               label={tr("Variant", "样式")}
               options={[{ value: "color", label: tr("Color", "彩色") }, { value: "soft", label: tr("Soft", "柔和") }]}
             />
-            <Segmented
-              value={sort}
-              onChange={(next) => { setRefiltered(true); setSort(next); if (next === "new") track("sort_newest"); }}
-              label={tr("Sort", "排序")}
-              options={[{ value: "default", label: tr("Default", "默认") }, { value: "new", label: tr("Newest", "最新") }]}
-            />
             <Button className="max-lg:ms-auto" variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
               {selecting ? tr("Done", "完成") : tr("Select", "多选")}
             </Button>
@@ -220,9 +218,10 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               onChange={(size) => { setSizing(true); setPrefs({ size }); }}
             />
           </div>
-          <div className="relative isolate -mx-gutter mb-3 flex gap-1.5 overflow-x-auto px-gutter pb-0.5 lg:hidden">
-            <Glide still selector="[aria-current=true]" className={cn("rounded-pill", raised)} />
+          <div className="relative isolate -mx-gutter mb-3 flex gap-0.5 overflow-x-auto px-gutter pb-0.5 lg:hidden">
+            <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
             <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
+            {hasNew && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
             {cats.map((c) => (
               <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
             ))}

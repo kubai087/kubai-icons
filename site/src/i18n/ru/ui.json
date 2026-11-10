@@ -233,10 +233,8 @@
  "{n} icon": "Иконок: {n}",
  "{n} icons": "Иконок: {n}",
  "Now with an agent skill": "Теперь есть Agent Skill",
- "Sort": "Сортировка",
- "Default": "По умолчанию",
- "Newest": "Сначала новые",
  "New": "Новое",
  "Added in v{version}. Projects on an earlier version need to update first.": "Добавлено в v{version}. Проектам на более ранней версии нужно сначала обновиться.",
- "Coming in the next release. It can’t be installed from npm yet.": "Появится в следующем выпуске. Пока нельзя установить из npm."
+ "Coming in the next release. It can’t be installed from npm yet.": "Появится в следующем выпуске. Пока нельзя установить из npm.",
+ "Downloaded": "Загружено"
 }

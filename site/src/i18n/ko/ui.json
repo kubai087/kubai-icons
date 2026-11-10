@@ -233,10 +233,8 @@
  "{n} icon": "아이콘 {n}개",
  "{n} icons": "아이콘 {n}개",
  "Now with an agent skill": "새로 추가: Agent Skill",
- "Sort": "정렬",
- "Default": "기본",
- "Newest": "최신순",
  "New": "새로운",
  "Added in v{version}. Projects on an earlier version need to update first.": "v{version}에서 추가되었습니다. 이전 버전을 쓰는 프로젝트는 먼저 업데이트하세요.",
- "Coming in the next release. It can’t be installed from npm yet.": "다음 릴리스에 포함됩니다. 아직 npm에서 설치할 수 없습니다."
+ "Coming in the next release. It can’t be installed from npm yet.": "다음 릴리스에 포함됩니다. 아직 npm에서 설치할 수 없습니다.",
+ "Downloaded": "다운로드됨"
 }

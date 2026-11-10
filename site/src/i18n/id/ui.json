@@ -233,10 +233,8 @@
  "{n} icon": "{n} ikon",
  "{n} icons": "{n} ikon",
  "Now with an agent skill": "Kini tersedia Agent Skill",
- "Sort": "Urutan",
- "Default": "Bawaan",
- "Newest": "Terbaru",
  "New": "Baru",
  "Added in v{version}. Projects on an earlier version need to update first.": "Ditambahkan di v{version}. Proyek dengan versi lama perlu diperbarui dulu.",
- "Coming in the next release. It can’t be installed from npm yet.": "Hadir di rilis berikutnya. Belum bisa dipasang dari npm."
+ "Coming in the next release. It can’t be installed from npm yet.": "Hadir di rilis berikutnya. Belum bisa dipasang dari npm.",
+ "Downloaded": "Terunduh"
 }

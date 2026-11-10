@@ -233,10 +233,8 @@
  "{n} icon": "Icone: {n}",
  "{n} icons": "Icone: {n}",
  "Now with an agent skill": "Ora con una Agent Skill",
- "Sort": "Ordine",
- "Default": "Predefinito",
- "Newest": "Più recenti",
  "New": "Nuova",
  "Added in v{version}. Projects on an earlier version need to update first.": "Aggiunta nella v{version}. I progetti con una versione precedente devono prima aggiornare.",
- "Coming in the next release. It can’t be installed from npm yet.": "Arriverà nella prossima versione. Non è ancora installabile da npm."
+ "Coming in the next release. It can’t be installed from npm yet.": "Arriverà nella prossima versione. Non è ancora installabile da npm.",
+ "Downloaded": "Scaricato"
 }

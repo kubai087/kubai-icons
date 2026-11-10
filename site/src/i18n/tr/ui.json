@@ -233,10 +233,8 @@
  "{n} icon": "Simge: {n}",
  "{n} icons": "Simge: {n}",
  "Now with an agent skill": "Artık Agent Skill",
- "Sort": "Sıralama",
- "Default": "Varsayılan",
- "Newest": "En yeni",
  "New": "Yeni",
  "Added in v{version}. Projects on an earlier version need to update first.": "v{version} sürümünde eklendi. Eski sürümü kullanan projelerin önce güncellemesi gerekir.",
- "Coming in the next release. It can’t be installed from npm yet.": "Bir sonraki sürümde gelecek. Henüz npm’den kurulamaz."
+ "Coming in the next release. It can’t be installed from npm yet.": "Bir sonraki sürümde gelecek. Henüz npm’den kurulamaz.",
+ "Downloaded": "İndirildi"
 }

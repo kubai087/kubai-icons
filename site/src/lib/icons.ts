@@ -291,14 +291,6 @@ export function matchedKeyword(ic: Searchable, query: string) {
   return null;
 }
 
-/** Orders a list newest first: icons not yet released, then by the release they arrived in. */
-export function newestFirst<T extends IconMeta>(list: T[]): T[] {
-  const key = (m: IconMeta) => (m.since ?? "999.999.999").split(".").map(Number);
-  const newer = (a: number[], b: number[]) => b[0] - a[0] || b[1] - a[1] || b[2] - a[2];
-  // The sort is stable, so icons from one release keep their order.
-  return [...list].sort((a, b) => newer(key(a), key(b)));
-}
-
 export const pascal = (s: string) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) => c.toUpperCase());
 export const camel = (s: string) => s.replace(/-([a-z0-9])/g, (_, c: string) => c.toUpperCase());
 

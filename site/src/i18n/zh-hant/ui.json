@@ -233,10 +233,8 @@
  "{n} icon": "{n} 個圖示",
  "{n} icons": "{n} 個圖示",
  "Now with an agent skill": "現已提供 Agent Skill",
- "Sort": "排序",
- "Default": "預設",
- "Newest": "最新",
  "New": "新",
  "Added in v{version}. Projects on an earlier version need to update first.": "v{version} 新增，已安裝舊版本的專案需要先更新。",
- "Coming in the next release. It can’t be installed from npm yet.": "將在下個版本發佈，暫時還不能從 npm 安裝。"
+ "Coming in the next release. It can’t be installed from npm yet.": "將在下個版本發佈，暫時還不能從 npm 安裝。",
+ "Downloaded": "已下載"
 }
