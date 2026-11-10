@@ -888,5 +888,14 @@
 "yo-yo":["Yo-yo","con quay","đồ chơi","đĩa xoay"],
 "yoga-mat":["Thảm yoga","thảm tập","tập yoga","thể dục"],
 "zoom-in":["Phóng to","kính lúp","thu phóng","zoom"],
-"zoom-out":["Thu nhỏ","kính lúp trừ","thu phóng","zoom out"]
+"zoom-out":["Thu nhỏ","kính lúp trừ","thu phóng","zoom out"],
+"item-tracker":["Thiết bị định vị","thẻ định vị","tìm đồ"],
+"wireless-charger":["Sạc không dây","đế sạc","sạc từ tính"],
+"dock":["Dock","thanh ứng dụng","thanh tác vụ"],
+"option":["Phím Option","Alt","phím tắt"],
+"usb-c-port":["Cổng USB-C","Type-C","cổng sạc"],
+"eject":["Đẩy ra","tháo đĩa","ngắt kết nối"],
+"retro-computer":["Máy tính cổ điển","máy tính đời cũ","máy tính all-in-one"],
+"bomb":["Quả bom","sập","lỗi nghiêm trọng"],
+"wristwatch":["Đồng hồ đeo tay","đồng hồ kim","chờ"]
 }

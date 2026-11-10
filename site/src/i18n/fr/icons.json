@@ -5337,5 +5337,50 @@
 "réduire",
 "loupe",
 "dézoomer"
+],
+"item-tracker": [
+"Traceur d’objets",
+"balise",
+"localisateur"
+],
+"wireless-charger": [
+"Chargeur sans fil",
+"socle de charge",
+"charge magnétique"
+],
+"dock": [
+"Dock",
+"barre d’apps",
+"barre des tâches"
+],
+"option": [
+"Touche Option",
+"Alt",
+"raccourci"
+],
+"usb-c-port": [
+"Port USB-C",
+"Type-C",
+"port de charge"
+],
+"eject": [
+"Éjecter",
+"éjecter le disque",
+"démonter"
+],
+"retro-computer": [
+"Ordinateur rétro",
+"ordinateur compact",
+"tout-en-un"
+],
+"bomb": [
+"Bombe",
+"plantage",
+"erreur fatale"
+],
+"wristwatch": [
+"Montre",
+"montre à aiguilles",
+"attente"
 ]
 }

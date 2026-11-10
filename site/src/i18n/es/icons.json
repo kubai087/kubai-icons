@@ -887,4 +887,13 @@
 "yo-yo":["Yoyó","yo-yo","juguete","disco giratorio"],
 "zoom-in":["Acercar","ampliar","zoom","lupa"],
 "zoom-out":["Alejar","reducir","zoom","lupa"],
-"yoga-mat":["Esterilla de yoga","esterilla","yoga","ejercicio"]}
+"yoga-mat":["Esterilla de yoga","esterilla","yoga","ejercicio"],
+"item-tracker":["Localizador","rastreador","buscar llaves"],
+"wireless-charger":["Cargador inalámbrico","base de carga","carga magnética"],
+"dock":["Dock","barra de apps","barra de tareas"],
+"option":["Tecla Opción","Option","Alt"],
+"usb-c-port":["Puerto USB-C","Type-C","puerto de carga"],
+"eject":["Expulsar","expulsar disco","desmontar"],
+"retro-computer":["Ordenador retro","ordenador clásico","todo en uno"],
+"bomb":["Bomba","fallo","error grave"],
+"wristwatch":["Reloj de pulsera","reloj analógico","esperar"]}

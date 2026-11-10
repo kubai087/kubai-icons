@@ -887,4 +887,13 @@
 "yo-yo":["Yoyo","oyuncak","döner disk"],
 "yoga-mat":["Yoga matı","minder","yoga"],
 "zoom-in":["Yakınlaştır","büyüt","büyüteç"],
-"zoom-out":["Uzaklaştır","küçült","büyüteç"]}
+"zoom-out":["Uzaklaştır","küçült","büyüteç"],
+"item-tracker":["Eşya bulucu","takip cihazı","anahtar bulucu"],
+"wireless-charger":["Kablosuz şarj cihazı","şarj pedi","manyetik şarj"],
+"dock":["Dock","uygulama çubuğu","görev çubuğu"],
+"option":["Option tuşu","Alt","kısayol"],
+"usb-c-port":["USB-C girişi","Type-C","şarj girişi"],
+"eject":["Çıkar","diski çıkar","bağlantıyı kes"],
+"retro-computer":["Retro bilgisayar","klasik bilgisayar","hepsi bir arada"],
+"bomb":["Bomba","çökme","ölümcül hata"],
+"wristwatch":["Kol saati","analog saat","bekleme"]}

@@ -887,4 +887,13 @@
 "yo-yo":["Yo-yo","gioco","disco rotante"],
 "yoga-mat":["Tappetino yoga","yoga","ginnastica"],
 "zoom-in":["Ingrandisci","zoom","lente"],
-"zoom-out":["Riduci","zoom indietro","lente"]}
+"zoom-out":["Riduci","zoom indietro","lente"],
+"item-tracker":["Localizzatore","tracker","trova chiavi"],
+"wireless-charger":["Caricatore wireless","base di ricarica","ricarica magnetica"],
+"dock":["Dock","barra delle app","barra delle applicazioni"],
+"option":["Tasto Opzione","Option","Alt"],
+"usb-c-port":["Porta USB-C","Type-C","porta di ricarica"],
+"eject":["Espelli","espelli disco","smonta"],
+"retro-computer":["Computer retrò","computer compatto","all-in-one"],
+"bomb":["Bomba","crash","errore fatale"],
+"wristwatch":["Orologio da polso","orologio analogico","attesa"]}

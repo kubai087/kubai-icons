@@ -4899,5 +4899,50 @@
 "Herauszoomen",
 "Lupe minus",
 "Zoom"
+],
+"item-tracker": [
+"Tracker",
+"Schlüsselfinder",
+"Ortungsanhänger"
+],
+"wireless-charger": [
+"Kabelloses Ladegerät",
+"Ladepad",
+"magnetisch laden"
+],
+"dock": [
+"Dock",
+"App-Leiste",
+"Taskleiste"
+],
+"option": [
+"Wahltaste",
+"Option",
+"Alt"
+],
+"usb-c-port": [
+"USB-C-Anschluss",
+"Type-C",
+"Ladeanschluss"
+],
+"eject": [
+"Auswerfen",
+"Medium auswerfen",
+"trennen"
+],
+"retro-computer": [
+"Retro-Computer",
+"Kompaktrechner",
+"All-in-One"
+],
+"bomb": [
+"Bombe",
+"Absturz",
+"schwerer Fehler"
+],
+"wristwatch": [
+"Armbanduhr",
+"Analoguhr",
+"warten"
 ]
 }

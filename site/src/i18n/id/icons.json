@@ -887,4 +887,13 @@
 "yo-yo":["Yoyo","mainan yoyo"],
 "yoga-mat":["Matras yoga","yoga","alas yoga"],
 "zoom-in":["Perbesar","zoom in","kaca pembesar"],
-"zoom-out":["Perkecil","zoom out","kaca pembesar"]}
+"zoom-out":["Perkecil","zoom out","kaca pembesar"],
+"item-tracker":["Pelacak barang","pelacak","penanda kunci"],
+"wireless-charger":["Pengisi daya nirkabel","charger wireless","pengisian magnetik"],
+"dock":["Dock","bilah aplikasi","taskbar"],
+"option":["Tombol Option","Alt","pintasan"],
+"usb-c-port":["Port USB-C","Type-C","port pengisian"],
+"eject":["Keluarkan","eject","lepas disk"],
+"retro-computer":["Komputer retro","komputer klasik","all-in-one"],
+"bomb":["Bom","crash","galat fatal"],
+"wristwatch":["Jam tangan","jam analog","tunggu"]}
