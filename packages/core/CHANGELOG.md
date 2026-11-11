@@ -1,5 +1,11 @@
 # kubai-icons
 
+## 0.5.0
+
+### Minor Changes
+
+- [#53](https://github.com/kubai087/kubai-icons/pull/53) [`4c29ded`](https://github.com/kubai087/kubai-icons/commit/4c29dedc09cf19104ffa1a8ee42853e7f6d54080) Thanks [@kubai087](https://github.com/kubai087)! - Add eight icons for school and early learning: `alphabet-blocks`, `book-stack`, `locker`, `pencil-case`, `pencil-cup`, `school-bus`, `seesaw` and `stacking-rings`. `book-stack`, `locker` and `pencil-case` also come with badges.
+
 ## 0.4.1
 
 ### Patch Changes

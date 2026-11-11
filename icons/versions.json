@@ -901,5 +901,15 @@
     "usb-c-port",
     "wireless-charger",
     "wristwatch"
+  ],
+  "0.5.0": [
+    "alphabet-blocks",
+    "book-stack",
+    "locker",
+    "pencil-case",
+    "pencil-cup",
+    "school-bus",
+    "seesaw",
+    "stacking-rings"
   ]
 }
