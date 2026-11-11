@@ -3,7 +3,7 @@ import { TILE, back } from './_interface.js';
 
 export default defineIcon({
   name: 'layout-dashboard',
-  zh: '仪表盘',
+  zh: '数据看板',
   category: 'layout',
   tags: ['dashboard', 'widgets', 'panels', 'overview', 'layout', '看板'],
   variants: ['plus', 'cog'],

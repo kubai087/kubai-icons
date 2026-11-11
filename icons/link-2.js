@@ -7,7 +7,7 @@ const LEFT = ribbon([[12.4, 8], ...arcPts(9.4, 12.5, 4.5, -90, -270, 20), [12.4,
 
 export default defineIcon({
   name: 'link-2',
-  zh: '链接',
+  zh: '链接 2',
   category: 'interface',
   tags: ['link', 'url', 'hyperlink', 'chain', 'connect', 'attach', '超链接'],
   variants: ['plus', 'x', 'check'],

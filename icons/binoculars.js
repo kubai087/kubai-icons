@@ -4,7 +4,7 @@ const L = 8.7, Rx = 22.3;
 
 export default defineIcon({
   name: 'binoculars',
-  zh: '望远镜',
+  zh: '双筒望远镜',
   category: 'travel',
   tags: ['binoculars', 'explore', 'view', 'sightseeing', 'watch', 'search', '双筒望远镜'],
   // A pair of binoculars; on hover the eyepieces wind out as they are focused.

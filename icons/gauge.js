@@ -4,7 +4,7 @@ const BODY = 'M4 16.4A11.5 11.5 0 0 1 27 16.4V18.8Q27 21 24.8 21H6.2Q4 21 4 18.8
 
 export default defineIcon({
   name: 'gauge',
-  zh: '仪表盘',
+  zh: '仪表',
   category: 'charts',
   tags: ['dashboard', 'speedometer', 'meter', 'performance', 'speed', 'kpi', '速度'],
   variants: ['plus', 'check', 'up', 'down', 'cog'],

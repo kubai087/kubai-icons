@@ -5,7 +5,7 @@ const ROCKER = rr(11, 4.6, 9, 15.8, 1.8);
 
 export default defineIcon({
   name: 'light-switch',
-  zh: '开关',
+  zh: '墙壁开关',
   category: 'home',
   tags: ['switch', 'wall switch', 'rocker', 'light', 'toggle', '电灯开关'],
   variants: ['check', 'clock'],

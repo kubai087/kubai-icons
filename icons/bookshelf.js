@@ -8,7 +8,7 @@ const TIP_X = 17.8, TIP_H = 6.6;
 
 export default defineIcon({
   name: 'bookshelf',
-  zh: '书架',
+  zh: '书柜',
   category: 'home',
   tags: ['books', 'library', 'shelves', 'bookcase', 'reading', 'furniture', '书柜', '藏书', '家具'],
   // A bookcase of two shelves holding narrow books of uneven height; on hover the last book on top tips over.

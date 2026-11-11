@@ -5,7 +5,7 @@ const TRACK = rr(4, 6, 23, 13, 6.5);
 
 export default defineIcon({
   name: 'toggle',
-  zh: '开关',
+  zh: '切换开关',
   category: 'interface',
   tags: ['switch', 'toggle', 'on off', 'enable', 'setting', '切换'],
   // A switch: on hover the knob slides across and the track fills, switched on.

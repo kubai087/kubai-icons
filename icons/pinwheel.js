@@ -8,7 +8,7 @@ const SETA = blade(0) + blade(2), SETB = blade(1) + blade(3);
 
 export default defineIcon({
   name: 'pinwheel',
-  zh: '风车',
+  zh: '纸风车',
   category: 'sports',
   tags: ['windmill', 'toy', 'spin', 'wind', 'summer', 'kids', '玩具', '纸风车'],
   // A paper pinwheel on a stick; on hover the wind spins it round once.

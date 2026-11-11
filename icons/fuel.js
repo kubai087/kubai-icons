@@ -2,7 +2,7 @@ import { defineIcon, KR, CR, f, OL, DEEP, DEEPS, R, rp, rr, at } from '../packag
 
 export default defineIcon({
   name: 'fuel',
-  zh: '加油站',
+  zh: '加油机',
   category: 'transport',
   tags: ['gas', 'petrol', 'gas station', 'refuel', 'diesel', 'pump', '加油'],
   variants: ['check', 'clock'],

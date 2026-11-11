@@ -4,7 +4,7 @@ const TUBE = rr(-9, -3, 14.4, 6, 2), HOOD = rr(0, -3.8, 6.4, 7.6, 1.8), EYE = rr
 
 export default defineIcon({
   name: 'telescope',
-  zh: '望远镜',
+  zh: '天文望远镜',
   category: 'science',
   tags: ['astronomy', 'space', 'observe', 'stars', '天文', '观测'],
   // A telescope on a tripod; on hover it tilts higher and its hood slides out.
