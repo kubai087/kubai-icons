@@ -37,6 +37,24 @@ export function carSide(u, dy = 0) {
     ${wheel(u, 9.6, 18 + dy, 3.1)}${wheel(u, 21.4, 18 + dy, 3.1)}`;
 }
 
+/**
+ * The car of carSide at scale s, its top left corner (3.6, 3.8) moved to (ox, oy), with one
+ * window, which stays legible when the car is small. Radii and outlines keep their size.
+ * `front` gives the body the front-piece fill, as in carSide; otherwise the whole car takes
+ * the back-piece fill, for a car standing behind another. `nose` replaces the body.
+ */
+export function carAt(u, ox, oy, s, { front = true, nose } = {}) {
+  const P = (pts) => pts.map(([x, y]) => [ox + (x - 3.6) * s, oy + (y - 3.8) * s]);
+  const cabin = rp(P([[7.8, 10.6], [10.6, 3.8], [20, 3.8], [24, 10.6]]), [0, 1.8, 2.2, 0]);
+  const win = rp(P([[10.6, 10.6], [12.2, 6.2], [19.4, 6.2], [21.8, 10.6]]), [0, 1, 1, 0]);
+  const body = nose ? nose(P) : rp(P([[3.6, 10.2], [27.4, 10.2], [27.4, 18], [3.6, 18]]), [2.2, 2.8, 2.2, 2.2]);
+  const wy = oy + 14.2 * s, wr = 3.1 * s;
+  return `<g filter="${u.sh}"><g filter="${u.hi}"><path d="${cabin}" fill="${u.loS}"/></g></g><path d="${cabin}" ${OL}/>
+    <path d="${win}" fill="#fff"/>
+    <g filter="${u.sh}"><g filter="${u.hi}"><path d="${body}" fill="${front ? u.upS : u.loS}"/></g></g><path d="${body}" ${OL}/>
+    ${wheel(u, ox + 6 * s, wy, wr)}${wheel(u, ox + 17.8 * s, wy, wr)}`;
+}
+
 /** A solid tyre with a white hub. */
 export const wheel = (u, cx, cy, r) => `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}" fill="${u.pure('#2F6FE0')}"/><circle cx="${f(cx)}" cy="${f(cy)}" r="1.2" ${WHITE}/>`;
 

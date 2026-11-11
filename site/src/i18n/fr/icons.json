@@ -5425,5 +5425,30 @@
 "Anneaux à empiler",
 "pyramide d'anneaux",
 "jouet"
+],
+"shipping-label": [
+"Étiquette d'expédition",
+"bordereau",
+"colis"
+],
+"car-crash": [
+"Accident de voiture",
+"collision",
+"choc"
+],
+"cars": [
+"Voitures",
+"véhicules",
+"flotte"
+],
+"control-unit": [
+"Calculateur",
+"unité de commande",
+"ECU"
+],
+"crash-sensor": [
+"Capteur de choc",
+"capteur d'impact",
+"airbag"
 ]
 }
