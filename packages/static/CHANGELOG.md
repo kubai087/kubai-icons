@@ -1,5 +1,11 @@
 # kubai-icons-static
 
+## 0.5.1
+
+### Patch Changes
+
+- [#56](https://github.com/kubai087/kubai-icons/pull/56) [`aec4494`](https://github.com/kubai087/kubai-icons/commit/aec4494bcdaecb8882e9e5610cb4ec7b582beb6c) Thanks [@kubai087](https://github.com/kubai087)! - Education icons: keep marks clear of the edges. The pencil case's zip sits lower and its pencils come out of the opened zip; the locker's latch and vents stand clear of the door's edges; the book spines are a little taller around their labels; the school bus drops the roof lamps that crowded its roof and windows.
+
 ## 0.5.0
 
 ### Minor Changes
