@@ -911,5 +911,12 @@
     "school-bus",
     "seesaw",
     "stacking-rings"
+  ],
+  "0.6.0": [
+    "car-crash",
+    "cars",
+    "control-unit",
+    "crash-sensor",
+    "shipping-label"
   ]
 }

@@ -1,5 +1,11 @@
 # kubai-icons-static
 
+## 0.6.0
+
+### Minor Changes
+
+- [#62](https://github.com/kubai087/kubai-icons/pull/62) [`930654d`](https://github.com/kubai087/kubai-icons/commit/930654dd714f6782b42ca52997ec264e04cd0418) Thanks [@kubai087](https://github.com/kubai087), [@LukiPrince](https://github.com/LukiPrince)! - Add five icons: `shipping-label`, `cars`, `car-crash`, `control-unit` and `crash-sensor`.
+
 ## 0.5.1
 
 ### Patch Changes
