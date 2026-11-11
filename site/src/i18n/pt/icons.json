@@ -4923,5 +4923,30 @@
 "Argolas de empilhar",
 "torre de argolas",
 "brinquedo"
+],
+"shipping-label": [
+"Etiqueta de envio",
+"etiqueta de remessa",
+"pacote"
+],
+"car-crash": [
+"Acidente de carro",
+"colisão",
+"batida"
+],
+"cars": [
+"Carros",
+"veículos",
+"frota"
+],
+"control-unit": [
+"Unidade de controle",
+"central eletrônica",
+"ECU"
+],
+"crash-sensor": [
+"Sensor de colisão",
+"sensor de impacto",
+"airbag"
 ]
 }

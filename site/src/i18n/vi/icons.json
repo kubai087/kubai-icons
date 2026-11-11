@@ -905,5 +905,10 @@
 "pencil-cup":["Ống cắm bút","bút chì","văn phòng phẩm"],
 "school-bus":["Xe buýt trường học","xe đưa đón","đi học"],
 "seesaw":["Bập bênh","sân chơi","thăng bằng"],
-"stacking-rings":["Tháp vòng","đồ chơi xếp chồng","đồ chơi"]
+"stacking-rings":["Tháp vòng","đồ chơi xếp chồng","đồ chơi"],
+"shipping-label":["Nhãn vận chuyển","phiếu gửi hàng","bưu kiện"],
+"car-crash":["Tai nạn ô tô","va chạm","đâm xe"],
+"cars":["Nhiều ô tô","xe cộ","đoàn xe"],
+"control-unit":["Bộ điều khiển","ECU","mô-đun"],
+"crash-sensor":["Cảm biến va chạm","cảm biến va đập","túi khí"]
 }
