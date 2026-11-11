@@ -1203,6 +1203,7 @@
 "stockage en ligne"
 ],
 "clover": [
+"Trèfle à quatre feuilles",
 "Trèfle",
 "porte-bonheur",
 "chance",
@@ -2578,6 +2579,7 @@
 "fruit"
 ],
 "library": [
+"Étagère à livres",
 "Bibliothèque",
 "livres",
 "librairie",
@@ -3718,6 +3720,7 @@
 "automatisation"
 ],
 "robot-vacuum": [
+"Robot de nettoyage",
 "Robot aspirateur",
 "aspirateur robot",
 "nettoyage",
@@ -3844,8 +3847,8 @@
 "espace"
 ],
 "save": [
+"Sauvegarder",
 "Enregistrer",
-"sauvegarder",
 "disquette",
 "sauvegarde"
 ],
@@ -3988,8 +3991,8 @@
 "machine"
 ],
 "settings": [
+"Paramètres",
 "Réglages",
-"paramètres",
 "engrenage",
 "configuration"
 ],
@@ -4168,8 +4171,8 @@
 "hiver"
 ],
 "sliders": [
+"Curseurs",
 "Réglages",
-"curseurs",
 "ajuster",
 "filtres"
 ],
@@ -4757,8 +4760,8 @@
 "approuver"
 ],
 "ticket": [
+"Ticket",
 "Billet",
-"ticket",
 "entrée",
 "place"
 ],

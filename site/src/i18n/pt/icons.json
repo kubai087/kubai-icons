@@ -168,8 +168,8 @@
 "direita"
 ],
 "arrow-up-down": [
+"Setas para cima e para baixo",
 "Ordenar",
-"setas para cima e para baixo",
 "classificar",
 "seta dupla"
 ],
@@ -427,8 +427,8 @@
 "alerta"
 ],
 "bench": [
+"Banco de praça",
 "Banco",
-"banco de praça",
 "parque",
 "assento"
 ],
@@ -1013,6 +1013,7 @@
 "diminuir"
 ],
 "circle-plus": [
+"Mais no círculo",
 "Adicionar",
 "mais",
 "novo",
@@ -1043,6 +1044,7 @@
 "prancheta"
 ],
 "clipboard-paste": [
+"Colar da área de transferência",
 "Colar",
 "área de transferência",
 "prancheta"
@@ -2372,6 +2374,7 @@
 "socorro"
 ],
 "light-switch": [
+"Interruptor de parede",
 "Interruptor",
 "botão de luz",
 "chave de luz"
@@ -2388,6 +2391,7 @@
 "navegação"
 ],
 "link-2": [
+"Link 2",
 "Link",
 "hiperlink",
 "elo",
@@ -3187,6 +3191,7 @@
 "vaso sanitário"
 ],
 "plus-square": [
+"Mais no quadrado",
 "Adicionar",
 "novo",
 "mais",
@@ -4053,6 +4058,7 @@
 "vários lembretes"
 ],
 "stool": [
+"Banquinho",
 "Banco",
 "banqueta",
 "banco de bar"
@@ -4686,9 +4692,9 @@
 "lavar roupa"
 ],
 "watch": [
+"Relógio inteligente",
 "Relógio de pulso",
-"smartwatch",
-"relógio inteligente"
+"smartwatch"
 ],
 "watering-can": [
 "Regador",

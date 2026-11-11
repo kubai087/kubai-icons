@@ -415,8 +415,8 @@
 "Klingel"
 ],
 "bench": [
-"Bank",
 "Parkbank",
+"Bank",
 "Sitzbank"
 ],
 "bicycle": [
@@ -431,8 +431,8 @@
 "Binär"
 ],
 "binder": [
-"Ordner",
 "Aktenordner",
+"Ordner",
 "Hefter"
 ],
 "binoculars": [
@@ -1259,8 +1259,8 @@
 "Gehhilfe"
 ],
 "cube": [
-"Würfel",
 "Kubus",
+"Würfel",
 "3D-Block",
 "Quader"
 ],
@@ -1766,8 +1766,8 @@
 "Braten"
 ],
 "fuel": [
-"Tankstelle",
 "Zapfsäule",
+"Tankstelle",
 "Tanken",
 "Kraftstoff"
 ],
@@ -1991,8 +1991,8 @@
 "Leier"
 ],
 "hash": [
-"Raute",
 "Hashtag",
+"Raute",
 "Nummernzeichen",
 "Hash"
 ],
@@ -2280,8 +2280,8 @@
 "Leuchte"
 ],
 "landmark": [
-"Bank",
 "Bankgebäude",
+"Bank",
 "Institution",
 "Säulengebäude"
 ],
@@ -2357,6 +2357,7 @@
 "Leuchtfeuer"
 ],
 "link-2": [
+"Link 2",
 "Verknüpfung",
 "Hyperlink",
 "Kettenglied",
@@ -2616,8 +2617,8 @@
 "Milchprodukt"
 ],
 "minimize": [
-"Verkleinern",
 "Vollbild beenden",
+"Verkleinern",
 "Wiederherstellen",
 "Minimieren"
 ],
@@ -3076,6 +3077,7 @@
 "Schwebendes Fenster"
 ],
 "pie": [
+"Tarte",
 "Kuchen",
 "Torte",
 "Obstkuchen",
@@ -3117,6 +3119,7 @@
 "Pingpong"
 ],
 "pinwheel": [
+"Windrädchen",
 "Windrad",
 "Papierwindmühle",
 "Spielzeugwindrad"
@@ -3349,8 +3352,8 @@
 "Punkt"
 ],
 "redo": [
-"Wiederholen",
 "Wiederherstellen",
+"Wiederholen",
 "Redo",
 "Vorwärtspfeil"
 ],
@@ -4821,8 +4824,8 @@
 "Hotspot"
 ],
 "wind-turbine": [
-"Windrad",
 "Windkraftanlage",
+"Windrad",
 "Windenergie",
 "Windturbine"
 ],
@@ -4895,8 +4898,8 @@
 "Zoom"
 ],
 "zoom-out": [
-"Verkleinern",
 "Herauszoomen",
+"Verkleinern",
 "Lupe minus",
 "Zoom"
 ],
