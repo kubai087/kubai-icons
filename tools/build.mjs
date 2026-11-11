@@ -199,8 +199,117 @@ if (targets.has('site')) {
   // Each translated language's words for the icons, loaded only on that language's pages.
   const i18n = path.join(root, 'site/src/i18n');
   for (const { name: language } of fs.readdirSync(i18n, { withFileTypes: true }).filter((e) => e.isDirectory())) write(path.join(out, 'keywords', `${language}.json`), fs.readFileSync(path.join(i18n, language, 'icons.json'), 'utf8'));
-  // The social card rides along as a static file.
+  // Plain-text guides for language models: llms.txt says what the library is and where to
+  // look, llms-full.txt adds usage and every icon's exact name, so an agent writing code
+  // can find an icon without running the site's script.
   const pub = path.join(root, 'site/public');
+  const SITE = 'https://icons.kubai.design';
+  const bases = icons.filter((ic) => !ic.base);
+  const badged = new Map();
+  for (const ic of icons) if (ic.base) badged.set(ic.base, [...(badged.get(ic.base) || []), ic.name.slice(ic.base.length + 1)]);
+  const intro = `# Kubai Icons
+
+> ${icons.length.toLocaleString('en')} animated icons in one consistent style (${bases.length} objects, plus badged and slashed "off" versions), for React, Vue, plain JavaScript, web components and static SVG. MIT licensed. Current version: ${version}.
+
+Each icon moves like the object on hover: a folder opens, an envelope unseals, a lock springs open. Every color derives from one accent through CSS, so icons follow \`currentColor\`.
+
+Icon names are kebab-case (\`folder-plus\`). In the React, Vue and JavaScript packages each icon is exported in PascalCase (\`FolderPlus\`); React and Vue also export it with an \`Icon\` suffix (\`FolderPlusIcon\`). Only names in the icon list exist; do not guess others.
+`;
+  const usage = `## Packages
+
+| Package | For |
+| --- | --- |
+| \`kubai-icons-react\` | React 18+ and Next.js, server rendering included |
+| \`kubai-icons-vue\` | Vue 3 and Nuxt |
+| \`kubai-icons\` | Any page: a framework-free API and the \`<kubai-icon>\` web component |
+| \`kubai-icons-static\` | Standalone SVG files for \`<img>\`, design tools, native apps and CDNs |
+
+## React
+
+\`\`\`tsx
+import { Folder, CalendarCheck } from "kubai-icons-react";
+
+<Folder />                                   // 24px, follows the text color
+<CalendarCheck size={32} color="#22C55E" variant="soft" badgeColor="semantic" />
+
+<button data-kubai-trigger>                  {/* plays when the button is hovered */}
+  <Folder size={18} trigger="parent" /> Open
+</button>
+\`\`\`
+
+Props: \`size\`, \`color\`, \`variant\` (\`"color"\` or \`"soft"\`), \`badgeColor\` (any color or \`"semantic"\`), \`trigger\` (\`"hover"\`, \`"parent"\` or \`"none"\`), \`hover\`, \`active\` / \`defaultActive\` / \`onActiveChange\`, \`title\`, plus any SVG prop. \`DynamicIcon\` from \`kubai-icons-react/dynamic\` loads an icon by name.
+
+## Vue
+
+\`\`\`vue
+<script setup>
+import { Folder, BellOff } from "kubai-icons-vue";
+</script>
+
+<template>
+  <Folder :size="28" color="#6366F1" />
+  <BellOff variant="soft" title="Muted" />
+</template>
+\`\`\`
+
+Props match React; \`active\` works with \`v-model:active\`. \`DynamicIcon\` from \`kubai-icons-vue/dynamic\` loads an icon by name.
+
+## JavaScript and the web component
+
+\`\`\`js
+import { createIcon, Folder, MailPlus } from "kubai-icons";
+document.body.append(createIcon(Folder, { size: 24 }), createIcon(MailPlus, { color: "#EC4899" }));
+\`\`\`
+
+With no build step:
+
+\`\`\`html
+<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>
+<kubai-icon name="folder-plus" size="32" color="#6366F1"></kubai-icon>
+\`\`\`
+
+## Static SVG
+
+\`\`\`html
+<img src="https://cdn.jsdelivr.net/npm/kubai-icons-static@0/svg/folder.svg" width="28" height="28" alt="" />
+\`\`\`
+
+Each file includes a margin for the drop shadow, so a 28px image matches a live icon at 24px. For another color: \`${SITE}/api/icon/folder.svg?color=EC4899\`.
+
+## Updating
+
+New icons come out in new releases. Icons marked "since" a version need at least that version installed: \`npm install kubai-icons-react@latest\` (or the package you use).
+`;
+  const docs = `## Docs
+
+- [Overview](${SITE}/docs/): install, versioning and updating
+- [React](${SITE}/docs/react/)
+- [Vue](${SITE}/docs/vue/)
+- [JavaScript and web component](${SITE}/docs/javascript/)
+- [Static SVG](${SITE}/docs/static/)
+- [Customize](${SITE}/docs/customize/): color, variants, badges and triggers
+- [Accessibility](${SITE}/docs/accessibility/)
+- [Performance](${SITE}/docs/performance/)
+- [Design](${SITE}/docs/design/): how an icon is drawn
+- [Agent skill](${SITE}/skill/): draw new icons in the same style with a coding agent
+
+## Icons
+
+- [Every icon name, by category](${SITE}/llms-full.txt): plain text, with usage
+- [Browse and search](${SITE}/icons/): one page per icon at ${SITE}/icons/<name>/
+`;
+  write(path.join(pub, 'llms.txt'), `${intro}\n${docs}`);
+  const list = categories.filter((c) => bases.some((ic) => ic.category === c.id)).map((c) => {
+    const rows = bases.filter((ic) => ic.category === c.id).map((ic) => {
+      const extra = badged.get(ic.name);
+      const tags = (ic.tags || []).filter((t) => !HAN.test(t) && t !== ic.name).slice(0, 6);
+      const when = since.get(ic.name);
+      return `- ${ic.name}${ic.zh ? ` (${ic.zh})` : ''}${tags.length ? `: ${tags.join(', ')}` : ''}${extra ? `. Also -${extra.join(', -')}` : ''}${when && added.length > 1 && when !== added[0] ? `. Since ${when}` : ''}`;
+    });
+    return `### ${c.en} (${c.id})\n\n${rows.join('\n')}`;
+  });
+  write(path.join(pub, 'llms-full.txt'), `${intro}\n${usage}\n${docs}\n## Icon list\n\nEach line is a base icon name, its Chinese name and a few search words. "Also -plus, -check" means \`<name>-plus\` and \`<name>-check\` exist too. "Since" marks icons added after the first release.\n\n${list.join('\n\n')}\n`);
+  // The social card rides along as a static file.
   fs.mkdirSync(path.join(pub, 'assets'), { recursive: true });
   fs.cpSync(path.join(root, 'assets', 'og.png'), path.join(pub, 'assets', 'og.png'));
   console.log(`site data → site/public/data, site/src/generated`);

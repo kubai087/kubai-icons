@@ -18,3 +18,5 @@ site/public/data/
 site/public/assets/
 site/src/generated/
 .claude/
+site/public/llms.txt
+site/public/llms-full.txt
