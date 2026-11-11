@@ -4877,5 +4877,45 @@
 "Relógio de pulso",
 "relógio analógico",
 "aguardar"
+],
+"alphabet-blocks": [
+"Blocos de letras",
+"blocos",
+"alfabeto"
+],
+"pencil-case": [
+"Estojo",
+"estojo escolar",
+"material escolar"
+],
+"locker": [
+"Armário",
+"armário escolar",
+"guarda-volumes"
+],
+"book-stack": [
+"Pilha de livros",
+"livros",
+"leitura"
+],
+"pencil-cup": [
+"Porta-lápis",
+"lápis",
+"papelaria"
+],
+"school-bus": [
+"Ônibus escolar",
+"ônibus",
+"escola"
+],
+"seesaw": [
+"Gangorra",
+"parquinho",
+"equilíbrio"
+],
+"stacking-rings": [
+"Argolas de empilhar",
+"torre de argolas",
+"brinquedo"
 ]
 }

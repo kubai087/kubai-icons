@@ -5382,5 +5382,45 @@
 "Montre",
 "montre à aiguilles",
 "attente"
+],
+"alphabet-blocks": [
+"Cubes alphabet",
+"cubes",
+"ABC"
+],
+"pencil-case": [
+"Trousse",
+"trousse à crayons",
+"fournitures"
+],
+"locker": [
+"Casier",
+"vestiaire",
+"armoire"
+],
+"book-stack": [
+"Pile de livres",
+"livres",
+"lecture"
+],
+"pencil-cup": [
+"Pot à crayons",
+"crayons",
+"fournitures"
+],
+"school-bus": [
+"Bus scolaire",
+"car scolaire",
+"école"
+],
+"seesaw": [
+"Bascule",
+"tape-cul",
+"aire de jeux"
+],
+"stacking-rings": [
+"Anneaux à empiler",
+"pyramide d'anneaux",
+"jouet"
 ]
 }

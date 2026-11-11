@@ -897,5 +897,13 @@
 "eject":["Đẩy ra","tháo đĩa","ngắt kết nối"],
 "retro-computer":["Máy tính cổ điển","máy tính đời cũ","máy tính all-in-one"],
 "bomb":["Quả bom","sập","lỗi nghiêm trọng"],
-"wristwatch":["Đồng hồ đeo tay","đồng hồ kim","chờ"]
+"wristwatch":["Đồng hồ đeo tay","đồng hồ kim","chờ"],
+"alphabet-blocks":["Khối chữ cái","khối gỗ","bảng chữ cái"],
+"pencil-case":["Hộp bút","túi đựng bút","văn phòng phẩm"],
+"locker":["Tủ khóa","tủ đồ","tủ cá nhân"],
+"book-stack":["Chồng sách","sách","đọc sách"],
+"pencil-cup":["Ống cắm bút","bút chì","văn phòng phẩm"],
+"school-bus":["Xe buýt trường học","xe đưa đón","đi học"],
+"seesaw":["Bập bênh","sân chơi","thăng bằng"],
+"stacking-rings":["Tháp vòng","đồ chơi xếp chồng","đồ chơi"]
 }

@@ -4944,5 +4944,45 @@
 "Armbanduhr",
 "Analoguhr",
 "warten"
+],
+"alphabet-blocks": [
+"Buchstabenwürfel",
+"Bauklötze",
+"ABC"
+],
+"pencil-case": [
+"Federmäppchen",
+"Etui",
+"Schreibwaren"
+],
+"locker": [
+"Spind",
+"Schließfach",
+"Schrank"
+],
+"book-stack": [
+"Bücherstapel",
+"Bücher",
+"Lesen"
+],
+"pencil-cup": [
+"Stiftebecher",
+"Bleistifte",
+"Schreibwaren"
+],
+"school-bus": [
+"Schulbus",
+"Bus",
+"Schulweg"
+],
+"seesaw": [
+"Wippe",
+"Spielplatz",
+"Gleichgewicht"
+],
+"stacking-rings": [
+"Stapelringe",
+"Stapelturm",
+"Babyspielzeug"
 ]
 }
