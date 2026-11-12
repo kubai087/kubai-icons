@@ -23,6 +23,7 @@ const FRIENDS = [
   { name: "UI root", site: "https://uiroot.com/" },
   { name: "HappyHands", site: "https://happyhands.cc/apps/portal/" },
   { name: "UINice", site: "https://uinice.com/" },
+  { name: "AprilNEA", site: "https://aprilnea.me/" },
 ];
 const MORE = [
   { name: "Lumno", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-extension` },
