@@ -918,5 +918,16 @@
     "control-unit",
     "crash-sensor",
     "shipping-label"
+  ],
+  "0.7.0": [
+    "camp-stove",
+    "carabiner",
+    "cooler",
+    "hammock",
+    "lantern",
+    "matchbox",
+    "picnic-basket",
+    "sleeping-bag",
+    "thermos"
   ]
 }
