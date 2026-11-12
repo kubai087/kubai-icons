@@ -1,19 +1,28 @@
 "use client";
 import { memo, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
-  Link, Globe, Bookmark, Users, Heart, Star, Mail, Send, Gift, Rocket, Compass, Share, MessageCircle, Coffee, Sparkles,
-  Planet, Paperclip, PartyPopper, Puzzle, ThumbsUp, Smile, Bell, Camera, Music, Palette, Code, Cake, Trophy, Flag, Ticket,
+  Astronaut, Ghost, Bot, Balloon, Crown, PartyPopper, Ufo, Rocket, Planet, Telescope, Boombox, Cassette, Turntable,
+  Polaroid, CameraRetro, Guitar, Headphones, ArcadeMachine, GameConsole, Gamepad, RetroComputer, Typewriter, Dice,
+  PlayingCards, Kite, Pinwheel, RollerSkate, Trophy, FerrisWheel, HotAirBalloon, Lighthouse, Windmill, Castle, Campfire,
+  Magnet, Wand, Bomb, PiggyBank, Gift, Cake, Donut, IceCream, Popcorn, Sushi, Watermelon, Cat, Dog, Bee, Butterfly, Whale,
+  Link,
 } from "kubai-icons-react";
 import { RiTwitterXLine } from "@remixicon/react";
-import { Button } from "@/components/ui/button";
 import { tile } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 
 export type WallFriend = { slug: string; name: string; site: string; host: string; image: string };
 
+/**
+ * Fifty different icons, chosen to be fun and to read at a glance: characters, space,
+ * retro music and games, toys, landmarks, sweets and animals. Mixed so neighbours differ.
+ */
 const ICONS = [
-  Smile, Heart, Globe, Mail, Rocket, Bookmark, Coffee, Users, Star, Send, Gift, Compass, MessageCircle, Sparkles, Planet,
-  Share, Paperclip, PartyPopper, Puzzle, ThumbsUp, Bell, Camera, Music, Palette, Code, Cake, Trophy, Flag, Ticket, Link,
+  Rocket, Cat, Boombox, Donut, FerrisWheel, Ghost, Dice, Polaroid, Planet, Bee,
+  ArcadeMachine, IceCream, Lighthouse, Crown, Kite, Cassette, Ufo, Dog, Trophy, Sushi,
+  Castle, Balloon, Gamepad, Whale, Telescope, Popcorn, Windmill, Wand, Turntable, Astronaut,
+  Pinwheel, Cake, HotAirBalloon, Butterfly, GameConsole, PartyPopper, Guitar, Magnet, Watermelon, Bot,
+  RollerSkate, Campfire, Typewriter, PiggyBank, Headphones, Bomb, PlayingCards, CameraRetro, Gift, RetroComputer,
 ];
 const COLORS = ["#5393FF", "#EC4899", "#06B6D4", "#6366F1", "#F97316", "#8B5CF6", "#F43F5E", "#22C55E", "#F59E0B", "#0284C7"];
 const BRAND = "#5393FF";
@@ -88,7 +97,7 @@ type Item = { kind: "icon"; k: number } | { kind: "friend"; f: WallFriend } | { 
  * rest, looping their motion on staggered beats while the wall is on screen. The last card
  * asks for a link exchange.
  */
-export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite: { title: string; action: string; href: string } }) {
+export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite: { label: string; href: string } }) {
   const ref = useRef<HTMLDivElement>(null);
   const [running, setRunning] = useState(false);
 
@@ -140,20 +149,18 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
           }
           if (item.kind === "invite") {
             return (
-              <div
+              <a
                 key="invite"
-                className="rise-in col-span-4 flex items-center gap-3 rounded-tile bg-[#5393FF]/10 px-4 ring-1 ring-[#5393FF]/30 sm:col-span-2"
+                href={invite.href}
+                target="_blank"
+                rel="noreferrer"
+                className="group rise-in col-span-4 flex items-center gap-3 rounded-tile bg-[#5393FF]/10 px-4 ring-1 ring-[#5393FF]/30 transition-colors hover:bg-[#5393FF]/15 sm:col-span-2"
                 style={rise}
               >
-                <Link size={32} color={BRAND} className="shrink-0" />
-                <div className="flex min-w-0 flex-1 items-center justify-between gap-2 sm:block sm:space-y-1.5">
-                  <p className="line-clamp-2 text-control leading-snug font-medium text-pretty">{invite.title}</p>
-                  <Button size="sm" variant="outline" render={<a href={invite.href} target="_blank" rel="noreferrer" />} nativeButton={false}>
-                    <RiTwitterXLine aria-hidden />
-                    {invite.action}
-                  </Button>
-                </div>
-              </div>
+                <Link size={32} color={BRAND} trigger="parent" className="shrink-0 sm:max-lg:hidden" />
+                <span className="line-clamp-3 min-w-0 flex-1 text-control leading-snug font-medium text-pretty">{invite.label}</span>
+                <RiTwitterXLine aria-hidden className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+              </a>
             );
           }
           const { f } = item;

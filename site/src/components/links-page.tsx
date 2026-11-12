@@ -12,7 +12,7 @@ export function LinksPage({ locale }: { locale: Locale }) {
       <h1 className="sr-only">{pick(locale, "Friends", "友情链接")}</h1>
       <FriendWall
         friends={friends}
-        invite={{ title: pick(locale, "Want to exchange links?", "想交换友链？"), action: pick(locale, "Contact me", "联系我"), href: AUTHOR.x }}
+        invite={{ label: pick(locale, "Contact me to exchange links", "联系我交换友链"), href: AUTHOR.x }}
       />
     </Container>
   );
