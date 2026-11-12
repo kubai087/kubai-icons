@@ -92,7 +92,7 @@
  "Icons are separate ES modules, bundled on import.": "每個圖示都是獨立的 ES 模組，匯入時才會打包",
  "Import {name}": "匯入 {name}",
  "In my product": "用在產品中",
- "In no particular order.": "排名不分先後。",
+ "In no particular order": "排名不分先後",
  "Info": "資訊",
  "Install the skill": "安裝 Skill",
  "Interface": "介面",

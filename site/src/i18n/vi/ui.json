@@ -92,7 +92,7 @@
  "Icons are separate ES modules, bundled on import.": "Mỗi biểu tượng là một module ES riêng, chỉ được đóng gói khi nhập",
  "Import {name}": "Nhập {name}",
  "In my product": "Trong sản phẩm",
- "In no particular order.": "Không theo thứ tự nào.",
+ "In no particular order": "Không theo thứ tự nào",
  "Info": "Thông tin",
  "Install the skill": "Cài Skill",
  "Interface": "Giao diện",

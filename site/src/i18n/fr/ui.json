@@ -92,7 +92,7 @@
  "Icons are separate ES modules, bundled on import.": "Chaque icône est un module ES distinct, intégré au bundle à l’import",
  "Import {name}": "Importer {name}",
  "In my product": "Dans mon produit",
- "In no particular order.": "Sans ordre particulier.",
+ "In no particular order": "Sans ordre particulier",
  "Info": "Info",
  "Install the skill": "Installer le Skill",
  "Interface": "Interface",

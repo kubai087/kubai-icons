@@ -7,7 +7,7 @@ import { asset, AUTHOR } from "@/lib/site";
 export function LinksPage({ locale }: { locale: Locale }) {
   return (
     <StandalonePage>
-      <Heading level={1} title={pick(locale, "Friends", "友情链接")} lead={pick(locale, "In no particular order.", "排名不分先后。")} />
+      <Heading level={1} title={pick(locale, "Friends", "友情链接")} lead={pick(locale, "In no particular order", "排名不分先后")} />
       <ul className="grid gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {FRIENDS.map((f) => (
           <li key={f.slug}>
