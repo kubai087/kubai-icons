@@ -91,7 +91,6 @@
  "Icons are separate ES modules, bundled on import.": "각 아이콘은 독립된 ES 모듈이며, 가져올 때만 번들에 포함됩니다",
  "Import {name}": "{name} 가져오기",
  "In my product": "내 제품에",
- "In no particular order": "순서는 무관합니다",
  "Info": "정보",
  "Install the skill": "Skill 설치",
  "Interface": "인터페이스",

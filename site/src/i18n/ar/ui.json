@@ -91,7 +91,6 @@
  "Icons are separate ES modules, bundled on import.": "كل أيقونة وحدة ES مستقلة، وتُضمَّن في الحزمة عند الاستيراد فقط",
  "Import {name}": "استيراد {name}",
  "In my product": "في منتجي",
- "In no particular order": "بلا ترتيب معيّن",
  "Info": "معلومات",
  "Install the skill": "تثبيت Skill",
  "Interface": "الواجهة",

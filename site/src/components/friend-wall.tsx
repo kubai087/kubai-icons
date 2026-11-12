@@ -2,14 +2,15 @@
 import { memo, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   Link, Globe, Bookmark, Users, Heart, Star, Mail, Send, Gift, Rocket,
-  Compass, Share, MessageCircle, Coffee, Sparkles, Planet, Paperclip, PartyPopper, Puzzle, ThumbsUp, UserPlus,
+  Compass, Share, MessageCircle, Coffee, Sparkles, Planet, Paperclip, PartyPopper, Puzzle, ThumbsUp, Smile,
 } from "kubai-icons-react";
+import { RiArrowRightUpLine } from "@remixicon/react";
 import { tile } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 
 export type WallFriend = { slug: string; name: string; site: string; host: string; image: string };
 
-const ICONS = [Link, Heart, Globe, Mail, Rocket, Bookmark, Coffee, Users, Star, Send, Gift, Compass, MessageCircle, Sparkles, Planet, Share, Paperclip, PartyPopper, Puzzle, ThumbsUp];
+const ICONS = [Smile, Heart, Globe, Mail, Rocket, Bookmark, Coffee, Users, Star, Send, Gift, Compass, MessageCircle, Sparkles, Planet, Share, Paperclip, PartyPopper, Puzzle, ThumbsUp];
 const COLORS = ["#5393FF", "#EC4899", "#06B6D4", "#6366F1", "#F97316", "#8B5CF6", "#F43F5E", "#22C55E", "#F59E0B", "#0284C7"];
 
 /**
@@ -88,12 +89,13 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
   while (next < ICONS.length) items.push({ kind: "icon", i: next++ });
 
   return (
-    // Rows are exactly one tile tall, so a row of friends alone keeps its height.
+    // Rows are sized so two tiles and a gap make exactly 1200 × 630, the usual share-image
+    // shape, so friends' images show whole; a row of friends alone keeps its height too.
     <div className="@container">
     <div
       ref={ref}
       className="grid grid-flow-row-dense grid-cols-[repeat(var(--cols),minmax(0,1fr))] gap-tiles [--cols:4] sm:[--cols:6] lg:[--cols:8] xl:[--cols:10]"
-      style={{ gridAutoRows: "calc((100cqw - (var(--cols) - 1) * var(--spacing-tiles)) / var(--cols))" }}
+      style={{ gridAutoRows: "calc((2 * (100cqw - (var(--cols) - 1) * var(--spacing-tiles)) / var(--cols) + var(--spacing-tiles)) * 630 / 1200)" }}
     >
       {items.map((item, n) => {
         const rise = { "--i": 1 + Math.floor(n / 4) } as CSSProperties;
@@ -105,20 +107,23 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
         }
         if (item.kind === "invite") {
           return (
-              <a
-                key="invite"
-                href={invite.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group rise-in col-span-2 flex items-center gap-3 rounded-tile border border-dashed px-4 transition-colors hover:bg-surface"
-                style={rise}
-              >
-                <UserPlus size={28} color="#5393FF" trigger="parent" className="shrink-0" />
-                <span className="min-w-0">
-                  <span className="block truncate text-control font-medium">{invite.title}</span>
-                  <span className="block truncate text-caption text-muted-foreground">{invite.action}</span>
+            <a
+              key="invite"
+              href={invite.href}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(tile(), "group rise-in col-span-2 flex items-center justify-start gap-3 px-5 text-start")}
+              style={rise}
+            >
+              <Link size={32} color="#5393FF" trigger="parent" className="shrink-0" />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-control font-medium">{invite.title}</span>
+                <span className="flex items-center gap-0.5 text-caption text-muted-foreground transition-colors group-hover:text-foreground">
+                  <span className="truncate">{invite.action}</span>
+                  <RiArrowRightUpLine aria-hidden className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" />
                 </span>
-              </a>
+              </span>
+            </a>
           );
         }
         const { f } = item;
@@ -128,8 +133,8 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
               href={f.site}
               target="_blank"
               rel="noopener"
-              title={f.host}
-              className="group rise-in relative col-span-2 overflow-hidden rounded-tile bg-surface ring-1 ring-border"
+              aria-label={`${f.name} (${f.host})`}
+              className="group rise-in relative col-span-2 overflow-hidden rounded-tile bg-surface ring-1 ring-border transition-shadow hover:ring-foreground/20"
               style={rise}
             >
               <img
@@ -139,10 +144,14 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
                 height={630}
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 size-full object-cover transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
+                className="absolute inset-0 size-full object-cover"
               />
-              <span className="absolute bottom-1.5 left-1.5 max-w-[calc(100%-0.75rem)] truncate rounded-control bg-background/90 px-2 py-0.5 text-caption font-medium shadow-sm backdrop-blur-sm">
-                {f.name}
+              {/* Inset 6px with the card's radius less 6px, so the two corners share a centre. */}
+              <span className="absolute bottom-1.5 left-1.5 flex max-w-[calc(100%-0.75rem)] items-center rounded-[calc(var(--radius-tile)-6px)] bg-background/60 px-2.5 py-1 text-caption shadow-sm ring-1 ring-foreground/10 backdrop-blur-md backdrop-saturate-150">
+                <span className="shrink-0 font-medium">{f.name}</span>
+                <span className="grid grid-cols-[0fr] opacity-0 transition-[grid-template-columns,opacity] duration-300 ease-[cubic-bezier(.22,1,.36,1)] group-hover:grid-cols-[1fr] group-hover:opacity-100 group-focus-visible:grid-cols-[1fr] group-focus-visible:opacity-100 motion-reduce:transition-none">
+                  <span className="min-w-0 truncate ps-1.5 text-muted-foreground">{f.host}</span>
+                </span>
               </span>
             </a>
         );

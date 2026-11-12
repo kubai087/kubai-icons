@@ -91,7 +91,6 @@
  "Icons are separate ES modules, bundled on import.": "Setiap ikon adalah modul ES terpisah yang hanya dibundel saat diimpor",
  "Import {name}": "Impor {name}",
  "In my product": "Di produk saya",
- "In no particular order": "Tanpa urutan tertentu",
  "Info": "Info",
  "Install the skill": "Pasang Skill",
  "Interface": "Antarmuka",

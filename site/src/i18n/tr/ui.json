@@ -91,7 +91,6 @@
  "Icons are separate ES modules, bundled on import.": "Her simge ayrı bir ES modülüdür ve yalnızca içe aktarıldığında pakete eklenir",
  "Import {name}": "{name} içe aktar",
  "In my product": "Ürünümde",
- "In no particular order": "Belirli bir sıra olmadan",
  "Info": "Bilgi",
  "Install the skill": "Skill'i kurun",
  "Interface": "Arayüz",
