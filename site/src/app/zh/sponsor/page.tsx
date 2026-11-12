@@ -1,4 +1,4 @@
-import { Heading, NarrowPage } from "@/components/kit/layout";
+import { Heading, StandalonePage } from "@/components/kit/layout";
 import { pageMeta } from "@/lib/seo";
 import { asset, AUTHOR } from "@/lib/site";
 
@@ -11,7 +11,7 @@ const METHODS = [
 
 export default function Page() {
   return (
-    <NarrowPage>
+    <StandalonePage>
       <Heading level={1} title="赞助 Kubai Icons" />
       <div className="grid gap-4 sm:grid-cols-2">
         {METHODS.map((m) => (
@@ -27,6 +27,6 @@ export default function Page() {
         <Heading title="赞助位" lead="同一时间只展示一个产品，位置在 GitHub README 和本站首页，内容为产品图标、名称和一句介绍，并标注为赞助。每月 150 美元。" />
         <a href={AUTHOR.x} target="_blank" rel="noreferrer" className="inline-block font-medium underline underline-offset-4">在 X 上联系我</a>
       </section>
-    </NarrowPage>
+    </StandalonePage>
   );
 }

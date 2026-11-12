@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { AgentSubmit } from "@/components/agent-submit";
-import { Heading, NarrowPage } from "@/components/kit/layout";
+import { Heading, StandalonePage } from "@/components/kit/layout";
 import { SubmitForm } from "@/components/submit-form";
 import { pageMeta } from "@/lib/seo";
 
@@ -12,10 +12,10 @@ export const metadata: Metadata = pageMeta({
 
 export default function SubmitPage() {
   return (
-    <NarrowPage>
+    <StandalonePage>
       <Heading level={1} title="Submit an icon" />
       <SubmitForm />
       <AgentSubmit />
-    </NarrowPage>
+    </StandalonePage>
   );
 }

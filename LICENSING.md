@@ -13,7 +13,7 @@ Use, change and redistribute these freely, in commercial work or not. Keep the c
 
 ## The website: all rights reserved
 
-[`LICENSE-SITE`](LICENSE-SITE) covers `site/`, `tools/`, `tests/` and `docs/`, along with the text, design and layout of [icons.kubai.design](https://icons.kubai.design/). You may read the source and run it locally to prepare a contribution here. Copying, hosting or redistributing it needs written permission. The icons shown on the site stay under MIT.
+[`LICENSE-SITE`](LICENSE-SITE) covers `site/`, `tools/`, `tests/` and `docs/`, along with the text, design and layout of [icons.kubai.design](https://icons.kubai.design/). You may read the source and run it locally to prepare a contribution here. Copying, hosting or redistributing it needs written permission. The icons shown on the site stay under MIT. The preview images in `site/public/friends/` are share cards or screenshots of friends' sites. They belong to those sites and are not covered by these licenses.
 
 ## The skill: Kubai Icons License
 

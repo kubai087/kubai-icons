@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { RiFeedbackLine, RiGithubLine, RiHeart3Line, RiMoreFill, RiTwitterXLine, RiUploadLine } from "@remixicon/react";
+import { RiFeedbackLine, RiGithubLine, RiHeart3Line, RiLinksLine, RiMoreFill, RiTwitterXLine, RiUploadLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { track } from "@/lib/analytics";
@@ -12,8 +12,10 @@ import { useLocalize, useTr } from "@/lib/use-locale";
 
 /** Each row is a full-size touch target. */
 const ITEM = "min-h-11 gap-2.5 px-2.5";
+/** Rows the bar itself shows from lg; only Friends waits until xl. */
+const BAR_LG = `${ITEM} lg:hidden`;
 
-/** The header's secondary links, gathered into one menu where the bar is too narrow for them. */
+/** The header's secondary links, gathered into one menu where the bar is too narrow for them. From lg to xl it holds only Friends. */
 export function HeaderMenu({ className }: { className?: string }) {
   const path = usePathname() ?? "/";
   const tr = useTr();
@@ -24,24 +26,27 @@ export function HeaderMenu({ className }: { className?: string }) {
         <RiMoreFill className="size-[18px] text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={10} className="w-52 p-1.5">
-        <DropdownMenuItem className={ITEM} render={<Link href={loc("/icons/submit/")} />}>
+        <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/icons/submit/")} />}>
           <RiUploadLine />{tr("Submit an icon", "提交图标")}
         </DropdownMenuItem>
-        <DropdownMenuItem className={ITEM} render={<Link href={loc("/sponsor/")} />}>
+        <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/sponsor/")} />}>
           <RiHeart3Line />{tr("Sponsor", "赞助")}
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className={ITEM} render={<a href={feedbackUrl(absolute(path))} target="_blank" rel="noreferrer" />} onClick={() => track("feedback_open")}>
+        <DropdownMenuItem className={ITEM} render={<Link href={loc("/links/")} />}>
+          <RiLinksLine />{tr("Friends", "友情链接")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="lg:hidden" />
+        <DropdownMenuItem className={BAR_LG} render={<a href={feedbackUrl(absolute(path))} target="_blank" rel="noreferrer" />} onClick={() => track("feedback_open")}>
           <RiFeedbackLine />{tr("Feedback", "反馈")}
         </DropdownMenuItem>
-        <DropdownMenuItem className={ITEM} render={<a href={REPO} target="_blank" rel="noreferrer" />}>
+        <DropdownMenuItem className={BAR_LG} render={<a href={REPO} target="_blank" rel="noreferrer" />}>
           <RiGithubLine />GitHub
         </DropdownMenuItem>
-        <DropdownMenuItem className={ITEM} render={<a href={AUTHOR.x} target="_blank" rel="noreferrer" />} onClick={() => track("author_x_open", { place: "header_menu" })}>
+        <DropdownMenuItem className={BAR_LG} render={<a href={AUTHOR.x} target="_blank" rel="noreferrer" />} onClick={() => track("author_x_open", { place: "header_menu" })}>
           <RiTwitterXLine />{tr("{name} on X", "{name} 的 X 主页", { name: AUTHOR.name })}
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <ThemeMenuItem className={ITEM} />
+        <DropdownMenuSeparator className="lg:hidden" />
+        <ThemeMenuItem className={BAR_LG} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

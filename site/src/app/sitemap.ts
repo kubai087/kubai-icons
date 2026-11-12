@@ -5,7 +5,7 @@ import { hasIconPages, LANGUAGES, localize } from "@/lib/i18n";
 
 export const dynamic = "force-static";
 
-const PAGES = ["/", "/icons/", "/icons/submit/", "/docs/", "/docs/react/", "/docs/vue/", "/docs/javascript/", "/docs/static/", "/docs/customize/", "/docs/design/", "/docs/accessibility/", "/docs/performance/", "/docs/analytics/", "/docs/contributing/", "/skill/", "/sponsor/", "/license/"];
+const PAGES = ["/", "/icons/", "/icons/submit/", "/docs/", "/docs/react/", "/docs/vue/", "/docs/javascript/", "/docs/static/", "/docs/customize/", "/docs/design/", "/docs/accessibility/", "/docs/performance/", "/docs/analytics/", "/docs/contributing/", "/skill/", "/sponsor/", "/links/", "/license/"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return LANGUAGES.map((l) => l.code).flatMap((locale) => [
