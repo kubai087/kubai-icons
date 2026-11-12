@@ -7,7 +7,6 @@ import {
   Magnet, Wand, Bomb, PiggyBank, Gift, Cake, Donut, IceCream, Popcorn, Sushi, Watermelon, Cat, Dog, Bee, Butterfly, Whale,
   Link,
 } from "kubai-icons-react";
-import { RiTwitterXLine } from "@remixicon/react";
 import { tile } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 
@@ -159,7 +158,6 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
               >
                 <Link size={32} color={BRAND} trigger="parent" className="shrink-0 sm:max-lg:hidden" />
                 <span className="line-clamp-3 min-w-0 flex-1 text-control leading-snug font-medium text-pretty">{invite.label}</span>
-                <RiTwitterXLine aria-hidden className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
               </a>
             );
           }
