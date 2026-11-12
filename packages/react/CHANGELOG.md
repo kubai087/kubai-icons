@@ -1,5 +1,16 @@
 # kubai-icons-react
 
+## 0.7.0
+
+### Minor Changes
+
+- [#67](https://github.com/kubai087/kubai-icons/pull/67) [`acbbc06`](https://github.com/kubai087/kubai-icons/commit/acbbc06048971f2ff778a69ffdd5bd7575101390) Thanks [@kubai087](https://github.com/kubai087)! - Add nine camping icons: `lantern`, `thermos`, `cooler`, `matchbox`, `camp-stove`, `sleeping-bag`, `picnic-basket`, `hammock` and `carabiner`.
+
+### Patch Changes
+
+- Updated dependencies [[`acbbc06`](https://github.com/kubai087/kubai-icons/commit/acbbc06048971f2ff778a69ffdd5bd7575101390)]:
+  - kubai-icons@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes
