@@ -1,11 +1,11 @@
 "use client";
 import { RiTwitterXLine } from "@remixicon/react";
 import { quietLink } from "@/components/kit/styles";
-import { AUTHOR, SPONSOR } from "@/lib/site";
+import { SPONSOR, SPONSOR_POST } from "@/lib/site";
 import { useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
-/** The paid sponsor as icon, name and one line, or a link to message the author while the slot is open. */
+/** The paid sponsor as icon, name and one line, or a link to the post about it while the slot is open. */
 export function SponsorSlot({ className }: { className?: string }) {
   const tr = useTr();
   const row = cn("flex w-fit items-center gap-2 py-1 pointer-coarse:py-2", quietLink, className);
@@ -19,7 +19,7 @@ export function SponsorSlot({ className }: { className?: string }) {
     );
   }
   return (
-    <a href={AUTHOR.x} target="_blank" rel="noreferrer" className={row}>
+    <a href={SPONSOR_POST} target="_blank" rel="noreferrer" className={row}>
       <span aria-hidden className="size-4 shrink-0 rounded-sm border border-dashed border-current opacity-60" />
       {tr("Your product here", "虚位以待")}
       <span className="flex items-center gap-1 font-medium text-[#5393FF]">
