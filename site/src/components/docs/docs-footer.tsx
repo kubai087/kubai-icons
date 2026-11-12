@@ -48,9 +48,6 @@ export function DocsFooter() {
           </Link>
         ) : null}
       </nav>
-      <p className="pt-3 text-caption text-muted-foreground">
-        {tr("Kubai Icons is free to use.", "Kubai Icons 免费使用。")} <Link href={loc("/sponsor/")} className="tap relative font-medium text-foreground underline-offset-4 hover:underline">{tr("Sponsor the project", "赞助本项目")}</Link>
-      </p>
     </div>
   );
 }

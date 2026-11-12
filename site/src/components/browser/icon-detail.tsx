@@ -18,7 +18,6 @@ import { burst } from "@/lib/ceremony";
 import { REPO, asset } from "@/lib/site";
 import { languageOf } from "@/lib/i18n";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
-import { nudgeSponsor } from "@/lib/sponsor-nudge";
 import { cn } from "@/lib/utils";
 import { PREVIEW_SIZE, type Badge as BadgeMode } from "./prefs";
 import { useIcon, useLocalName } from "./icon-tile";
@@ -150,19 +149,19 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
       const button = e.currentTarget, svg = svgText();
       if (!(await copyText(svg, { quiet: true }))) return;
       celebrate("copy", button);
-      track("icon_copy", { icon: meta.name, format: "svg" }); nudgeSponsor();
+      track("icon_copy", { icon: meta.name, format: "svg" });
     },
     svg: (e: React.MouseEvent<HTMLElement>) => {
       const svg = svgText();
       download(`${meta.name}.svg`, new Blob([svg], { type: "image/svg+xml" }));
       celebrate("svg", e.currentTarget);
-      track("icon_download", { icon: meta.name, format: "svg" }); nudgeSponsor();
+      track("icon_download", { icon: meta.name, format: "svg" });
     },
     png: async (e: React.MouseEvent<HTMLElement>) => {
       const button = e.currentTarget, svg = svgText();
       download(`${meta.name}.png`, await svgToPng(svg, 512));
       celebrate("png", button);
-      track("icon_download", { icon: meta.name, format: "png" }); nudgeSponsor();
+      track("icon_download", { icon: meta.name, format: "png" });
     },
   };
   const variants = related.filter((r) => r.base);
@@ -288,7 +287,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
               ))}
               {(Object.keys(snippets) as (keyof typeof snippets)[]).map((k) => (
                 <TabsContent key={k} value={k} className="swap-in [grid-area:1/1]">
-                  <CodeBlock code={snippets[k]} className="h-full" onCopy={() => { track("icon_copy", { icon: meta.name, format: k }); nudgeSponsor(); }} />
+                  <CodeBlock code={snippets[k]} className="h-full" onCopy={() => { track("icon_copy", { icon: meta.name, format: k }); }} />
                 </TabsContent>
               ))}
             </div>

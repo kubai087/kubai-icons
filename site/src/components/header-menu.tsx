@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { RiFeedbackLine, RiGithubLine, RiHeart3Line, RiLinksLine, RiMoreFill, RiTwitterXLine, RiUploadLine } from "@remixicon/react";
+import { RiFeedbackLine, RiGithubLine, RiLinksLine, RiMoreFill, RiTwitterXLine, RiUploadLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { track } from "@/lib/analytics";
@@ -12,10 +12,10 @@ import { useLocalize, useTr } from "@/lib/use-locale";
 
 /** Each row is a full-size touch target. */
 const ITEM = "min-h-11 gap-2.5 px-2.5";
-/** Rows the bar itself shows from lg; only Friends waits until xl. */
+/** Rows the bar itself shows from lg. */
 const BAR_LG = `${ITEM} lg:hidden`;
 
-/** The header's secondary links, gathered into one menu where the bar is too narrow for them. From lg to xl it holds only Friends. */
+/** The header's secondary links, gathered into one menu where the bar is too narrow for them. */
 export function HeaderMenu({ className }: { className?: string }) {
   const path = usePathname() ?? "/";
   const tr = useTr();
@@ -29,11 +29,8 @@ export function HeaderMenu({ className }: { className?: string }) {
         <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/icons/submit/")} />}>
           <RiUploadLine />{tr("Submit an icon", "提交图标")}
         </DropdownMenuItem>
-        <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/sponsor/")} />}>
-          <RiHeart3Line />{tr("Sponsor", "赞助")}
-        </DropdownMenuItem>
-        <DropdownMenuItem className={ITEM} render={<Link href={loc("/links/")} />}>
-          <RiLinksLine />{tr("Friends", "友情链接")}
+        <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/links/")} />}>
+          <RiLinksLine />{tr("Partners", "合作伙伴")}
         </DropdownMenuItem>
         <DropdownMenuSeparator className="lg:hidden" />
         <DropdownMenuItem className={BAR_LG} render={<a href={feedbackUrl(absolute(path))} target="_blank" rel="noreferrer" />} onClick={() => track("feedback_open")}>

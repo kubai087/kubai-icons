@@ -15,7 +15,6 @@ import {
   type CollectionFormat, type SavedIcon,
 } from "@/lib/collection";
 import { loadIndex, type IconMeta } from "@/lib/icons";
-import { nudgeSponsor } from "@/lib/sponsor-nudge";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
 import { useIcon, useLocalName } from "./icon-tile";
@@ -58,7 +57,6 @@ export function CollectionDock() {
     try {
       const saved = await downloadCollection(items, format);
       track("collection_download", { count: saved, format });
-      nudgeSponsor();
     } catch {
       toast.error(tr("Download failed", "下载失败"));
     } finally {
