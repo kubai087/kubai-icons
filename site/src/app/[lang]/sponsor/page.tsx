@@ -1,45 +1,19 @@
 import type { Metadata } from "next";
-import { Heading, StandalonePage } from "@/components/kit/layout";
+import { MovedPage } from "@/components/moved-page";
+import { LINKS_DESCRIPTION } from "@/lib/friends";
 import { localize, translated } from "@/lib/i18n";
 import { pageLanguage } from "@/lib/page-language";
 import { pageMeta } from "@/lib/seo";
-import { asset, AUTHOR } from "@/lib/site";
-
-const METHODS = [
-  { name: "Alipay", src: "/sponsor/alipay.png" },
-  { name: "WeChat Pay", src: "/sponsor/wechat.png" },
-];
 
 type Props = { params: Promise<{ lang: string }> };
 
+// Links to /sponsor/ still reach the partners page.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await pageLanguage(params);
-  return pageMeta({
-    title: translated(locale, "Sponsor"),
-    path: localize("/sponsor/", locale),
-    description: translated(locale, "Support the development of Kubai Icons, a free and open-source icon library, with Alipay or WeChat Pay."),
-  });
+  return pageMeta({ title: translated(locale, "Partners"), path: localize("/links/", locale), description: translated(locale, LINKS_DESCRIPTION) });
 }
 
 export default async function Page({ params }: Props) {
   const locale = await pageLanguage(params);
-  return (
-    <StandalonePage>
-      <Heading level={1} title={translated(locale, "Sponsor Kubai Icons")} />
-      <div className="grid gap-4 sm:grid-cols-2">
-        {METHODS.map((m) => (
-          <figure key={m.name} className="space-y-3 rounded-card border p-5">
-            <div className="mx-auto w-full max-w-56 overflow-hidden rounded-lg bg-white">
-              <img src={asset(m.src)} alt={translated(locale, "{name} payment QR code", { name: m.name })} width={448} height={448} className="block h-auto w-full" />
-            </div>
-            <figcaption className="text-center font-medium">{m.name}</figcaption>
-          </figure>
-        ))}
-      </div>
-      <section id="slot" className="scroll-mt-(--header) space-y-4 pt-4">
-        <Heading title={translated(locale, "Sponsor slot")} lead={translated(locale, "One product at a time can appear in the GitHub README and on this site’s home page, shown with its icon, name and one line of text and marked as sponsored. US$150 a month.")} />
-        <a href={AUTHOR.x} target="_blank" rel="noreferrer" className="inline-block font-medium underline underline-offset-4">{translated(locale, "Contact me on X")}</a>
-      </section>
-    </StandalonePage>
-  );
+  return <MovedPage to={localize("/links/", locale)} label={translated(locale, "Partners")} />;
 }

@@ -23,11 +23,10 @@ const NAV = [
   { href: "/docs/", label: "Docs", zh: "文档" },
   { href: "/skill/", label: "Skill", zh: "Skill" },
   { href: "/icons/submit/", label: "Submit", zh: "提交", wide: "lg" as const },
-  { href: "/sponsor/", label: "Sponsor", zh: "赞助", wide: "lg" as const },
-  { href: "/links/", label: "Friends", zh: "友情链接", wide: "xl" as const },
+  { href: "/links/", label: "Partners", zh: "合作伙伴", wide: "lg" as const },
 ];
 
-const WIDE = { lg: "hidden lg:block", xl: "hidden xl:block" } as const;
+const WIDE = { lg: "hidden lg:block" } as const;
 
 /** The nav entry for a path: the most specific one, so /icons/submit/ is not also Icons. */
 const currentHref = (path: string | null) => {
@@ -76,7 +75,7 @@ export function SiteHeader() {
           <LanguageSwitch className={cn("tap relative grid size-8 place-items-center rounded-control hover:bg-muted", quietLink)} iconOnly />
           <ThemeToggle className="max-lg:hidden" />
           <GitHubStars className="ms-1 hidden min-[360px]:inline-flex" />
-          <HeaderMenu className="ms-1 xl:hidden" />
+          <HeaderMenu className="ms-1 lg:hidden" />
         </div>
       </Container>
     </header>

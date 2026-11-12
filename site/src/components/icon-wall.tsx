@@ -1,16 +1,22 @@
 "use client";
-import { memo, useEffect, useRef, useState, type CSSProperties } from "react";
+import { Fragment, memo, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
   Astronaut, Ghost, Bot, Balloon, Crown, PartyPopper, Ufo, Rocket, Planet, Telescope, Boombox, Cassette, Turntable,
   Polaroid, CameraRetro, Guitar, Headphones, ArcadeMachine, GameConsole, Gamepad, RetroComputer, Typewriter, Dice,
   PlayingCards, Kite, Pinwheel, RollerSkate, Trophy, FerrisWheel, HotAirBalloon, Lighthouse, Windmill, Castle, Campfire,
   Magnet, Wand, Bomb, PiggyBank, Gift, Cake, Donut, IceCream, Popcorn, Sushi, Watermelon, Cat, Dog, Bee, Butterfly, Whale,
-  Link,
 } from "kubai-icons-react";
+import { RiTwitterXLine } from "@remixicon/react";
 import { tile } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 
-export type WallFriend = { slug: string; name: string; site: string; host: string; image: string };
+export type WallFriend = { slug: string; name: string; site: string; host: string; image: string; sponsored?: boolean };
+
+/**
+ * A card set into the wall. A `tall` card spans the whole row and two rows on phones, for a
+ * share image; the others span the whole row once. Wider, every card takes two tiles.
+ */
+export type WallCard = { key: string; tall?: boolean; render: (style: CSSProperties) => ReactNode };
 
 /**
  * Fifty different icons, chosen to be fun and to read at a glance: characters, space,
@@ -24,19 +30,17 @@ const ICONS = [
   RollerSkate, Campfire, Typewriter, PiggyBank, Headphones, Bomb, PlayingCards, CameraRetro, Gift, RetroComputer,
 ];
 const COLORS = ["#5393FF", "#EC4899", "#06B6D4", "#6366F1", "#F97316", "#8B5CF6", "#F43F5E", "#22C55E", "#F59E0B", "#0284C7"];
-const BRAND = "#5393FF";
 
 /**
- * Columns and rows at each width, and the cells a friend's card and the invite take. On
- * phones a friend spans the whole row and two rows tall, so its share image stays large;
- * wider, it takes two tiles. Icons fill the rest, so every row is full: 4 × 24, 6 × 9, 8 × 8
- * and 10 × 7.
+ * Columns at each width, the fewest icons to show there, and the cells a tall card and a
+ * short card take: on phones a card spans the whole row, wider it takes two tiles. Icons
+ * fill the rest, so every row is full.
  */
 const GRIDS = [
-  { cols: 4, rows: 24, friend: 8, invite: 4 },
-  { cols: 6, rows: 9, friend: 2, invite: 2 },
-  { cols: 8, rows: 8, friend: 2, invite: 2 },
-  { cols: 10, rows: 7, friend: 2, invite: 2 },
+  { cols: 4, icons: 16, tall: 8, short: 4 },
+  { cols: 6, icons: 30, tall: 2, short: 2 },
+  { cols: 8, icons: 40, tall: 2, short: 2 },
+  { cols: 10, icons: 48, tall: 2, short: 2 },
 ];
 const SHOW = [["", "hidden"], ["sm:grid", "sm:hidden"], ["lg:grid", "lg:hidden"], ["xl:grid", "xl:hidden"]] as const;
 
@@ -90,15 +94,14 @@ const LoopTile = memo(function LoopTile({ Icon, color, offset, period, running, 
   );
 });
 
-type Item = { kind: "icon"; k: number } | { kind: "friend"; f: WallFriend } | { kind: "invite" };
+type Item = { kind: "icon"; k: number } | { kind: "card"; card: WallCard };
 
 /**
- * Friends' sites set into a wall of moving icons, like the one on the home page: each
- * friend's share image takes two tiles, spread loosely through the wall, and icons fill the
- * rest, looping their motion on staggered beats while the wall is on screen. The last card
- * asks for a link exchange.
+ * Cards set into a wall of moving icons, like the one on the home page: the cards are spread
+ * loosely through the wall and icons fill the rest, looping their motion on staggered beats
+ * while the wall is on screen. The wall grows by whole rows to fit its cards.
  */
-export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite: { label: string; href: string } }) {
+export function IconWall({ cards }: { cards: WallCard[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [running, setRunning] = useState(false);
 
@@ -109,78 +112,97 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
     return () => observer.disconnect();
   }, []);
 
-  const cards: Item[] = [...friends.map((f) => ({ kind: "friend", f }) as Item), { kind: "invite" }];
-  const counts = GRIDS.map((g) => g.cols * g.rows - friends.length * g.friend - g.invite);
+  const counts = GRIDS.map((g) => {
+    const used = cards.reduce((sum, c) => sum + (c.tall ? g.tall : g.short), 0);
+    return Math.ceil((used + g.icons) / g.cols) * g.cols - used;
+  });
   const total = Math.max(...counts);
   // Cards go in evenly between the icons, starting a little way in.
   const items: Item[] = [];
   let next = 0;
   for (let k = 0; k < total; k++) {
-    if (next < cards.length && k >= Math.round(((next + 0.4) * total) / cards.length)) items.push(cards[next++]);
+    if (next < cards.length && k >= Math.round(((next + 0.4) * total) / cards.length)) items.push({ kind: "card", card: cards[next++] });
     items.push({ kind: "icon", k });
   }
-  while (next < cards.length) items.push(cards[next++]);
+  while (next < cards.length) items.push({ kind: "card", card: cards[next++] });
 
   return (
     <div className="@container">
       <div
         ref={ref}
         className="grid grid-flow-row-dense grid-cols-[repeat(var(--cols),minmax(0,1fr))] gap-tiles [--cols:4] sm:[--cols:6] lg:[--cols:8] xl:[--cols:10]"
-        // Square tiles: each row is one column wide, so a row of friends alone keeps its height.
+        // Square tiles: each row is one column wide, so a row of cards alone keeps its height.
         style={{ gridAutoRows: "calc((100cqw - (var(--cols) - 1) * var(--spacing-tiles)) / var(--cols))" }}
       >
         {items.map((item, n) => {
           const rise = { "--i": 1 + Math.floor(n / 6) } as CSSProperties;
-          if (item.kind === "icon") {
-            const { k } = item;
-            const shown = cn(GRIDS.map((_, g) => SHOW[g][spread(k, counts[g], total) ? 0 : 1]));
-            return (
-              <LoopTile
-                key={`icon-${k}`}
-                Icon={ICONS[k % ICONS.length]}
-                color={COLORS[(k * 3) % COLORS.length]}
-                offset={(((k * 7) % total) / total) * total * PER_TILE}
-                period={total * PER_TILE}
-                running={running}
-                className={shown}
-                style={rise}
-              />
-            );
-          }
-          if (item.kind === "invite") {
-            return (
-              <a
-                key="invite"
-                href={invite.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group rise-in col-span-4 flex items-center gap-3 rounded-tile bg-[#5393FF]/10 px-4 ring-1 ring-[#5393FF]/30 transition-colors hover:bg-[#5393FF]/15 sm:col-span-2"
-                style={rise}
-              >
-                <Link size={32} color={BRAND} trigger="parent" className="shrink-0 sm:max-lg:hidden" />
-                <span className="line-clamp-3 min-w-0 flex-1 text-control leading-snug font-medium text-pretty">{invite.label}</span>
-              </a>
-            );
-          }
-          const { f } = item;
+          if (item.kind === "card") return <Fragment key={item.card.key}>{item.card.render(rise)}</Fragment>;
+          const { k } = item;
+          const shown = cn(GRIDS.map((_, g) => SHOW[g][spread(k, counts[g], total) ? 0 : 1]));
           return (
-            <a
-              key={f.slug}
-              href={f.site}
-              target="_blank"
-              rel="noopener"
-              aria-label={`${f.name} (${f.host})`}
-              className="group rise-in relative col-span-4 row-span-2 overflow-hidden rounded-tile sm:col-span-2 sm:row-span-1 bg-surface ring-1 ring-border transition-shadow hover:ring-foreground/20"
+            <LoopTile
+              key={`icon-${k}`}
+              Icon={ICONS[k % ICONS.length]}
+              color={COLORS[(k * 3) % COLORS.length]}
+              offset={(((k * 7) % total) / total) * total * PER_TILE}
+              period={total * PER_TILE}
+              running={running}
+              className={shown}
               style={rise}
-            >
-              <img src={f.image} alt="" width={1200} height={630} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
-              <span className="absolute bottom-1.5 left-1.5 flex h-[22px] max-w-[calc(100%-0.75rem)] items-center rounded-full bg-background/85 px-2.5 text-caption leading-none font-medium text-foreground shadow-[0_1px_3px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 backdrop-blur-sm">
-                <span className="truncate">{f.name}</span>
-              </span>
-            </a>
+            />
           );
         })}
       </div>
     </div>
   );
+}
+
+/** A card for a place on the wall that is still open, linking to a message on X. */
+function OpenCard({ title, action, href, style }: { title: string; action: string; href: string; style: CSSProperties }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="group rise-in col-span-4 flex flex-col justify-center rounded-tile border border-dashed border-[#5393FF]/50 bg-[#5393FF]/5 px-4 leading-snug transition-colors hover:bg-[#5393FF]/10 sm:col-span-2"
+      style={style}
+    >
+      <span className="truncate text-control font-semibold">{title}</span>
+      <span className="flex items-center gap-1 truncate text-caption font-medium text-[#5393FF]">
+        <RiTwitterXLine aria-hidden className="size-3 shrink-0" />
+        {action}
+      </span>
+    </a>
+  );
+}
+
+type Open = { title: string; action: string; href: string };
+
+/** Partners' sites, each share image taking two tiles, with the open place in the middle. */
+export function FriendWall({ friends, open }: { friends: WallFriend[]; open: Open }) {
+  const sites: WallCard[] = friends.map((f) => ({
+    key: f.slug,
+    tall: true,
+    render: (style: CSSProperties) => (
+      <a
+        href={f.site}
+        target="_blank"
+        rel={f.sponsored ? "sponsored noopener" : "noopener"}
+        aria-label={`${f.name} (${f.host})`}
+        className="group rise-in relative col-span-4 row-span-2 overflow-hidden rounded-tile sm:col-span-2 sm:row-span-1 bg-surface ring-1 ring-border transition-shadow hover:ring-foreground/20"
+        style={style}
+      >
+        <img src={f.image} alt="" width={1200} height={630} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
+        <span className="absolute bottom-1.5 left-1.5 flex h-[22px] max-w-[calc(100%-0.75rem)] items-center rounded-full bg-background/85 px-2.5 text-caption leading-none font-medium text-foreground shadow-[0_1px_3px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 backdrop-blur-sm">
+          <span className="truncate">{f.name}</span>
+        </span>
+      </a>
+    ),
+  }));
+  const cards = [...sites];
+  cards.splice(Math.round(sites.length / 2), 0, {
+    key: "open",
+    render: (style) => <OpenCard title={open.title} action={open.action} href={open.href} style={style} />,
+  });
+  return <IconWall cards={cards} />;
 }

@@ -59,8 +59,7 @@ export function SiteFooter() {
             <a href={REPO} target="_blank" rel="noreferrer" className={link}>GitHub</a>
             <a href={`${REPO}/releases`} target="_blank" rel="noreferrer" className={link}>{tr("Releases", "更新日志")}</a>
             <FeedbackLink className={link}>{tr("Feedback", "反馈")}</FeedbackLink>
-            <Link href={loc("/sponsor/")} className={link}>{tr("Sponsor", "赞助")}</Link>
-          <Link href={loc("/links/")} className={link}>{tr("Friends", "友情链接")}</Link>
+            <Link href={loc("/links/")} className={link}>{tr("Partners", "合作伙伴")}</Link>
           </Column>
           <Column title={tr("Legal", "法律信息")}>
             <Link href={loc("/license/")} className={link}>{tr("License", "许可证")}</Link>
