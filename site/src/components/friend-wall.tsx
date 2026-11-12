@@ -27,14 +27,16 @@ const COLORS = ["#5393FF", "#EC4899", "#06B6D4", "#6366F1", "#F97316", "#8B5CF6"
 const BRAND = "#5393FF";
 
 /**
- * Columns and rows at each width. Friends take two cells each; icons fill the rest, so every
- * row is full: 4 × 10, 6 × 9, 8 × 8 and 10 × 7.
+ * Columns and rows at each width, and the cells a friend's card and the invite take. On
+ * phones a friend spans the whole row and two rows tall, so its share image stays large;
+ * wider, it takes two tiles. Icons fill the rest, so every row is full: 4 × 24, 6 × 9, 8 × 8
+ * and 10 × 7.
  */
 const GRIDS = [
-  { cols: 4, rows: 10 },
-  { cols: 6, rows: 9 },
-  { cols: 8, rows: 8 },
-  { cols: 10, rows: 7 },
+  { cols: 4, rows: 24, friend: 8, invite: 4 },
+  { cols: 6, rows: 9, friend: 2, invite: 2 },
+  { cols: 8, rows: 8, friend: 2, invite: 2 },
+  { cols: 10, rows: 7, friend: 2, invite: 2 },
 ];
 const SHOW = [["", "hidden"], ["sm:grid", "sm:hidden"], ["lg:grid", "lg:hidden"], ["xl:grid", "xl:hidden"]] as const;
 
@@ -108,8 +110,7 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
   }, []);
 
   const cards: Item[] = [...friends.map((f) => ({ kind: "friend", f }) as Item), { kind: "invite" }];
-  // On phones the invite card spans the whole row (four tiles), so its button fits beside it.
-  const counts = GRIDS.map((g, i) => g.cols * g.rows - cards.length * 2 - (i === 0 ? 2 : 0));
+  const counts = GRIDS.map((g) => g.cols * g.rows - friends.length * g.friend - g.invite);
   const total = Math.max(...counts);
   // Cards go in evenly between the icons, starting a little way in.
   const items: Item[] = [];
@@ -169,7 +170,7 @@ export function FriendWall({ friends, invite }: { friends: WallFriend[]; invite:
               target="_blank"
               rel="noopener"
               aria-label={`${f.name} (${f.host})`}
-              className="group rise-in relative col-span-2 overflow-hidden rounded-tile bg-surface ring-1 ring-border transition-shadow hover:ring-foreground/20"
+              className="group rise-in relative col-span-4 row-span-2 overflow-hidden rounded-tile sm:col-span-2 sm:row-span-1 bg-surface ring-1 ring-border transition-shadow hover:ring-foreground/20"
               style={rise}
             >
               <img src={f.image} alt="" width={1200} height={630} loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
