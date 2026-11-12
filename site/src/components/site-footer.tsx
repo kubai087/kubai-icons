@@ -15,6 +15,8 @@ import { useLocalize, useTr } from "@/lib/use-locale";
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
 
 const GITHUB = "https://github.com/kubai087";
+/** Friends' sites. Karl's is plain http until its custom domain serves a valid certificate. */
+const FRIENDS = [{ name: "Karl Coding", site: "http://www.leekarl.com/" }];
 const MORE = [
   { name: "Lumno", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-extension` },
   { name: "Lumno Web", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-web` },
@@ -36,7 +38,7 @@ export function SiteFooter() {
   const loc = useLocalize();
   return (
     <footer className="mt-section border-t">
-      <Container className="grid grid-cols-2 gap-x-6 gap-y-8 py-12 md:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
+      <Container className="grid grid-cols-2 gap-x-6 gap-y-8 py-12 md:grid-cols-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))]">
         <div className="col-span-2 space-y-3 md:col-span-1">
           <Link href={loc("/")} className="flex w-fit items-center gap-2 text-subheading font-semibold">
             <Logo size={24} />
@@ -70,6 +72,11 @@ export function SiteFooter() {
             </div>
           ))}
           <a href="https://www.kubai.design/" className={link}>kubai.design</a>
+        </Column>
+        <Column title={tr("Friends", "友情链接")}>
+          {FRIENDS.map((f) => (
+            <a key={f.name} href={f.site} className={link}>{f.name}</a>
+          ))}
         </Column>
       </Container>
       <div className="border-t">
