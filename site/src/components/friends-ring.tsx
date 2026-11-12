@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { RiArrowRightUpLine } from "@remixicon/react";
+import { Container } from "@/components/kit/layout";
 import { cn } from "@/lib/utils";
 
 export type RingFriend = { slug: string; name: string; site: string; host: string; image: string };
@@ -13,6 +14,53 @@ const MIN_SLOTS = 16;
 const GAP = 0.08;
 /** Cards further round than this are behind the viewer and stay hidden. */
 const VISIBLE = 72;
+
+/** Each edge lens covers this share of the stage's width. */
+const LENS = 0.24;
+/** How far, in pixels, the lens pulls the picture at its outer edge. */
+const BEND = 70;
+
+/**
+ * A displacement map for one edge lens, at half size. Red moves pixels sideways and green
+ * up and down; both grow toward the outer edge, so the picture bulges and stretches there
+ * like the rim of a glass lens.
+ */
+function lensMap(width: number, height: number, side: "left" | "right") {
+  const w = Math.max(2, Math.round(width / 2));
+  const h = Math.max(2, Math.round(height / 2));
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return "";
+  const img = ctx.createImageData(w, h);
+  for (let y = 0; y < h; y++) {
+    const v = (y / (h - 1)) * 2 - 1;
+    for (let x = 0; x < w; x++) {
+      const t = side === "left" ? 1 - x / (w - 1) : x / (w - 1);
+      const k = t * t * (3 - 2 * t);
+      const dx = (side === "left" ? 1 : -1) * k * 0.9;
+      const dy = -v * k * k * 0.45;
+      const i = (y * w + x) * 4;
+      img.data[i] = 128 + dx * 127;
+      img.data[i + 1] = 128 + dy * 127;
+      img.data[i + 2] = 128;
+      img.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return canvas.toDataURL();
+}
+
+/** Keeps one colour channel of the bent picture, so each can bend by a slightly different amount. */
+const CHANNELS = [
+  ["R", "1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"],
+  ["G", "0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"],
+  ["B", "0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"],
+] as const;
+
+/** Chromium can run an SVG filter on what sits behind an element; elsewhere the lenses just blur. */
+const canRefract = () => typeof CSS !== "undefined" && CSS.supports("backdrop-filter", "url(#a)") && /Chrome\//.test(navigator.userAgent);
 
 const wrap = (deg: number) => ((((deg + 180) % 360) + 360) % 360) - 180;
 
@@ -51,9 +99,17 @@ export function FriendsRing({ friends }: { friends: RingFriend[] }) {
     let frontNow = -1;
     const shown: boolean[] = [];
 
+    const refract = canRefract();
+    const lenses = (["left", "right"] as const).map((side) => ({
+      side,
+      el: el.querySelector<HTMLElement>(`[data-lens=${side}]`),
+      map: document.getElementById(`friends-lens-map-${side}`),
+      filter: document.getElementById(`friends-lens-${side}`),
+    }));
+
     const layout = () => {
       const w = el.clientWidth;
-      const width = w < 640 ? w * 0.62 : Math.min(380, Math.max(260, w * 0.3));
+      const width = w < 640 ? w * 0.62 : Math.min(440, Math.max(260, w * 0.26));
       const height = (width * 630) / 1200;
       const radius = (slots * width * (1 + GAP)) / (2 * Math.PI);
       depth = radius * 0.86;
@@ -65,6 +121,18 @@ export function FriendsRing({ friends }: { friends: RingFriend[] }) {
       cards.current.forEach((c, i) => {
         if (c) c.style.transform = `rotateY(${-i * step}deg) translateZ(${-radius}px)`;
       });
+      if (!refract) return;
+      const lw = Math.round(w * LENS);
+      const lh = Math.round(height * 1.75);
+      for (const lens of lenses) {
+        if (!lens.el || !lens.map || !lens.filter) continue;
+        for (const node of [lens.filter, lens.map]) {
+          node.setAttribute("width", String(lw));
+          node.setAttribute("height", String(lh));
+        }
+        lens.map.setAttribute("href", lensMap(lw, lh, lens.side));
+        lens.el.style.backdropFilter = `url(#friends-lens-${lens.side}) blur(1.5px) saturate(1.35)`;
+      }
     };
 
     const render = () => {
@@ -200,20 +268,42 @@ export function FriendsRing({ friends }: { friends: RingFriend[] }) {
     };
   }, [count, slots, step]);
 
-  const edge = (side: "left" | "right", width: string, blur: string) => (
+  const lens = (side: "left" | "right") => (
     <div
-      aria-hidden
-      className={cn("pointer-events-none absolute inset-y-0 z-10", side === "left" ? "left-0" : "right-0", blur)}
-      style={{ width, maskImage: `linear-gradient(to ${side === "left" ? "right" : "left"}, black, transparent)` }}
+      data-lens={side}
+      className={cn("pointer-events-none absolute inset-y-0 z-10 backdrop-blur-[6px]", side === "left" ? "left-0" : "right-0")}
+      style={{
+        width: `${LENS * 100}%`,
+        maskImage: `linear-gradient(to ${side === "left" ? "right" : "left"}, black 35%, transparent)`,
+        backgroundImage: `linear-gradient(to ${side === "left" ? "right" : "left"}, rgb(255 255 255 / 0.08), transparent 70%)`,
+      }}
     />
+  );
+
+  /** Splits the bend across red, green and blue so the lens edges fringe like real glass. */
+  const lensFilter = (side: "left" | "right") => (
+    <filter key={side} id={`friends-lens-${side}`} x="0" y="0" width="1" height="1" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+      <feImage id={`friends-lens-map-${side}`} x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map" />
+      {CHANNELS.map(([channel, matrix], n) => (
+        <Fragment key={channel}>
+          <feDisplacementMap in="SourceGraphic" in2="map" scale={BEND * (1 + n * 0.06)} xChannelSelector="R" yChannelSelector="G" result={`bent${channel}`} />
+          <feColorMatrix in={`bent${channel}`} type="matrix" values={matrix} result={`only${channel}`} />
+        </Fragment>
+      ))}
+      <feBlend in="onlyR" in2="onlyG" mode="screen" result="rg" />
+      <feBlend in="rg" in2="onlyB" mode="screen" />
+    </filter>
   );
 
   return (
     <div className="space-y-8">
+      <svg aria-hidden width="0" height="0" className="absolute">
+        <defs>{lensFilter("left")}{lensFilter("right")}</defs>
+      </svg>
       <div
         ref={stage}
         aria-hidden
-        className="relative -mx-gutter cursor-grab touch-pan-y overflow-hidden select-none active:cursor-grabbing"
+        className="relative cursor-grab touch-pan-y overflow-hidden select-none active:cursor-grabbing"
         style={{ maskImage: "linear-gradient(to right, transparent, black 7%, black 93%, transparent)" }}
       >
         <div ref={ring} className="absolute top-1/2 left-1/2 transform-3d will-change-transform">
@@ -238,11 +328,10 @@ export function FriendsRing({ friends }: { friends: RingFriend[] }) {
             );
           })}
         </div>
-        {edge("left", "26%", "backdrop-blur-[3px]")}
-        {edge("left", "13%", "backdrop-blur-[8px]")}
-        {edge("right", "26%", "backdrop-blur-[3px]")}
-        {edge("right", "13%", "backdrop-blur-[8px]")}
+        {lens("left")}
+        {lens("right")}
       </div>
+      <Container>
       <ol className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
         {friends.map((f, i) => (
           <li key={f.slug} className="flex items-center gap-3 border-b py-1">
@@ -265,6 +354,7 @@ export function FriendsRing({ friends }: { friends: RingFriend[] }) {
           </li>
         ))}
       </ol>
+      </Container>
     </div>
   );
 }
