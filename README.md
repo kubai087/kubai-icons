@@ -225,6 +225,11 @@ Each icon is one module in [`icons/`](icons); [`docs/authoring.md`](docs/authori
 
 </details>
 
+## Sponsor
+
+<!-- One sponsor at a time, as a favicon, a linked name and one line of text. -->
+This spot is open. One product at a time is shown here and in the footer of [icons.kubai.design](https://icons.kubai.design/), with its icon, name and one line of text, for US$150 a month. [Contact me on X](https://x.com/kubai087).
+
 ## Contributing
 
 - **Improve the skill.** Report a rule that left you guessing, run a blind test with a fresh session, or fix a script. Rule changes start from an issue.
