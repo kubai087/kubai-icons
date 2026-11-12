@@ -909,4 +909,13 @@
 "car-crash":["Choque de coche","accidente","colisión"],
 "cars":["Coches","vehículos","flota"],
 "control-unit":["Unidad de control","centralita","ECU"],
-"crash-sensor":["Sensor de impacto","sensor de choque","airbag"]}
+"crash-sensor":["Sensor de impacto","sensor de choque","airbag"],
+"lantern":["Farol de camping","farol","luz"],
+"thermos":["Termo","botella térmica","bebida caliente"],
+"cooler":["Nevera portátil","hielera","picnic"],
+"matchbox":["Caja de cerillas","cerillas","fuego"],
+"camp-stove":["Hornillo de camping","hornillo de gas","cocinar"],
+"sleeping-bag":["Saco de dormir","acampada","dormir"],
+"picnic-basket":["Cesta de picnic","picnic","cesta"],
+"hammock":["Hamaca","descanso","vacaciones"],
+"carabiner":["Mosquetón","escalada","enganche"]}

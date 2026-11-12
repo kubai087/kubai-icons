@@ -5450,5 +5450,50 @@
 "Capteur de choc",
 "capteur d'impact",
 "airbag"
+],
+"lantern": [
+"Lanterne de camping",
+"lanterne",
+"lumière"
+],
+"thermos": [
+"Thermos",
+"bouteille isotherme",
+"boisson chaude"
+],
+"cooler": [
+"Glacière",
+"boîte isotherme",
+"pique-nique"
+],
+"matchbox": [
+"Boîte d'allumettes",
+"allumettes",
+"feu"
+],
+"camp-stove": [
+"Réchaud de camping",
+"réchaud à gaz",
+"cuisiner"
+],
+"sleeping-bag": [
+"Sac de couchage",
+"camping",
+"dormir"
+],
+"picnic-basket": [
+"Panier de pique-nique",
+"pique-nique",
+"panier"
+],
+"hammock": [
+"Hamac",
+"détente",
+"vacances"
+],
+"carabiner": [
+"Mousqueton",
+"escalade",
+"attache"
 ]
 }

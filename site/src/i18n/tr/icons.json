@@ -909,4 +909,13 @@
 "car-crash":["Araba kazası","çarpışma","kaza"],
 "cars":["Arabalar","araçlar","filo"],
 "control-unit":["Kontrol ünitesi","ECU","modül"],
-"crash-sensor":["Çarpışma sensörü","darbe sensörü","hava yastığı"]}
+"crash-sensor":["Çarpışma sensörü","darbe sensörü","hava yastığı"],
+"lantern":["Kamp feneri","fener","ışık"],
+"thermos":["Termos","termos şişe","sıcak içecek"],
+"cooler":["Buzluk","soğutucu çanta","piknik"],
+"matchbox":["Kibrit kutusu","kibrit","ateş"],
+"camp-stove":["Kamp ocağı","gaz ocağı","yemek pişirme"],
+"sleeping-bag":["Uyku tulumu","kamp","uyku"],
+"picnic-basket":["Piknik sepeti","piknik","sepet"],
+"hammock":["Hamak","dinlenme","tatil"],
+"carabiner":["Karabina","tırmanış","kanca"]}

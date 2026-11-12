@@ -5012,5 +5012,50 @@
 "Crashsensor",
 "Aufprallsensor",
 "Airbag"
+],
+"lantern": [
+"Campinglaterne",
+"Laterne",
+"Licht"
+],
+"thermos": [
+"Thermosflasche",
+"Isolierflasche",
+"Heißgetränk"
+],
+"cooler": [
+"Kühlbox",
+"Kühltasche",
+"Picknick"
+],
+"matchbox": [
+"Streichholzschachtel",
+"Streichhölzer",
+"Feuer"
+],
+"camp-stove": [
+"Campingkocher",
+"Gaskocher",
+"Kochen"
+],
+"sleeping-bag": [
+"Schlafsack",
+"Camping",
+"Schlafen"
+],
+"picnic-basket": [
+"Picknickkorb",
+"Picknick",
+"Korb"
+],
+"hammock": [
+"Hängematte",
+"Entspannen",
+"Urlaub"
+],
+"carabiner": [
+"Karabiner",
+"Karabinerhaken",
+"Klettern"
 ]
 }
