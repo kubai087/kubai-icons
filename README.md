@@ -132,6 +132,8 @@ No build step? One script tag loads any icon on demand:
 
 Find an icon and copy its code on the [website](https://icons.kubai.design/icons/). Guides for every package are in the [documentation](https://icons.kubai.design/docs/).
 
+Building a native app in Go? [Kubai Icons for MyGo](https://kubai.yldm.ai/) is a community port for [MyGo](https://github.com/egoist/mygo), maintained by [yldm-tech](https://github.com/yldm-tech/mygo-kubai-icons) rather than this project.
+
 ## How an icon is built
 
 Every icon is a back piece, optional white content and a front piece, like a folder holding a sheet of paper. Outlines sit outside the fill, so shapes keep their full size. Every gradient, outline and shadow derives from one accent color, so a single value repaints the whole icon. Each part has exactly two keyframes, rest and hover.

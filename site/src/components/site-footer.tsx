@@ -15,8 +15,11 @@ import { useLocalize, useTr } from "@/lib/use-locale";
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
 
 const GITHUB = "https://github.com/kubai087";
-/** Friends' sites. Karl's is plain http until its custom domain serves a valid certificate. */
-const FRIENDS = [{ name: "Karl Coding", site: "http://www.leekarl.com/" }];
+/** Friends' sites, including community ports. Karl's is plain http until its custom domain serves a valid certificate. */
+const FRIENDS = [
+  { name: "Karl Coding", site: "http://www.leekarl.com/" },
+  { name: "Kubai Icons for MyGo", site: "https://kubai.yldm.ai/" },
+];
 /** The one paid sponsor slot, also listed in the README. null while it is open. */
 const SPONSOR = null as { name: string; site: string; icon: string; line: string } | null;
 const MORE = [
