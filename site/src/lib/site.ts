@@ -4,6 +4,8 @@ export const REPO = "https://github.com/kubai087/kubai-icons";
 /** The icons the home page's Modules demo can import. */
 export const MODULE_DEMO = ["folder", "bell", "lock", "mail"];
 export const AUTHOR = { name: "Kubai087", x: "https://x.com/kubai087" } as const;
+/** The post on X that describes the paid places, where open places link. */
+export const SPONSOR_POST = "https://x.com/Kubai087/status/2120923602031919194";
 /** The one paid sponsor slot, shown on the home page and billed monthly. null while it is open. */
 export const SPONSOR = null as { name: string; site: string; icon: string; line: string } | null;
 /** The repository's star count from GitHub's public API, or null when it cannot be read. */
