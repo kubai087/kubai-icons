@@ -1,20 +1,14 @@
+import list from "./friends.json";
 import { msg } from "./i18n";
 
 /**
- * Sites we exchange links with, listed on the links page. Each has a 1200×630 preview at
- * public/friends/<slug>.webp, made with `node tools/friend-preview.mjs <slug> <url>`.
+ * Sites we exchange links with, listed on the links page, in friends.json. Each has a
+ * 1200×630 preview at public/friends/<slug>.webp. Add one with `node tools/friend-preview.mjs
+ * <slug> <url>`; every deploy refreshes them all (`--all`), and a check every six hours
+ * redeploys when a friend's share image changes. `preview` is the page to read when the
+ * site's address only redirects.
  */
-export const FRIENDS = [
-  { slug: "karl-coding", name: "Karl Coding", site: "https://www.leekarl.com/" },
-  { slug: "kubai-icons-for-mygo", name: "Kubai Icons for MyGo", site: "https://kubai.yldm.ai/" },
-  { slug: "coldstoneboy", name: "冷石Boy", site: "https://coldstoneboy.cn/" },
-  { slug: "uiroot", name: "UI root", site: "https://uiroot.com/" },
-  { slug: "happyhands", name: "HappyHands", site: "https://happyhands.cc/apps/portal/" },
-  { slug: "uinice", name: "UINice", site: "https://uinice.com/" },
-  { slug: "aprilnea", name: "AprilNEA", site: "https://aprilnea.me/" },
-  { slug: "dmthefounder", name: "DMtheFounder", site: "https://dmthefounder.com/" },
-  { slug: "astrafoundry", name: "AstraFoundry", site: "https://astrafoundry.si/" },
-];
+export const FRIENDS: { slug: string; name: string; site: string; preview?: string }[] = list;
 
 export const LINKS_DESCRIPTION = msg("Sites and projects by friends of Kubai Icons, in no particular order.");
 export const LINKS_DESCRIPTION_ZH = "Kubai Icons 朋友们的网站和作品，排名不分先后。";

@@ -4,26 +4,73 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  # Every six hours, check whether a friend has changed their share image.
+  schedule:
+    - cron: "17 */6 * * *"
 
 concurrency:
   group: deploy
   cancel-in-progress: false
 
 jobs:
+  # Scheduled runs only: fetch friends' share images and compare them with the live site.
+  # The site is rebuilt only when one has changed.
+  friends:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - id: check
+        run: node tools/friend-preview.mjs --all --og-only --live https://icons.kubai.design
+      - if: steps.check.outputs.changed == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: friends
+          path: site/public/friends
+
   # The site, on Cloudflare Pages. Analytics turns on only when the repository defines
   # these variables.
   cloudflare:
+    needs: friends
+    if: ${{ !cancelled() && (github.event_name != 'schedule' || needs.friends.outputs.changed == 'true') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Friends' preview images: fresh share images, and screenshots for sites without one.
+      # A site that cannot be read keeps the image in the repository.
+      - name: Install Chinese and Japanese fonts for screenshots
+        if: github.event_name != 'schedule'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk
+      - name: Refresh friends' preview images
+        if: github.event_name != 'schedule'
+        run: node tools/friend-preview.mjs --all
+      - name: Use the share images the check fetched
+        if: github.event_name == 'schedule'
+        uses: actions/download-artifact@v7
+        with:
+          name: friends
+          path: site/public/friends
       - name: Build the packages and site data
         run: npm run build
       - name: Test
@@ -51,6 +98,7 @@ jobs:
   # The previous address, on GitHub Pages, forwards visitors to the site.
   forward-old-address:
     needs: cloudflare
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: read

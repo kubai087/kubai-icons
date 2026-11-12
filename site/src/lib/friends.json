@@ -1,0 +1,11 @@
+[
+  { "slug": "karl-coding", "name": "Karl Coding", "site": "https://www.leekarl.com/" },
+  { "slug": "kubai-icons-for-mygo", "name": "Kubai Icons for MyGo", "site": "https://kubai.yldm.ai/" },
+  { "slug": "coldstoneboy", "name": "冷石Boy", "site": "https://coldstoneboy.cn/" },
+  { "slug": "uiroot", "name": "UI root", "site": "https://uiroot.com/" },
+  { "slug": "happyhands", "name": "HappyHands", "site": "https://happyhands.cc/apps/portal/" },
+  { "slug": "uinice", "name": "UINice", "site": "https://uinice.com/" },
+  { "slug": "aprilnea", "name": "AprilNEA", "site": "https://aprilnea.me/", "preview": "https://aprilnea.me/en" },
+  { "slug": "dmthefounder", "name": "DMtheFounder", "site": "https://dmthefounder.com/" },
+  { "slug": "astrafoundry", "name": "AstraFoundry", "site": "https://astrafoundry.si/" }
+]
