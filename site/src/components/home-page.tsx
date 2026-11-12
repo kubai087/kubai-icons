@@ -14,6 +14,7 @@ import { HeroWall } from "@/components/hero-wall";
 import { HeroBadge } from "@/components/hero-badge";
 import { HeroHeadline } from "@/components/hero-headline";
 import { FeatureCards } from "@/components/feature-cards";
+import { SponsorSlot } from "@/components/sponsor-slot";
 import { iconCount, moduleBytes } from "@/lib/catalog";
 
 /** The home page, in either language. */
@@ -60,6 +61,10 @@ export function HomePage({ locale }: { locale: Locale }) {
             <Button size="xl" variant="ghost" className="px-3 text-muted-foreground max-sm:hidden" render={<Link href={localize("/docs/", locale)} />}>{pick(locale, "Documentation", "查看文档")}</Button>
           </div>
           <div className="rise-in [--i:4]"><InstallTabs /></div>
+          <div className="rise-in flex flex-wrap items-center gap-x-3 text-control [--i:5]">
+            <span className="text-caption font-medium text-muted-foreground">{pick(locale, "Sponsors", "赞助商")}</span>
+            <SponsorSlot />
+          </div>
         </div>
         <HeroWall />
       </section>
