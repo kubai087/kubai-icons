@@ -8,5 +8,5 @@
   { "slug": "aprilnea", "name": "AprilNEA", "site": "https://aprilnea.me/", "preview": "https://aprilnea.me/en" },
   { "slug": "dmthefounder", "name": "DMtheFounder", "site": "https://dmthefounder.com/" },
   { "slug": "astrafoundry", "name": "AstraFoundry", "site": "https://astrafoundry.si/" },
-  { "slug": "openbroca", "name": "Openbroca", "site": "https://openbroca.com/?utm_source=kubai&utm_medium=sponsorship&utm_campaign=friends_wall", "preview": "https://openbroca.com/", "sponsored": true }
+  { "slug": "openbroca", "name": "Openbroca", "site": "https://openbroca.com/?utm_source=kubai&utm_medium=sponsorship&utm_campaign=friends_wall", "preview": "https://openbroca.com/", "sponsored": true, "ownImage": true }
 ]

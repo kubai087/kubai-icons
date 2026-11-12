@@ -11,6 +11,7 @@
 // overrides the path).
 //
 // --all never fails a deploy: a friend whose site cannot be read keeps the image it has.
+// A friend marked "ownImage" keeps the image in the repository and is never refreshed.
 // --og-only skips screenshots, which differ a little every time; friends without a wide
 // share image then keep the image live on --live, or the one in the repository.
 // --live <site> also compares each fresh share image with the one that site serves now, and
@@ -101,6 +102,10 @@ const changed = [];
 
 for (const f of friends) {
   const file = path.join(outDir, `${f.slug}.webp`);
+  if (f.ownImage) {
+    console.log(`${f.slug}: kept its own image`);
+    continue;
+  }
   const url = f.preview ?? f.site;
   let out = null;
   let how = '';
