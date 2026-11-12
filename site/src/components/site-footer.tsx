@@ -19,6 +19,7 @@ const GITHUB = "https://github.com/kubai087";
 const FRIENDS = [
   { name: "Karl Coding", site: "http://www.leekarl.com/" },
   { name: "Kubai Icons for MyGo", site: "https://kubai.yldm.ai/" },
+  { name: "冷石Boy", site: "https://coldstoneboy.cn/" },
 ];
 /** The one paid sponsor slot, also listed in the README. null while it is open. */
 const SPONSOR = null as { name: string; site: string; icon: string; line: string } | null;
