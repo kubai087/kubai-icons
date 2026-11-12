@@ -230,7 +230,7 @@ Each icon is one module in [`icons/`](icons); [`docs/authoring.md`](docs/authori
 ## Sponsor
 
 <!-- One sponsor at a time, as a favicon, a linked name and one line of text. -->
-This spot is open. One product at a time is shown here and on the home page and footer of [icons.kubai.design](https://icons.kubai.design/), with its icon, name and one line of text, for US$150 a month. [Contact me on X](https://x.com/kubai087).
+This spot is open. One product at a time is shown here and on the home page of [icons.kubai.design](https://icons.kubai.design/), with its icon, name and one line of text, for US$150 a month. [Contact me on X](https://x.com/kubai087).
 
 ## Contributing
 

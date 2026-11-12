@@ -10,7 +10,6 @@ import { Container } from "@/components/kit/layout";
 import { quietLink } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 import { LanguageSwitch } from "./language-switch";
-import { SponsorSlot } from "./sponsor-slot";
 import { useLocalize, useTr } from "@/lib/use-locale";
 
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
@@ -40,68 +39,53 @@ function Column({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/**
- * A label beside links that sit in the link columns above, so a growing list adds rows
- * instead of crowding one line. Wide screens put the label under the description.
- */
-function Row({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <nav aria-label={title} className="col-span-2 grid grid-cols-subgrid items-start gap-y-2 md:col-span-4 lg:col-span-5 lg:gap-y-0">
-      <p className="col-span-2 text-caption font-medium text-foreground md:col-span-4 lg:col-span-1 lg:py-1 lg:leading-5">{title}</p>
-      <div className="col-span-2 grid grid-cols-subgrid text-control md:col-span-4">{children}</div>
-    </nav>
-  );
-}
-
 export function SiteFooter() {
   const tr = useTr();
   const loc = useLocalize();
   return (
     <footer className="mt-section border-t">
-      <Container className="grid grid-cols-2 gap-x-6 gap-y-8 pt-12 pb-8 md:grid-cols-4 lg:grid-cols-[minmax(0,1.6fr)_repeat(4,minmax(0,1fr))]">
-        <div className="col-span-2 space-y-3 md:col-span-4 lg:col-span-1">
+      {/* The description on the left and the link columns on the right, stacked below 1280px so the columns keep their width. */}
+      <Container className="grid gap-x-16 gap-y-10 py-12 xl:grid-cols-[16rem_minmax(0,1fr)]">
+        <div className="space-y-3">
           <Link href={loc("/")} className="flex w-fit items-center gap-2 text-subheading font-semibold">
             <Logo size={24} />
             Kubai Icons
           </Link>
           <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}</p>
         </div>
-        <Column title={tr("Library", "图标库")}>
-          <Link href={loc("/icons/")} className={link}>{tr("Icons", "图标")}</Link>
-          <Link href={loc("/icons/submit/")} className={link}>{tr("Submit an icon", "提交图标")}</Link>
-          <Link href={loc("/docs/")} className={link}>{tr("Docs", "文档")}</Link>
-          <Link href={loc("/skill/")} className={link}>Skill</Link>
-        </Column>
-        <Column title={tr("Project", "项目")}>
-          <a href={REPO} className={link}>GitHub</a>
-          <a href={`${REPO}/releases`} className={link}>{tr("Releases", "更新日志")}</a>
-          <FeedbackLink className={link}>{tr("Feedback", "反馈")}</FeedbackLink>
-          <Link href={loc("/sponsor/")} className={link}>{tr("Sponsor", "赞助")}</Link>
-        </Column>
-        <Column title={tr("Legal", "法律信息")}>
-          <Link href={loc("/license/")} className={link}>{tr("License", "许可证")}</Link>
-          <Link href={loc("/docs/analytics/")} className={link}>{tr("Privacy", "隐私")}</Link>
-        </Column>
-        <Column title={tr("More by Kubai087", "Kubai087 的其他作品")}>
-          {MORE.map((p) => (
-            <div key={p.name} className="flex items-center gap-1.5">
-              <a href={p.site} className={link}>{p.name}</a>
-              <a href={p.repo} aria-label={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} title={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} className={cn("grid size-5 place-items-center pointer-coarse:size-8", quietLink)}>
-                <RiGithubLine className="size-3.5" />
-              </a>
-            </div>
-          ))}
-          <a href="https://www.kubai.design/" className={link}>kubai.design</a>
-        </Column>
-        <div className="col-span-2 grid grid-cols-subgrid gap-y-6 md:col-span-4 md:mt-2 lg:col-span-5 lg:gap-y-3">
-          <Row title={tr("Sponsors", "赞助商")}>
-            <SponsorSlot className="col-span-full" />
-          </Row>
-          <Row title={tr("Friends", "友情链接")}>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-3 lg:grid-cols-5">
+          <Column title={tr("Library", "图标库")}>
+            <Link href={loc("/icons/")} className={link}>{tr("Icons", "图标")}</Link>
+            <Link href={loc("/icons/submit/")} className={link}>{tr("Submit an icon", "提交图标")}</Link>
+            <Link href={loc("/docs/")} className={link}>{tr("Docs", "文档")}</Link>
+            <Link href={loc("/skill/")} className={link}>Skill</Link>
+          </Column>
+          <Column title={tr("Project", "项目")}>
+            <a href={REPO} className={link}>GitHub</a>
+            <a href={`${REPO}/releases`} className={link}>{tr("Releases", "更新日志")}</a>
+            <FeedbackLink className={link}>{tr("Feedback", "反馈")}</FeedbackLink>
+            <Link href={loc("/sponsor/")} className={link}>{tr("Sponsor", "赞助")}</Link>
+          </Column>
+          <Column title={tr("Legal", "法律信息")}>
+            <Link href={loc("/license/")} className={link}>{tr("License", "许可证")}</Link>
+            <Link href={loc("/docs/analytics/")} className={link}>{tr("Privacy", "隐私")}</Link>
+          </Column>
+          <Column title={tr("More by Kubai087", "Kubai087 的其他作品")}>
+            {MORE.map((p) => (
+              <div key={p.name} className="flex items-center gap-1.5">
+                <a href={p.site} className={link}>{p.name}</a>
+                <a href={p.repo} aria-label={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} title={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} className={cn("grid size-5 place-items-center pointer-coarse:size-8", quietLink)}>
+                  <RiGithubLine className="size-3.5" />
+                </a>
+              </div>
+            ))}
+            <a href="https://www.kubai.design/" className={link}>kubai.design</a>
+          </Column>
+          <Column title={tr("Friends", "友情链接")}>
             {FRIENDS.map((f) => (
               <a key={f.name} href={f.site} className={link}>{f.name}</a>
             ))}
-          </Row>
+          </Column>
         </div>
       </Container>
       <div className="border-t">
