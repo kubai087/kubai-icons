@@ -22,6 +22,7 @@ const FRIENDS = [
   { name: "冷石Boy", site: "https://coldstoneboy.cn/" },
   { name: "UI root", site: "https://uiroot.com/" },
   { name: "HappyHands", site: "https://happyhands.cc/apps/portal/" },
+  { name: "UINice", site: "https://uinice.com/" },
 ];
 const MORE = [
   { name: "Lumno", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-extension` },
