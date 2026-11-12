@@ -88,7 +88,6 @@
  "Icon size": "Kích thước",
  "Icon size in pixels": "Kích thước (pixel)",
  "Icons": "Biểu tượng",
- "Icons and packages are MIT licensed.": "Biểu tượng và gói phần mềm theo giấy phép MIT",
  "Icons are separate ES modules, bundled on import.": "Mỗi biểu tượng là một module ES riêng, chỉ được đóng gói khi nhập",
  "Import {name}": "Nhập {name}",
  "In my product": "Trong sản phẩm",

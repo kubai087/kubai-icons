@@ -88,7 +88,6 @@
  "Icon size": "크기",
  "Icon size in pixels": "크기(픽셀)",
  "Icons": "아이콘",
- "Icons and packages are MIT licensed.": "아이콘과 패키지는 MIT 라이선스입니다",
  "Icons are separate ES modules, bundled on import.": "각 아이콘은 독립된 ES 모듈이며, 가져올 때만 번들에 포함됩니다",
  "Import {name}": "{name} 가져오기",
  "In my product": "내 제품에",

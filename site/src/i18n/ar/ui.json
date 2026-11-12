@@ -88,7 +88,6 @@
  "Icon size": "الحجم",
  "Icon size in pixels": "الحجم بالبكسل",
  "Icons": "الأيقونات",
- "Icons and packages are MIT licensed.": "الأيقونات والحزم مرخصة بموجب MIT",
  "Icons are separate ES modules, bundled on import.": "كل أيقونة وحدة ES مستقلة، وتُضمَّن في الحزمة عند الاستيراد فقط",
  "Import {name}": "استيراد {name}",
  "In my product": "في منتجي",

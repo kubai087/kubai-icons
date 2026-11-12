@@ -92,7 +92,6 @@
   "Icon size",
   "Icon size in pixels",
   "Icons",
-  "Icons and packages are MIT licensed.",
   "Icons are separate ES modules, bundled on import.",
   "Import {name}",
   "In my product",

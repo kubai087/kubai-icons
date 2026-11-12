@@ -88,7 +88,6 @@
  "Icon size": "Simge boyutu",
  "Icon size in pixels": "Simge boyutu (piksel)",
  "Icons": "Simgeler",
- "Icons and packages are MIT licensed.": "Simgeler ve paketler MIT lisanslıdır",
  "Icons are separate ES modules, bundled on import.": "Her simge ayrı bir ES modülüdür ve yalnızca içe aktarıldığında pakete eklenir",
  "Import {name}": "{name} içe aktar",
  "In my product": "Ürünümde",

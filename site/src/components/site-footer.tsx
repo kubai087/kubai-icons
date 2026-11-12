@@ -9,7 +9,6 @@ import { AUTHOR, REPO } from "@/lib/site";
 import { Container } from "@/components/kit/layout";
 import { quietLink } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
-import { LanguageSwitch } from "./language-switch";
 import { useLocalize, useTr } from "@/lib/use-locale";
 
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
@@ -44,6 +43,10 @@ export function SiteFooter() {
             Kubai Icons
           </Link>
           <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}</p>
+          <p className="pt-1 text-caption text-muted-foreground">
+            © {new Date().getFullYear()}{" "}
+            <AuthorLink place="footer" className="tap relative font-medium text-foreground underline-offset-4 hover:underline">{AUTHOR.name}</AuthorLink>
+          </p>
         </div>
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
           <Column title={tr("Library", "图标库")}>
@@ -76,15 +79,6 @@ export function SiteFooter() {
           </Column>
         </div>
       </Container>
-      <div className="border-t">
-        <Container className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-5 text-caption text-muted-foreground">
-          <span className="flex flex-wrap items-center gap-x-4 gap-y-1">{tr("Icons and packages are MIT licensed.", "图标和软件包采用 MIT 许可")}<LanguageSwitch className={quietLink} /></span>
-          <span>
-            © {new Date().getFullYear()}{" "}
-            <AuthorLink place="footer" className="tap relative font-medium text-foreground underline-offset-4 hover:underline">{AUTHOR.name}</AuthorLink>
-          </span>
-        </Container>
-      </div>
     </footer>
   );
 }

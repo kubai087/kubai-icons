@@ -88,7 +88,6 @@
  "Icon size": "サイズ",
  "Icon size in pixels": "サイズ (ピクセル)",
  "Icons": "アイコン",
- "Icons and packages are MIT licensed.": "アイコンとパッケージは MIT ライセンスです",
  "Icons are separate ES modules, bundled on import.": "各アイコンは独立した ES モジュールで、インポートしたものだけがバンドルされます",
  "Import {name}": "{name} をインポート",
  "In my product": "プロダクトで使う",

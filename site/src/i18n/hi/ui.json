@@ -88,7 +88,6 @@
  "Icon size": "आइकन का आकार",
  "Icon size in pixels": "आइकन का आकार (पिक्सल में)",
  "Icons": "आइकन",
- "Icons and packages are MIT licensed.": "आइकन और पैकेज MIT लाइसेंस के अंतर्गत हैं",
  "Icons are separate ES modules, bundled on import.": "हर आइकन अलग ES module है और इंपोर्ट करने पर ही bundle में आता है",
  "Import {name}": "{name} इंपोर्ट करें",
  "In my product": "मेरे प्रोडक्ट में",

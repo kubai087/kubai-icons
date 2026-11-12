@@ -88,7 +88,6 @@
  "Icon size": "尺寸",
  "Icon size in pixels": "尺寸（像素）",
  "Icons": "圖示",
- "Icons and packages are MIT licensed.": "圖示和套件採用 MIT 授權",
  "Icons are separate ES modules, bundled on import.": "每個圖示都是獨立的 ES 模組，匯入時才會打包",
  "Import {name}": "匯入 {name}",
  "In my product": "用在產品中",

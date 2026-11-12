@@ -88,7 +88,6 @@
  "Icon size": "Taille",
  "Icon size in pixels": "Taille en pixels",
  "Icons": "Icônes",
- "Icons and packages are MIT licensed.": "Icônes et paquets sous licence MIT",
  "Icons are separate ES modules, bundled on import.": "Chaque icône est un module ES distinct, intégré au bundle à l’import",
  "Import {name}": "Importer {name}",
  "In my product": "Dans mon produit",
