@@ -10,6 +10,7 @@ import { Container } from "@/components/kit/layout";
 import { quietLink } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 import { LanguageSwitch } from "./language-switch";
+import { SponsorSlot } from "./sponsor-slot";
 import { useLocalize, useTr } from "@/lib/use-locale";
 
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
@@ -20,9 +21,9 @@ const FRIENDS = [
   { name: "Karl Coding", site: "http://www.leekarl.com/" },
   { name: "Kubai Icons for MyGo", site: "https://kubai.yldm.ai/" },
   { name: "冷石Boy", site: "https://coldstoneboy.cn/" },
+  { name: "UI root", site: "https://uiroot.com/" },
+  { name: "HappyHands", site: "https://happyhands.cc/apps/portal/" },
 ];
-/** The one paid sponsor slot, also listed in the README. null while it is open. */
-const SPONSOR = null as { name: string; site: string; icon: string; line: string } | null;
 const MORE = [
   { name: "Lumno", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-extension` },
   { name: "Lumno Web", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-web` },
@@ -39,12 +40,15 @@ function Column({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** A labelled row of links that wraps between links, for lists that grow. */
-function Strip({ title, className, children }: { title: string; className?: string; children: ReactNode }) {
+/**
+ * A label beside links that sit in the link columns above, so a growing list adds rows
+ * instead of crowding one line. Wide screens put the label under the description.
+ */
+function Row({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <nav aria-label={title} className={cn("flex flex-wrap items-center gap-x-5 gap-y-1 text-control", className)}>
-      <p className="text-caption font-medium text-foreground">{title}</p>
-      {children}
+    <nav aria-label={title} className="col-span-2 grid grid-cols-subgrid items-start gap-y-2 md:col-span-4 lg:col-span-5 lg:gap-y-0">
+      <p className="col-span-2 text-caption font-medium text-foreground md:col-span-4 lg:col-span-1 lg:py-1 lg:leading-5">{title}</p>
+      <div className="col-span-2 grid grid-cols-subgrid text-control md:col-span-4">{children}</div>
     </nav>
   );
 }
@@ -89,26 +93,16 @@ export function SiteFooter() {
           ))}
           <a href="https://www.kubai.design/" className={link}>kubai.design</a>
         </Column>
-        {/* Sponsors line up under the description, friends under the first link column. */}
-        <Strip title={tr("Sponsors", "赞助商")} className="col-span-2 md:mt-2 lg:col-span-1">
-          {SPONSOR ? (
-            <a href={SPONSOR.site} target="_blank" rel="sponsored noopener" className={cn("flex w-fit items-center gap-2 py-1 pointer-coarse:py-2", quietLink)}>
-              <img src={SPONSOR.icon} alt="" width={16} height={16} className="size-4 rounded-sm" />
-              <span className="font-medium text-foreground">{SPONSOR.name}</span>
-              <span>{SPONSOR.line}</span>
-            </a>
-          ) : (
-            <Link href={`${loc("/sponsor/")}#slot`} className={cn("flex w-fit items-center gap-2 py-1 pointer-coarse:py-2", quietLink)}>
-              <span aria-hidden className="size-4 rounded-sm border border-dashed border-current opacity-60" />
-              {tr("Your product here", "虚位以待")}
-            </Link>
-          )}
-        </Strip>
-        <Strip title={tr("Friends", "友情链接")} className="col-span-2 -mt-5 md:mt-2 lg:col-span-4">
-          {FRIENDS.map((f) => (
-            <a key={f.name} href={f.site} className={link}>{f.name}</a>
-          ))}
-        </Strip>
+        <div className="col-span-2 grid grid-cols-subgrid gap-y-6 md:col-span-4 md:mt-2 lg:col-span-5 lg:gap-y-3">
+          <Row title={tr("Sponsors", "赞助商")}>
+            <SponsorSlot className="col-span-full" />
+          </Row>
+          <Row title={tr("Friends", "友情链接")}>
+            {FRIENDS.map((f) => (
+              <a key={f.name} href={f.site} className={link}>{f.name}</a>
+            ))}
+          </Row>
+        </div>
       </Container>
       <div className="border-t">
         <Container className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-5 text-caption text-muted-foreground">

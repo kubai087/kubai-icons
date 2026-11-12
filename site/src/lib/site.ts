@@ -4,6 +4,8 @@ export const REPO = "https://github.com/kubai087/kubai-icons";
 /** The icons the home page's Modules demo can import. */
 export const MODULE_DEMO = ["folder", "bell", "lock", "mail"];
 export const AUTHOR = { name: "Kubai087", x: "https://x.com/kubai087" } as const;
+/** The one paid sponsor slot, shown on the home page, in the footer and in the README. null while it is open. */
+export const SPONSOR = null as { name: string; site: string; icon: string; line: string } | null;
 /** The repository's star count from GitHub's public API, or null when it cannot be read. */
 export async function fetchStars(init?: RequestInit): Promise<number | null> {
   try {
