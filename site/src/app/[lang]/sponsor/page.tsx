@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Heading, NarrowPage } from "@/components/kit/layout";
+import { Heading, StandalonePage } from "@/components/kit/layout";
 import { localize, translated } from "@/lib/i18n";
 import { pageLanguage } from "@/lib/page-language";
 import { pageMeta } from "@/lib/seo";
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const locale = await pageLanguage(params);
   return (
-    <NarrowPage>
+    <StandalonePage>
       <Heading level={1} title={translated(locale, "Sponsor Kubai Icons")} />
       <div className="grid gap-4 sm:grid-cols-2">
         {METHODS.map((m) => (
@@ -40,6 +40,6 @@ export default async function Page({ params }: Props) {
         <Heading title={translated(locale, "Sponsor slot")} lead={translated(locale, "One product at a time can appear in the GitHub README and on this site’s home page, shown with its icon, name and one line of text and marked as sponsored. US$150 a month.")} />
         <a href={AUTHOR.x} target="_blank" rel="noreferrer" className="inline-block font-medium underline underline-offset-4">{translated(locale, "Contact me on X")}</a>
       </section>
-    </NarrowPage>
+    </StandalonePage>
   );
 }

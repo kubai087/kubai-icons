@@ -1,4 +1,4 @@
-import { Heading, NarrowPage } from "@/components/kit/layout";
+import { Heading, StandalonePage } from "@/components/kit/layout";
 import { pageMeta } from "@/lib/seo";
 import { asset, AUTHOR } from "@/lib/site";
 
@@ -11,7 +11,7 @@ const METHODS = [
 
 export default function Page() {
   return (
-    <NarrowPage>
+    <StandalonePage>
       <Heading level={1} title="Sponsor Kubai Icons" />
       <div className="grid gap-4 sm:grid-cols-2">
         {METHODS.map((m) => (
@@ -27,6 +27,6 @@ export default function Page() {
         <Heading title="Sponsor slot" lead="One product at a time can appear in the GitHub README and on this site’s home page, shown with its icon, name and one line of text and marked as sponsored. US$150 a month." />
         <a href={AUTHOR.x} target="_blank" rel="noreferrer" className="inline-block font-medium underline underline-offset-4">Contact me on X</a>
       </section>
-    </NarrowPage>
+    </StandalonePage>
   );
 }

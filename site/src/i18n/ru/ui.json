@@ -92,6 +92,7 @@
  "Icons are separate ES modules, bundled on import.": "Каждая иконка — отдельный ES-модуль, в сборку попадает только при импорте",
  "Import {name}": "Импорт {name}",
  "In my product": "В моём продукте",
+ "In no particular order.": "В произвольном порядке.",
  "Info": "Информация",
  "Install the skill": "Установить Skill",
  "Interface": "Интерфейс",

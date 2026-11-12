@@ -92,6 +92,7 @@
  "Icons are separate ES modules, bundled on import.": "हर आइकन अलग ES module है और इंपोर्ट करने पर ही bundle में आता है",
  "Import {name}": "{name} इंपोर्ट करें",
  "In my product": "मेरे प्रोडक्ट में",
+ "In no particular order.": "किसी खास क्रम में नहीं।",
  "Info": "जानकारी",
  "Install the skill": "Skill इंस्टॉल करें",
  "Interface": "इंटरफ़ेस",

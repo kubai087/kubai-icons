@@ -53,8 +53,8 @@ export function SiteFooter() {
             <Link href={loc("/skill/")} className={link}>Skill</Link>
           </Column>
           <Column title={tr("Project", "项目")}>
-            <a href={REPO} className={link}>GitHub</a>
-            <a href={`${REPO}/releases`} className={link}>{tr("Releases", "更新日志")}</a>
+            <a href={REPO} target="_blank" rel="noreferrer" className={link}>GitHub</a>
+            <a href={`${REPO}/releases`} target="_blank" rel="noreferrer" className={link}>{tr("Releases", "更新日志")}</a>
             <FeedbackLink className={link}>{tr("Feedback", "反馈")}</FeedbackLink>
             <Link href={loc("/sponsor/")} className={link}>{tr("Sponsor", "赞助")}</Link>
           <Link href={loc("/links/")} className={link}>{tr("Friends", "友情链接")}</Link>
@@ -66,13 +66,13 @@ export function SiteFooter() {
           <Column title={tr("More by Kubai087", "Kubai087 的其他作品")}>
             {MORE.map((p) => (
               <div key={p.name} className="flex items-center gap-1.5">
-                <a href={p.site} className={link}>{p.name}</a>
-                <a href={p.repo} aria-label={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} title={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} className={cn("grid size-5 place-items-center pointer-coarse:size-8", quietLink)}>
+                <a href={p.site} target="_blank" rel="noreferrer" className={link}>{p.name}</a>
+                <a href={p.repo} target="_blank" rel="noreferrer" aria-label={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} title={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} className={cn("grid size-5 place-items-center pointer-coarse:size-8", quietLink)}>
                   <RiGithubLine className="size-3.5" />
                 </a>
               </div>
             ))}
-            <a href="https://www.kubai.design/" className={link}>kubai.design</a>
+            <a href="https://www.kubai.design/" target="_blank" rel="noreferrer" className={link}>kubai.design</a>
           </Column>
         </div>
       </Container>

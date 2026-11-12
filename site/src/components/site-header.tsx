@@ -17,14 +17,17 @@ import { localize } from "@/lib/i18n";
 import { useLocalize, useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
-// Links marked `wide` sit in the bar from the lg breakpoint; below it they are in HeaderMenu.
+// Links marked `wide` sit in the bar from that breakpoint; below it they are in HeaderMenu.
 const NAV = [
   { href: "/icons/", label: "Icons", zh: "图标" },
   { href: "/docs/", label: "Docs", zh: "文档" },
   { href: "/skill/", label: "Skill", zh: "Skill" },
-  { href: "/icons/submit/", label: "Submit", zh: "提交", wide: true },
-  { href: "/sponsor/", label: "Sponsor", zh: "赞助", wide: true },
+  { href: "/icons/submit/", label: "Submit", zh: "提交", wide: "lg" as const },
+  { href: "/sponsor/", label: "Sponsor", zh: "赞助", wide: "lg" as const },
+  { href: "/links/", label: "Friends", zh: "友情链接", wide: "xl" as const },
 ];
+
+const WIDE = { lg: "hidden lg:block", xl: "hidden xl:block" } as const;
 
 /** The nav entry for a path: the most specific one, so /icons/submit/ is not also Icons. */
 const currentHref = (path: string | null) => {
@@ -55,7 +58,7 @@ export function SiteHeader() {
                 key={n.href}
                 href={loc(n.href)}
                 aria-current={active ? "page" : undefined}
-                className={cn("focus-inset tap relative rounded-control px-2 py-1.5 whitespace-nowrap sm:px-2.5", n.wide && "hidden lg:block", quietLink, active && "text-foreground")}
+                className={cn("focus-inset tap relative rounded-control px-2 py-1.5 whitespace-nowrap sm:px-2.5", n.wide && WIDE[n.wide], quietLink, active && "text-foreground")}
               >
                 {tr(n.label, n.zh)}
               </Link>
@@ -73,7 +76,7 @@ export function SiteHeader() {
           <LanguageSwitch className={cn("tap relative grid size-8 place-items-center rounded-control hover:bg-muted", quietLink)} iconOnly />
           <ThemeToggle className="max-lg:hidden" />
           <GitHubStars className="ms-1 hidden min-[360px]:inline-flex" />
-          <HeaderMenu className="ms-1 lg:hidden" />
+          <HeaderMenu className="ms-1 xl:hidden" />
         </div>
       </Container>
     </header>
