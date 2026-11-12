@@ -3,7 +3,7 @@ import { Heading, NarrowPage } from "@/components/kit/layout";
 import { localize, translated } from "@/lib/i18n";
 import { pageLanguage } from "@/lib/page-language";
 import { pageMeta } from "@/lib/seo";
-import { asset } from "@/lib/site";
+import { asset, AUTHOR } from "@/lib/site";
 
 const METHODS = [
   { name: "Alipay", src: "/sponsor/alipay.png" },
@@ -36,6 +36,10 @@ export default async function Page({ params }: Props) {
           </figure>
         ))}
       </div>
+      <section id="slot" className="scroll-mt-(--header) space-y-4 pt-4">
+        <Heading title={translated(locale, "Sponsor slot")} lead={translated(locale, "One product at a time can appear in the GitHub README and in this site’s footer, shown with its icon, name and one line of text and marked as sponsored. US$150 a month.")} />
+        <a href={AUTHOR.x} target="_blank" rel="noreferrer" className="inline-block font-medium underline underline-offset-4">{translated(locale, "Contact me on X")}</a>
+      </section>
     </NarrowPage>
   );
 }

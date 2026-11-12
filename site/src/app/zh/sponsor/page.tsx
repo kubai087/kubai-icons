@@ -1,6 +1,6 @@
 import { Heading, NarrowPage } from "@/components/kit/layout";
 import { pageMeta } from "@/lib/seo";
-import { asset } from "@/lib/site";
+import { asset, AUTHOR } from "@/lib/site";
 
 export const metadata = pageMeta({ title: "赞助", path: "/zh/sponsor/", description: "通过支付宝或微信支付，支持免费开源图标库 Kubai Icons 的开发。" });
 
@@ -23,6 +23,10 @@ export default function Page() {
           </figure>
         ))}
       </div>
+      <section id="slot" className="scroll-mt-(--header) space-y-4 pt-4">
+        <Heading title="赞助位" lead="同一时间只展示一个产品，位置在 GitHub README 和本站页脚，内容为产品图标、名称和一句介绍，并标注为赞助。每月 150 美元。" />
+        <a href={AUTHOR.x} target="_blank" rel="noreferrer" className="inline-block font-medium underline underline-offset-4">在 X 上联系我</a>
+      </section>
     </NarrowPage>
   );
 }
