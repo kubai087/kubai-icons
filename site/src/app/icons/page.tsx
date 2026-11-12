@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IconBrowser } from "@/components/browser/icon-browser";
+import { IconIndex } from "@/components/browser/icon-index";
 import { Container } from "@/components/kit/layout";
 import { allCategories, firstChunk } from "@/lib/catalog";
 import { pageMeta } from "@/lib/seo";
@@ -15,6 +16,7 @@ export default function IconsPage() {
     <Container className="pt-8 lg:pt-stick">
       <h1 className="sr-only">Search animated SVG icons</h1>
       <IconBrowser categories={allCategories()} firstChunk={firstChunk()} />
+      <IconIndex />
     </Container>
   );
 }
