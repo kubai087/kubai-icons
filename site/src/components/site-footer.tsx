@@ -15,15 +15,6 @@ import { useLocalize, useTr } from "@/lib/use-locale";
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
 
 const GITHUB = "https://github.com/kubai087";
-/** Friends' sites, including community ports. Karl's is plain http until its custom domain serves a valid certificate. */
-const FRIENDS = [
-  { name: "Karl Coding", site: "http://www.leekarl.com/" },
-  { name: "Kubai Icons for MyGo", site: "https://kubai.yldm.ai/" },
-  { name: "冷石Boy", site: "https://coldstoneboy.cn/" },
-  { name: "UI root", site: "https://uiroot.com/" },
-  { name: "HappyHands", site: "https://happyhands.cc/apps/portal/" },
-  { name: "UINice", site: "https://uinice.com/" },
-];
 const MORE = [
   { name: "Lumno", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-extension` },
   { name: "Lumno Web", site: "https://lumno.kubai.design/", repo: `${GITHUB}/lumno-web` },
@@ -54,7 +45,7 @@ export function SiteFooter() {
           </Link>
           <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}</p>
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-3 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
           <Column title={tr("Library", "图标库")}>
             <Link href={loc("/icons/")} className={link}>{tr("Icons", "图标")}</Link>
             <Link href={loc("/icons/submit/")} className={link}>{tr("Submit an icon", "提交图标")}</Link>
@@ -66,6 +57,7 @@ export function SiteFooter() {
             <a href={`${REPO}/releases`} className={link}>{tr("Releases", "更新日志")}</a>
             <FeedbackLink className={link}>{tr("Feedback", "反馈")}</FeedbackLink>
             <Link href={loc("/sponsor/")} className={link}>{tr("Sponsor", "赞助")}</Link>
+          <Link href={loc("/links/")} className={link}>{tr("Friends", "友情链接")}</Link>
           </Column>
           <Column title={tr("Legal", "法律信息")}>
             <Link href={loc("/license/")} className={link}>{tr("License", "许可证")}</Link>
@@ -81,11 +73,6 @@ export function SiteFooter() {
               </div>
             ))}
             <a href="https://www.kubai.design/" className={link}>kubai.design</a>
-          </Column>
-          <Column title={tr("Friends", "友情链接")}>
-            {FRIENDS.map((f) => (
-              <a key={f.name} href={f.site} className={link}>{f.name}</a>
-            ))}
           </Column>
         </div>
       </Container>
