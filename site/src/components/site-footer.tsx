@@ -38,35 +38,28 @@ function Column({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+/** A labelled row of links that wraps between links, for lists that grow. */
+function Strip({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <nav aria-label={title} className="flex flex-wrap items-center gap-x-5 gap-y-1 text-control">
+      <p className="text-caption font-medium text-foreground">{title}</p>
+      {children}
+    </nav>
+  );
+}
+
 export function SiteFooter() {
   const tr = useTr();
   const loc = useLocalize();
   return (
     <footer className="mt-section border-t">
-      <Container className="grid grid-cols-2 gap-x-6 gap-y-8 py-12 md:grid-cols-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))]">
-        <div className="col-span-2 space-y-3 md:col-span-1">
+      <Container className="grid grid-cols-2 gap-x-6 gap-y-8 pt-12 pb-10 md:grid-cols-4 lg:grid-cols-[minmax(0,1.6fr)_repeat(4,minmax(0,1fr))]">
+        <div className="col-span-2 space-y-3 md:col-span-4 lg:col-span-1">
           <Link href={loc("/")} className="flex w-fit items-center gap-2 text-subheading font-semibold">
             <Logo size={24} />
             Kubai Icons
           </Link>
           <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}</p>
-          <div className="space-y-1 pt-3">
-            <p className="text-caption font-medium text-foreground">{tr("Sponsors", "赞助商")}</p>
-            {SPONSOR ? (
-              <a href={SPONSOR.site} target="_blank" rel="sponsored noopener" className={cn("block w-fit max-w-64 py-1 text-control", quietLink)}>
-                <span className="flex items-center gap-2 font-medium text-foreground">
-                  <img src={SPONSOR.icon} alt="" width={16} height={16} className="size-4 rounded-sm" />
-                  {SPONSOR.name}
-                </span>
-                <span className="mt-0.5 block text-pretty">{SPONSOR.line}</span>
-              </a>
-            ) : (
-              <Link href={`${loc("/sponsor/")}#slot`} className={cn("flex w-fit items-center gap-2 py-1 text-control pointer-coarse:py-2", quietLink)}>
-                <span aria-hidden className="size-4 rounded-sm border border-dashed border-current opacity-60" />
-                {tr("Your product here", "你的产品可以放在这里")}
-              </Link>
-            )}
-          </div>
         </div>
         <Column title={tr("Library", "图标库")}>
           <Link href={loc("/icons/")} className={link}>{tr("Icons", "图标")}</Link>
@@ -95,11 +88,27 @@ export function SiteFooter() {
           ))}
           <a href="https://www.kubai.design/" className={link}>kubai.design</a>
         </Column>
-        <Column title={tr("Friends", "友情链接")}>
+      </Container>
+      <Container className="flex flex-col gap-3 pb-8 md:flex-row md:flex-wrap md:gap-x-12">
+        <Strip title={tr("Sponsors", "赞助商")}>
+          {SPONSOR ? (
+            <a href={SPONSOR.site} target="_blank" rel="sponsored noopener" className={cn("flex w-fit items-center gap-2 py-1 pointer-coarse:py-2", quietLink)}>
+              <img src={SPONSOR.icon} alt="" width={16} height={16} className="size-4 rounded-sm" />
+              <span className="font-medium text-foreground">{SPONSOR.name}</span>
+              <span>{SPONSOR.line}</span>
+            </a>
+          ) : (
+            <Link href={`${loc("/sponsor/")}#slot`} className={cn("flex w-fit items-center gap-2 py-1 pointer-coarse:py-2", quietLink)}>
+              <span aria-hidden className="size-4 rounded-sm border border-dashed border-current opacity-60" />
+              {tr("Your product here", "你的产品可以放在这里")}
+            </Link>
+          )}
+        </Strip>
+        <Strip title={tr("Friends", "友情链接")}>
           {FRIENDS.map((f) => (
             <a key={f.name} href={f.site} className={link}>{f.name}</a>
           ))}
-        </Column>
+        </Strip>
       </Container>
       <div className="border-t">
         <Container className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-5 text-caption text-muted-foreground">
