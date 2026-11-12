@@ -100,7 +100,7 @@ export function SiteFooter() {
           ) : (
             <Link href={`${loc("/sponsor/")}#slot`} className={cn("flex w-fit items-center gap-2 py-1 pointer-coarse:py-2", quietLink)}>
               <span aria-hidden className="size-4 rounded-sm border border-dashed border-current opacity-60" />
-              {tr("Your product here", "你的产品可以放在这里")}
+              {tr("Your product here", "虚位以待")}
             </Link>
           )}
         </Strip>
