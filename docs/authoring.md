@@ -35,7 +35,10 @@ export default defineIcon({
 - No `Date`, `Math.random` or other input: a build must always produce the same markup.
 - Text (`<text>`) only when the glyph is the semantic core, as in the calendar's date.
 - Shared geometry for a family of icons may live in a helper module whose name starts
-  with an underscore (`icons/_arrows.js`); the build skips those files.
+  with an underscore (`icons/_arrows.js`); the build skips those files. Two worth knowing:
+  `layer` and `moveAll` in `icons/_science-edu-sports.js` draw a piece with its outline
+  and move both together, and `flameTongues` in `icons/_weather-nature.js` is the flame
+  icon's outline, to scale down wherever a small flame is needed.
 - Do not change `packages/core/src/kit.js` or the badges to suit one icon.
 
 ## Keywords
@@ -46,7 +49,22 @@ Every icon needs an entry in `icons/keywords.json`, which the website searches a
 - `object`: other names for what is drawn.
 - `meaning`: what it stands for in an interface.
 - `action`: what a user does with it, or the feature it labels.
-- `zh`: Simplified Chinese search words.
+- `zh`: Simplified Chinese search words. The first one is the icon's name on the Chinese
+  pages, so make it the same as the icon's `zh` field.
+
+## Translations
+
+The website also lists the icons in 14 other languages. Each has
+`site/src/i18n/<lang>/icons.json`, which maps every base icon to a list of words: the first
+is the icon's name on that language's pages, the rest are search words. A new icon needs an
+entry in every one of these files.
+
+- Within one language, no two icons may show the same name, ignoring case; the same goes
+  for the first `zh` word in `icons/keywords.json`. When a name clashes, give one or both
+  icons a more specific name and keep the old word as a search word.
+- Languages written in Latin or Cyrillic letters start the name with a capital.
+- The files are laid out differently (indented, one word per line, one entry per line).
+  Add entries in each file's own layout.
 
 ## Names
 

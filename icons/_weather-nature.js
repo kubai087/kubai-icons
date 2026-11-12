@@ -67,3 +67,8 @@ export function flameShape(by, hw, ht, lean = 0) {
     + `C${x(tx + hw * 0.24)} ${y(-ht * 0.8)} ${x(hw)} ${y(-ht * 0.62)} ${x(hw)} ${y(-ht * 0.36)}`
     + `C${x(hw)} ${y(-ht * 0.15)} ${x(hw * 0.57)} ${y(0)} ${x(0)} ${y(0)}Z`;
 }
+
+// The outer flame: a main tongue with tip (tx, ty) and a smaller tongue at (sx, sy) on its left.
+export const flameTongues = (tx, ty, sx, sy) => `M15.5 23.8C10.8 23.8 7.2 20.4 7.2 16C7.2 13.2 8 10.8 ${f(sx)} ${f(sy)}`
+  + `C${f(sx + 0.9)} ${f(sy + 2.6)} 11 12.6 12.6 13C12.2 8.8 ${f(tx - 3.4)} ${f(ty + 4.4)} ${f(tx)} ${f(ty)}`
+  + `C${f(tx + 1.4)} ${f(ty + 4.6)} 23.8 9.6 23.8 16C23.8 20.4 20.2 23.8 15.5 23.8Z`;

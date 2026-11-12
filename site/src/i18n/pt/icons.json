@@ -4948,5 +4948,50 @@
 "Sensor de colisão",
 "sensor de impacto",
 "airbag"
+],
+"lantern": [
+"Lanterna de camping",
+"lanterna",
+"luz"
+],
+"thermos": [
+"Garrafa térmica",
+"térmica",
+"bebida quente"
+],
+"cooler": [
+"Caixa térmica",
+"cooler",
+"piquenique"
+],
+"matchbox": [
+"Caixa de fósforos",
+"fósforos",
+"fogo"
+],
+"camp-stove": [
+"Fogareiro de camping",
+"fogareiro a gás",
+"cozinhar"
+],
+"sleeping-bag": [
+"Saco de dormir",
+"acampamento",
+"dormir"
+],
+"picnic-basket": [
+"Cesta de piquenique",
+"piquenique",
+"cesta"
+],
+"hammock": [
+"Rede de descanso",
+"rede",
+"relaxar"
+],
+"carabiner": [
+"Mosquetão",
+"escalada",
+"engate"
 ]
 }

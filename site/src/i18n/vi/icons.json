@@ -910,5 +910,14 @@
 "car-crash":["Tai nạn ô tô","va chạm","đâm xe"],
 "cars":["Nhiều ô tô","xe cộ","đoàn xe"],
 "control-unit":["Bộ điều khiển","ECU","mô-đun"],
-"crash-sensor":["Cảm biến va chạm","cảm biến va đập","túi khí"]
+"crash-sensor":["Cảm biến va chạm","cảm biến va đập","túi khí"],
+"lantern":["Đèn cắm trại","đèn bão","ánh sáng"],
+"thermos":["Bình giữ nhiệt","phích","đồ uống nóng"],
+"cooler":["Thùng giữ lạnh","thùng đá","dã ngoại"],
+"matchbox":["Hộp diêm","diêm","lửa"],
+"camp-stove":["Bếp cắm trại","bếp ga mini","nấu ăn"],
+"sleeping-bag":["Túi ngủ","cắm trại","ngủ"],
+"picnic-basket":["Giỏ dã ngoại","dã ngoại","giỏ"],
+"hammock":["Võng","thư giãn","nghỉ ngơi"],
+"carabiner":["Móc carabiner","khóa leo núi","leo núi"]
 }

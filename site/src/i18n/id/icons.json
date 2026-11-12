@@ -909,4 +909,13 @@
 "car-crash":["Kecelakaan mobil","tabrakan","benturan"],
 "cars":["Mobil-mobil","kendaraan","armada"],
 "control-unit":["Unit kontrol","ECU","modul"],
-"crash-sensor":["Sensor tabrakan","sensor benturan","airbag"]}
+"crash-sensor":["Sensor tabrakan","sensor benturan","airbag"],
+"lantern":["Lentera kemah","lentera","lampu"],
+"thermos":["Termos","botol termos","minuman panas"],
+"cooler":["Kotak pendingin","cooler box","piknik"],
+"matchbox":["Kotak korek api","korek api","api"],
+"camp-stove":["Kompor kemah","kompor gas portabel","memasak"],
+"sleeping-bag":["Kantong tidur","sleeping bag","berkemah"],
+"picnic-basket":["Keranjang piknik","piknik","keranjang"],
+"hammock":["Tempat tidur gantung","hammock","bersantai"],
+"carabiner":["Karabiner","pengait","panjat tebing"]}
