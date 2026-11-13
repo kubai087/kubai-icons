@@ -163,27 +163,6 @@ function defsMarkup(k, grads, P) {
 }
 
 // ---------- Which shapes get an outline ----------
-/** Bounding boxes [x0, y0, x1, y1] of each subpath of a path, from its absolute commands. */
-function subpathBoxes(d) {
-  const boxes = [];
-  let b = null, x = 0, y = 0;
-  const add = (px, py) => { if (b) { b[0] = Math.min(b[0], px); b[1] = Math.min(b[1], py); b[2] = Math.max(b[2], px); b[3] = Math.max(b[3], py); } };
-  for (const [, cmd, body] of d.matchAll(/([MLHVQCA Z])([^MLHVQCAZ]*)/g)) {
-    const n = (body.match(/-?\d*\.?\d+(?:e-?\d+)?/g) || []).map(Number);
-    if (cmd === 'M') { b = [n[0], n[1], n[0], n[1]]; boxes.push(b); [x, y] = n; for (let i = 2; i < n.length; i += 2) { add(n[i], n[i + 1]); x = n[i]; y = n[i + 1]; } }
-    else if (cmd === 'L') for (let i = 0; i < n.length; i += 2) { add(n[i], n[i + 1]); x = n[i]; y = n[i + 1]; }
-    else if (cmd === 'H') for (const v of n) { add(v, y); x = v; }
-    else if (cmd === 'V') for (const v of n) { add(x, v); y = v; }
-    else if (cmd === 'Q' || cmd === 'C') { const w = cmd === 'Q' ? 4 : 6; for (let i = 0; i + w <= n.length; i += w) { for (let j = 0; j < w; j += 2) add(n[i + j], n[i + j + 1]); x = n[i + w - 2]; y = n[i + w - 1]; } }
-    else if (cmd === 'A') for (let i = 0; i + 7 <= n.length; i += 7) {
-      const ex = n[i + 5], ey = n[i + 6], mx = (x + ex) / 2, my = (y + ey) / 2;
-      add(ex, ey);
-      if (n[i + 3]) { add(mx - n[i], my); add(mx + n[i], my); add(mx, my - n[i + 1]); add(mx, my + n[i + 1]); }
-      x = ex; y = ey;
-    }
-  }
-  return boxes;
-}
 const hasClass = (el, name) => (el.getAttribute('class') || '').split(/\s+/).includes(name);
 const IDENTITY = [1, 0, 0, 1, 0, 0];
 const multiply = (m, n) => [
@@ -206,7 +185,103 @@ function matrixOf(transform) {
   }
   return m;
 }
-/** The on-canvas bounding box of each outlined shape in the tree, in document order. */
+/** Bounding boxes [x0, y0, x1, y1] of each subpath of a path, from its absolute commands. */
+function subpathBoxes(d) {
+  const boxes = [];
+  let b = null, x = 0, y = 0;
+  const add = (px, py) => { if (b) { b[0] = Math.min(b[0], px); b[1] = Math.min(b[1], py); b[2] = Math.max(b[2], px); b[3] = Math.max(b[3], py); } };
+  for (const [, cmd, body] of d.matchAll(/([MLHVQCA Z])([^MLHVQCAZ]*)/g)) {
+    const n = (body.match(/-?\d*\.?\d+(?:e-?\d+)?/g) || []).map(Number);
+    if (cmd === 'M') { b = [n[0], n[1], n[0], n[1]]; boxes.push(b); [x, y] = n; for (let i = 2; i < n.length; i += 2) { add(n[i], n[i + 1]); x = n[i]; y = n[i + 1]; } }
+    else if (cmd === 'L') for (let i = 0; i < n.length; i += 2) { add(n[i], n[i + 1]); x = n[i]; y = n[i + 1]; }
+    else if (cmd === 'H') for (const v of n) { add(v, y); x = v; }
+    else if (cmd === 'V') for (const v of n) { add(x, v); y = v; }
+    else if (cmd === 'Q' || cmd === 'C') { const w = cmd === 'Q' ? 4 : 6; for (let i = 0; i + w <= n.length; i += w) { for (let j = 0; j < w; j += 2) add(n[i + j], n[i + j + 1]); x = n[i + w - 2]; y = n[i + w - 1]; } }
+    else if (cmd === 'A') for (let i = 0; i + 7 <= n.length; i += 7) {
+      const ex = n[i + 5], ey = n[i + 6], mx = (x + ex) / 2, my = (y + ey) / 2;
+      add(ex, ey);
+      if (n[i + 3]) { add(mx - n[i], my); add(mx + n[i], my); add(mx, my - n[i + 1]); add(mx, my + n[i + 1]); }
+      x = ex; y = ey;
+    }
+  }
+  return boxes;
+}
+/** A path's outline as polylines, one per subpath, with curves and arcs flattened. */
+function flatten(d) {
+  const rings = [];
+  let ring = null, x = 0, y = 0, sx = 0, sy = 0;
+  // Straight runs get points along them too, so a shape whose corners all hide under another
+  // shape but whose middle shows (a bar between two weights) is not taken as inside it.
+  const to = (px, py) => {
+    const steps = ring.length ? Math.ceil(Math.hypot(px - x, py - y) / 0.8) : 1;
+    for (let k = 1; k < steps; k++) ring.push([x + (px - x) * k / steps, y + (py - y) * k / steps]);
+    ring.push([px, py]); x = px; y = py;
+  };
+  for (const [, cmd, body] of d.matchAll(/([MLHVQCAZ])([^MLHVQCAZ]*)/g)) {
+    const n = (body.match(/-?\d*\.?\d+(?:e-?\d+)?/g) || []).map(Number);
+    if (cmd === 'M') { ring = []; rings.push(ring); sx = n[0]; sy = n[1]; to(n[0], n[1]); for (let i = 2; i + 1 < n.length; i += 2) to(n[i], n[i + 1]); }
+    else if (!ring) continue;
+    else if (cmd === 'L') for (let i = 0; i + 1 < n.length; i += 2) to(n[i], n[i + 1]);
+    else if (cmd === 'H') for (const v of n) to(v, y);
+    else if (cmd === 'V') for (const v of n) to(x, v);
+    else if (cmd === 'Q') for (let i = 0; i + 3 < n.length; i += 4) {
+      const x0 = x, y0 = y;
+      for (let k = 1; k <= 8; k++) { const t = k / 8, u = 1 - t; to(u * u * x0 + 2 * u * t * n[i] + t * t * n[i + 2], u * u * y0 + 2 * u * t * n[i + 1] + t * t * n[i + 3]); }
+    } else if (cmd === 'C') for (let i = 0; i + 5 < n.length; i += 6) {
+      const x0 = x, y0 = y;
+      for (let k = 1; k <= 12; k++) {
+        const t = k / 12, u = 1 - t;
+        to(u * u * u * x0 + 3 * u * u * t * n[i] + 3 * u * t * t * n[i + 2] + t * t * t * n[i + 4],
+          u * u * u * y0 + 3 * u * u * t * n[i + 1] + 3 * u * t * t * n[i + 3] + t * t * t * n[i + 5]);
+      }
+    } else if (cmd === 'A') for (let i = 0; i + 6 < n.length; i += 7) {
+      arcPoints(x, y, n[i], n[i + 1], n[i + 2], n[i + 3], n[i + 4], n[i + 5], n[i + 6]).forEach(([px, py]) => to(px, py));
+    } else if (cmd === 'Z') { x = sx; y = sy; }
+  }
+  return rings.filter((r) => r.length > 1);
+}
+/** Points along an SVG arc from (x1, y1), by the endpoint-to-centre conversion in the SVG spec. */
+function arcPoints(x1, y1, rx, ry, phi, large, sweep, x2, y2) {
+  if (!rx || !ry || (x1 === x2 && y1 === y2)) return [[x2, y2]];
+  rx = Math.abs(rx); ry = Math.abs(ry);
+  const a = phi * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a);
+  const dx = (x1 - x2) / 2, dy = (y1 - y2) / 2, xp = c * dx + sn * dy, yp = -sn * dx + c * dy;
+  const lam = (xp * xp) / (rx * rx) + (yp * yp) / (ry * ry);
+  if (lam > 1) { rx *= Math.sqrt(lam); ry *= Math.sqrt(lam); }
+  const num = rx * rx * ry * ry - rx * rx * yp * yp - ry * ry * xp * xp, den = rx * rx * yp * yp + ry * ry * xp * xp;
+  const k = (large === sweep ? -1 : 1) * Math.sqrt(Math.max(0, num / den));
+  const cxp = k * rx * yp / ry, cyp = -k * ry * xp / rx;
+  const cx = c * cxp - sn * cyp + (x1 + x2) / 2, cy = sn * cxp + c * cyp + (y1 + y2) / 2;
+  const ang = (ux, uy, vx, vy) => { const d = Math.atan2(ux * vy - uy * vx, ux * vx + uy * vy); return d; };
+  const t1 = ang(1, 0, (xp - cxp) / rx, (yp - cyp) / ry);
+  let dt = ang((xp - cxp) / rx, (yp - cyp) / ry, (-xp - cxp) / rx, (-yp - cyp) / ry);
+  if (!sweep && dt > 0) dt -= 2 * Math.PI; else if (sweep && dt < 0) dt += 2 * Math.PI;
+  const steps = Math.max(4, Math.ceil(Math.abs(dt) / (Math.PI / 16))), out = [];
+  for (let j = 1; j <= steps; j++) {
+    const t = t1 + dt * j / steps;
+    out.push([cx + rx * Math.cos(t) * c - ry * Math.sin(t) * sn, cy + rx * Math.cos(t) * sn + ry * Math.sin(t) * c]);
+  }
+  return out;
+}
+/** Whether (x, y) is inside the filled rings (nonzero or evenodd), or within tol of an edge, so a
+ * shape that shares an edge with another still counts as inside it once both are flattened. */
+function insideRings(rings, evenodd, x, y, tol = 0.3) {
+  let wind = 0, cross = 0;
+  for (const r of rings) {
+    for (let i = 0; i < r.length; i++) {
+      const [ax, ay] = r[i], [bx, by] = r[(i + 1) % r.length];
+      const vx = bx - ax, vy = by - ay, l2 = vx * vx + vy * vy;
+      const t = l2 ? Math.max(0, Math.min(1, ((x - ax) * vx + (y - ay) * vy) / l2)) : 0;
+      if (Math.hypot(x - (ax + t * vx), y - (ay + t * vy)) <= tol) return true;
+      if ((ay <= y) !== (by <= y)) {
+        const xi = ax + (y - ay) / (by - ay) * vx;
+        if (xi > x) { cross++; wind += by > ay ? 1 : -1; }
+      }
+    }
+  }
+  return evenodd ? cross % 2 === 1 : wind !== 0;
+}
+/** Each outlined shape in the tree, in document order: its box, and its outline in canvas space. */
 function outlineHulls(tree) {
   const hulls = [];
   const visit = (node, parent) => {
@@ -214,9 +289,14 @@ function outlineHulls(tree) {
       if (typeof el === 'string') continue;
       const m = multiply(parent, matrixOf(el.getAttribute('transform')));
       if (hasClass(el, 'ol')) {
-        const pts = subpathBoxes(el.getAttribute('d') || '').flatMap(([x0, y0, x1, y1]) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]])
+        const d = el.getAttribute('d') || '';
+        const pts = subpathBoxes(d).flatMap(([x0, y0, x1, y1]) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]])
           .map(([x, y]) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]);
-        hulls.push(pts.length ? [Math.min(...pts.map((p) => p[0])), Math.min(...pts.map((p) => p[1])), Math.max(...pts.map((p) => p[0])), Math.max(...pts.map((p) => p[1]))] : null);
+        const rings = flatten(d).map((r) => r.map(([x, y]) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]));
+        hulls.push(pts.length ? {
+          box: [Math.min(...pts.map((p) => p[0])), Math.min(...pts.map((p) => p[1])), Math.max(...pts.map((p) => p[0])), Math.max(...pts.map((p) => p[1]))],
+          rings, evenodd: el.getAttribute('fill-rule') === 'evenodd'
+        } : null);
       }
       visit(el, m);
     }
@@ -226,6 +306,12 @@ function outlineHulls(tree) {
 }
 const area = (b) => (b[2] - b[0]) * (b[3] - b[1]);
 const within = (a, b) => a[0] >= b[0] - 0.01 && a[1] >= b[1] - 0.01 && a[2] <= b[2] + 0.01 && a[3] <= b[3] + 0.01;
+/**
+ * Whether shape h lies inside shape o: its box inside o's box, and every point of the shape
+ * inside o's shape too. Boxes alone would let a shape that pokes out of o on a slant, such as
+ * a fuselage across a pair of wings, count as inside.
+ */
+const inside = (h, o) => within(h.box, o.box) && h.rings.every((r) => r.every(([x, y]) => insideRings(o.rings, o.evenodd, x, y)));
 
 const innerCache = new WeakMap();
 /**
@@ -245,7 +331,7 @@ function innerOutlines(def, state) {
   for (const k of [0, 0.25, 0.5, 0.75, 1]) {
     def.draw(interp(rest, hover, k), E, {});
     const hulls = outlineHulls(tree);
-    const inner = new Set(hulls.flatMap((h, i) => (h && hulls.some((o, j) => j !== i && o && area(o) > area(h) && within(h, o)) ? [i] : [])));
+    const inner = new Set(hulls.flatMap((h, i) => (h && hulls.some((o, j) => j !== i && o && area(o.box) > area(h.box) && inside(h, o)) ? [i] : [])));
     found = found ? new Set([...found].filter((i) => inner.has(i))) : inner;
   }
   innerCache.set(def, found);
@@ -277,7 +363,10 @@ function closeSeams(tree, outlined, names) {
     if (!fill || closed.has(fill) || seeThrough(fill)) continue;
     closed.add(fill);
     let top = fill;
-    while (parents.get(top).tag === 'g' && parents.get(top).getAttribute('filter') && !parents.get(top).getAttribute('clip-path')) top = parents.get(top);
+    // Climb out of the fill's shadow and glow groups, but never out of a group that moves it
+    // (one with a transform, even an empty one, or a name that draw() animates).
+    const moves = (g) => g.getAttribute('transform') !== null || g.getAttribute('data-n') !== null;
+    while (parents.get(top).tag === 'g' && parents.get(top).getAttribute('filter') && !parents.get(top).getAttribute('clip-path') && !moves(parents.get(top))) top = parents.get(top);
     const attrs = new Map([['d', d], ['fill', 'none'], ['stroke-width', String(UNDERLAP)]]);
     // Joined the way the outline is, the narrower stroke stays inside it even at sharp points.
     if (outline.getAttribute('stroke-linejoin')) attrs.set('stroke-linejoin', outline.getAttribute('stroke-linejoin'));
