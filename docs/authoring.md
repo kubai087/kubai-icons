@@ -30,7 +30,9 @@ export default defineIcon({
   `cloud`, `frontPiece`, `sector`, `KR`, `CR`, `OL`, `LINE`, `ACC`, `DEEP`, `DEEPS`,
   `CLOCK_MINUTES`) come from `packages/core/src/kit.js`, which also offers `ellipse`,
   `arrow` (a straight shaft with a solid head), `arcArrow`, `capsuleRing`, `scaleAt`,
-  `rattle` (a damped swing that is 0 at both ends), `clamp01`, `SOFT`/`SOFTS` (the lighter
+  `rattle` (a damped swing that is 0 at both ends), `bump` (one pulse out and back),
+  `wave` (a movement written against real time), `settle` (slows a wave to a stop at its
+  end; see [Writing smooth motion](review.md#writing-smooth-motion)), `clamp01`, `SOFT`/`SOFTS` (the lighter
   mark colour #89B5FF) and `WHITE`/`WHITES` (white marks that soft variants turn deep).
 - No `Date`, `Math.random` or other input: a build must always produce the same markup.
 - Text (`<text>`) only when the glyph is the semantic core, as in the calendar's date.
@@ -38,7 +40,8 @@ export default defineIcon({
   with an underscore (`icons/_arrows.js`); the build skips those files. Two worth knowing:
   `layer` and `moveAll` in `icons/_science-edu-sports.js` draw a piece with its outline
   and move both together, and `flameTongues` in `icons/_weather-nature.js` is the flame
-  icon's outline, to scale down wherever a small flame is needed.
+  icon's outline, to scale down wherever a small flame is needed. `nudge(defineIcon({...}), dx, dy)`
+  in `icons/_place.js` moves a whole icon, to centre one drawn off the canvas centre.
 - Do not change `packages/core/src/kit.js` or the badges to suit one icon.
 
 ## Keywords
@@ -112,6 +115,12 @@ variant). `--only` accepts a trailing `*` (`--only 'archive*'` shows every compo
 in section 10 of `PROMPT.md` has to pass, and the command has to finish without errors.
 
 `npm run validate` checks every icon's metadata, names and markup.
+
+`node tools/audit.mjs --only archive,inbox` measures the icons against the rules and scores
+them: jumps and abrupt endings in the motion, size, centring, layers, line widths, small
+details and thin gaps. [`review.md`](review.md) explains each finding and the visual
+checklist that goes with it. A new icon should come out of it with no findings, or with
+each remaining one confirmed on a sheet as intended.
 
 ## Release versions
 
