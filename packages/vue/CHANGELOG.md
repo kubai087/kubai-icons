@@ -1,5 +1,16 @@
 # kubai-icons-vue
 
+## 0.8.0
+
+### Minor Changes
+
+- [#80](https://github.com/kubai087/kubai-icons/pull/80) [`cf0f6b3`](https://github.com/kubai087/kubai-icons/commit/cf0f6b3fe82aa19a81bd811be6369bbd93ece0f8) Thanks [@kubai087](https://github.com/kubai087)! - Add nine garden and backyard icons: `fence`, `birdhouse`, `greenhouse`, `beehive`, `seed-packet`, `rain-barrel`, `rake`, `grill` and `wind-chime`.
+
+### Patch Changes
+
+- Updated dependencies [[`cf0f6b3`](https://github.com/kubai087/kubai-icons/commit/cf0f6b3fe82aa19a81bd811be6369bbd93ece0f8)]:
+  - kubai-icons@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes
