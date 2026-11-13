@@ -22,6 +22,7 @@ export default function Page() {
             <li>an icon requested, with the search term, or an icon submitted;</li>
             <li>the feedback link or the author link opened.</li>
           </ul>
+          <p>Page addresses are recorded without their query string, except campaign (utm_) parameters, so the search box and filters reach analytics only as the events above.</p>
           <p>Umami does not set cookies. It receives the IP address and user agent that accompany any web request. Search terms are sent as typed, so do not enter personal information in the search box.</p>
           <p>Browsers that send Do Not Track or Global Privacy Control do not load the analytics script, so neither their page views nor their events are counted.</p>
           <p>A visitor&apos;s icon collection and display preferences are stored only in that browser. A collection link holds the list in the URL fragment, which browsers do not send to the server, and analytics is set to leave it out.</p>

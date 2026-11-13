@@ -41,6 +41,36 @@ export type EventName =
   | "feedback_open"
   | "author_x_open";
 
+/** The global name of the Umami before-send hook (see sendableUrl). */
+export const UMAMI_BEFORE_SEND = "kubaiUmamiBeforeSend";
+
+/**
+ * The address as analytics receives it: no fragment, and of the query only the campaign
+ * (utm_*) parameters. The rest of the query holds the search term, category and open icon,
+ * which the events already carry.
+ */
+export function sendableUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    const campaign = [...u.searchParams].filter(([key]) => key.startsWith("utm_"));
+    u.search = new URLSearchParams(campaign).toString();
+    u.hash = "";
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+/** Installs the before-send hook that passes page and referrer addresses through sendableUrl. */
+export function installUmamiHook() {
+  const w = window as unknown as Record<string, unknown>;
+  w[UMAMI_BEFORE_SEND] = (_type: string, payload: { url?: string; referrer?: string }) => ({
+    ...payload,
+    ...(payload.url && { url: sendableUrl(payload.url) }),
+    ...(payload.referrer && { referrer: sendableUrl(payload.referrer) }),
+  });
+}
+
 /** Records a product event. Does nothing when analytics is off or the visitor opted out. */
 export function track(event: EventName, props: Props = {}) {
   if (optedOut()) return;
