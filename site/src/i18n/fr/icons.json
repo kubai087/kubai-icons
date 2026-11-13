@@ -5495,5 +5495,50 @@
 "Mousqueton",
 "escalade",
 "attache"
+],
+"fence": [
+"Clôture",
+"palissade",
+"jardin"
+],
+"birdhouse": [
+"Nichoir",
+"maison d'oiseaux",
+"jardin"
+],
+"greenhouse": [
+"Serre",
+"jardinage",
+"plantes"
+],
+"beehive": [
+"Ruche",
+"abeilles",
+"miel"
+],
+"seed-packet": [
+"Sachet de graines",
+"graines",
+"semis"
+],
+"rain-barrel": [
+"Récupérateur d'eau de pluie",
+"eau de pluie",
+"tonneau"
+],
+"rake": [
+"Râteau",
+"feuilles",
+"jardinage"
+],
+"grill": [
+"Barbecue",
+"grill",
+"grillade"
+],
+"wind-chime": [
+"Carillon éolien",
+"carillon",
+"véranda"
 ]
 }

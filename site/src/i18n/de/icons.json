@@ -5057,5 +5057,50 @@
 "Karabiner",
 "Karabinerhaken",
 "Klettern"
+],
+"fence": [
+"Zaun",
+"Lattenzaun",
+"Garten"
+],
+"birdhouse": [
+"Vogelhaus",
+"Nistkasten",
+"Garten"
+],
+"greenhouse": [
+"Gewächshaus",
+"Glashaus",
+"Pflanzen"
+],
+"beehive": [
+"Bienenstock",
+"Bienenkorb",
+"Honig"
+],
+"seed-packet": [
+"Samentüte",
+"Saatgut",
+"Aussaat"
+],
+"rain-barrel": [
+"Regentonne",
+"Regenwasser",
+"Tonne"
+],
+"rake": [
+"Rechen",
+"Harke",
+"Laub"
+],
+"grill": [
+"Kugelgrill",
+"Grill",
+"Grillen"
+],
+"wind-chime": [
+"Windspiel",
+"Klangspiel",
+"Veranda"
 ]
 }

@@ -918,4 +918,13 @@
 "sleeping-bag":["Sacco a pelo","campeggio","dormire"],
 "picnic-basket":["Cestino da picnic","picnic","cesto"],
 "hammock":["Amaca","relax","vacanza"],
-"carabiner":["Moschettone","arrampicata","aggancio"]}
+"carabiner":["Moschettone","arrampicata","aggancio"],
+"fence":["Steccato","recinzione","giardino"],
+"birdhouse":["Casetta per uccelli","nido","giardino"],
+"greenhouse":["Serra","piante","giardinaggio"],
+"beehive":["Alveare","api","miele"],
+"seed-packet":["Bustina di semi","semi","semina"],
+"rain-barrel":["Cisterna per pioggia","acqua piovana","barile"],
+"rake":["Rastrello","foglie","giardinaggio"],
+"grill":["Barbecue","griglia","grigliata"],
+"wind-chime":["Campane a vento","scacciapensieri","veranda"]}

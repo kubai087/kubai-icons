@@ -919,5 +919,14 @@
 "sleeping-bag":["Túi ngủ","cắm trại","ngủ"],
 "picnic-basket":["Giỏ dã ngoại","dã ngoại","giỏ"],
 "hammock":["Võng","thư giãn","nghỉ ngơi"],
-"carabiner":["Móc carabiner","khóa leo núi","leo núi"]
+"carabiner":["Móc carabiner","khóa leo núi","leo núi"],
+"fence":["Hàng rào","rào gỗ","vườn"],
+"birdhouse":["Nhà chim","tổ chim","vườn"],
+"greenhouse":["Nhà kính","cây trồng","làm vườn"],
+"beehive":["Tổ ong","ong","mật ong"],
+"seed-packet":["Gói hạt giống","hạt giống","gieo hạt"],
+"rain-barrel":["Thùng hứng nước mưa","nước mưa","thùng"],
+"rake":["Cái cào","lá","làm vườn"],
+"grill":["Lò nướng ngoài trời","nướng BBQ","tiệc nướng"],
+"wind-chime":["Chuông gió","phong linh","hiên nhà"]
 }

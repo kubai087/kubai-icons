@@ -918,4 +918,13 @@
 "sleeping-bag":["Uyku tulumu","kamp","uyku"],
 "picnic-basket":["Piknik sepeti","piknik","sepet"],
 "hammock":["Hamak","dinlenme","tatil"],
-"carabiner":["Karabina","tırmanış","kanca"]}
+"carabiner":["Karabina","tırmanış","kanca"],
+"fence":["Çit","bahçe çiti","bahçe"],
+"birdhouse":["Kuş evi","yuva","bahçe"],
+"greenhouse":["Sera","bitki","bahçecilik"],
+"beehive":["Arı kovanı","arı","bal"],
+"seed-packet":["Tohum paketi","tohum","ekim"],
+"rain-barrel":["Yağmur suyu varili","yağmur suyu","varil"],
+"rake":["Tırmık","yaprak","bahçe işi"],
+"grill":["Mangal","barbekü","ızgara"],
+"wind-chime":["Rüzgar çanı","çan","veranda"]}
