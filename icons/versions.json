@@ -929,5 +929,16 @@
     "picnic-basket",
     "sleeping-bag",
     "thermos"
+  ],
+  "0.8.0": [
+    "beehive",
+    "birdhouse",
+    "fence",
+    "greenhouse",
+    "grill",
+    "rain-barrel",
+    "rake",
+    "seed-packet",
+    "wind-chime"
   ]
 }
