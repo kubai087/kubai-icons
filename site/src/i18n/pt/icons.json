@@ -4993,5 +4993,50 @@
 "Mosquetão",
 "escalada",
 "engate"
+],
+"fence": [
+"Cerca",
+"grade",
+"jardim"
+],
+"birdhouse": [
+"Casinha de pássaro",
+"ninho",
+"jardim"
+],
+"greenhouse": [
+"Estufa",
+"plantas",
+"jardinagem"
+],
+"beehive": [
+"Colmeia",
+"abelhas",
+"mel"
+],
+"seed-packet": [
+"Pacote de sementes",
+"sementes",
+"plantio"
+],
+"rain-barrel": [
+"Barril de chuva",
+"água da chuva",
+"cisterna"
+],
+"rake": [
+"Ancinho",
+"folhas",
+"jardinagem"
+],
+"grill": [
+"Churrasqueira",
+"churrasco",
+"grelha"
+],
+"wind-chime": [
+"Sino de vento",
+"mensageiro dos ventos",
+"varanda"
 ]
 }
