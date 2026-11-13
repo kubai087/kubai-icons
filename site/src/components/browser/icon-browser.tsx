@@ -131,7 +131,21 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     if (color) setOpenColor(color);
     track("icon_open", { icon: m.name });
   }, []);
-  const pickCat = (id: string) => { setRefiltered(true); setCat(id); if (id) track("filter_category", { category: id }); };
+  // Category analytics: one event per category the visitor stays on, once per page load,
+  // so clicking through the list does not send an event for every category passed.
+  const catTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const trackedCats = useRef(new Set<string>());
+  useEffect(() => () => clearTimeout(catTimer.current), []);
+  const pickCat = (id: string) => {
+    setRefiltered(true);
+    setCat(id);
+    clearTimeout(catTimer.current);
+    if (!id || trackedCats.current.has(id)) return;
+    catTimer.current = setTimeout(() => {
+      trackedCats.current.add(id);
+      track("filter_category", { category: id });
+    }, 1500);
+  };
   // Category links filter in place; opening one in a new tab still goes to its page.
   const filterTo = (e: React.MouseEvent, id: string) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return;

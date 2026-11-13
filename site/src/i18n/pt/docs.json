@@ -196,6 +196,7 @@
  "Toggle icons such as <0>Bookmark</0> show their state only through color and shape. Add visible text next to the icon, or set <1>aria-pressed</1> on the button, so that screen readers can announce the state.": "Ícones de alternância como <0>Bookmark</0> mostram o estado apenas por cor e forma. Adicione texto visível ao lado do ícone ou defina <1>aria-pressed</1> no botão, para que os leitores de tela possam anunciar o estado.",
  "Trademarks": "Marcas registradas",
  "Trigger from a parent": "Acionar a partir do elemento pai",
+ "Page addresses are recorded without their query string, except campaign (utm_) parameters, so the search box and filters reach analytics only as the events above.": "Os endereços das páginas são registrados sem a query string, exceto os parâmetros de campanha (utm_), então a caixa de busca e os filtros só chegam à análise como os eventos acima.",
  "Umami does not set cookies. It receives the IP address and user agent that accompany any web request. Search terms are sent as typed, so do not enter personal information in the search box.": "O Umami não define cookies. Ele recebe o endereço IP e o user agent que acompanham qualquer requisição web. Os termos de pesquisa são enviados como digitados, então não informe dados pessoais na caixa de pesquisa.",
  "Usage": "Uso",
  "Use": "Usar",

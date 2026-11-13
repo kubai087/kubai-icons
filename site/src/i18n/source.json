@@ -374,6 +374,7 @@
   "Overview",
   "Package",
   "Packages",
+  "Page addresses are recorded without their query string, except campaign (utm_) parameters, so the search box and filters reach analytics only as the events above.",
   "Paste the following into your agent:",
   "Performance",
   "Plain JavaScript and the <0><kubai-icon></0> web component",

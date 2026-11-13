@@ -196,6 +196,7 @@
  "Toggle icons such as <0>Bookmark</0> show their state only through color and shape. Add visible text next to the icon, or set <1>aria-pressed</1> on the button, so that screen readers can announce the state.": "<0>Bookmark</0> のようなトグルアイコンは、色と形だけで状態を示します。スクリーンリーダーが状態を読み上げられるように、アイコンの横に見えるテキストを追加するか、ボタンに <1>aria-pressed</1> を設定してください。",
  "Trademarks": "商標",
  "Trigger from a parent": "親要素からトリガーする",
+ "Page addresses are recorded without their query string, except campaign (utm_) parameters, so the search box and filters reach analytics only as the events above.": "ページのアドレスは、キャンペーンパラメーター（utm_）を除き、クエリ文字列を取り除いて記録されます。そのため、検索ボックスやフィルターの内容は、上記のイベントとしてのみアクセス解析に送られます。",
  "Umami does not set cookies. It receives the IP address and user agent that accompany any web request. Search terms are sent as typed, so do not enter personal information in the search box.": "Umami は Cookie を設定しません。Web リクエストに必ず付随する IP アドレスとユーザーエージェントを受け取ります。検索語は入力したとおりに送信されるため、検索ボックスに個人情報を入力しないでください。",
  "Usage": "使い方",
  "Use": "使う",
