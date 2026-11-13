@@ -15,5 +15,6 @@ export default defineIcon({
     ${front(u, rp(R(4, 7, 23, 6.4), [KR, KR, 0, 0]), u.upS)}
     <path data-n="la" d="${rp(R(13.3, 11.4, 4.4, 3.8), [0.4, 0.4, 1, 1])}" data-t="fill:#2F6FE0"/>`,
   target: (h) => ({ o: h ? 1 : 0 }),
-  draw(p, E) { at(E.la, { transform: `translate(0 11.4) scale(1 ${f(Math.cos(Math.PI * p.o))}) translate(0 -11.4)` }); }
+  // The latch flips up, ending short enough to stay 2 clear of the lid's top.
+  draw(p, E) { at(E.la, { transform: `translate(0 11.4) scale(1 ${f(1 - 1.6 * p.o)}) translate(0 -11.4)` }); }
 });

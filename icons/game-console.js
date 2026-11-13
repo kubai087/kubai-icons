@@ -27,7 +27,7 @@ export default defineIcon({
   draw(p, E) {
     // The jump button is held down while the character arcs over and stretches in the air.
     const o = clamp01(p.o), push = Math.sin(Math.PI * Math.min(1, o / 0.75));
-    const air = Math.sin(Math.PI * o), x = 11.6 + 6.4 * o, y = 6.6 - 2.6 * air;
+    const air = Math.sin(Math.PI * o), x = 11.6 + 5 * o, y = 6.6 - 2.6 * air;
     const w = 2.8 - 0.4 * air, h = 3 + 0.4 * air;
     at(E.hero, { d: rr(x + (2.8 - w) / 2, y + 3 - h, w, h, 0.7) });
     // The D-pad rocks toward the right while the character runs that way.

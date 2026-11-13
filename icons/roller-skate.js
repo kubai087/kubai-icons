@@ -11,9 +11,10 @@ export default defineIcon({
   category: 'sports',
   tags: ['roller skate', 'skating', 'quad skate', 'rink', 'roller', 'sport', '溜冰'],
   // A roller skate side on; on hover it rolls forward, its wheels turning.
-  svg: (u) => `<g data-n="g">${layer(u, 'bt', BOOT, u.loS, { extra: `<path d="M10.8 5H13.4M10.8 8.2H13.4" class="ln" stroke-linecap="round" stroke="#fff" data-w="stroke"/>` })}
+  svg: (u) => `<g data-n="g">${layer(u, 'bt', BOOT, u.loS, { extra: `<path d="M10.8 5H12.6M10.8 8.2H12.6" class="ln" stroke-linecap="round" stroke="#fff" data-w="stroke"/>` })}
     ${WHEELS.map((x, i) => `<g filter="${u.sh}"><path d="${circ(x, 20.4, 3)}" fill="${u.pure('#2F6FE0')}"/></g><path d="${circ(x, 20.4, 3)}" ${OL}/>
-      <g data-n="w${i}"><path d="M${x} 18.6V22.2" fill="none" stroke-width="1.6" stroke-linecap="round" stroke="#fff" data-w="stroke"/></g>`).join('')}
+      <clipPath id="${u.id('w' + i)}"><path d="${circ(x, 20.4, 3)}"/></clipPath>
+      <g clip-path="url(#${u.id('w' + i)})"><g data-n="w${i}"><path d="M${x} 16.4V24.4" fill="none" stroke-width="1.6" stroke="#fff" data-w="stroke"/></g></g>`).join('')}
     ${layer(u, 'pl', PLATE, u.upS)}</g>`,
   target: (h) => ({ x: h ? 1.6 : 0 }),
   draw(p, E) {

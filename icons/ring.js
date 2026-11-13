@@ -13,7 +13,8 @@ export default defineIcon({
   svg: (u) => `<g filter="${u.sh}"><g filter="${u.hi}"><g data-n="r">
       <path d="${BAND}" fill-rule="evenodd" fill="${u.loS}"/><path d="${GEM}" fill="${u.upS}"/></g></g></g>
     <g data-n="rO"><path d="${BAND}" fill-rule="evenodd" ${OL}/><path d="${GEM}" stroke-linejoin="round" ${OL}/>
-      <path d="M9.8 4.8H21.2" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/></g>`,
+      <clipPath id="${u.id('g')}"><path d="${GEM}"/></clipPath>
+      <path d="M7 4.8H24" clip-path="url(#${u.id('g')})" fill="none" stroke-width="1.6" ${DEEPS}/></g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const t = `rotate(${f(rattle(clamp01(p.o), 10, 2))} 15.5 15.4)`;

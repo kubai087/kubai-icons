@@ -1,6 +1,8 @@
 import { defineIcon, KR, f, OL, rp, at } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'tag',
   zh: '标签',
   category: 'commerce',
@@ -17,4 +19,4 @@ export default defineIcon({
     const t = `rotate(${f(p.a)} 15.5 12.5)`;
     at(E.t, { transform: t }); at(E.tO, { transform: t });
   }
-});
+}), -1.5, 1.5);

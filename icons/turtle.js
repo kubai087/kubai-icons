@@ -4,7 +4,7 @@ import { layer, move } from './_w2-people.js';
 const SHELL = 'M4.4 16.6C4.4 9.6 9 5.4 13.8 5.4C18.6 5.4 23.2 9.6 23.2 16.6Z';
 const RIM = rr(3, 15.4, 21.6, 3.6, 1.8);
 const LEG = rr(-1.8, 0, 3.6, 5.2, 1.6);
-const HEAD = circ(0, 0, 3);
+const HEAD = circ(0, 0, 3.6);
 
 export default defineIcon({
   name: 'turtle',
@@ -13,7 +13,7 @@ export default defineIcon({
   tags: ['turtle', 'tortoise', 'slow', 'reptile', 'animal', 'pet', '海龟'],
   // A turtle under its domed shell; on hover it stretches its head out and takes a step.
   svg: (u) => `${layer(u, LEG, u.upS, 'l1')}${layer(u, LEG, u.upS, 'l2')}
-    <g data-n="hd">${layer(u, HEAD, u.upS)}<circle cx="0.8" cy="-0.6" r="1.2" ${DEEP}/></g>
+    <g data-n="hd">${layer(u, HEAD, u.upS)}<circle cx="0.4" cy="-0.2" r="1.2" ${DEEP}/></g>
     <g filter="${u.sh}"><g filter="${u.hi}"><path d="${SHELL}" fill="${u.loS}"/></g></g><path d="${SHELL}" ${OL}/>
     <path d="${rp([[13.8, 8.6], [16.6, 10.2], [16.6, 13.4], [13.8, 15], [11, 13.4], [11, 10.2]], 0.6)}" fill="none" class="ln" stroke-linejoin="round" ${WHITES}/>
     <g filter="${u.hi}"><path d="${RIM}" fill="${u.upS}"/></g><path d="${RIM}" ${OL}/>`,

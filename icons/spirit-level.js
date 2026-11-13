@@ -11,9 +11,10 @@ export default defineIcon({
   // A spirit level resting at a slant; on hover it settles level and the bubble runs to the
   // middle.
   svg: (u) => rig(u, 'l', [{ d: BAR, fill: u.loS }, `<path d="${VIAL}" fill="#fff"/>
-    <path d="M13 10.8V14.2M18 10.8V14.2" fill="none" stroke-width="1.6" stroke-linecap="round" ${DEEPS}/>
+    <clipPath id="${u.id('v')}"><path d="${VIAL}"/></clipPath>
+    <path d="M13 8V17M18 8V17" clip-path="url(#${u.id('v')})" fill="none" stroke-width="1.6" ${DEEPS}/>
     <path data-n="bb" ${SOFT}/>`]),
-  target: (h) => ({ a: h ? 0 : -6, x: h ? 15.5 : 19.6 }),
+  target: (h) => ({ a: h ? 0 : -6, x: h ? 15.5 : 18.2 }),
   draw(p, E) {
     pose(E, 'l', 2, `rotate(${f(p.a)} 15.5 12.5)`);
     at(E.bb, { d: ellipse(p.x, 12.5, 1.6, 1.3) });

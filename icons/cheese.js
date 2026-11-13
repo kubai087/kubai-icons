@@ -10,7 +10,9 @@ export default defineIcon({
   variants: [],
   // A wedge of holey cheese; it rocks on its base on hover.
   svg: (u) => {
-    const top = rp([[4.6, 12.6], [26.4, 4], [26.4, 12.6]], [0.8, KR, 0]);
+    // The top runs on down behind the side, so its lower corners stay hidden and the right
+    // edges of top and side run on as one line.
+    const top = rp([[4.6, 12.6], [26.4, 4], [26.4, 14.6], [4.6, 14.6]], [0.8, KR, 0, 0]);
     const side = rp(R(4.6, 12.6, 21.8, 10.4), [0.8, 0, KR, KR]);
     return `<g data-n="g">
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${top}" fill="${u.upS}"/></g></g><path d="${top}" ${OL} stroke-linejoin="round"/>

@@ -1,5 +1,6 @@
 import { defineIcon, KR, f, rp, rr, R, DEEPS, rattle, clamp01 } from '../packages/core/src/kit.js';
 import { rig, pose } from './_tools-dev.js';
+import { nudge } from './_place.js';
 
 const BODY = rr(8.8, 3.2, 17.8, 8.2, KR);
 const GRIP = rp([[15.6, 10], [21.8, 10], [21.2, 19.4], [15, 19.4]], [0, 0, 0, 0]);
@@ -7,7 +8,8 @@ const BASE = rr(12.2, 18.2, 12.4, 5, 1.6);
 const CHUCK = rp(R(4.8, 4.6, 5, 5.4), [1.4, 0.4, 0.4, 1.4]);
 const BIT = rr(1.6, 6.1, 3.8, 2.4, 0.6);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'drill',
   zh: '电钻',
   category: 'tools',
@@ -29,4 +31,4 @@ export default defineIcon({
     E.gv.setAttribute('d', d || 'M0 0');
     pose(E, 'd', 6, `translate(${f(rattle(o, 0.5, 8))} 0)`);
   }
-});
+}), 1.5, -0.8);

@@ -1,8 +1,10 @@
 import { defineIcon, f, OL, circ, rr, at } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
 const BOT = 22;
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'yoga-mat',
   zh: '瑜伽垫',
   category: 'sports',
@@ -20,4 +22,4 @@ export default defineIcon({
     const a0 = q(0), a1 = q(4.4);
     at(E.sp, { d: `M${f(p.x)} ${f(cy)}M${f(a0[0])} ${f(a0[1])}A${f(s)} ${f(s)} 0 1 1 ${f(a1[0])} ${f(a1[1])}` });
   }
-});
+}), 2.5, -1);

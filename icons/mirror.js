@@ -15,10 +15,11 @@ export default defineIcon({
       <g filter="${u.sh}"><g filter="${u.hi}"><path data-n="m0" d="${frame}" fill="${u.loS}"/></g></g><path data-n="m1" d="${frame}" ${OL}/>
       <path data-n="m2" d="${glass}" fill="#fff"/>
       <clipPath id="${u.id('g')}"><path d="${glass}"/></clipPath>
-      <g data-n="m3" clip-path="url(#${u.id('g')})"><g data-n="glint"><path d="M10 9.6L15 4.6" ${ACC} fill="none" stroke-linecap="round"/><path d="M12 12.8L18.4 6.4" ${LINE} fill="none" stroke-linecap="round"/></g></g>`;
+      <g data-n="m3" clip-path="url(#${u.id('g')})"><g data-n="glint"><path d="M2 17.6L19 0.6" ${ACC} fill="none"/><path d="M4 20.8L24.4 0.4" ${LINE} fill="none"/></g></g>`;
   },
   target: (h) => ({ x: h ? 5.4 : 0 }),
   draw(p, E) {
+    // The glints run right across the glass and are clipped at its edge.
     // The swivel narrows the frame and glass about the stand's axis and widens them again.
     const k = 1 - 0.4 * Math.sin(Math.PI * clamp01(p.x / 5.4));
     const t = Math.abs(1 - k) < 1e-4 ? '' : scaleAt(k, 15.5, 9.8, 1);

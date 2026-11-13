@@ -1,4 +1,4 @@
-import { defineIcon, CR, f, DEEP, WHITE, rp, rr, star, at } from '../packages/core/src/kit.js';
+import { defineIcon, CR, f, DEEP, WHITE, rp, rr, star, at, bump } from '../packages/core/src/kit.js';
 import { back } from './_w2-devices.js';
 
 // The shell: bevelled top corners, shoulders, and an edge connector below them.
@@ -17,10 +17,11 @@ export default defineIcon({
   svg: (u) => `<g data-n="g">${back(u, SHELL)}
       <path d="${PINS}" ${WHITE}/>
       <path d="${rr(9, 4, 13, 12, CR)}" fill="#fff"/>
-      <path data-n="st" d="${star(4.8, 2.3)}" ${DEEP}/></g>`,
-  target: (h) => ({ d: h ? 1.4 : 0, s: h ? 1.2 : 1 }),
+      <path data-n="st" d="${star(4.2, 2)}" ${DEEP}/></g>`,
+  target: (h) => ({ d: h ? 1.4 : 0, o: h ? 1 : 0 }),
   draw(p, E) {
     at(E.g, { transform: `translate(0 ${f(p.d)})` });
-    at(E.st, { transform: `translate(15.5 10.2) scale(${f(p.s)})` });
+    // The star swells once and settles at a size that keeps it 2 clear of the label.
+    at(E.st, { transform: `translate(15.5 10.2) scale(${f(1 + 0.18 * bump(p.o))})` });
   }
 });

@@ -16,7 +16,7 @@ export default defineIcon({
     <g filter="${u.sh}"><g filter="${u.hi}"><path d="${circ(15.5, CY, 10)}" fill="${u.loS}"/></g></g>
     <path d="${circ(15.5, CY, 10)}" ${OL}/>
     <path d="${circ(15.5, CY, 7.4)}" fill="#fff"/>
-    <path data-n="hand" d="M15.5 ${CY}V${CY - 5.8}" stroke-width="2" stroke-linecap="round" data-t="stroke:#2F6FE0"/>
+    <path data-n="hand" d="M15.5 ${CY}V${CY - 4.4}" stroke-width="2" stroke-linecap="round" data-t="stroke:#2F6FE0"/>
     <circle cx="15.5" cy="${CY}" r="1.7" ${DEEP}/>`,
   target: (h) => ({ a: h ? 360 : 0, dn: h ? 0.8 : 0 }),
   draw(p, E) {

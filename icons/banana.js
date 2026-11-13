@@ -1,11 +1,13 @@
 import { defineIcon, f, OL, DEEP, DEEPS, at, rattle, clamp01 } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
 // A crescent between two arcs that share the stem end and the tip.
 const P1 = [24.4, 2.6], P2 = [4, 18.2];
 const moon = (ro, ri) => `M${P1[0]} ${P1[1]}A${ro} ${ro} 0 0 1 ${P2[0]} ${P2[1]}A${ri} ${ri} 0 0 0 ${P1[0]} ${P1[1]}Z`;
 const BODY = moon(13.2, 22), FACE = moon(15, 22);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'banana',
   zh: '香蕉',
   category: 'food',
@@ -19,4 +21,4 @@ export default defineIcon({
       <circle cx="${f(P2[0] + 1)}" cy="${f(P2[1] - 0.2)}" r="1.2" ${DEEP}/></g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) { at(E.g, { transform: `rotate(${f(rattle(clamp01(p.o), 8, 2))} 15.5 21)` }); }
-});
+}), 0.5, 1.8);

@@ -1,10 +1,12 @@
 import { defineIcon, f, OL, DEEP, R, rp, rr, at, clamp01 } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
 const BODY = rr(6.4, 8.2, 12.4, 15.6, 2.2);
 const CAP = rp(R(8.2, 4.2, 8.8, 4.6), [1.8, 1.8, 0, 0]);
 const DOTS = [[21.4, 4.4], [24.8, 2], [25, 6.8], [28, 4.4]];
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'spray-can',
   zh: '喷漆',
   category: 'tools',
@@ -21,4 +23,4 @@ export default defineIcon({
     at(E.bt, { transform: `translate(0 ${f(0.8 * Math.min(1, o * 3))})` });
     DOTS.forEach((d, i) => at(E['m' + i], { r: f(1.3 * clamp01(o * 2.2 - i * 0.35)) }));
   }
-});
+}), 2.8, 0);

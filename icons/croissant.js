@@ -1,4 +1,5 @@
 import { defineIcon, f, OL, WHITES, at, scaleAt } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
 // The crescent: the part of circle A outside circle B, its horns where they cross.
 const A = [15.5, 20.6, 12.2], B = [15.5, 28.6, 13];
@@ -15,13 +16,16 @@ const inner = (t) => {
 const point = (t, d) => `${f(A[0] + d * Math.sin(t * Math.PI / 180))} ${f(A[1] - d * Math.cos(t * Math.PI / 180))}`;
 // A fold line across the crescent at angle t, inset from both edges.
 const fold = (t) => `M${point(t, inner(t) + 0.9)}L${point(t, A[2] - 0.9)}`;
-// The plump middle section between angles -t and t, standing slightly proud of the crescent.
+// The plump middle section between angles -t and t, standing slightly proud of the crescent's
+// outer edge and sitting 2 inside its inner edge.
 const middle = (t, lift) => {
   const r = A[2] + lift;
-  return `M${point(-t, r)}A${f(r)} ${f(r)} 0 0 1 ${point(t, r)}L${point(t, inner(t) - lift)}A${B[2]} ${B[2]} 0 0 0 ${point(-t, inner(t) - lift)}Z`;
+  const b = B[2] + 2;
+  return `M${point(-t, r)}A${f(r)} ${f(r)} 0 0 1 ${point(t, r)}L${point(t, inner(t) + 2)}A${b} ${b} 0 0 0 ${point(-t, inner(t) + 2)}Z`;
 };
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'croissant',
   zh: '牛角包',
   category: 'food',
@@ -29,7 +33,7 @@ export default defineIcon({
   variants: ['heart'],
   // A croissant with a plump middle section and scored layers; it puffs up on hover.
   svg: (u) => {
-    const roll = middle(19, 0.7);
+    const roll = middle(19, 1.2);
     return `<g data-n="g">
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${BODY}" fill="${u.loS}"/></g></g><path d="${BODY}" ${OL} stroke-linejoin="round"/>
       <path d="${fold(-62) + fold(-40) + fold(40) + fold(62)}" fill="none" stroke-width="1.6" stroke-linecap="round" ${WHITES}/>
@@ -41,4 +45,4 @@ export default defineIcon({
     at(E.g, { transform: scaleAt(p.s, 15.5, 22) });
     at(E.roll, { transform: `translate(0 ${f(p.y)})` });
   }
-});
+}), 0, -3);

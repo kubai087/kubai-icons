@@ -19,7 +19,7 @@ export default defineIcon({
       <circle cx="9.8" cy="17.2" r="3.2" fill="#fff"/><circle cx="9.8" cy="17.2" r="1.3" ${DEEP}/>
       ${wheel(u, 23.2, 20, 3.6)}</g>`;
   },
-  target: (h) => ({ o: h ? 1 : 0, p: h ? [24.4, 1.4, 2.2] : [21.7, 7.4, 0.6] }),
+  target: (h) => ({ o: h ? 1 : 0, p: h ? [24.4, 1.4, 2.2] : [21.7, 7.4, 0.05] }),
   draw(p, E) {
     const o = clamp01(p.o);
     at(E.t, { transform: drive(o, 9.8, 23.6) });

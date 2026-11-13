@@ -15,7 +15,8 @@ export default defineIcon({
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${spout}" fill="${u.upS}"/></g></g><path d="${spout}" ${OL}/>
       <path data-n="ln" class="ln" stroke="#fff" data-w="stroke"/>`;
   },
-  target: (h) => ({ w: h ? [8.4, 3.4] : [12.4, 6.6], y: h ? 1.8 : 0 }),
+  // Line lengths that keep each line 2 clear of the funnel's slanted sides.
+  target: (h) => ({ w: h ? [6.4, 2] : [9.2, 4.6], y: h ? 1.8 : 0 }),
   draw(p, E) {
     const [a, b] = p.w;
     at(E.ln, { d: `M${f(15.5 - a / 2)} ${f(5.8 + p.y)}H${f(15.5 + a / 2)}M${f(15.5 - b / 2)} ${f(8.8 + p.y)}H${f(15.5 + b / 2)}` });

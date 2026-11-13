@@ -177,8 +177,18 @@ export function wave(o, fn) {
 const SWING = 0.75, MAX_HALF_TURNS = 3;
 /** A damped swing that is 0 at rest and at the end of the hover: amplitude a, k half-turns. */
 export const rattle = (o, a, k = 3) => wave(o, (t) => a * SWING * (1 - t) * Math.sin(Math.min(k, MAX_HALF_TURNS) * Math.PI * t * t * (3 - 2 * t)));
+/**
+ * Real time reshaped so a movement comes to rest smoothly: unchanged up to halfway, then
+ * slowing to a stop at 1. A wave written as fn(settle(t)) that ends where it started (a
+ * pulse, a full swing) no longer arrives at full speed and stops dead.
+ */
+export const settle = (t) => {
+  if (t <= 0.5) return t;
+  const u = Math.min(t, 1) - 0.5;
+  return 0.5 + u + 2 * u * u - 4 * u * u * u;
+};
 /** A single out-and-back pulse, 0 at rest and at the end of the hover, 1 halfway through. */
-export const bump = (o) => wave(o, (t) => Math.sin(Math.PI * t));
+export const bump = (o) => wave(o, (t) => Math.sin(Math.PI * settle(t)));
 
 /**
  * Declares an icon. Fields:

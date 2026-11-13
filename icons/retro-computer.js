@@ -1,4 +1,4 @@
-import { defineIcon, KR, CR, f, ACC, DEEP, DEEPS, rr, at } from '../packages/core/src/kit.js';
+import { defineIcon, KR, CR, f, ACC, DEEP, DEEPS, rr, at, wave } from '../packages/core/src/kit.js';
 import { solid, span } from './_devices.js';
 
 const SCREEN = rr(8.8, 3.4, 13.4, 10.2, CR);
@@ -19,7 +19,7 @@ export default defineIcon({
       <path d="M16.4 17H21.4" class="ln" ${DEEPS}/>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
-    at(E.off, { opacity: f(1 - span(p.o, 0, 0.35)) });
+    at(E.off, { opacity: f(1 - wave(p.o, (t) => span(t, 0, 0.3))) });
     const l1 = span(p.o, 0.25, 0.65), l2 = span(p.o, 0.5, 0.95);
     at(E.ln, { d: (l1 > 0 ? `M11.2 6.8H${f(11.2 + 7.8 * l1)}` : '') + (l2 > 0 ? `M11.2 10H${f(11.2 + 5 * l2)}` : '') });
   }

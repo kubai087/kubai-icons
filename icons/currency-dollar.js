@@ -8,7 +8,7 @@ export default defineIcon({
   tags: ['dollar', 'usd', 'money', 'price', 'currency', '货币'],
   variants: ['plus', 'minus', 'check', 'x', 'sync'],
   // A coin struck with a dollar sign; on hover it spins once on its edge.
-  svg: (u) => coin(u, glyph('M19.2 9.4C18.7 8.2 17.4 7.5 15.5 7.5C13.2 7.5 11.8 8.6 11.8 10.2C11.8 14 19.2 11.2 19.2 14.9C19.2 16.5 17.7 17.5 15.5 17.5C13.4 17.5 12.1 16.8 11.6 15.6M15.5 5.6V7.5M15.5 17.5V19.4')),
+  svg: (u) => coin(u, glyph('M18.46 10.02C18.06 9.06 17.02 8.5 15.5 8.5C13.66 8.5 12.54 9.38 12.54 10.66C12.54 13.7 18.46 11.46 18.46 14.42C18.46 15.7 17.26 16.5 15.5 16.5C13.82 16.5 12.78 15.94 12.38 14.98M15.5 7.4V8.5M15.5 16.5V17.6')),
   target: (h) => ({ o: h ? 1 : 0 }),
   draw: coinSpin
 });

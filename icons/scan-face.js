@@ -12,7 +12,7 @@ export default defineIcon({
     return `<path data-n="fr" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${face}" fill="${u.loS}"/></g></g>
       <path d="${face}" ${OL}/>
-      <path d="M12.3 9.6V11.4M18.7 9.6V11.4" fill="none" stroke-width="2.4" stroke-linecap="round" ${WHITES}/>
+      <path d="M12.3 9.6V11.4M18.7 9.6V11.4" fill="none" stroke-width="2.2" stroke-linecap="round" ${WHITES}/>
       <path data-n="sm" fill="none" stroke-width="1.6" stroke-linecap="round" ${WHITES}/>`;
   },
   target: (h) => ({ i: h ? 1.2 : 0, sm: h ? 1.6 : 0.8 }),

@@ -19,7 +19,7 @@ export default defineIcon({
     const l = arrow(-J[0], J[1], -TIP[0] - ux * s, TIP[1] + uy * s, 3.2, 2.6);
     leanBody(E, 'tile', 0, -0.8 * w);
     at(E.m, { transform: place(0) });
-    at(E.mS, { d: `M0 ${f(5.6 - 0.8 * s)}V${J[1]}${r.shaft.replace(/^M[^L]+/, '')}${l.shaft}` });
+    at(E.mS, { d: `M0 ${f(4.2 - 0.8 * s)}V${J[1]}${r.shaft.replace(/^M[^L]+/, '')}${l.shaft}` });
     at(E.mH, { d: r.head + l.head });
   }
 });

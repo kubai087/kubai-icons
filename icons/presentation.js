@@ -1,7 +1,8 @@
 import { defineIcon, KR, CR, R, rp, rr, at, clamp01 } from '../packages/core/src/kit.js';
 import { back, front } from './_commerce-charts.js';
 
-const XS = [10.6, 14.2, 17.8], REST = [2.6, 3.8, 5], END = [4.2, 5.2, 5.8];
+// Bars stand on the bottom of the screen, 2 apart, and stay 2 below its top.
+const XS = [9.9, 14.3, 18.7], REST = [2.6, 3.8, 5], END = [4.2, 5.2, 5.6];
 
 export default defineIcon({
   name: 'presentation',
@@ -21,7 +22,7 @@ export default defineIcon({
     const o = clamp01(p.o);
     XS.forEach((x, i) => {
       const s = clamp01(o * 1.16 - i * 0.08), hg = s ? (REST[i] + (END[i] - REST[i]) * s) * (1 - 0.95 * Math.sin(Math.PI * s)) : REST[i];
-      at(E['b' + i], { d: rp(R(x, 13.6 - hg, 2.6, hg), [0.6, 0.6, 0.2, 0.2]) });
+      at(E['b' + i], { d: rp(R(x, 15 - hg, 2.4, hg), [0.6, 0.6, 0, 0]) });
     });
   }
 });

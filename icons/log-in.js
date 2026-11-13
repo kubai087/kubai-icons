@@ -1,4 +1,4 @@
-import { defineIcon, KR, f, OL, DEEP, DEEPS, R, rp, rr, at } from '../packages/core/src/kit.js';
+import { defineIcon, KR, f, OL, DEEP, DEEPS, R, rp, rr, at, clamp01 } from '../packages/core/src/kit.js';
 
 export default defineIcon({
   name: 'log-in',
@@ -8,7 +8,7 @@ export default defineIcon({
   // A door with an arrow beside it pointing in. On hover the door swings open on its
   // right hinge and the arrow heads in towards it.
   svg: (u) => {
-    const frame = rr(14.8, 1, 12.2, 23, KR), way = rp(R(17.8, 4, 6.2, 20), [1.6, 1.6, 0, 0]);
+    const frame = rr(14.8, 1, 12.2, 23, KR), way = rp(R(17.6, 4, 6.6, 20), [1.6, 1.6, 0, 0]);
     return `
     <g filter="${u.sh}"><g filter="${u.hi}"><path d="${frame}" fill="${u.loS}"/></g></g>
     <path d="${frame}" ${OL}/>
@@ -21,10 +21,11 @@ export default defineIcon({
   },
   target: (h) => ({ s: h ? 0.5 : 1, x: h ? 1.4 : 0 }),
   draw(p, E) {
-    const w = 6.2 * p.s, d = rp(R(24 - w, 4, w, 20), [1.6, 1.6, 0, 0]);
+    const w = 6.6 * p.s, d = rp(R(24.2 - w, 4, w, 20), [1.6, 1.6, 0, 0]);
     at(E.leaf, { d }); at(E.leafO, { d });
-    // The knob keeps to the free edge and never leaves the narrowing leaf.
-    at(E.knob, { cx: f(24 - w * (0.29 + 0.42 * p.s)) });
+    // The knob sits in the middle of the leaf, 2 clear of both edges, and turns away
+    // with the leaf once the leaf is too narrow to hold it.
+    at(E.knob, { cx: f(24.2 - w / 2), opacity: f(clamp01((p.s - 0.7) / 0.25)) });
     at(E.arrow, { transform: `translate(${f(p.x)} 0)` });
   }
 });

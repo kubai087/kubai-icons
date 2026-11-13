@@ -1,4 +1,5 @@
 import { defineIcon, f, OL, DEEPS, at } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
 const EC = [14.4, 10.4];
 const waves = (r) => {
@@ -7,7 +8,8 @@ const waves = (r) => {
   return `M${f(a[0])} ${f(a[1])}A${f(r)} ${f(r)} 0 0 0 ${f(b[0])} ${f(b[1])}`;
 };
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'ear',
   zh: '耳朵',
   category: 'people',
@@ -19,7 +21,7 @@ export default defineIcon({
     const curl = 'M20.7 7.7C21.9 9.7 21.2 11.8 19.3 13.3';
     return `<g data-n="e"><g filter="${u.sh}"><g filter="${u.hi}"><path d="${ear}" fill="${u.loS}"/></g></g><path d="${ear}" ${OL}/>
       <g filter="${u.hi}"><path d="${inner}" fill="${u.upS}"/></g><path d="${inner}" ${OL}/>
-      <path d="${curl}" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/></g>
+      <path d="${curl}" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/></g>
       <path data-n="w1" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>
       <path data-n="w2" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>`;
   },
@@ -29,4 +31,4 @@ export default defineIcon({
     at(E.w1, { d: waves(p.r[0]), opacity: f(p.o) });
     at(E.w2, { d: waves(p.r[1]), opacity: f(Math.max(0, p.o * 1.6 - 0.6)) });
   }
-});
+}), -3, 0);

@@ -97,23 +97,23 @@ export function straightIcon({ body, a, tail, tip, go, dart, lean = 0, head = 3.
 const CH = { dx: 3.4, dy: 4 };
 const chev = (x, dx = CH.dx, dy = CH.dy) => `M${f(x - dx)} ${f(-dy)}L${f(x)} 0L${f(x - dx)} ${f(dy)}`;
 
-/** A disc icon with one chevron pointing at angle a; it steps that way on hover. */
+/** A disc icon with one chevron pointing at angle a; on hover it darts that way and settles. */
 export function chevronIcon({ a, ...meta }) {
   return defineIcon({
     category: 'arrows',
     ...meta,
     svg: (u) => disc(u) + `<path data-n="ch" d="${chev(2.4, 4.4, 5.4)}" ${STROKE}/>`,
-    target: (h) => ({ s: h ? 1.2 : 0 }),
+    target: (h) => ({ o: h ? 1 : 0 }),
     draw(p, E) {
-      const [ux, uy] = dir(a);
-      at(E.ch, { transform: place(a, ux * p.s, uy * p.s) });
+      const [ux, uy] = dir(a), s = 1.6 * p.o + 1.4 * swell(p.o);
+      at(E.ch, { transform: place(a, ux * s, uy * s) });
     }
   });
 }
 
 /**
- * A disc icon with two chevrons pointing at angle a. On hover the leading one steps
- * further than the trailing one, so the pair opens up as it moves.
+ * A disc icon with two chevrons pointing at angle a. On hover both dart the way they point
+ * and settle, the leading one further than the trailing one, so the pair opens up.
  */
 export function chevronsIcon({ a, ...meta }) {
   const gap = 5.2, v1 = -0.9;
@@ -121,11 +121,12 @@ export function chevronsIcon({ a, ...meta }) {
     category: 'arrows',
     ...meta,
     svg: (u) => disc(u) + `<g data-n="g"><path data-n="c1" d="${chev(v1)}" ${STROKE}/><path data-n="c2" d="${chev(v1 + gap)}" ${STROKE}/></g>`,
-    target: (h) => ({ s: h ? 1 : 0 }),
+    target: (h) => ({ o: h ? 1 : 0 }),
     draw(p, E) {
+      const w = swell(p.o);
       at(E.g, { transform: place(a) });
-      at(E.c1, { transform: `translate(${f(p.s * 0.5)} 0)` });
-      at(E.c2, { transform: `translate(${f(p.s)} 0)` });
+      at(E.c1, { transform: `translate(${f(0.8 * p.o + 0.8 * w)} 0)` });
+      at(E.c2, { transform: `translate(${f(2 * p.o + 1.4 * w)} 0)` });
     }
   });
 }

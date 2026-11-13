@@ -1,5 +1,6 @@
 import { defineIcon, f, OL, DEEP, DEEPS, WHITE, rr, clamp01, at } from '../packages/core/src/kit.js';
 import { solid } from './_b5-parts.js';
+import { nudge } from './_place.js';
 
 const CX = 14.6, BX = 6.6, BY = 1, BW = 16, BH = 16.8;
 const BODY = rr(BX, BY, BW, BH, 3.2);
@@ -21,7 +22,8 @@ const along = (t) => {
   return ROUTE[ROUTE.length - 1];
 };
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'blood-bag',
   zh: '血袋',
   category: 'health',
@@ -37,10 +39,11 @@ export default defineIcon({
     <path d="${BODY}" ${OL}/>
     <path d="${rr(CX - 3.4, 2.8, 6.8, 2.6, 1.3)}" fill="#fff"/>
     <path d="${DROP}" ${WHITE}/>`,
-  target: (h) => ({ y: h ? 11.4 : 6.2, d: h ? 1 : 0 }),
+  // Full, the blood rises behind the label, 2 above the drop on it.
+  target: (h) => ({ y: h ? 11.4 : 4.6, d: h ? 1 : 0 }),
   draw(p, E) {
     at(E.lq, { d: rr(BX - 1, p.y, BW + 2, 20, 0) });
     const [x, y] = along(clamp01(p.d));
     at(E.dp, { cx: f(x), cy: f(y) });
   }
-});
+}), -1.5, 0.3);

@@ -1,4 +1,4 @@
-import { defineIcon, f, OL, rr, wave, clamp01 } from '../packages/core/src/kit.js';
+import { defineIcon, f, OL, rr, wave, clamp01, settle } from '../packages/core/src/kit.js';
 import { layer, moveAll } from './_science-edu-sports.js';
 
 // Three rings, widest at the bottom, on a peg standing in a base. Touching parts sit one unit
@@ -21,7 +21,7 @@ export default defineIcon({
     RINGS.forEach((_, i) => {
       // The top ring goes first; each hop lasts 60% of the motion.
       const start = 0.2 * (2 - i);
-      const k = wave(o, (t) => Math.sin(Math.PI * clamp01((t - start) / 0.6)));
+      const k = wave(o, (t) => Math.sin(Math.PI * settle(clamp01((t - start) / 0.6))));
       moveAll(E, ['r' + i], k > 1e-4 ? `translate(0 ${f(-2.6 * k)})` : '');
     });
   }

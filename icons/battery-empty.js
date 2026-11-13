@@ -1,4 +1,4 @@
-import { defineIcon, f, DEEP, at, clamp01, wave } from '../packages/core/src/kit.js';
+import { defineIcon, f, DEEP, at, clamp01, wave, settle } from '../packages/core/src/kit.js';
 import { battery, level } from './_w2-devices.js';
 
 export default defineIcon({
@@ -12,6 +12,6 @@ export default defineIcon({
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const o = clamp01(p.o);
-    at(E.lvl, { d: level(2.4 + 6 * Math.sin(Math.PI * Math.min(1, o * 2))), opacity: f(wave(o, (t) => Math.sin(3 * Math.PI * t) ** 2 * (1 - t * 0.6))) });
+    at(E.lvl, { d: level(2.4 + 6 * wave(o, (t) => Math.sin(Math.PI * settle(Math.min(1, t * 2))))), opacity: f(wave(o, (t) => Math.sin(3 * Math.PI * t) ** 2 * (1 - t * 0.6))) });
   }
 });

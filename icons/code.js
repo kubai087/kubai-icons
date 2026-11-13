@@ -1,4 +1,4 @@
-import { defineIcon, KR, CR, f, OL, DEEPS, R, rp, rr, at } from '../packages/core/src/kit.js';
+import { defineIcon, KR, CR, f, OL, DEEPS, R, rp, rr, at, bump } from '../packages/core/src/kit.js';
 
 const BODY = rr(4, 3.3, 23, 18.4, KR);
 const HEAD = rp(R(4, 3.3, 23, 4.6), [KR, KR, 0, 0]);
@@ -16,9 +16,9 @@ export default defineIcon({
     <path data-n="br" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/>
     <path data-n="sl" fill="none" stroke-width="2.2" stroke-linecap="round" data-t="stroke:#89B5FF"/>
     <g filter="${u.hi}"><path d="${HEAD}" fill="${u.upS}"/></g><path d="${HEAD}" ${OL}/>`,
-  target: (h) => ({ x: h ? 0.8 : 0, a: h ? 1 : 0 }),
+  target: (h) => ({ a: h ? 1 : 0 }),
   draw(p, E) {
-    const l = 12.2 - p.x, r = 18.8 + p.x;
+    const x = 1.1 * p.a + 0.9 * bump(p.a), l = 12.2 - x, r = 18.8 + x;
     at(E.br, { d: `M${f(l)} 12.2L${f(l - 2.7)} 14.8L${f(l)} 17.4M${f(r)} 12.2L${f(r + 2.7)} 14.8L${f(r)} 17.4` });
     const dx = 1.1 + 0.5 * p.a;
     at(E.sl, { d: `M${f(15.5 + dx)} 12.1L${f(15.5 - dx)} 17.5` });

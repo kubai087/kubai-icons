@@ -14,7 +14,8 @@ export default defineIcon({
     <g filter="${u.sh}"><g filter="${u.hi}"><path d="${body}" fill="${u.loS}"/></g></g><path d="${body}" ${OL}/>
     <path d="${circ(10.8, 14.4, 4.6)}" fill="#fff"/><path data-n="cone" d="${circ(10.8, 14.4, 2.2)}" ${SOFT}/>
     <path d="${rr(17.6, 9.6, 7.4, 4.6, CR)}" fill="#fff"/>
-    <path data-n="nd" d="M0 10.9V12.9" fill="none" stroke-width="1.6" stroke-linecap="round" ${DEEPS}/>
+    <clipPath id="${u.id('w')}"><path d="${rr(17.6, 9.6, 7.4, 4.6, CR)}"/></clipPath>
+    <g clip-path="url(#${u.id('w')})"><path data-n="nd" d="M0 8.6V15.2" fill="none" stroke-width="1.6" ${DEEPS}/></g>
     <path d="${circ(21.3, 17.7, 2.1)}" fill="#fff" data-w="fill"/>`;
   },
   target: (h) => ({ o: h ? 1 : 0 }),

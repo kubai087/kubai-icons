@@ -13,7 +13,7 @@ export default defineIcon({
       <circle cx="10.6" cy="9.2" r="1.8" ${WHITE}/><circle cx="17.4" cy="6.2" r="1.5" ${WHITE}/><circle cx="21.4" cy="10.6" r="1.4" ${WHITE}/></g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
-    const o = clamp01(p.o), y = wave(o, (t) => -1.4 * (1 - (1 - t) * Math.cos(3 * Math.PI * t)));
+    const o = clamp01(p.o), y = wave(o, (t) => -1.4 * (1 - (1 - t) ** 2 * Math.cos(3 * Math.PI * t)));
     at(E.cap, { transform: `translate(0 ${f(y)})` });
     const st = rp([[11.8, 12 + y], [19.2, 12 + y], [20, 23.6], [11, 23.6]], [0, 0, KR, KR]);
     at(E.st, { d: st }); at(E.stO, { d: st });

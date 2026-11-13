@@ -1,6 +1,7 @@
 import { defineIcon, KR, CR, f, OL, DEEP, DEEPS, WHITE, rr, circ, clamp01 } from '../packages/core/src/kit.js';
 import { layer, moveAll } from './_science-edu-sports.js';
 import { flameTongues } from './_weather-nature.js';
+import { nudge } from './_place.js';
 
 // The drawer is drawn at x = 0 and slides out of the right-hand end of the sleeve. It is
 // one unit shorter than the sleeve at top and bottom, so it hides inside it.
@@ -11,7 +12,8 @@ const SHUT = 5, OPEN = 9;
 // A white flame printed on the sleeve, centred on it.
 const MARK = `<path d="${flameTongues(16.6, 1.2, 9, 8.6)}" transform="translate(11.7 19) scale(0.42) translate(-15.5 -23.8)" ${WHITE}/>`;
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'matchbox',
   zh: '火柴盒',
   category: 'travel',
@@ -21,4 +23,4 @@ export default defineIcon({
     ${layer(u, 's', SLEEVE, u.loS, { extra: MARK })}`,
   target: (h) => ({ x: h ? OPEN : SHUT }),
   draw(p, E) { moveAll(E, ['d'], `translate(${f(p.x)} 0)`); }
-});
+}), 2, -2);

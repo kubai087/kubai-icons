@@ -44,6 +44,7 @@ export function thumb(down) {
   const cuff = rp(pts(R(4, 11.2, 4.8, 12.6)), 1.4);
   const handPts = [[9.6, 23.8], [9.6, 11.4], [12.6, 9.6], [13.6, 3.6], [17.6, 2.8], [17.6, 9.2], [24, 9.2], [26, 11.6], [24.6, 23.8]];
   const hand = rp(pts(handPts), rad([KR, 1.2, 2, 2.4, 2.2, 1.2, 2, 2.4, KR]));
-  const seams = `M18.6 ${f(y(14.6))}H24.2M18.6 ${f(y(19))}H23.6`;
+  // The finger seams run out to the hand's edge, where the icon clips them.
+  const seams = `M18.6 ${f(y(14.6))}H28M18.6 ${f(y(19))}H28`;
   return { cuff, hand, seams };
 }

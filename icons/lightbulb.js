@@ -15,8 +15,8 @@ export default defineIcon({
       <circle data-n="glow" cx="15.5" cy="9.4" r="5" fill="#fff"/>
       <path d="M12.8 12.6L14.2 9.8L15.5 11.8L16.8 9.8L18.2 12.6" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/>
       <g filter="${u.hi}"><path d="${base}" fill="${u.loS}"/></g><path d="${base}" ${OL}/>
-      <path d="${lines(12.8, 20, [5.4])}" class="ln" stroke="#fff" data-w="stroke"/>`;
+      <path d="${lines(13.6, 20, [3.8])}" class="ln" stroke="#fff" data-w="stroke"/>`;
   },
-  target: (h) => ({ glow: h ? 1 : 0, r: h ? 7.2 : 5 }),
+  target: (h) => ({ glow: h ? 1 : 0, r: h ? 5.9 : 5 }),
   draw(p, E) { at(E.glow, { r: f(p.r), opacity: f(p.glow) }); }
 });

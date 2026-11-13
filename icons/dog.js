@@ -15,8 +15,8 @@ export default defineIcon({
   svg: (u) => `<g data-n="g"><g filter="${u.sh}"><g filter="${u.hi}"><path d="${HEAD}" fill="${u.loS}"/></g></g><path d="${HEAD}" ${OL}/>
     <g fill="#fff" data-w="fill"><circle cx="12" cy="11" r="1.5"/><circle cx="19" cy="11" r="1.5"/></g>
     <g filter="${u.hi}"><path d="${MUZZLE}" fill="${u.upS}"/></g><path d="${MUZZLE}" ${OL}/>
-    <path d="${ellipse(15.5, 14.8, 2.2, 1.5)}" ${DEEP}/>
-    <path d="M15.5 16.2V17.6M13.2 18.4Q15.5 20 17.8 18.4" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/>
+    <path d="${ellipse(15.5, 16.1, 2.2, 1.5)}" ${DEEP}/>
+    <path d="M13.2 18.4Q15.5 20 17.8 18.4" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${DEEPS}/>
     ${layer(u, EAR, u.loS, 'l')}${layer(u, EAR, u.loS, 'r')}</g>`,
   target: (h) => ({ o: h ? 1 : 0, ear: h ? 9 : 0 }),
   draw(p, E) {

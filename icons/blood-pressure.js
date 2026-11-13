@@ -17,7 +17,7 @@ export default defineIcon({
   target: (h) => ({ a: h ? 50 : -55, s: h ? 0.84 : 1 }),
   draw(p, E) {
     const r = p.a * Math.PI / 180;
-    at(E.nd, { d: `M${GX} ${GY}L${f(GX + 4.6 * Math.sin(r))} ${f(GY - 4.6 * Math.cos(r))}` });
+    at(E.nd, { d: `M${GX} ${GY}L${f(GX + 3.3 * Math.sin(r))} ${f(GY - 3.3 * Math.cos(r))}` });
     at(E.b, { transform: scaleAt(p.s, BX, BY, 1) });
   }
 });

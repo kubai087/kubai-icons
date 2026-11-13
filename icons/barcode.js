@@ -1,4 +1,4 @@
-import { defineIcon, KR, f, OL, R, rp, rr, at, clamp01, wave } from '../packages/core/src/kit.js';
+import { defineIcon, KR, f, OL, R, rp, rr, at, clamp01, wave, settle } from '../packages/core/src/kit.js';
 
 // Bars of two widths, 1.5 apart, centred on the card.
 const BARS = [1.6, 2.8, 1.6, 1.6, 2.8];
@@ -22,6 +22,6 @@ export default defineIcon({
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const o = clamp01(p.o);
-    at(E.bar, { transform: `translate(0 ${f(12.5 + 5.4 * wave(o, (t) => Math.sin(2 * Math.PI * t) * (1 - 0.35 * t)))})` });
+    at(E.bar, { transform: `translate(0 ${f(12.5 + 5.4 * wave(o, (t) => Math.sin(2 * Math.PI * settle(t)) * (1 - 0.35 * t)))})` });
   }
 });

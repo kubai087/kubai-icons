@@ -1,10 +1,12 @@
 import { defineIcon, f, rp, rr, at, WHITE } from '../packages/core/src/kit.js';
 import { rig, pose } from './_tools-dev.js';
+import { nudge } from './_place.js';
 
 const HANDLE = rr(2, 9.3, 12.6, 6.4, 2);
 const HEAD = rp([[12.6, 9.3], [16.6, 6], [22.6, 6], [22.6, 19], [16.6, 19], [12.6, 15.7]], [0.4, 1, 1.2, 1.2, 1, 0.4]);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'flashlight',
   zh: '手电筒',
   category: 'tools',
@@ -21,4 +23,4 @@ export default defineIcon({
     pose(E, 'f', 4, 'translate(-1.4 1.4) rotate(-45 15.5 12.5)');
     at(E.bm, { transform: `translate(22.6 12.5) scale(${f(Math.max(0.001, p.b))} ${f(0.6 + 0.4 * p.b)}) translate(-22.6 -12.5)`, opacity: f(0.9 * Math.min(1, p.b * 3)) });
   }
-});
+}), 2.3, -2.5);

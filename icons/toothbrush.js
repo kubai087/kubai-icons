@@ -1,12 +1,14 @@
 import { defineIcon, f, R, rp, at, rattle, clamp01 } from '../packages/core/src/kit.js';
 import { back, front, place } from './_b1-home.js';
+import { nudge } from './_place.js';
 
 const DEG = -35, CX = 15.5, CY = 13.4;
 const handle = [[-13.7, 0.8], [3, 1], [5.6, 0], [13.7, 0], [13.7, 4.4], [5.6, 4.4], [3, 3.6], [-13.7, 4.6]];
 const TUFTS = [3, 6.3, 9.6];
 const on = (pts) => place(pts, DEG, CX, CY);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'toothbrush',
   zh: '牙刷',
   category: 'home',
@@ -21,4 +23,4 @@ export default defineIcon({
     const t = rattle(clamp01(p.o), 4.4, 3), a = DEG * Math.PI / 180;
     at(E.g, { transform: `translate(${f(t * Math.cos(a))} ${f(t * Math.sin(a))})` });
   }
-});
+}), -1.5, -0.5);

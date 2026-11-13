@@ -1,10 +1,12 @@
 import { defineIcon, f, OL, DEEPS, rp, circ, at } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
 // Drawn upright round (15.5, 12.5), then leaned toward the upper right.
 const HEAD = circ(15.5, 6.2, 5.8);
 const HANDLE = rp([[12.8, 9.4], [18.2, 9.4], [17.2, 23], [13.8, 23]], [0.4, 0.4, 1.4, 1.4]);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'mic-vocal',
   zh: '手持麦克风',
   category: 'media',
@@ -20,4 +22,4 @@ export default defineIcon({
     const t = `translate(0 ${f(p.y)}) rotate(${f(p.a)} 15.5 13.6)`;
     ['a', 'b', 'c1', 'd'].forEach((k) => at(E[k], { transform: t }));
   }
-});
+}), -2, 0.8);

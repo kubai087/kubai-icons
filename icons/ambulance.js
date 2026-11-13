@@ -1,10 +1,12 @@
 import { defineIcon, KR, f, OL, WHITE, rp, rr, clamp01, at, rattle } from '../packages/core/src/kit.js';
 import { wheel } from './_travel-transport.js';
+import { nudge } from './_place.js';
 
 const W = 1.4, L = 3.2, X = 11.5, Y = 10.8;
 const CROSS = rp([[X - W, Y - L], [X + W, Y - L], [X + W, Y - W], [X + L, Y - W], [X + L, Y + W], [X + W, Y + W], [X + W, Y + L], [X - W, Y + L], [X - W, Y + W], [X - L, Y + W], [X - L, Y - W], [X - W, Y - W]], [0.8, 0.8, 0.4, 0.8, 0.8, 0.4, 0.8, 0.8, 0.4, 0.8, 0.8, 0.4]);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'ambulance',
   zh: '救护车',
   category: 'health',
@@ -31,4 +33,4 @@ export default defineIcon({
     const tilt = rattle(o, -1.6, 2);
     at(E.t, { transform: `translate(${f(x)} 0) rotate(${f(tilt)} 8.6 20.4)` });
   }
-});
+}), 0.5, 2);

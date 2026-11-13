@@ -18,7 +18,8 @@ export default defineIcon({
   variants: ['plus', 'check', 'x', 'alert', 'cog'],
   // A quadcopter seen from above; on hover its propellers spin and it lifts off.
   svg: (u) => `<g data-n="dr">${solid(u, arm(1) + arm(-1), u.loS)}
-      ${ROT.map(([x, y], i) => `${solid(u, circ(x, y, 3.3), u.upS)}<path data-n="p${i}" d="M${f(x - 2.2)} ${f(y)}H${f(x + 2.2)}" class="ln" ${DEEPS}/>`).join('')}
+      ${ROT.map(([x, y], i) => `${solid(u, circ(x, y, 3.3), u.upS)}<clipPath id="${u.id('r' + i)}"><path d="${circ(x, y, 3.3)}"/></clipPath>
+        <g clip-path="url(#${u.id('r' + i)})"><path data-n="p${i}" d="M${f(x - 3.6)} ${f(y)}H${f(x + 3.6)}" fill="none" stroke-width="1.6" ${DEEPS}/></g>`).join('')}
       ${solid(u, circ(15.5, 12.5, 3.4), u.upS)}</g>`,
   target: (h) => ({ a: h ? 180 : 45, y: h ? -0.8 : 0 }),
   draw(p, E) {

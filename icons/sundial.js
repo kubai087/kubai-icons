@@ -19,7 +19,8 @@ export default defineIcon({
     <g filter="${u.sh}"><g filter="${u.hi}"><path d="${GNOMON}" fill="${u.upS}"/></g></g><path d="${GNOMON}" ${OL}/>`,
   target: (h) => ({ a: h ? 32 : 150 }),
   draw(p, E) {
-    const r = p.a * Math.PI / 180, k = 1 + 0.08 * (150 - p.a) / 118;
-    at(E.shade, { d: `M15.5 13.2L${f(15.5 + 8.2 * k * Math.cos(r))} ${f(13 + 3 * k * Math.sin(r))}` });
+    // The shadow keeps 2 clear of the dial's rim all the way round.
+    const r = p.a * Math.PI / 180;
+    at(E.shade, { d: `M15.5 13.2L${f(15.5 + 5.6 * Math.cos(r))} ${f(13 + 1.6 * Math.sin(r))}` });
   }
 });

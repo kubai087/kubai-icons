@@ -21,7 +21,7 @@ export default defineIcon({
       ${front(u, rp([[3.6, 1.6], [27.4, 1.6], [27.4, 8.8], [22, 8.8], [21.2, 5.4], [9.8, 5.4], [9, 8.8], [3.6, 8.8]], [3, 3, 1.8, 1.8, 0.8, 0.8, 1.8, 1.8]))}`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
-    const a = 130 * wave(p.o, (t) => (t < 0.55 ? Math.sin((Math.PI / 2) * (t / 0.55)) : 1 - ((t - 0.55) / 0.45) ** 2));
+    const a = 130 * wave(p.o, (t) => (t < 0.55 ? Math.sin((Math.PI / 2) * (t / 0.55)) : 0.5 + 0.5 * Math.cos(Math.PI * (t - 0.55) / 0.45)));
     at(E.dial, { transform: `translate(${C[0]} ${C[1]}) rotate(${f(a)})` });
   }
 });

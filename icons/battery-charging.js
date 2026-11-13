@@ -13,8 +13,8 @@ export default defineIcon({
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${body}" fill="${u.loS}"/></g></g><path d="${body}" ${OL}/>
       <path d="${rr(5.8, 8.6, 17.2, 7.8, 1.2)}" fill="#fff"/>
       <path data-n="lvl" ${DEEP}/>
-      <path d="M15.5 8.7L11.9 13.1H14.3L13.4 16.3L17.1 11.8H14.7Z" fill="#fff" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
-      <path d="M15.5 8.7L11.9 13.1H14.3L13.4 16.3L17.1 11.8H14.7Z" ${DEEP}/>`;
+      <path d="M15.5 8.6L11.9 13.1H14.3L13.4 16.4L17.1 11.8H14.7Z" fill="#fff" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M15.5 8.6L11.9 13.1H14.3L13.4 16.4L17.1 11.8H14.7Z" ${DEEP}/>`;
   },
   target: (h) => ({ w: h ? 14.4 : 5.4 }),
   draw(p, E) { at(E.lvl, { d: rr(7.2, 10, p.w, 5, 0.8) }); }

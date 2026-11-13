@@ -1,7 +1,9 @@
 import { defineIcon, KR, f, OL, DEEP, rp, rr, at, clamp01 } from '../packages/core/src/kit.js';
 import { flame } from './_home-food.js';
+import { nudge } from './_place.js';
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'watering-can',
   zh: '浇水壶',
   category: 'home',
@@ -30,4 +32,4 @@ export default defineIcon({
       at(E[n], { opacity: f(k), transform: `translate(0 ${f(-2 + 2 * k)})` });
     });
   }
-});
+}), 2, -2.8);

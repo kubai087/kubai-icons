@@ -3,7 +3,8 @@ import { defineIcon, KR, CR, f, OL, DEEP, R, rp, rr, at, clamp01 } from '../pack
 const KEY = 19 / 4;
 // White keys 0 and 2 and the black key between keys 2 and 3 go down together as a chord.
 const CHORD = [0, 2], DIP = 1.6;
-const whiteKey = (k, dy) => rp(R(6 + KEY * k, 7.4 + dy, KEY, 12.3), [k ? 0 : CR, k === 3 ? CR : 0, k === 3 ? CR : 0, k ? 0 : CR]);
+// A pressed key sinks at its top; its bottom stays 2 clear of the case.
+const whiteKey = (k, dy) => rp(R(6 + KEY * k, 7.4 + dy, KEY, 12.3 - dy), [k ? 0 : CR, k === 3 ? CR : 0, k === 3 ? CR : 0, k ? 0 : CR]);
 const blackKeys = (dy) => [1, 2].map((k) => rp(R(6 + KEY * k - 1.4, 7.4 + (k === 2 ? dy : 0), 2.8, 6.8), [0, 0, 0.8, 0.8])).join('');
 
 export default defineIcon({

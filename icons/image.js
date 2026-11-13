@@ -22,7 +22,7 @@ export default defineIcon({
     </g>
     <path d="${frame}" ${OL}/>`;
   },
-  target: (h) => ({ y: h ? 6.3 : 9.2, r: h ? 2.9 : 2.6, dy: h ? 2.4 : 0 }),
+  target: (h) => ({ y: h ? 8.4 : 9.2, r: h ? 3.1 : 2.6, dy: h ? 2.4 : 0 }),
   draw(p, E) {
     at(E.sun, { r: f(p.r), cy: f(p.y) });
     at(E.back, { d: hill(BACK, p.dy * 0.6) }); at(E.front, { d: hill(FRONT, p.dy) });

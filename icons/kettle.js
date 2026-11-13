@@ -1,9 +1,11 @@
 import { defineIcon, KR, f, OL, DEEPS, R, rp, rr, at, rattle, clamp01 } from '../packages/core/src/kit.js';
 import { steam, reveal } from './_home-food.js';
+import { nudge } from './_place.js';
 
 const BODY = rp([[10, 8.2], [21, 8.2], [24.2, 23.4], [6.8, 23.4]], [2.8, 2.8, KR, KR]);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'kettle',
   zh: '水壶',
   category: 'home',
@@ -30,4 +32,4 @@ export default defineIcon({
     const s = clamp01((o - 0.1) / 0.75);
     at(E.st, { d: s > 0 ? steam(3.8, 7.4, 3) : steam(3.8, 7.4, 2), ...reveal(s) });
   }
-});
+}), 2, -0.3);

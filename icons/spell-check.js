@@ -14,7 +14,7 @@ export default defineIcon({
   },
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
-    const o = Math.max(0, Math.min(1, p.o)), a = wave(o, (t) => 1.3 * Math.pow(1 - t, 0.6) * Math.cos(3 * Math.PI * t));
+    const o = Math.max(0, Math.min(1, p.o)), a = wave(o, (t) => 1.3 * Math.pow(1 - t, 1.5) * Math.cos(3 * Math.PI * t));
     at(E.tx, { y: f(13.8 - 1.4 * bump(o)) });
     let d = 'M8.5 17.4';
     for (let i = 0; i < 6; i++) d += `Q${f(8.5 + i * 2.33 + 1.17)} ${f(17.4 + (i % 2 ? a : -a))} ${f(8.5 + (i + 1) * 2.33)} 17.4`;

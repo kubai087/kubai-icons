@@ -1,4 +1,4 @@
-import { defineIcon, KR, CR, f, OL, DEEP, DEEPS, R, rp, rr, at } from '../packages/core/src/kit.js';
+import { defineIcon, KR, CR, f, OL, DEEP, DEEPS, R, rp, rr, at, clamp01 } from '../packages/core/src/kit.js';
 
 // The door covers the opening exactly and hangs on its left edge.
 const CASE = rr(7.2, 1, 16.6, 23, KR), X = 10.2, Y = 4, W = 10.6, H = 17;
@@ -22,9 +22,10 @@ export default defineIcon({
     const s = p.s, d = door(W * s);
     at(E.d, { d }); at(E.dO, { d });
     // Vents across the top of the door and the latch by its free edge, each 2 clear of the
-    // door's edges when it is shut; they narrow with the door as it turns.
-    const x0 = f(X + 2.8 * s), x1 = f(X + 7.8 * s);
-    at(E.v, { d: `M${x0} 7.2H${x1}M${x0} 10.2H${x1}` });
-    at(E.h, { d: rr(X + 6.2 * s, 12.6, 2.4 * s, 4.4, Math.min(1.2, 1.2 * s)) });
+    // door's edges when it is shut; they narrow with the door as it turns and are gone once
+    // the door is too narrow to keep them 2 clear.
+    const x0 = f(X + 2.8 * s), x1 = f(X + 7.8 * s), k = f(clamp01((s - 0.72) / 0.2));
+    at(E.v, { d: `M${x0} 7.2H${x1}M${x0} 10.2H${x1}`, opacity: k });
+    at(E.h, { d: rr(X + 6.2 * s, 12.6, 2.4 * s, 4.4, Math.min(1.2, 1.2 * s)), opacity: k });
   }
 });

@@ -1,9 +1,11 @@
 import { defineIcon, f, OL, WHITES, at, rattle, clamp01 } from '../packages/core/src/kit.js';
 import { leaf } from './_home-food.js';
+import { nudge } from './_place.js';
 
 const ROOT = 'M11.6 9Q11.6 6.6 14 6.6H17Q19.4 6.6 19.4 9C19.4 13.6 17 22 15.5 25C14 22 11.6 13.6 11.6 9Z';
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'carrot',
   zh: '胡萝卜',
   category: 'food',
@@ -19,4 +21,4 @@ export default defineIcon({
   },
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) { at(E.lv, { transform: `rotate(${f(rattle(clamp01(p.o), 14, 3))} 15.5 7.2)` }); }
-});
+}), -2, 1.3);

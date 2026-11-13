@@ -4,6 +4,9 @@ import { back, front, place } from './_b1-home.js';
 const DEG = 32, CX = 13.8, CY = 13.5;
 const on = (pts) => place(pts, DEG, CX, CY);
 
+// The grips run right across the handle and are clipped at its sides.
+const HANDLE = rp(on([[-2.2, -5], [2.2, -5], [3.2, 11], [-3.2, 11]]), [0, 0, 2.6, 2.6]);
+
 export default defineIcon({
   name: 'razor',
   zh: '剃须刀',
@@ -11,11 +14,11 @@ export default defineIcon({
   tags: ['shave', 'blade', 'beard', 'grooming', 'barber', 'bathroom', '刮胡刀', '刀片', '胡须'],
   // A safety razor held at an angle; it makes shaving strokes along its handle on hover.
   svg: (u) => `<g data-n="g">
-      ${front(u, rp(on([[-2.2, -5], [2.2, -5], [3.2, 11], [-3.2, 11]]), [0, 0, 2.6, 2.6]))}
+      ${front(u, HANDLE)}
       ${back(u, rp(on(R(-7.4, -11, 14.8, 8)), 2.2))}
       <path d="${rp(on(R(-5.2, -9, 10.4, 4)), 1.2)}" fill="#fff"/>
-      <path d="${poly(on([[-3.6, -7], [3.6, -7]]))}" fill="none" stroke-width="1.6" stroke-linecap="round" ${DEEPS}/>
-      <path d="${poly(on([[-1.3, 2.8], [1.3, 2.8]])) + poly(on([[-1.5, 6.2], [1.5, 6.2]]))}" fill="none" stroke-width="1.6" stroke-linecap="round" ${DEEPS}/>
+      <clipPath id="${u.id('h')}"><path d="${HANDLE}"/></clipPath>
+      <path d="${poly(on([[-4, 2.8], [4, 2.8]])) + poly(on([[-4, 6.2], [4, 6.2]]))}" clip-path="url(#${u.id('h')})" fill="none" stroke-width="1.6" ${DEEPS}/>
     </g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {

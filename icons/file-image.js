@@ -24,6 +24,6 @@ export default defineIcon({
   draw(p, E) {
     const o = Math.max(0, Math.min(1, p.sun));
     at(E.h0, { d: hill0(0.9 * o) }); at(E.h1, { d: hill1(1.1 * o) });
-    at(E.sun, { cx: f(13 + 2 * o), cy: f(15.2 - 3.4 * Math.sin(Math.PI / 2 * o)), r: f(1.8 + 0.5 * o) });
+    at(E.sun, { cx: f(13 + 2 * o), cy: f(15.2 - 1.4 * Math.sin(Math.PI / 2 * o)), r: f(1.8 + 0.5 * o) });
   }
 });

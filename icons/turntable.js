@@ -16,7 +16,7 @@ export default defineIcon({
       <circle cx="${C[0]}" cy="${C[1]}" r="2.4" ${DEEP}/>
       <g data-n="arm"><path d="M0 0V10.4" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/><path d="${rr(-1.6, 9, 3.2, 4, 1)}" ${DEEP}/></g>
       <circle cx="${PIVOT[0]}" cy="${PIVOT[1]}" r="1.9" ${DEEP}/>`,
-  target: (h) => ({ arm: h ? 34 : 0, rot: h ? 200 : 0 }),
+  target: (h) => ({ arm: h ? 44 : 0, rot: h ? 200 : 0 }),
   draw(p, E) {
     at(E.arm, { transform: `translate(${PIVOT[0]} ${PIVOT[1]}) rotate(${f(p.arm)})` });
     at(E.spin, { transform: `translate(${C[0]} ${C[1]}) rotate(${f(p.rot)})` });

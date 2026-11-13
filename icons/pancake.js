@@ -1,4 +1,4 @@
-import { defineIcon, f, OL, rr, at, wave, clamp01 } from '../packages/core/src/kit.js';
+import { defineIcon, f, OL, rr, at, wave, clamp01, settle } from '../packages/core/src/kit.js';
 import { drippy } from './_home-food.js';
 import { solid, light } from './_b2-kitchen.js';
 
@@ -18,7 +18,7 @@ export default defineIcon({
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const o = clamp01(p.o);
-    const y = wave(o, (t) => -5 * Math.sin(Math.PI * t)), a = wave(o, (t) => 14 * Math.sin(2 * Math.PI * t));
+    const y = wave(o, (t) => -5 * Math.sin(Math.PI * settle(t))), a = wave(o, (t) => 14 * Math.sin(2 * Math.PI * settle(t)));
     at(E.top, { transform: `translate(0 ${f(y)}) rotate(${f(a)} 15.5 9.6)` });
   }
 });

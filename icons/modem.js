@@ -1,4 +1,4 @@
-import { defineIcon, KR, f, DEEP, DEEPS, R, rp, rr, arrow, at, circ, wave } from '../packages/core/src/kit.js';
+import { defineIcon, KR, f, DEEP, DEEPS, R, rp, rr, arrow, at, circ, wave, settle } from '../packages/core/src/kit.js';
 import { back, front } from './_w2-devices.js';
 import { span } from './_devices.js';
 
@@ -21,7 +21,7 @@ export default defineIcon({
       <path data-n="ld" ${DEEP}/>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
-    const o = p.o, pulse = (a, b) => wave(o, (t) => Math.sin(Math.PI * span(t, a, b)));
+    const o = p.o, pulse = (a, b) => wave(o, (t) => Math.sin(Math.PI * settle(span(t, a, b))));
     at(E.up, { transform: `translate(0 ${f(-1.6 * pulse(0, 0.55))})` });
     at(E.dn, { transform: `translate(0 ${f(1.2 * pulse(0.35, 0.95))})` });
     at(E.ld, { d: LEDS.map((x, i) => circ(x, 18.4, 1.3 + 0.7 * pulse(0.08 * i, 0.08 * i + 0.5))).join('') });

@@ -13,12 +13,14 @@ export default defineIcon({
   // A desk fan whose blades spin a full turn on hover.
   svg: (u) => {
     const head = circ(C[0], C[1], 8.2), base = rr(9.4, 20.2, 12.2, 3.2, 1.6);
-    const blades = [0, 120, 240].map((a) => `<path d="${leaf([C[0], C[1]], [C[0], C[1] - 5.6], 2.6)}" transform="rotate(${a} ${C[0]} ${C[1]})" ${SOFT}/>`).join('');
+    // The blades reach the guard and are clipped at its rim.
+    const blades = [0, 120, 240].map((a) => `<path d="${leaf([C[0], C[1]], [C[0], C[1] - 6.8], 2.8)}" transform="rotate(${a} ${C[0]} ${C[1]})" ${SOFT}/>`).join('');
     return `<path d="M15.5 16V20.4" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${base}" fill="${u.loS}"/></g></g><path d="${base}" ${OL}/>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${head}" fill="${u.loS}"/></g></g><path d="${head}" ${OL}/>
       <path d="${circ(C[0], C[1], 6.2)}" fill="#fff"/>
-      <g data-n="blades">${blades}</g>
+      <clipPath id="${u.id('g')}"><path d="${circ(C[0], C[1], 6.2)}"/></clipPath>
+      <g clip-path="url(#${u.id('g')})"><g data-n="blades">${blades}</g></g>
       <circle cx="${C[0]}" cy="${C[1]}" r="1.6" ${DEEP}/>`;
   },
   target: (h) => ({ a: h ? 360 : 0 }),

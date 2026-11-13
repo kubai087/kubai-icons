@@ -13,7 +13,8 @@ export default defineIcon({
   svg: (u) => {
     const book = (i) => {
       const [x, w, y] = BOOKS[i], d = rp(R(x, y, w, 23 - y), [1.2, 1.2, 0, 0]), light = i % 2 === 1;
-      const mark = `<path d="M${f(x + 1.2)} ${f(y + 3)}H${f(x + w - 1.2)}" class="ln" ${light ? `${DEEPS} stroke-opacity=".55"` : WHITES}/>`;
+      // The label is a band right across the spine, clipped at its edges.
+      const mark = `<clipPath id="${u.id('k' + i)}"><path d="${d}"/></clipPath><path d="M${f(x - 1)} ${f(y + 3)}H${f(x + w + 1)}" clip-path="url(#${u.id('k' + i)})" fill="none" stroke-width="1.6" ${light ? `${DEEPS} stroke-opacity=".55"` : WHITES}/>`;
       return `<g data-n="b${i}"><g filter="${u.hi}"><path d="${d}" fill="${light ? u.upS : u.loS}"/></g><path d="${d}" ${OL}/>${mark}</g>`;
     };
     const shelf = rr(4, 19.6, 23, 3.8, 1.2);

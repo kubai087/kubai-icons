@@ -14,7 +14,7 @@ export default defineIcon({
     return `<g filter="${u.sh}"><g filter="${u.hi}"><path d="${body}" fill="${u.loS}"/></g></g><path d="${body}" ${OL}/>
       <path d="${box}" fill="#fff"/>
       <g data-n="fire"><path d="${flame(15.5, 20.6, 7.4, 8.4)}" ${SOFT}/><path d="${flame(15.5, 20.6, 3.8, 5)}" ${DEEP}/></g>
-      <path d="${rr(11, 19.8, 9, 2.6, 1.3)}" ${DEEP}/>
+      <path d="${rr(11, 20.2, 9, 2.6, 1.3)}" ${DEEP}/>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${shelf}" fill="${u.upS}"/></g></g><path d="${shelf}" ${OL}/>`;
   },
   target: (h) => ({ s: h ? 1.22 : 0.85, w: h ? 1.32 : 1, o: h ? 1 : 0 }),

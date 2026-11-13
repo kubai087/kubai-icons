@@ -5,7 +5,8 @@ const PTS = [[9.4, 14], [13.4, 10.2], [16.8, 12.8], [21.8, 7.6]];
 const len = (pts) => pts.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0);
 const LEN = len(PTS);
 // The line rising a little further and carried on into an arrowhead: one stroke out along each barb.
-const FULL = [...PTS.slice(0, 3), [23.2, 6.1]];
+// The arrow's tip and barbs stay 2 clear of the board's edges.
+const FULL = [...PTS.slice(0, 3), [21.9, 7.7]];
 const TIP = FULL[3], BACK = Math.atan2(FULL[2][1] - TIP[1], FULL[2][0] - TIP[0]);
 const barb = (a) => [TIP[0] + 3.4 * Math.cos(BACK + a), TIP[1] + 3.4 * Math.sin(BACK + a)];
 const ARROW = [...FULL, barb(0.62), TIP, barb(-0.62)], ALEN = len(ARROW);

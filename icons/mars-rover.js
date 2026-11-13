@@ -1,4 +1,4 @@
-import { defineIcon, f, DEEP, rr, circ, at, clamp01, wave } from '../packages/core/src/kit.js';
+import { defineIcon, f, DEEP, rr, circ, at, clamp01, wave, settle } from '../packages/core/src/kit.js';
 import { solid } from './_b5-parts.js';
 
 const WX = [7.3, 15.5, 23.7], WY = 19.9, WR = 3.6;
@@ -18,7 +18,7 @@ export default defineIcon({
   draw(p, E) {
     at(E.g, { transform: `translate(${f(p.x)} 0)` });
     const o = clamp01(p.o);
-    WX.forEach((_, i) => at(E[`w${i}`], { transform: `translate(0 ${f(-wave(o, (t) => 1.3 * Math.sin(Math.PI * clamp01(t * 2 - (2 - i) * 0.5))))})` }));
+    WX.forEach((_, i) => at(E[`w${i}`], { transform: `translate(0 ${f(-wave(o, (t) => 1.3 * Math.sin(Math.PI * settle(clamp01(t * 2 - (2 - i) * 0.5)))))})` }));
     at(E.ey, { cx: f(19 + 3.4 * o) });
   }
 });

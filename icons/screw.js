@@ -15,14 +15,14 @@ export default defineIcon({
   tags: ['bolt', 'fastener', 'thread', 'hardware', 'fix', '螺钉'],
   // A threaded wood screw; on hover it turns, its thread runs down and it sinks in.
   svg: (u) => `<g data-n="s">${solid(u, SHANK, u.loS)}
-    <clipPath id="${u.id('t')}"><path d="M12.7 7H18.3V19H12.7Z"/></clipPath>
+    <clipPath id="${u.id('t')}"><path d="${SHANK}"/></clipPath>
     <g clip-path="url(#${u.id('t')})"><path data-n="th" fill="none" stroke-width="1.6" ${WHITES}/></g>
     ${solid(u, HEAD, u.upS)}
     <path data-n="slot" d="${rr(14.2, 1, 2.6, 3.2, 0.5)}" ${DEEP}/></g>`,
   target: (h) => ({ t: h ? 1 : 0 }),
   draw(p, E) {
     let d = '';
-    for (let k = -1; k < 3; k++) { const y = 10.6 + P * (k + p.t); d += `M12.7 ${f(y + 1.3)}L18.3 ${f(y - 1.3)}`; }
+    for (let k = -1; k < 3; k++) { const y = 10.6 + P * (k + p.t); d += `M7.1 ${f(y + 3.9)}L23.9 ${f(y - 3.9)}`; }
     at(E.th, { d });
     at(E.s, { transform: `translate(0 ${f(1.4 * p.t)})` });
     at(E.slot, { transform: `translate(15.5 0) scale(${f(Math.max(0.05, Math.abs(Math.cos(p.t * Math.PI))))} 1) translate(-15.5 0)` });

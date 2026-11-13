@@ -1,4 +1,4 @@
-import { defineIcon, KR, f, OL, rr, at, wave } from '../packages/core/src/kit.js';
+import { defineIcon, KR, f, OL, rr, at, wave, settle } from '../packages/core/src/kit.js';
 
 export default defineIcon({
   name: 'scan-qr',
@@ -22,6 +22,6 @@ export default defineIcon({
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const o = Math.max(0, Math.min(1, p.o));
-    at(E.bar, { transform: `translate(0 ${f(12.5 + 7.6 * wave(o, (t) => Math.sin(2 * Math.PI * t) * (1 - 0.35 * t)))})` });
+    at(E.bar, { transform: `translate(0 ${f(12.5 + 7.6 * wave(o, (t) => Math.sin(2 * Math.PI * settle(t)) * (1 - 0.35 * t)))})` });
   }
 });

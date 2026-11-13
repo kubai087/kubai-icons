@@ -1,7 +1,9 @@
 import { defineIcon, KR, f, DEEP, DEEPS, R, rp, rr, at } from '../packages/core/src/kit.js';
 import { back, front } from './_w2-devices.js';
+import { nudge } from './_place.js';
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'barcode-scanner',
   zh: '扫码枪',
   category: 'devices',
@@ -18,4 +20,4 @@ export default defineIcon({
     at(E.tr, { transform: `rotate(${f(18 * p.o)} 15.9 9.6)` });
     at(E.beam, { opacity: f(Math.max(0, p.o * 1.6 - 0.6)) });
   }
-});
+}), -1.5, -1);

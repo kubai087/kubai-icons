@@ -10,7 +10,8 @@ export default defineIcon({
   svg: (u) => {
     const box = rp(R(5.4, 11.4, 20.2, 11.4), [0, 0, KR, KR]);
     const lid = rr(3.8, 8.6, 23.4, 4.4, 1.6);
-    const paper = rr(11, 0, 9, 11, CR);
+    // The ballot is wide enough to keep its tick 2 clear of its sides.
+    const paper = rr(9.8, 0, 11.4, 11, CR);
     return `<g filter="${u.sh}"><path d="${box}" fill="${u.lo(11.4)}"/></g><path d="${box}" ${OL}/>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${lid}" fill="${u.upS}"/></g></g><path d="${lid}" ${OL}/>
       <path d="${rr(9.6, 9.9, 11.8, 1.8, 0.9)}" ${DEEP}/>

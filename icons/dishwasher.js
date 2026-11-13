@@ -12,8 +12,8 @@ export default defineIcon({
       ${front(u, rp(R(6.3, 1, 18.4, 4.6), [KR, KR, 0, 0]))}
       <path d="${circ(10, 3.3, 1.2) + circ(13.4, 3.3, 1.2)}" ${DEEP}/>
       <path d="${rr(8.6, 7.8, 13.8, 14, CR)}" fill="#fff"/>
-      <path d="${rr(10.6, 10, 2.4, 8, 1.2) + rr(14.3, 10, 2.4, 8, 1.2) + rr(18, 10, 2.4, 8, 1.2)}" ${SOFT}/>
-      <path d="M10 19.4H21" ${ACC}/>
+      <path d="${rr(10.6, 10, 2.4, 6.6, 1.2) + rr(14.3, 10, 2.4, 6.6, 1.2) + rr(18, 10, 2.4, 6.6, 1.2)}" ${SOFT}/>
+      <path d="M11.4 19.4H19.6" ${ACC}/>
       <g filter="${u.hi}"><path data-n="dr" fill="${u.upS}"/></g><path data-n="drO" ${OL}/>
       <path data-n="hd" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>`,
   target: (h) => ({ h: h ? 4.4 : 17.4 }),

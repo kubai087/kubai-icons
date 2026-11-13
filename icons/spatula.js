@@ -1,9 +1,11 @@
 import { defineIcon, f, KR, WHITES, rp, rr, at, rattle, clamp01 } from '../packages/core/src/kit.js';
 import { solid, light } from './_b2-kitchen.js';
+import { nudge } from './_place.js';
 
 const HEAD = rp([[8.8, -1], [22.2, -1], [23, 13.2], [8, 13.2]], KR);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'spatula',
   zh: '锅铲',
   category: 'home',
@@ -16,4 +18,4 @@ export default defineIcon({
     </g></g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) { at(E.g, { transform: `rotate(${f(rattle(clamp01(p.o), -22, 2))} 6.8 23.6)` }); }
-});
+}), -1.8, 1);

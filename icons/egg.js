@@ -13,7 +13,7 @@ export default defineIcon({
   svg: (u) => {
     const bowl = rp([[7.4, 14.2], [23.6, 14.2], [21, 21], [10, 21]], [1.2, 1.2, 2.6, 2.6]), foot = rr(11.4, 19.6, 8.2, 3.6, 1.2);
     return `<g data-n="egg"><g filter="${u.sh}"><g filter="${u.hi}"><path d="${EGG}" fill="${u.loS}"/></g></g><path d="${EGG}" ${OL}/>
-      <path data-n="crack" d="M10.6 9.4L12.6 7.6L14.4 10L16.6 7.6L18.6 10L20.4 8.4" pathLength="1" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${WHITES}/></g>
+      <path data-n="crack" d="M11.3 9.4L13 7.6L14.6 10L16.4 7.6L18.1 10L19.7 8.4" pathLength="1" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${WHITES}/></g>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${foot}" fill="${u.loS}"/></g></g><path d="${foot}" ${OL}/>
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${bowl}" fill="${u.upS}"/></g></g><path d="${bowl}" ${OL}/>`;
   },

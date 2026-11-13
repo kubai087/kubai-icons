@@ -1,6 +1,8 @@
 import { defineIcon, f, OL, DEEPS, rp, rr, at, rattle, clamp01 } from '../packages/core/src/kit.js';
+import { nudge } from './_place.js';
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'broom',
   zh: '扫帚',
   category: 'home',
@@ -22,4 +24,4 @@ export default defineIcon({
     const a = 30 + rattle(clamp01(p.o), 14, 2);
     at(E.g, { transform: `rotate(${f(a)} 15.5 12.2)` });
   }
-});
+}), 2.8, -1);

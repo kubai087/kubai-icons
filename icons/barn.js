@@ -25,7 +25,8 @@ export default defineIcon({
     setD(E, 'l', rp(R(X0, TOP, wl, BOT - TOP), [1, 0, 0, 0]));
     setD(E, 'r', rp(R(X1 - wr, TOP, wr, BOT - TOP), [0, 1, 0, 0]));
     const fade = f(1 - clamp01(o / 0.6));
-    at(E.lb, { d: `M${f(X0 + wl - 2.2)} ${TOP + 2}L${f(X0 + 1.6)} ${BOT - 2}`, opacity: fade });
-    at(E.rb, { d: `M${f(X1 - wr + 1.2)} ${TOP + 2}L${f(X1 - 1.6)} ${BOT - 2}`, opacity: fade });
+    // Each brace keeps 2 clear of its door's edges, round caps included.
+    at(E.lb, { d: `M${f(X0 + wl - 2.8)} ${f(TOP + 2.8)}L${f(X0 + 2.8)} ${f(BOT - 2.8)}`, opacity: fade });
+    at(E.rb, { d: `M${f(X1 - wr + 2.8)} ${f(TOP + 2.8)}L${f(X1 - 2.8)} ${f(BOT - 2.8)}`, opacity: fade });
   }
 });

@@ -1,12 +1,14 @@
 import { defineIcon, f, DEEPS, rp, at, scaleAt, clamp01 } from '../packages/core/src/kit.js';
 import { back } from './_interface.js';
+import { nudge } from './_place.js';
 
 const TIP = [7.6, 4.6];
 const ARROW = rp([TIP, [26.8, 12.4], [19.2, 17], [14.8, 24]], [1.2, 1.6, 1.4, 1.6]);
 // Click rays fanning out from the tip toward the upper left.
 const RAYS = [180, 225, 270].map((a) => [Math.cos(a * Math.PI / 180), Math.sin(a * Math.PI / 180)]);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'cursor',
   zh: '指针',
   category: 'interface',
@@ -23,4 +25,4 @@ export default defineIcon({
       opacity: o < 0.02 ? 0 : 1
     });
   }
-});
+}), -1.5, -1.5);

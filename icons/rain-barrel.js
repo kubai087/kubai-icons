@@ -1,5 +1,6 @@
 import { defineIcon, f, OL, WHITE, WHITES, rr, circ, at } from '../packages/core/src/kit.js';
 import { layer } from './_science-edu-sports.js';
+import { nudge } from './_place.js';
 
 // A barrel with its lid one unit above it, two white hoops 2.4 in from its ends, a white
 // water drop between them, and a short tap on its right side.
@@ -11,7 +12,8 @@ const TAP = rr(21.2, 15.2, 5.4, 2.4, 1.2);
 // A drop gathers under the tap's mouth, touching it.
 const DROP = [25.2, 17.6];
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'rain-barrel',
   zh: '集雨桶',
   category: 'nature',
@@ -26,4 +28,4 @@ export default defineIcon({
     const d = p.r < 0.1 ? '' : circ(DROP[0], DROP[1] + p.r, p.r);
     at(E.dp, { d }); at(E.dpO, { d });
   }
-});
+}), -1.5, -0.5);

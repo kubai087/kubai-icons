@@ -15,7 +15,7 @@ export default defineIcon({
   // A chocolate-chip cookie that breaks in two along a crack on hover.
   svg: (u) => Object.entries(HALVES).map(([n, h]) => `<g data-n="${n}">
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${h.d}" fill="${u.loS}"/></g></g>
-      <path d="${h.d}" ${OL}/>
+      <path d="${h.d}" ${OL} stroke-linejoin="round"/>
       ${h.chips.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.6" ${DEEP}/>`).join('')}</g>`).join(''),
   target: (h) => ({ x: h ? 2.6 : 0, a: h ? 6 : 0 }),
   draw(p, E) {

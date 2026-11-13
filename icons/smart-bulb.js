@@ -1,4 +1,4 @@
-import { defineIcon, f, DEEP, DEEPS, WHITES, rr, circ, lines, at, wave } from '../packages/core/src/kit.js';
+import { defineIcon, f, DEEP, DEEPS, WHITES, rr, circ, lines, at, wave, settle } from '../packages/core/src/kit.js';
 import { arcPath, span } from './_devices.js';
 import { back, front } from './_w2-devices.js';
 
@@ -12,19 +12,19 @@ export default defineIcon({
   tags: ['smart light', 'connected bulb', 'iot', 'wifi light', 'smart home', 'lighting', '智能照明', '灯'],
   variants: ['check', 'x', 'clock', 'cog'],
   off: true,
-  // A bulb with a wireless signal where the filament would be; on hover the bulb brightens and
-  // the signal pulses outward from the dot.
+  // A lit bulb with a wireless signal where the filament would be; on hover the signal pulses
+  // outward from the dot.
   svg: (u) => `${front(u, GLASS)}
       <circle data-n="glow" cx="${CX}" cy="9" fill="#fff"/>
       <path data-n="a1" d="${arcPath(CX, CY, 3.4, -46, 46)}" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>
       <path data-n="a2" d="${arcPath(CX, CY, 6.8, -42, 42)}" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>
       <path d="${circ(CX, CY, 1.5)}" ${DEEP}/>
       ${back(u, rr(10.8, 17, 9.4, 6.4, 2), u.loS)}
-      <path d="${lines(12.9, 20.2, [5.2])}" class="ln" ${WHITES}/>`,
+      <path d="${lines(13.6, 20.2, [3.8])}" class="ln" ${WHITES}/>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
-    const o = p.o, pulse = (a, b) => wave(o, (t) => Math.sin(Math.PI * span(t, a, b)));
-    at(E.glow, { r: f(6.5 + 1.1 * o) });
+    const o = p.o, pulse = (a, b) => wave(o, (t) => Math.sin(Math.PI * settle(span(t, a, b))));
+    at(E.glow, { r: 6.5 });
     at(E.a1, { opacity: f(1 - 0.75 * pulse(0, 0.5)) });
     at(E.a2, { opacity: f(1 - 0.75 * pulse(0.3, 0.85)) });
   }

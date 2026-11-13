@@ -1,11 +1,13 @@
 import { defineIcon, f, rp, circ, at } from '../packages/core/src/kit.js';
 import { solid } from './_w2-dev.js';
 import { cwCirc } from './_tools-dev.js';
+import { nudge } from './_place.js';
 
 const CX = 12.6, CY = 11.4, R = 9.4;
 const ROLL = circ(CX, CY, R) + cwCirc(CX, CY, 6.4), CORE = circ(CX, CY, 6.4) + cwCirc(CX, CY, 4);
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'tape-roll',
   zh: '胶带',
   category: 'tools',
@@ -20,4 +22,4 @@ export default defineIcon({
     const d = rp([[CX, y0], [p.x, y0 + p.dy], [p.x - 1.6, y1 + p.dy], [CX, y1]], [0, 0.5, 0.5, 0]);
     at(E.t, { d }); at(E.tO, { d });
   }
-});
+}), 1.5, 1);

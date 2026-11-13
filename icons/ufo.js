@@ -1,4 +1,4 @@
-import { defineIcon, f, WHITE, rp, ellipse, clamp01, at, wave } from '../packages/core/src/kit.js';
+import { defineIcon, f, WHITE, rp, ellipse, clamp01, at, wave, settle } from '../packages/core/src/kit.js';
 import { solid } from './_b5-parts.js';
 
 const Y = 15.4;
@@ -25,6 +25,6 @@ export default defineIcon({
     at(E.eg, { d: `M${f(15.5 - w0)} ${f(top)}L${f(15.5 - w1)} ${f(top + L)}M${f(15.5 + w0)} ${f(top)}L${f(15.5 + w1)} ${f(top + L)}` });
     E.bm.setAttribute('opacity', b > 0.02 ? 1 : 0); E.eg.setAttribute('opacity', b > 0.02 ? 1 : 0);
     const o = clamp01(p.o);
-    LIGHTS.forEach((_, i) => at(E[`l${i}`], { r: f(1.5 + wave(o, (t) => 0.7 * Math.max(0, Math.sin(Math.PI * Math.min(1, Math.max(0, t * 2 - i * 0.5)))))) }));
+    LIGHTS.forEach((_, i) => at(E[`l${i}`], { r: f(1.5 + wave(o, (t) => 0.7 * Math.max(0, Math.sin(Math.PI * settle(Math.min(1, Math.max(0, t * 2 - i * 0.5))))))) }));
   }
 });

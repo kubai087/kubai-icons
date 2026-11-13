@@ -13,12 +13,14 @@ export default defineIcon({
       <path d="${rr(7.8, 3, 15.6, 19.4, CR)}" fill="#fff"/>
       <path d="${lines(11.4, 8.4, [9.2, 6.6])}" ${ACC}/>
       <g data-n="cv"><g filter="${u.hi}"><path d="${cover}" fill="${u.loS}"/></g><path data-n="sh" d="${cover}" ${DEEP} opacity="0"/><path d="${cover}" ${OL}/>
-        <path d="${lines(10.4, 7.6, [10.2])}" class="ln" stroke="#fff" data-w="stroke"/></g>`;
+        <path data-n="cl" d="${lines(10.4, 7.6, [10.2])}" class="ln" stroke="#fff" data-w="stroke"/></g>`;
   },
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const o = Math.max(0, Math.min(1, p.o));
     at(E.cv, { transform: `translate(6.3 0) scale(${f(Math.max(0.001, 1 - 0.72 * o))} 1) translate(-6.3 0)` });
     at(E.sh, { opacity: f(0.35 * o) });
+    // The title turns away with the cover before the cover is too narrow to hold it.
+    at(E.cl, { opacity: f(1 - Math.min(1, o / 0.5)) });
   }
 });

@@ -306,7 +306,7 @@ const ICONS = [
     name: '回收站',
     svg: (u) => `
       <g filter="${u.sh}"><path data-n="back" fill="${u.lo(18.6)}"/></g>
-      <g data-n="card" filter="${u.sh}"><path d="${rr(0, 0, 10.4, 7.6, CR)}" fill="${u.upS}"/><circle cx="3" cy="3" r="1.4" fill="#fff"/></g>
+      <g data-n="card" filter="${u.sh}"><path d="${rr(0, 0, 10.4, 7.6, CR)}" fill="${u.upS}"/><path d="${rr(0, 0, 10.4, 7.6, CR)}" ${OL}/><circle cx="3" cy="3" r="1.4" fill="#fff"/></g>
       <g filter="${u.hi}"><path data-n="front" fill="${u.up(17.4)}"/></g>
       <path data-n="frontO" ${OL}/>
       <path data-n="ribs" fill="none" stroke-width="1.6" stroke-linecap="round" data-t="stroke:#5393FF" stroke-opacity=".6"/>

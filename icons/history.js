@@ -13,9 +13,9 @@ export default defineIcon({
   svg: (u) => `
     <g filter="${u.sh}"><g filter="${u.hi}"><path d="${circ(CX, CY, 7.4)}" fill="${u.loS}"/></g></g>
     <path d="${circ(CX, CY, 7.4)}" ${OL}/>
-    <path d="${circ(CX, CY, 4.8)}" fill="#fff"/>
-    <path d="M${CX} ${CY}V${CY - 2.4}" transform="rotate(${CLOCK_MINUTES / 2} ${CX} ${CY})" stroke-width="2.6" stroke-linecap="round" ${SOFTS}/>
-    <path d="M${CX} ${CY}V${CY - 3.6}" transform="rotate(${(CLOCK_MINUTES * 6) % 360} ${CX} ${CY})" stroke-width="2" stroke-linecap="round" ${DEEPS}/>
+    <path d="${circ(CX, CY, 5.4)}" fill="#fff"/>
+    <path d="M${CX} ${CY}V${CY - 1.6}" transform="rotate(${CLOCK_MINUTES / 2} ${CX} ${CY})" stroke-width="2.6" stroke-linecap="round" ${SOFTS}/>
+    <path d="M${CX} ${CY}V${CY - 2.4}" transform="rotate(${(CLOCK_MINUTES * 6) % 360} ${CX} ${CY})" stroke-width="2" stroke-linecap="round" ${DEEPS}/>
     <circle cx="${CX}" cy="${CY}" r="1.4" ${DEEP}/>
     <path data-n="arc" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>
     <path data-n="head" ${DEEP}/>`,

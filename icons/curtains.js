@@ -15,7 +15,7 @@ export default defineIcon({
   // Two curtains tied back on a rail; they draw further apart on hover.
   svg: (u) => `${back(u, rr(7.6, 3, 15.8, 20.8, 1.2))}
       ${liveFront(u, 'l')}${liveFront(u, 'r')}
-      <path data-n="tie" fill="none" stroke-width="2.4" ${DEEPS}/>
+      <path data-n="tie" fill="none" stroke-width="2.2" ${DEEPS}/>
       ${back(u, rr(3.6, 1.2, 23.8, 3.6, 1.8))}`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {

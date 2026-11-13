@@ -1,6 +1,6 @@
 import { defineIcon, f, OL, DEEP, circ, at } from '../packages/core/src/kit.js';
 
-const RX = 9.2, RY = 3.8, TILT = [45, 135], START = [Math.PI, Math.PI];
+const RX = 7.9, RY = 3, TILT = [45, 135], START = [Math.PI, Math.PI];
 const onOrbit = (k, t) => {
   const a = TILT[k] * Math.PI / 180, x = RX * Math.cos(t), y = RY * Math.sin(t);
   return [15.5 + x * Math.cos(a) - y * Math.sin(a), 12.5 + x * Math.sin(a) + y * Math.cos(a)];

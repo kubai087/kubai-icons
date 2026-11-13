@@ -1,6 +1,7 @@
 import { defineIcon, f, DEEPS, rp, rr } from '../packages/core/src/kit.js';
 import { solid } from './_b5-parts.js';
 import { layer, moveAll } from './_science-edu-sports.js';
+import { nudge } from './_place.js';
 
 // The backrest is drawn upright from the hip, then laid back about it.
 const HX = 13, HY = 15;
@@ -9,7 +10,8 @@ const SEAT = rp([[10.4, 12.2], [19.6, 12.2], [27.8, 15.6], [26.2, 19.8], [18.8, 
 const COLUMN = rr(12.4, 16, 6.2, 6, 0), FOOT = rr(7, 20.8, 17, 3.2, 1.6);
 const LAMP = 'M17.4 8A5 5 0 0 1 27.4 8Z';
 
-export default defineIcon({
+// Centred on the canvas by its outer bounds.
+export default nudge(defineIcon({
   name: 'dental-chair',
   zh: '牙科椅',
   category: 'health',
@@ -25,4 +27,4 @@ export default defineIcon({
     moveAll(E, ['bk'], `translate(${HX} ${HY}) rotate(${f(p.a)})`);
     moveAll(E, ['lp'], `translate(0 ${f(p.ly)})`);
   }
-});
+}), -1.5, -0.3);

@@ -19,6 +19,6 @@ export default defineIcon({
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {
     const o = Math.max(0, Math.min(1, p.o));
-    at(E.needle, { transform: `rotate(${f(wave(o, (t) => 40 * (1 - t) * Math.cos(3 * Math.PI * t)))} 15.5 12.5)` });
+    at(E.needle, { transform: `rotate(${f(wave(o, (t) => 40 * (1 - t) ** 2 * Math.cos(3 * Math.PI * t)))} 15.5 12.5)` });
   }
 });

@@ -11,8 +11,8 @@ export default defineIcon({
   tags: ['chopping board', 'knife', 'chop', 'kitchen', 'prep', 'cooking', '菜板', '切菜'],
   variants: [],
   // A paddle board with a kitchen knife lying on it; on hover the knife rocks in a chop.
-  svg: (u) => `${solid(u, BOARD)}<g transform="rotate(-32 15.5 14.6)"><g data-n="kn">
-      <path d="${BLADE}" fill="#fff"/><path d="${rr(17.4, 11.4, 7.2, 3.6, 1.8)}" ${DEEP}/>
+  svg: (u) => `${solid(u, BOARD)}<g transform="translate(1.2 0) rotate(-32 15.5 14.6)"><g data-n="kn">
+      <path d="${BLADE}" fill="#fff"/><path d="${rr(17.4, 11.4, 5.8, 3.6, 1.8)}" ${DEEP}/>
     </g></g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) { at(E.kn, { transform: `rotate(${f(rattle(clamp01(p.o), -16, 3))} 7.4 12.6)` }); }

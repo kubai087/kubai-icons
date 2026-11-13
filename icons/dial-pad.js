@@ -1,4 +1,4 @@
-import { defineIcon, KR, f, DEEP, WHITE, rr, circ, at, wave } from '../packages/core/src/kit.js';
+import { defineIcon, KR, f, DEEP, WHITE, rr, circ, at, wave, settle } from '../packages/core/src/kit.js';
 import { back } from './_w2-devices.js';
 import { span } from './_devices.js';
 
@@ -21,7 +21,7 @@ export default defineIcon({
   draw(p, E) {
     SEQ.forEach((_, i) => {
       const a = 0.04 + i * 0.22;
-      const v = wave(p.o, (t) => Math.sin(Math.PI * span(t, a, a + 0.3)));
+      const v = wave(p.o, (t) => Math.sin(Math.PI * settle(span(t, a, a + 0.3))));
       at(E['k' + i], { opacity: f(v), r: f(1.9 + 0.5 * v) });
     });
   }

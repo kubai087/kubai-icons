@@ -23,6 +23,8 @@ export default defineIcon({
     at(E.ctr, { d: circ(W[0], W[1], 1.8 - 0.7 * Math.sin(Math.PI * Math.max(0, Math.min(1, t / 0.6)))) });
     at(E.pr, { d: `M12 7.6H${f(12 + p.pr)}` });
     const r = p.a * Math.PI / 180;
-    at(E.dot, { d: circ(W[0] + 3.5 * Math.sin(r), W[1] - 3.5 * Math.cos(r), 1.2 + 0.45 * touch) });
+    // The fingertip is there only while it turns the wheel, so neither pose has a dot squeezed
+    // between the button and the rim.
+    at(E.dot, { d: circ(W[0] + 3.5 * Math.sin(r), W[1] - 3.5 * Math.cos(r), Math.max(0.01, 1.6 * touch)), opacity: touch < 0.05 ? 0 : 1 });
   }
 });
