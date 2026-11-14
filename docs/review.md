@@ -49,7 +49,7 @@ loses the weight of each finding.
 | `large` | 10 | The rest pose runs well past the 23 × 23 keyline |
 | `offCentre` | 8 | The rest pose sits off the centre (15.5, 12.5). Leaving room for the hover (steam above a cup, toast popping up) is a reason to sit low; otherwise move the whole icon with `nudge()` from `icons/_place.js` |
 | `light` / `heavy` | 6 | At 24px it covers much less or much more area than the rest of the set |
-| `oneLayer` | 10 | No front piece and no large white content: only one layer |
+| `oneLayer` | 10 | No front piece and no large white content: only one layer. A symbol drawn on the plain disc or tile (play, check, bold, align) is exempt, as `PROMPT.md` section 3 allows |
 | `strokeWidth` | 5 | A line drawn over a body uses a width other than 1.6, 2.2, 2.6, 2.0 or 1.2. A line that stands on its own and is the object itself (Wi-Fi arcs, fog) may be up to 2.8; an outlined tube (a wide outline-coloured stroke under a narrower fill stroke) is a body and is not counted |
 | `tiny` | 6 | A mark or detail is under 2.4 units |
 | `edgeGap` | 6 | A mark or white content leaves a sliver (under about 1.4 units) to the edge of its shape |

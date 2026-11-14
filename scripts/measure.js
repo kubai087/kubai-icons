@@ -103,6 +103,12 @@ var KubaiMeasure = (() => {
     const area = (b) => (b[2] - b[0]) * (b[3] - b[1]);
     res.contentArea = Math.round(shapes.filter((s) => s.role === 'content').reduce((a, s) => a + area(s.box), 0) * 10) / 10;
     res.frontArea = Math.round(shapes.filter((s) => s.role === 'front').reduce((a, s) => a + area(s.box), 0) * 10) / 10;
+    // A plain symbol body: the one back piece is the standard disc (Ø23) or tile (20.6) and
+    // everything else is marks. PROMPT.md lets such interface symbols keep one layer.
+    const backs = shapes.filter((s) => s.role === 'back' || s.role === 'front' || s.role === 'content');
+    const near = (b, r) => b.every((v, i) => Math.abs(v - r[i]) < 0.35);
+    res.plainBody = backs.length === 1 && backs[0].role === 'back'
+      && (near(backs[0].box, [4, 1, 27, 24]) || near(backs[0].box, [5.2, 2.2, 25.8, 22.8]));
     const label = (s) => `${s.role}#${s.i}[${s.box.map((v) => v.toFixed(1)).join(',')}]`;
 
     // A point sits on a shape when it is inside the fill (or the stroke band of a stroked mark).
@@ -388,7 +394,7 @@ var KubaiMeasure = (() => {
     offCentre:    { w: 8,  area: 'shape',  text: 'the rest pose is off the centre (15.5, 12.5)' },
     light:        { w: 6,  area: 'shape',  text: 'covers much less area than the set at 24px (reads light)' },
     heavy:        { w: 6,  area: 'shape',  text: 'covers much more area than the set at 24px (reads heavy)' },
-    oneLayer:     { w: 10, area: 'shape',  text: 'only one layer: no front piece and no large white content' },
+    oneLayer:     { w: 10, area: 'shape',  text: 'only one layer: no front piece and no large white content (a symbol on the plain disc or tile is exempt)' },
     strokeWidth:  { w: 5,  area: 'shape',  text: 'a mark uses a line width outside 1.6 / 2.2 / 2.6 / 2.0 / 1.2' },
     tiny:         { w: 6,  area: 'shape',  text: 'a mark or detail is smaller than 2.4 units' },
     edgeGap:      { w: 6,  area: 'shape',  text: 'a mark or white content leaves a sliver (under ~1.4 units) to the edge of its shape' },
@@ -448,7 +454,7 @@ var KubaiMeasure = (() => {
       const L = gr.layers;
       const hasFront = (L.front || 0) > 0 && gr.frontArea > 20;
       const hasContent = gr.contentArea > 40;
-      if (!hasFront && !hasContent && (L.back || 0) <= 1) add('oneLayer', JSON.stringify(L));
+      if (!hasFront && !hasContent && (L.back || 0) <= 1 && !gr.plainBody) add('oneLayer', JSON.stringify(L));
       const odd = [...new Set(gr.widths)].filter((w) => !ALLOWED.some((a) => near(w, a)));
       if (odd.length) add('strokeWidth', odd.join(', '));
       if (gr.tiny.length) add('tiny', gr.tiny.slice(0, 3).join('; '));
