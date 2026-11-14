@@ -1,7 +1,7 @@
 import { defineIcon, f, DEEPS, rr, at, rattle, clamp01 } from '../packages/core/src/kit.js';
 import { solid, light } from './_b2-kitchen.js';
 
-const CX = 15.5, NECK = 15, TOP = -3.6, BELLY = 4.2, A = 7.6, INNER = 3.9;
+const CX = 15.5, NECK = 15, TOP = -1.6, BELLY = 4.2, A = 7.6, INNER = 3.9;
 // A wire loop of half-width k from the neck, over the top and back.
 const loop = (k) => `M${f(CX - 0.1 * k)} ${NECK}C${f(CX - 0.3 * k)} 12 ${f(CX - k)} ${f(BELLY + 4.4)} ${f(CX - k)} ${BELLY}`
   + `C${f(CX - k)} ${f(BELLY - 4.8)} ${f(CX - 0.56 * k)} ${TOP} ${CX} ${TOP}`
@@ -22,7 +22,7 @@ export default defineIcon({
         <path data-n="w1" stroke-width="1.6" ${DEEPS}/><path data-n="w0" stroke-width="1.6" ${DEEPS}/>
         <path d="${loop(A)}" stroke-width="2.2" data-t="stroke:#5393FF"/>
       </g>
-      ${solid(u, rr(13.3, 18, 4.4, 9.8, 2.2))}${light(u, rr(14, 14.2, 3, 5, 0.8))}
+      ${solid(u, rr(13.3, 18, 4.4, 8.4, 2.2))}${light(u, rr(14, 14.2, 3, 5, 0.8))}
     </g></g>`,
   target: (h) => ({ o: h ? 1 : 0 }),
   draw(p, E) {

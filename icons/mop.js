@@ -12,7 +12,7 @@ export default defineIcon({
   category: 'home',
   tags: ['clean', 'floor', 'wash', 'housework', 'wet', '拖地', '打扫', '清洁'],
   // An upright string mop with fat hanging strands; on hover it pushes side to side and the strands drag behind.
-  svg: (u) => `<g data-n="g"><path d="M15.5 -0.6V9" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/></g>
+  svg: (u) => `<g data-n="g"><path d="M15.5 1V9" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/></g>
       ${STRANDS.map(([i], n) => (Math.abs(i) === 1 ? liveFront : liveBack)(u, `s${n}`)).join('')}
       <g data-n="cap">${back(u, rr(9.8, 6.6, 11.4, 4.2, 1.4))}</g>`,
   target: (h) => ({ o: h ? 1 : 0 }),

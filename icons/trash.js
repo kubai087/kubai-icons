@@ -16,7 +16,8 @@ export default defineIcon({
     <path data-n="ribs" fill="none" stroke-width="1.6" stroke-linecap="round" data-t="stroke:#5393FF" stroke-opacity=".6"/>
     <g data-n="lid"><g filter="${u.hi}"><path d="${TRASH_LID}" fill="${u.upS}"/></g><path d="${TRASH_LID}" ${OL}/></g>`,
   target: (h) => ({
-    back: [[7.4, 4.8], [23.6, 4.8], [22.4, 23.4], [8.6, 23.4]],
+    // The back's top is level with the front's, so it hides behind it even with the lid up.
+    back: [[7.4, 6], [23.6, 6], [22.4, 23.4], [8.6, 23.4]],
     front: h ? [[6.6, 6], [24.4, 6], [22.6, 23.4], [8.4, 23.4]] : [[6.8, 6], [24.2, 6], [22.6, 23.4], [8.4, 23.4]],
     card: h ? [10.3, 2.4, -8] : [10.3, 12, 0],
     lid: h ? [0, -5.8, -6] : [0, 0, 0]
