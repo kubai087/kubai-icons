@@ -5102,5 +5102,35 @@
 "Windspiel",
 "Klangspiel",
 "Veranda"
+],
+"filing-cabinet": [
+"Aktenschrank",
+"Hängeregister",
+"Büro"
+],
+"paper-shredder": [
+"Aktenvernichter",
+"Schredder",
+"Datenschutz"
+],
+"coffee-machine": [
+"Kaffeemaschine",
+"Espressomaschine",
+"Küche"
+],
+"water-cooler": [
+"Wasserspender",
+"Trinkwasser",
+"Büro"
+],
+"office-chair": [
+"Bürostuhl",
+"Drehstuhl",
+"Schreibtisch"
+],
+"standing-desk": [
+"Stehschreibtisch",
+"höhenverstellbar",
+"Arbeitsplatz"
 ]
 }

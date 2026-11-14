@@ -5038,5 +5038,35 @@
 "Sino de vento",
 "mensageiro dos ventos",
 "varanda"
+],
+"filing-cabinet": [
+"Arquivo de gavetas",
+"gaveteiro",
+"escritório"
+],
+"paper-shredder": [
+"Fragmentadora",
+"triturar papel",
+"privacidade"
+],
+"coffee-machine": [
+"Máquina de café",
+"espresso",
+"cozinha"
+],
+"water-cooler": [
+"Bebedouro",
+"galão de água",
+"água potável"
+],
+"office-chair": [
+"Cadeira de escritório",
+"cadeira giratória",
+"escritório"
+],
+"standing-desk": [
+"Mesa regulável",
+"mesa em pé",
+"estação de trabalho"
 ]
 }

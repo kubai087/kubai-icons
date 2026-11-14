@@ -927,4 +927,10 @@
 "rain-barrel":["Yağmur suyu varili","yağmur suyu","varil"],
 "rake":["Tırmık","yaprak","bahçe işi"],
 "grill":["Mangal","barbekü","ızgara"],
-"wind-chime":["Rüzgar çanı","çan","veranda"]}
+"wind-chime":["Rüzgar çanı","çan","veranda"],
+"filing-cabinet":["Dosya dolabı","çekmece","ofis"],
+"paper-shredder":["Kâğıt imha makinesi","öğütücü","gizlilik"],
+"coffee-machine":["Kahve makinesi","espresso","mutfak"],
+"water-cooler":["Su sebili","damacana","içme suyu"],
+"office-chair":["Ofis sandalyesi","döner sandalye","çalışma masası"],
+"standing-desk":["Ayarlanabilir masa","ayakta çalışma masası","çalışma alanı"]}

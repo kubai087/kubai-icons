@@ -928,5 +928,11 @@
 "rain-barrel":["Thùng hứng nước mưa","nước mưa","thùng"],
 "rake":["Cái cào","lá","làm vườn"],
 "grill":["Lò nướng ngoài trời","nướng BBQ","tiệc nướng"],
-"wind-chime":["Chuông gió","phong linh","hiên nhà"]
+"wind-chime":["Chuông gió","phong linh","hiên nhà"],
+"filing-cabinet":["Tủ hồ sơ","ngăn kéo","văn phòng"],
+"paper-shredder":["Máy hủy tài liệu","hủy giấy","bảo mật"],
+"coffee-machine":["Máy pha cà phê","espresso","nhà bếp"],
+"water-cooler":["Cây nước nóng lạnh","bình nước","nước uống"],
+"office-chair":["Ghế văn phòng","ghế xoay","bàn làm việc"],
+"standing-desk":["Bàn nâng hạ","bàn đứng","bàn làm việc"]
 }

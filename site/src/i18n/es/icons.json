@@ -927,4 +927,10 @@
 "rain-barrel":["Barril de lluvia","agua de lluvia","depósito"],
 "rake":["Rastrillo","hojas","jardinería"],
 "grill":["Parrilla","barbacoa","asado"],
-"wind-chime":["Campanas de viento","móvil de viento","porche"]}
+"wind-chime":["Campanas de viento","móvil de viento","porche"],
+"filing-cabinet":["Mueble archivador","archivador","cajonera"],
+"paper-shredder":["Destructora de papel","triturar","privacidad"],
+"coffee-machine":["Cafetera","máquina de espresso","cocina"],
+"water-cooler":["Dispensador de agua","garrafón","agua potable"],
+"office-chair":["Silla de oficina","silla giratoria","escritorio"],
+"standing-desk":["Escritorio elevable","escritorio de pie","puesto de trabajo"]}

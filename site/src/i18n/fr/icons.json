@@ -5540,5 +5540,35 @@
 "Carillon éolien",
 "carillon",
 "véranda"
+],
+"filing-cabinet": [
+"Armoire à dossiers",
+"classeur à tiroirs",
+"bureau"
+],
+"paper-shredder": [
+"Destructeur de documents",
+"broyeuse",
+"confidentialité"
+],
+"coffee-machine": [
+"Machine à café",
+"expresso",
+"cuisine"
+],
+"water-cooler": [
+"Fontaine à eau",
+"distributeur d'eau",
+"eau potable"
+],
+"office-chair": [
+"Chaise de bureau",
+"fauteuil pivotant",
+"poste de travail"
+],
+"standing-desk": [
+"Bureau assis-debout",
+"bureau réglable",
+"poste de travail"
 ]
 }
