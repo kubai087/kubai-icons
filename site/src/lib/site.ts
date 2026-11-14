@@ -6,8 +6,17 @@ export const MODULE_DEMO = ["folder", "bell", "lock", "mail"];
 export const AUTHOR = { name: "Kubai087", x: "https://x.com/kubai087" } as const;
 /** The post on X that describes the paid places, where open places link. */
 export const SPONSOR_POST = "https://x.com/Kubai087/status/2120923602031919194";
-/** The one paid sponsor slot, shown on the home page and billed monthly. null while it is open. */
-export const SPONSOR = null as { name: string; site: string; icon: string; line: string } | null;
+/** The one paid sponsor slot, shown on the home page and billed monthly. null while it is open.
+ * The icon is a path under public/; the English line is also a key in the src/i18n catalogs. */
+export const SPONSOR: { name: string; site: string; icon: string; line: { en: string; zh: string } } | null = {
+  name: "Airfoil",
+  site: "https://www.airfoil.studio/careers?utm_source=kubai-icons",
+  icon: "/sponsors/airfoil.webp",
+  line: {
+    en: "The design studio behind Exa and Vapi is hiring designers and illustrators in Asia",
+    zh: "Exa 和 Vapi 幕后的设计工作室，正在亚洲招募设计师与插画师",
+  },
+};
 /** The repository's star count from GitHub's public API, or null when it cannot be read. */
 export async function fetchStars(init?: RequestInit): Promise<number | null> {
   try {
