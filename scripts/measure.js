@@ -65,7 +65,9 @@ var KubaiMeasure = (() => {
   const DIRS = Array.from({ length: 16 }, (_, i) => [Math.cos(i * Math.PI / 8), Math.sin(i * Math.PI / 8)]);
   const RADII = [0.1, 0.2, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.7, 1.9, 2.1];
 
-  function geometry(svg) {
+  // With outlinesOnly, only the checks that matter mid-motion run: outlines peeking out,
+  // corners missing an edge and edges with no outline. A gap may pass by during a motion.
+  function geometry(svg, { outlinesOnly = false } = {}) {
     base = svg.getCTM().inverse();
     const els = [...svg.querySelectorAll('path,rect,circle,ellipse,line,polyline,polygon')];
     const shapes = [], outlines = [];
@@ -113,6 +115,8 @@ var KubaiMeasure = (() => {
       return inFill(s.el, x, y);
     };
 
+    const solid = shapes.filter((o) => o.role !== 'mark');
+    if (!outlinesOnly) {
     // Line widths of stroked marks, and sizes of each piece of a mark.
     for (const s of shapes) {
       if (s.role !== 'mark') continue;
@@ -166,7 +170,6 @@ var KubaiMeasure = (() => {
       return pts.filter(([x, y]) => inClips(s.clips, x, y));
     };
     // Only the parts of a shape that nothing painted later covers count.
-    const solid = shapes.filter((o) => o.role !== 'mark');
     for (const s of shapes) s.pts = visibleSamples(s).filter(([x, y]) => !solid.some((o) => o.i > s.i && on(o, x, y)));
     const containers = shapes.filter((s) => s.role === 'back' || s.role === 'front' || s.role === 'content');
     for (const s of shapes) {
@@ -200,6 +203,7 @@ var KubaiMeasure = (() => {
       let best = 9;
       for (const [x, y] of a.pts) for (const r of RADII) { if (r >= best) break; if (DIRS.some(([dx, dy]) => on(b, x + dx * r, y + dy * r))) { best = r; break; } }
       if (best > 0.1 && best <= 1.35) res.pair.push(`${label(a)} ~ ${label(b)} gap≈${best}`);
+    }
     }
     // A covered part's outline must not show past the edge of the part in front of it. Walk
     // the middle of each outline band: a short visible stretch with covered stretches on
@@ -246,23 +250,30 @@ var KubaiMeasure = (() => {
     for (const s of shapes) {
       // A solid deep fill (a tyre, a pipe) reads on its own and takes no outline.
       if ((s.role !== 'back' && s.role !== 'front') || /^url\(#pure-/.test(s.el.getAttribute('fill') || '')) continue;
+      // A part shrunk to almost nothing (a sparkle before it appears) shows no edge at all.
+      if (Math.max(s.box[2] - s.box[0], s.box[3] - s.box[1]) < 0.5) continue;
       const len = s.el.getTotalLength();
       if (!(len > 0)) continue;
       const n = Math.min(400, Math.max(60, Math.round(len * 3))), step = len / n;
       let run = 0, worst = 0, at = null;
+      // The step out is taken in the part's own coordinates, so a part squashed mid-flip,
+      // whose outline is squashed with it, is judged against that squashed outline.
       for (let k = 0; k <= n; k++) {
         const q = s.el.getPointAtLength(step * (k % n)), q2 = s.el.getPointAtLength(step * ((k + 1) % n));
-        const a = toRoot(s.el, q.x, q.y), b = toRoot(s.el, q2.x, q2.y);
-        const l = Math.hypot(b.x - a.x, b.y - a.y);
+        const a = toRoot(s.el, q.x, q.y);
+        const l = Math.hypot(q2.x - q.x, q2.y - q.y);
         let bare = false;
         if (l > 1e-6 && l < step * 4) {
-          const ux = -(b.y - a.y) / l * 0.5, uy = (b.x - a.x) / l * 0.5;
-          const [px, py] = on(s, a.x + ux, a.y + uy) ? [a.x - ux, a.y - uy] : [a.x + ux, a.y + uy];
-          bare = inClips(s.clips, a.x, a.y) && !painted(px, py) && !solid.some((o) => o.i > s.i && on(o, a.x, a.y));
+          const ux = -(q2.y - q.y) / l * 0.5, uy = (q2.x - q.x) / l * 0.5;
+          const out1 = toRoot(s.el, q.x + ux, q.y + uy), out2 = toRoot(s.el, q.x - ux, q.y - uy);
+          const o = on(s, out1.x, out1.y) ? out2 : out1;
+          bare = inClips(s.clips, a.x, a.y) && !painted(o.x, o.y) && !solid.some((x) => x.i > s.i && on(x, a.x, a.y));
         }
-        if (bare) { run++; if (run > worst) { worst = run; at = [a.x, a.y]; } } else run = 0;
+        // Run lengths are measured on the canvas, whatever the part's own scale.
+        const next = toRoot(s.el, q2.x, q2.y), d = Math.hypot(next.x - a.x, next.y - a.y);
+        if (bare) { run += d; if (run > worst) { worst = run; at = [a.x, a.y]; } } else run = 0;
       }
-      if (worst * step > 1) res.bare.push(`${(worst * step).toFixed(1)} long near ${at.map((v) => v.toFixed(1)).join(',')}`);
+      if (worst > 1) res.bare.push(`${worst.toFixed(1)} long near ${at.map((v) => v.toFixed(1)).join(',')}`);
     }
 
     // Sharp corners of outlined parts must either sit on another part's edge (a hinge, where
@@ -390,7 +401,10 @@ var KubaiMeasure = (() => {
 
   const ALLOWED = [1.6, 2.2, 2.6, 2.0, 1.2];
   const near = (a, b, t = 0.06) => Math.abs(a - b) <= t;
-  const uniq = (geo, key) => [...new Set(geo.flatMap((g, i) => (g && !g.failed ? g[key].map((s) => (i ? 'end: ' : 'rest: ') + s) : [])))];
+  // geo: [rest, end, ...poses during the motion]; mids gives the time of each of those poses.
+  let mids = [];
+  const tag = (i) => (i === 0 ? 'rest: ' : i === 1 ? 'end: ' : `t=${mids[i - 2]}: `);
+  const uniq = (geo, key) => [...new Set(geo.flatMap((g, i) => (g && !g.failed && g[key] ? g[key].map((s) => tag(i) + s) : [])))];
 
   // The canvas box of every visible part of a live <svg>, in document order (null for a part
   // hidden in this pose). Compared frame by frame, these show a part that jumps on screen,
@@ -426,7 +440,8 @@ var KubaiMeasure = (() => {
   }
 
   // Findings from geometry() of the rest pose and the end of the hover.
-  function shapeFindings(geo) {
+  function shapeFindings(geo, times = []) {
+    mids = times;
     const found = [], add = (id, detail) => found.push({ id, detail });
     const [gr] = geo;
     if (gr && !gr.failed) {
@@ -439,7 +454,8 @@ var KubaiMeasure = (() => {
       if (gr.tiny.length) add('tiny', gr.tiny.slice(0, 3).join('; '));
       if (gr.text) add('text', `${gr.text} <text>`);
     }
-    const edge = uniq(geo, 'edge'), peek = uniq(geo, 'peek'), bare = uniq(geo, 'bare'), joint = uniq(geo, 'joint'), pair = uniq(geo, 'pair');
+    const ends = geo.slice(0, 2);
+    const edge = uniq(ends, 'edge'), pair = uniq(ends, 'pair'), peek = uniq(geo, 'peek'), bare = uniq(geo, 'bare'), joint = uniq(geo, 'joint');
     if (edge.length) add('edgeGap', edge.slice(0, 3).join('; '));
     if (peek.length) add('peek', peek.slice(0, 4).join('; '));
     if (bare.length) add('bare', bare.slice(0, 3).join('; '));
@@ -479,6 +495,13 @@ var KubaiMeasure = (() => {
     return found;
   }
   const score = (found) => Math.max(0, 100 - found.reduce((a, x) => a + (RULES[x.id] ? RULES[x.id].w : 0), 0));
+  // An icon may declare findings it keeps on purpose, each with its reason:
+  //   allow: { leaves: 'the lid lifts clear of the bin' }
+  // Those are reported apart, with the reason, and cost no points.
+  const split = (found, allow) => ({
+    found: found.filter((x) => !(allow && allow[x.id])),
+    allowed: found.filter((x) => allow && allow[x.id]).map((x) => ({ ...x, reason: allow[x.id] }))
+  });
 
-  return { geometry, motion, boxes, boxJumps, role, RULES, shapeFindings, sizeFindings, motionFindings, score };
+  return { geometry, motion, boxes, boxJumps, role, RULES, shapeFindings, sizeFindings, motionFindings, score, split };
 })();

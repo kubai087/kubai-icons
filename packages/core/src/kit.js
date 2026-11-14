@@ -201,6 +201,8 @@ export const bump = (o) => wave(o, (t) => Math.sin(Math.PI * settle(t)));
  * - svg(u), target(hover, state), draw(p, E): the layers and the motion.
  * - tap: true when a click toggles `state.active`.
  * - by: contributor GitHub handle.
+ * - allow: findings of tools/audit.mjs kept on purpose, each with its reason, e.g.
+ *   { leaves: 'the lid lifts clear of the bin' }. Reported apart; they cost no points.
  */
 export function defineIcon(def) {
   return def;

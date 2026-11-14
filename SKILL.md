@@ -45,7 +45,7 @@ metadata:
    node scripts/check.mjs --only 新图标A,新图标B --with 文件夹,邮件,下载
    ```
 
-   截图和 `findings.md` 在 `check-out/`。脚本报出错误时先修错误；再看 `findings.md`，每一条都指出一个很可能的问题，到截图上确认后修掉，确认是有意为之的可以保留（例如悬停时盖子抬出画布）。最后逐条对照 `PROMPT.md` 第 10 节的清单检查。往复类动作看 `frames.png`；查细缝时加 `--scale 3`；查浅主色上的标记时加 `--accent #F59E0B`，把所有图标换成同一个主色。不加 `--only` 就检查整套。静态版看 `rest.png`、`size-24.png`、`size-28.png` 和 `palettes.png` 就够了。
+   截图和 `findings.md` 在 `check-out/`。脚本报出错误时先修错误；再看 `findings.md`，每一条都指出一个很可能的问题，到截图上确认后修掉，确认是有意为之的可以保留（例如悬停时盖子抬出画布），在图标定义里写 `allow: { 规则名: '理由' }` 声明，它会单独列在 `findings.md` 的 Allowed 部分，不再计入问题；没确认过的不要声明。最后逐条对照 `PROMPT.md` 第 10 节的清单检查。往复类动作看 `frames.png`；查细缝时加 `--scale 3`；查浅主色上的标记时加 `--accent #F59E0B`，把所有图标换成同一个主色。不加 `--only` 就检查整套。静态版看 `rest.png`、`size-24.png`、`size-28.png` 和 `palettes.png` 就够了。
 8. 改到全部通过后，更新 README 里提到的图标数量，以及展示页每个断点的列数（列数要能整除图标总数，断点可以增删）。
 9. 要静态时，导出到用户指定的目录，并告诉用户用的是哪个色板：
 

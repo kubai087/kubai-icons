@@ -222,7 +222,7 @@ npm run build        # every package, from icons/ and badges/
 npm run validate     # names, metadata and markup of every icon
 npm test
 node tools/check.mjs --only folder,mail --with download   # contact sheets in check-out/lib
-node tools/audit.mjs --only folder,mail                   # scores against the rules, in check-out/audit
+npm run audit        # scores every icon against the rules, in check-out/audit
 npm run site:dev     # the website
 ```
 

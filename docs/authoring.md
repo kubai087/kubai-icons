@@ -18,6 +18,7 @@ export default defineIcon({
   tags: ['box', 'storage', 'store', '存档'],
   variants: ['plus', 'check', 'search', 'lock'], // badges this object takes
   off: false,                   // true adds a slashed "<name>-off" icon
+  // allow: { offCentre: 'sits low to leave room for the steam' },  // see docs/review.md
   // One sentence: the object, and what it does on hover.
   svg: (u) => `...`,
   target: (h, s) => ({ ... }),
@@ -116,7 +117,7 @@ in section 10 of `PROMPT.md` has to pass, and the command has to finish without 
 
 `npm run validate` checks every icon's metadata, names and markup.
 
-`node tools/audit.mjs --only archive,inbox` measures the icons against the rules and scores
+`node tools/audit.mjs --only archive,inbox` (`npm run audit` for all) measures the icons against the rules and scores
 them: jumps and abrupt endings in the motion, size, centring, layers, line widths, small
 details and thin gaps. [`review.md`](review.md) explains each finding and the visual
 checklist that goes with it. A new icon should come out of it with no findings, or with

@@ -17,13 +17,15 @@ check (`scripts/check.mjs`, for a set made with the skill) and the library's aud
 ## Measured: `tools/audit.mjs`
 
 ```bash
-node tools/audit.mjs                      # every base icon
+npm run audit                             # every base icon
 node tools/audit.mjs --only stool,yo-yo   # some icons
 node tools/audit.mjs --category food --min 90
 ```
 
+It runs several headless Chrome processes side by side (`--jobs n` sets how many).
+
 It renders each icon's hover at 25 equal steps of real time (the runtime eases time, so equal
-steps show how fast things really move), measures the rest and end poses, and writes
+steps show how fast things really move), measures the rest and end poses in full and three moments in between for outlines (a peek, a spike or a bare edge that shows only mid-motion), and writes
 `check-out/audit/report.json` and `report.md`, lowest score first. An icon starts at 100 and
 loses the weight of each finding.
 
@@ -61,6 +63,19 @@ loses the weight of each finding.
 flags gaps under about 1.4, because the reference icons keep content lines 1.5 from the
 edge of a page. Gaps are measured from the painted shapes, so a container it picks can be
 wrong; confirm each one on a sheet at `--scale 3`.
+
+### Findings kept on purpose
+
+Some findings describe what an icon means to do: a bin whose lid lifts off the canvas, a cup
+that sits low to leave room for its steam, a date drawn as text. Once a finding is confirmed
+on a sheet as intended, declare it on the icon with the reason:
+
+```js
+allow: { offCentre: 'it sits low to leave room for the steam rising on hover' },
+```
+
+An allowed finding costs no points and is listed apart, under "Allowed", with its reason, so
+it stays visible. Declare only what has been looked at; never allow a finding to quiet it.
 
 ## Looked at: the visual checklist
 

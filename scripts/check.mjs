@@ -179,18 +179,20 @@ try {
 
   // Measures: each icon mounted large, its markup taken at equal steps of real time through
   // the hover, and its rest and end poses measured. Read back from the dumped DOM.
+  const MIDS = [0.15, 0.35, 0.6];
   const measure = `${prelude}const g = document.getElementById('grid');
     const box = document.createElement('div'); g.replaceWith(box);
     const strip = (svg) => svg.outerHTML.replace(/<defs>[\\s\\S]*?<\\/defs>/, '');
-    const T = 24, result = [];
+    const T = 24, MIDS = ${JSON.stringify(MIDS)}, result = [];
     for (const icon of shownIcons) {
       const host = document.createElement('div'); box.appendChild(host);
       const inst = copy(icon, host), svg = host.querySelector('svg');
       svg.setAttribute('width', 310); svg.setAttribute('height', 290);
       const frames = [], parts = [];
       for (let k = 0; k <= T; k++) { pose(inst, k / T); frames.push(strip(svg)); parts.push(KubaiMeasure.boxes(svg)); }
-      const geo = [0, 1].map((t) => { pose(inst, t); try { return KubaiMeasure.geometry(svg); } catch (e) { return { failed: String(e.message || e) }; } });
-      result.push({ name: icon.name, motion: KubaiMeasure.motion(frames), jumps: KubaiMeasure.boxJumps(parts), geo });
+      // Rest and end in full; moments in between for outlines only (a gap may pass by).
+      const geo = [0, 1, ...MIDS].map((t, k) => { pose(inst, t); try { return KubaiMeasure.geometry(svg, { outlinesOnly: k > 1 }); } catch (e) { return { failed: String(e.message || e) }; } });
+      result.push({ name: icon.name, allow: icon.allow || null, motion: KubaiMeasure.motion(frames), jumps: KubaiMeasure.boxJumps(parts), geo });
       host.remove();
     }
     const pre = document.createElement('pre'); pre.id = 'kubai-measure'; pre.textContent = JSON.stringify(result); document.body.appendChild(pre);`;
@@ -214,15 +216,20 @@ try {
   // Findings, lowest score first. They point at likely problems; the sheets decide.
   const KM = new Function(`${measureJs}; return KubaiMeasure;`)();
   const report = measured.map((m) => {
-    const found = [...KM.motionFindings(m.motion, m.jumps), ...KM.sizeFindings(m.geo[0]?.bounds, m.geo[1]?.bounds), ...KM.shapeFindings(m.geo)];
-    return { name: m.name, score: KM.score(found), found };
+    const all = [...KM.motionFindings(m.motion, m.jumps), ...KM.sizeFindings(m.geo[0]?.bounds, m.geo[1]?.bounds), ...KM.shapeFindings(m.geo, MIDS)];
+    const { found, allowed } = KM.split(all, m.allow);
+    return { name: m.name, score: KM.score(found), found, allowed };
   }).sort((a, b) => a.score - b.score);
   const flagged = report.filter((r) => r.found.length);
+  const kept = report.filter((r) => r.allowed.length);
+  const line = (x) => `- **${x.id}**: ${KM.RULES[x.id].text}${x.detail ? ` (${x.detail})` : ''}${x.reason ? `. Allowed: ${x.reason}` : ''}`;
   fs.writeFileSync(path.join(out, 'findings.md'), [`# Findings`, '', `${report.length} icons measured, ${flagged.length} with findings. Each points at a likely problem; confirm it on the sheets.`, '',
-    ...flagged.map((r) => `## ${r.name} (${r.score})\n\n${r.found.map((x) => `- **${x.id}**: ${KM.RULES[x.id].text}${x.detail ? ` (${x.detail})` : ''}`).join('\n')}\n`)].join('\n'));
+    ...flagged.map((r) => `## ${r.name} (${r.score})\n\n${r.found.map(line).join('\n')}\n`),
+    ...(kept.length ? ['# Allowed', '', 'Findings an icon declares in `allow`, with its reason.', '', ...kept.map((r) => `## ${r.name}\n\n${r.allowed.map(line).join('\n')}\n`)] : [])].join('\n'));
   console.log(flagged.length
     ? `Findings for ${flagged.length} of ${report.length} icons (details in findings.md):\n${flagged.map((r) => `  ${r.name}  ${r.score}  ${r.found.map((x) => x.id).join(', ')}`).join('\n')}`
     : `No findings for ${report.length} icons.`);
+  if (kept.length) console.log(`Allowed on purpose: ${kept.map((r) => `${r.name} (${r.allowed.map((x) => x.id).join(', ')})`).join('; ')}`);
   console.log(`Screenshots in ${out}`);
   process.exitCode = errors.length ? 1 : 0;
 } finally {

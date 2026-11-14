@@ -3,14 +3,15 @@
 // What it cannot judge (does the object read as itself, is the motion what the object does)
 // stays with the visual checklist in docs/review.md.
 //
-//   node tools/audit.mjs [--only a,b] [--category files] [--out check-out/audit] [--min 90]
+//   node tools/audit.mjs [--only a,b] [--category files] [--out check-out/audit] [--min 90] [--jobs 4]
 //
 // Writes report.json (every measure and finding per icon) and report.md (icons sorted from
 // the lowest score), and prints a summary. --min lists only icons scoring below it.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { loadIcons, root } from './registry.mjs';
 import { renderSVG, renderInner } from '../packages/core/src/render.js';
 import { EASE } from '../packages/core/src/motion.js';
@@ -28,10 +29,14 @@ const only = (opt('--only') || '').split(',').map((s) => s.trim()).filter(Boolea
 const category = opt('--category');
 const out = path.resolve(opt('--out') || path.join(root, 'check-out', 'audit'));
 const min = Number(opt('--min') || 100);
+// Chrome processes run side by side; each takes one chunk of icons at a time.
+const jobs = Math.max(1, Number(opt('--jobs')) || Math.min(6, Math.max(1, os.cpus().length - 2)));
 
 // ---------- The rubric: KubaiMeasure.RULES, shared with scripts/check.mjs ----------
 const RULES = KubaiMeasure.RULES;
 
+// Base icons only: a badge is drawn once, apart, and composed onto a corner, so measuring
+// it against the body's rules would only report the gap cut round it.
 const { bases, failures } = await loadIcons({ composites: false, strict: false });
 let set = bases;
 if (only.length) set = set.filter((b) => only.some((p) => (p.endsWith('*') ? b.name.startsWith(p.slice(0, -1)) : b.name === p)));
@@ -43,8 +48,10 @@ const T = 24;
 const times = Array.from({ length: T + 1 }, (_, i) => i / T);
 
 const VB = '0 -3 31 31';
+// Moments during the hover (real time) where outlines are checked too.
+const MIDS = [0.15, 0.35, 0.6];
 function prepare(icon) {
-  const item = { name: icon.name, cat: icon.category, errors: [], frames: [], geo: [], steps: [] };
+  const item = { name: icon.name, cat: icon.category, allow: icon.allow || null, errors: [], frames: [], geo: [], steps: [] };
   const bad = (s) => /NaN|undefined|Infinity/.test(s);
   const markup = [];
   for (const t of times) {
@@ -56,11 +63,12 @@ function prepare(icon) {
     } catch (e) { item.errors.push(`t=${t.toFixed(2)}: ${e.message}`); item.frames.push(null); markup.push(null); }
   }
   Object.assign(item, KubaiMeasure.motion(markup));
-  for (const hover of [false, true]) {
+  // Rest and end are measured in full; the moments in between for outlines only.
+  for (const [k, t] of [0, 1, ...MIDS].entries()) {
     try {
-      const inner = renderInner(icon, { k: `g${hover ? 1 : 0}`, hover, paint: 'template', names: false });
-      item.geo.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${VB}" width="310" height="310">${inner}</svg>`);
-    } catch (e) { item.errors.push(`${hover ? 'hover' : 'rest'}: ${e.message}`); item.geo.push(null); }
+      const inner = renderInner(icon, { k: `g${k}`, progress: EASE(t), paint: 'template', names: false });
+      item.geo.push({ svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${VB}" width="310" height="310">${inner}</svg>`, outlinesOnly: k > 1 });
+    } catch (e) { item.errors.push(`t=${t}: ${e.message}`); item.geo.push(null); }
   }
   return item;
 }
@@ -106,12 +114,12 @@ function pageScript() {
         const a = gs.getImageData(0, 0, 24, 24).data; let s = 0; for (let i = 3; i < a.length; i += 4) s += a[i] / 255;
         r.ink = Math.round(s / 576 * 1000) / 1000;
       }
-      r.geo = d.geo.map((t) => {
-        if (!t) return null;
+      r.geo = d.geo.map((g) => {
+        if (!g) return null;
         const host = document.createElement('div');
-        host.innerHTML = t;
+        host.innerHTML = g.svg;
         document.body.appendChild(host);
-        try { return KubaiMeasure.geometry(host.firstElementChild); } catch (e) { return { failed: e.message }; } finally { host.remove(); }
+        try { return KubaiMeasure.geometry(host.firstElementChild, { outlinesOnly: g.outlinesOnly }); } catch (e) { return { failed: e.message }; } finally { host.remove(); }
       });
       res.push(r);
     }
@@ -119,7 +127,7 @@ function pageScript() {
   };
 }
 
-function runChunk(items) {
+async function runChunk(items) {
   const work = fs.mkdtempSync(path.join(os.tmpdir(), 'kubai-audit-'));
   try {
     const data = items.map(({ name, frames, geo }) => ({ name, frames, geo }));
@@ -130,8 +138,16 @@ function runChunk(items) {
     </script>`;
     const page = path.join(work, 'p.html');
     fs.writeFileSync(page, html);
-    const dom = execFileSync(findChrome(), ['--headless=new', '--disable-gpu', `--user-data-dir=${path.join(work, 'profile')}`,
-      '--virtual-time-budget=900000', '--dump-dom', 'file://' + page], { maxBuffer: 1 << 30, timeout: 900000, stdio: ['ignore', 'pipe', 'ignore'] }).toString();
+    // Chrome can exit with an error while tearing down after it has printed the page; the
+    // page is what counts, so a failed exit is only fatal when nothing came out.
+    let dom;
+    try {
+      ({ stdout: dom } = await promisify(execFile)(findChrome(), ['--headless=new', '--disable-gpu', `--user-data-dir=${path.join(work, 'profile')}`,
+        '--virtual-time-budget=900000', '--dump-dom', 'file://' + page], { maxBuffer: 1 << 30, timeout: 1800000 }));
+    } catch (e) {
+      if (!e.stdout) throw e;
+      dom = e.stdout;
+    }
     const m = /<pre id="out">([\s\S]*?)<\/pre>/.exec(dom);
     if (!m) throw new Error('the audit page returned nothing');
     const r = JSON.parse(m[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&'));
@@ -143,14 +159,22 @@ function runChunk(items) {
 }
 
 // ---------- Measure ----------
-const measured = [];
-const CHUNK = 40;
-for (let i = 0; i < set.length; i += CHUNK) {
-  const items = set.slice(i, i + CHUNK).map(prepare);
-  const r = runChunk(items);
-  items.forEach((it, j) => measured.push({ name: it.name, cat: it.cat, errors: it.errors, steps: it.steps, speed: it.speed, ...r[j] }));
-  process.stdout.write(`\r${Math.min(i + CHUNK, set.length)}/${set.length}`);
-}
+const CHUNK = 20;
+const chunks = [];
+for (let i = 0; i < set.length; i += CHUNK) chunks.push(set.slice(i, i + CHUNK));
+const results = new Array(chunks.length);
+let next = 0, done = 0;
+await Promise.all(Array.from({ length: Math.min(jobs, chunks.length) }, async () => {
+  while (next < chunks.length) {
+    const c = next++;
+    const items = chunks[c].map(prepare);
+    const r = await runChunk(items);
+    results[c] = items.map((it, j) => ({ name: it.name, cat: it.cat, allow: it.allow, errors: it.errors, steps: it.steps, speed: it.speed, ...r[j] }));
+    done += items.length;
+    process.stdout.write(`\r${done}/${set.length}`);
+  }
+}));
+const measured = results.flat();
 process.stdout.write('\n');
 
 // ---------- Score ----------
@@ -201,10 +225,11 @@ const report = measured.map((m) => {
     if (m.ink < inkLo) add('light', `ink ${m.ink} (set 5%: ${inkLo})`);
     if (m.ink > inkHi) add('heavy', `ink ${m.ink} (set 95%: ${inkHi})`);
   }
-  found.push(...KubaiMeasure.shapeFindings(m.geo || []));
+  found.push(...KubaiMeasure.shapeFindings(m.geo || [], MIDS));
   const gr = m.geo?.[0];
-  const score = Math.max(0, 100 - found.reduce((a, x) => a + RULES[x.id].w, 0));
-  return { name: m.name, category: m.cat, score, findings: found, measures: { ink: m.ink, reach: m.reach, rest: m.boxes?.[0], end: m.boxes?.at(-1), diffs: m.diffs, layers: gr?.layers, widths: gr && !gr.failed ? [...new Set(gr.widths)] : [] } };
+  const { found: open, allowed } = KubaiMeasure.split(found, m.allow);
+  const score = KubaiMeasure.score(open);
+  return { name: m.name, category: m.cat, score, findings: open, allowed, measures: { ink: m.ink, reach: m.reach, rest: m.boxes?.[0], end: m.boxes?.at(-1), diffs: m.diffs, layers: gr?.layers, widths: gr && !gr.failed ? [...new Set(gr.widths)] : [] } };
 }).sort((a, b) => a.score - b.score || a.name.localeCompare(b.name));
 
 fs.mkdirSync(out, { recursive: true });
@@ -213,7 +238,9 @@ const counts = Object.fromEntries(Object.keys(RULES).map((k) => [k, report.filte
 const avg = report.reduce((a, r) => a + r.score, 0) / report.length;
 const md = [`# Icon audit`, '', `${report.length} icons, average score ${avg.toFixed(1)}.`, '', '| Finding | Weight | Icons |', '| --- | --- | --- |',
   ...Object.entries(RULES).map(([k, r]) => `| ${k}: ${r.text} | ${r.w} | ${counts[k]} |`), '',
-  ...report.filter((r) => r.score < min && r.findings.length).map((r) => `## ${r.name} (${r.category}) — ${r.score}\n\n${r.findings.map((x) => `- **${x.id}** ${x.detail || ''}`).join('\n')}\n`)].join('\n');
+  ...report.filter((r) => r.score < min && r.findings.length).map((r) => `## ${r.name} (${r.category}) — ${r.score}\n\n${r.findings.map((x) => `- **${x.id}** ${x.detail || ''}`).join('\n')}\n`),
+  '# Allowed', '', 'Findings an icon declares in `allow`, with its reason.', '',
+  ...report.filter((r) => r.allowed.length).map((r) => `- **${r.name}**: ${r.allowed.map((x) => `${x.id} (${x.reason})`).join('; ')}`)].join('\n');
 fs.writeFileSync(path.join(out, 'report.md'), md);
 console.log(`Audited ${report.length} icons, average ${avg.toFixed(1)}.`);
 for (const [k, n] of Object.entries(counts)) if (n) console.log(`  ${k.padEnd(12)} ${n}`);
