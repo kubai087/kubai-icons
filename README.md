@@ -156,7 +156,7 @@ The complete rules are in [`PROMPT.md`](PROMPT.md).
 | [`PROMPT.md`](PROMPT.md) | The rules, each one a hard requirement: canvas and keylines, layers, corners and outlines, light, color, marks and motion. |
 | [`src/engine.js`](src/engine.js) | Color derivation, outside outlines, gradients, shadows, interpolation and palettes, already built. New icons reuse them instead of reinventing them. |
 | [`src/icons.js`](src/icons.js) | 66 worked examples. Each new icon starts from the closest one in structure. |
-| [`scripts/check.mjs`](scripts/check.mjs) | A headless self-check: rest, hover, every moment in between, 24px, 28px and every palette. |
+| [`scripts/check.mjs`](scripts/check.mjs) | A headless self-check: rest, hover, every moment in between, 24px, 28px and every palette, plus a list of findings against the rules that can be measured ([`scripts/measure.js`](scripts/measure.js)). |
 
 `index.html` opens a local gallery of these 66 examples. The full library is on the [website](https://icons.kubai.design/icons/).
 
@@ -203,6 +203,8 @@ node scripts/check.mjs --only 剪刀,地图 --with 文件夹,邮件,下载
 | `--scale 3` | Renders every sheet at 3×, to look for seams. |
 | `--out dir` | Writes the screenshots somewhere other than `check-out/`. |
 
+Besides the screenshots it writes `findings.md`: each icon measured against the rules that can be measured, such as motion that stops dead or jumps, size and centring, line widths, thin gaps, outlines that peek out or meet in a spike, and edges with no outline. Each finding points at a likely problem to confirm on the screenshots.
+
 `CHROME` overrides the browser path. The animations in this README come from `node scripts/media.mjs`, which also needs `ffmpeg` and `img2webp`.
 
 </details>
@@ -220,10 +222,11 @@ npm run build        # every package, from icons/ and badges/
 npm run validate     # names, metadata and markup of every icon
 npm test
 node tools/check.mjs --only folder,mail --with download   # contact sheets in check-out/lib
+node tools/audit.mjs --only folder,mail                   # scores against the rules, in check-out/audit
 npm run site:dev     # the website
 ```
 
-Each icon is one module in [`icons/`](icons); [`docs/authoring.md`](docs/authoring.md) explains the format. The website is a static Next.js export in [`site/`](site).
+Each icon is one module in [`icons/`](icons); [`docs/authoring.md`](docs/authoring.md) explains the format, and [`docs/review.md`](docs/review.md) how icons are reviewed. The website is a static Next.js export in [`site/`](site).
 
 </details>
 

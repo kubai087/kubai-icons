@@ -3,7 +3,7 @@ name: kubai-icons
 description: 生成一套风格统一的功能图标，可以交付悬停时会形变的动态版（SVG + JS），也可以导出静态 SVG 文件，沿用 Lumno 书签文件夹图标的构造：后片、内容、前片分层，外描边，所有颜色从一个主色推导，两组关键帧的悬停动效，可切换色板。用户要做图标、功能图标、动态图标、静态 SVG 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
 license: Kubai Icons License (source-available). Complete terms in LICENSE.
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   display_name: "Kubai 动态图标"
   display_name_en: "Kubai Icons"
   description_zh: "按同一种风格稳定地画出功能图标：文件夹式的前后分层、外描边、一个主色推导全部颜色，悬停时做物体本身会做的动作；也可以导出静态 SVG。"
@@ -20,7 +20,8 @@ metadata:
 - `src/engine.js`：引擎。颜色推导、外描边遮罩、厚度带渐变、投影和内发光滤镜、插值动画、色板都在这里。直接复用，不要改。
 - `src/icons.js`：范例图标。新图标按同样的格式追加。
 - `src/app.js`、`index.html`：展示页。`ORDER` 决定展示哪些图标、按什么顺序排。
-- `scripts/check.mjs`：自检脚本。在无头 Chrome 里截出静止、悬停、悬停过程的中间帧、24px、28px 和所有色板，并读出每一页的脚本报错。临时文件都放在输出目录里，跑完自动清理。
+- `scripts/check.mjs`：自检脚本。在无头 Chrome 里截出静止、悬停、悬停过程的中间帧、24px、28px 和所有色板，读出每一页的脚本报错，并用 `scripts/measure.js` 对照 `PROMPT.md` 里能量化的规则逐个测量，结果写进 `findings.md`。临时文件都放在输出目录里，跑完自动清理。
+- `scripts/measure.js`：测量规则的代码，由自检脚本加载。量的是动作有没有跳帧、结束时是否平稳停下，尺寸和居中，分层，线宽，过小的细节，细缝，被盖住的描边露头，尖角接缝处的毛刺，以及落在背景上却没有描边的边。
 - `scripts/export.mjs`：静态导出。把图标渲染成不依赖脚本和样式表的独立 SVG 文件，可以指定色板、主色和静止或悬停状态。
 
 ## 流程
@@ -44,7 +45,7 @@ metadata:
    node scripts/check.mjs --only 新图标A,新图标B --with 文件夹,邮件,下载
    ```
 
-   截图在 `check-out/`。逐条对照 `PROMPT.md` 第 10 节的清单检查；脚本报出错误时先修错误。往复类动作看 `frames.png`；查细缝时加 `--scale 3`；查浅主色上的标记时加 `--accent #F59E0B`，把所有图标换成同一个主色。不加 `--only` 就检查整套。静态版看 `rest.png`、`size-24.png`、`size-28.png` 和 `palettes.png` 就够了。
+   截图和 `findings.md` 在 `check-out/`。脚本报出错误时先修错误；再看 `findings.md`，每一条都指出一个很可能的问题，到截图上确认后修掉，确认是有意为之的可以保留（例如悬停时盖子抬出画布）。最后逐条对照 `PROMPT.md` 第 10 节的清单检查。往复类动作看 `frames.png`；查细缝时加 `--scale 3`；查浅主色上的标记时加 `--accent #F59E0B`，把所有图标换成同一个主色。不加 `--only` 就检查整套。静态版看 `rest.png`、`size-24.png`、`size-28.png` 和 `palettes.png` 就够了。
 8. 改到全部通过后，更新 README 里提到的图标数量，以及展示页每个断点的列数（列数要能整除图标总数，断点可以增删）。
 9. 要静态时，导出到用户指定的目录，并告诉用户用的是哪个色板：
 

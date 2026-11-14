@@ -11,6 +11,9 @@ Every icon gets two passes:
 2. **Looked at**: the sheets from `node tools/check.mjs` are read against the visual
    checklist below. A measure only points at a likely problem; the sheet decides.
 
+The measures live in [`scripts/measure.js`](../scripts/measure.js), which the skill's own
+check (`scripts/check.mjs`, for a set made with the skill) and the library's audit share.
+
 ## Measured: `tools/audit.mjs`
 
 ```bash

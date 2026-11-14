@@ -6,6 +6,11 @@
 //   frames.png                one row per moment of the hover motion, from rest to end
 //   size-24.png, size-28.png  the same icons at 24px and 28px, rest above hover
 //   palettes.png              one row per palette
+//   findings.md               what scripts/measure.js finds against the rules: motion that
+//                             stops dead or jumps, size and centring, layers, line widths,
+//                             small details, thin gaps, outlines that peek out or meet in a
+//                             spike, and edges with no outline; each one to confirm on the
+//                             sheets
 // and prints any script error raised while a page loads.
 //
 //   node scripts/check.mjs [--only 名字,名字] [--with 名字,名字] [--accent #hex] [--scale n] [--out dir]
@@ -48,7 +53,8 @@ if (!chrome) {
 
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
 const icons = read('src/icons.js');
-const js = [read('src/engine.js'), icons, read('src/app.js')].join('\n');
+const measureJs = read('scripts/measure.js');
+const js = [read('src/engine.js'), icons, read('src/app.js'), measureJs].join('\n');
 const html = read('index.html');
 
 // Names must match icons that exist and are listed in ORDER, or the screenshots would
@@ -171,15 +177,52 @@ try {
     const box = document.createElement('div'); box.append(...rows); g.replaceWith(box);`;
   shot('palettes', page(sheet(36), palettes), 100 + count * 60, 30 + 8 * 60, 2);
 
+  // Measures: each icon mounted large, its markup taken at equal steps of real time through
+  // the hover, and its rest and end poses measured. Read back from the dumped DOM.
+  const measure = `${prelude}const g = document.getElementById('grid');
+    const box = document.createElement('div'); g.replaceWith(box);
+    const strip = (svg) => svg.outerHTML.replace(/<defs>[\\s\\S]*?<\\/defs>/, '');
+    const T = 24, result = [];
+    for (const icon of shownIcons) {
+      const host = document.createElement('div'); box.appendChild(host);
+      const inst = copy(icon, host), svg = host.querySelector('svg');
+      svg.setAttribute('width', 310); svg.setAttribute('height', 290);
+      const frames = [], parts = [];
+      for (let k = 0; k <= T; k++) { pose(inst, k / T); frames.push(strip(svg)); parts.push(KubaiMeasure.boxes(svg)); }
+      const geo = [0, 1].map((t) => { pose(inst, t); try { return KubaiMeasure.geometry(svg); } catch (e) { return { failed: String(e.message || e) }; } });
+      result.push({ name: icon.name, motion: KubaiMeasure.motion(frames), jumps: KubaiMeasure.boxJumps(parts), geo });
+      host.remove();
+    }
+    const pre = document.createElement('pre'); pre.id = 'kubai-measure'; pre.textContent = JSON.stringify(result); document.body.appendChild(pre);`;
+  const measureFile = path.join(work, 'measure.html');
+  fs.writeFileSync(measureFile, page('', measure));
+  pages.push(measureFile);
+
   // Errors: dump each page's DOM and read the attribute the listener recorded.
+  let measured = [];
   const errors = pages.map((file) => {
     const dom = execFileSync(chrome, ['--headless=new', '--disable-gpu', '--force-prefers-reduced-motion', `--user-data-dir=${path.join(work, 'profile')}`,
       '--virtual-time-budget=3000', '--dump-dom', 'file://' + file],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 256 * 1024 * 1024 });
+    const r = dom.match(/<pre id="kubai-measure">([\s\S]*?)<\/pre>/);
+    if (r) measured = JSON.parse(r[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&'));
     const m = dom.match(/data-err="([^"]*)"/);
     return m ? `${path.basename(file, '.html')}: ${m[1]}` : null;
   }).filter(Boolean);
   console.log(errors.length ? `Script errors:\n${errors.join('\n')}` : 'No script errors.');
+
+  // Findings, lowest score first. They point at likely problems; the sheets decide.
+  const KM = new Function(`${measureJs}; return KubaiMeasure;`)();
+  const report = measured.map((m) => {
+    const found = [...KM.motionFindings(m.motion, m.jumps), ...KM.sizeFindings(m.geo[0]?.bounds, m.geo[1]?.bounds), ...KM.shapeFindings(m.geo)];
+    return { name: m.name, score: KM.score(found), found };
+  }).sort((a, b) => a.score - b.score);
+  const flagged = report.filter((r) => r.found.length);
+  fs.writeFileSync(path.join(out, 'findings.md'), [`# Findings`, '', `${report.length} icons measured, ${flagged.length} with findings. Each points at a likely problem; confirm it on the sheets.`, '',
+    ...flagged.map((r) => `## ${r.name} (${r.score})\n\n${r.found.map((x) => `- **${x.id}**: ${KM.RULES[x.id].text}${x.detail ? ` (${x.detail})` : ''}`).join('\n')}\n`)].join('\n'));
+  console.log(flagged.length
+    ? `Findings for ${flagged.length} of ${report.length} icons (details in findings.md):\n${flagged.map((r) => `  ${r.name}  ${r.score}  ${r.found.map((x) => x.id).join(', ')}`).join('\n')}`
+    : `No findings for ${report.length} icons.`);
   console.log(`Screenshots in ${out}`);
   process.exitCode = errors.length ? 1 : 0;
 } finally {
