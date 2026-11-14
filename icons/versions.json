@@ -940,5 +940,13 @@
     "rake",
     "seed-packet",
     "wind-chime"
+  ],
+  "0.9.0": [
+    "coffee-machine",
+    "filing-cabinet",
+    "office-chair",
+    "paper-shredder",
+    "standing-desk",
+    "water-cooler"
   ]
 }
