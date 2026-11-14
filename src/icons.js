@@ -69,6 +69,7 @@ const ICONS = [
   },
   {
     name: '搜索',
+    allow: { strokeWidth: 'the lens rim is 1.8, as on every magnifier in the set' },
     // The page is the subject; the lens is a supporting mark on its corner, a solid
     // ring with no inner outline so it never leaves a thin band.
     svg: (u) => `
@@ -131,6 +132,7 @@ const ICONS = [
   },
   {
     name: '日历',
+    allow: { text: 'the date is the point of the icon' },
     svg: (u) => {
       const body = rr(5.2, 3.4, 20.6, 19.4, KR);
       const sheet = rp(R(8.2, 9, 14.6, 10.8), [0, 0, CR, CR]);
@@ -304,6 +306,7 @@ const ICONS = [
   },
   {
     name: '回收站',
+    allow: { leaves: 'the lid lifts clear of the bin on hover' },
     svg: (u) => `
       <g filter="${u.sh}"><path data-n="back" fill="${u.lo(18.6)}"/></g>
       <g data-n="card" filter="${u.sh}"><path d="${rr(0, 0, 10.4, 7.6, CR)}" fill="${u.upS}"/><path d="${rr(0, 0, 10.4, 7.6, CR)}" ${OL}/><circle cx="3" cy="3" r="1.4" fill="#fff"/></g>
@@ -643,6 +646,7 @@ const ICONS = [
   },
   {
     name: '礼物',
+    allow: { peek: 'the bow loops cross over the ribbon' },
     // A gift box whose lid lifts off on hover.
     svg: (u) => {
       const box = rr(6.6, 11, 17.8, 11.8, KR), lid = rr(5.2, 7.2, 20.6, 4.6, 1.6);
@@ -690,15 +694,19 @@ const ICONS = [
     name: '编辑',
     // A pencil that writes a line on hover.
     svg: (u) => {
-      const body = rr(7.1, 9.6, 15, 6.8, 0.8), tip = rp([[22.1, 9.6], [28.4, 13], [22.1, 16.4]], [0.3, 0.9, 0.3]), cap = rr(2.8, 9.6, 4.7, 6.8, 2);
+      // Back to front, each piece with its own outline: the tip runs on under the body and the
+      // body under the cap, so every seam shows one outline. Shadow and glow stay outside the
+      // turn, so the light still comes from above.
+      const tip = rp([[21.1, 9.6], [22.1, 9.6], [28.4, 13], [22.1, 16.4], [21.1, 16.4]], [0, 0, 0.9, 0, 0]);
+      const body = rp(R(7.1, 9.6, 15, 6.8), [0.8, 0, 0, 0.8]), cap = rr(2.8, 9.6, 4.7, 6.8, 2);
+      const piece = (n, d, fill) => `<g filter="${u.sh}"><g filter="${u.hi}"><path data-n="${n}" d="${d}" fill="${fill}"/></g></g><path data-n="${n}O" d="${d}" ${OL}/>`;
       return `<path data-n="ink" fill="none" stroke-width="2.2" stroke-linecap="round" ${DEEPS}/>
-        <g filter="${u.sh}"><g filter="${u.hi}"><g data-n="pen"><path d="${body}" fill="${u.loS}"/><path d="${tip}" fill="${u.upS}"/><path d="${cap}" fill="${u.upS}"/></g></g></g>
-        <g data-n="penO"><path d="${body}" ${OL}/><path d="${tip}" ${OL}/><path d="${cap}" ${OL}/></g>`;
+        ${piece('t', tip, u.upS)}${piece('b', body, u.loS)}${piece('c', cap, u.upS)}`;
     },
     target: (h) => ({ push: h ? 1.6 : 0, ink: h ? 9 : 0 }),
     draw(p, E) {
       const t = `rotate(135 15.5 13) translate(${f(p.push)} 0)`;
-      at(E.pen, { transform: t }); at(E.penO, { transform: t });
+      for (const n of ['t', 'b', 'c']) { at(E[n], { transform: t }); at(E[n + 'O'], { transform: t }); }
       at(E.ink, { d: `M6.4 23.6H${f(6.4 + p.ink)}`, opacity: p.ink > 0.2 ? 1 : 0 });
     }
   },
@@ -750,6 +758,7 @@ const ICONS = [
   },
   {
     name: '打印',
+    allow: { offCentre: 'it sits high to leave room for the sheet coming out below' },
     // A printer that feeds a printed page out of its slot on hover.
     svg: (u) => {
       const tray = rp(R(8.4, 3.3, 14.2, 6.4), [1.4, 1.4, 0, 0]), body = rr(4, 8.4, 23, 9.4, KR), page = rr(0, 0, 13, 10, CR);
@@ -872,7 +881,8 @@ const ICONS = [
         <g filter="${u.sh}"><g filter="${u.hi}"><path d="${spout}" fill="${u.upS}"/></g></g><path d="${spout}" ${OL}/>
         <path data-n="ln" class="ln" stroke="#fff" data-w="stroke"/>`;
     },
-    target: (h) => ({ w: h ? [8.4, 3.4] : [12.4, 6.6] }),
+    // Line lengths that keep each line 2 clear of the funnel's slanted sides.
+    target: (h) => ({ w: h ? [6.4, 2.4] : [9.2, 4.6] }),
     draw(p, E) {
       const [a, b] = p.w;
       at(E.ln, { d: `M${f(15.5 - a / 2)} 5.8H${f(15.5 + a / 2)}M${f(15.5 - b / 2)} 8.8H${f(15.5 + b / 2)}` });
@@ -908,6 +918,7 @@ const ICONS = [
   },
   {
     name: '包裹',
+    allow: { offCentre: 'it sits low to leave room for the flaps opening above it', joint: 'the lid and the box meet corner to corner' },
     // A parcel whose two top flaps fold open on hover.
     svg: (u) => {
       const box = rr(5.2, 8.6, 20.6, 14.2, KR);
@@ -1047,17 +1058,20 @@ const ICONS = [
         <path d="${rr(7.8, 3, 15.6, 19.4, CR)}" fill="#fff"/>
         <path d="${lines(11.4, 8.4, [9.2, 6.6])}" ${ACC}/>
         <g data-n="cv"><g filter="${u.hi}"><path d="${cover}" fill="${u.loS}"/></g><path data-n="sh" d="${cover}" ${DEEP} opacity="0"/><path d="${cover}" ${OL}/>
-          <path d="${lines(10.4, 7.6, [10.2])}" class="ln" stroke="#fff" data-w="stroke"/></g>`;
+          <path data-n="cl" d="${lines(10.4, 7.6, [10.2])}" class="ln" stroke="#fff" data-w="stroke"/></g>`;
     },
     target: (h) => ({ o: h ? 1 : 0 }),
     draw(p, E) {
       const o = Math.max(0, Math.min(1, p.o));
       at(E.cv, { transform: `translate(6.3 0) scale(${f(Math.max(0.001, 1 - 0.72 * o))} 1) translate(-6.3 0)` });
       at(E.sh, { opacity: f(0.35 * o) });
+      // The title turns away with the cover before the cover is too narrow to hold it.
+      at(E.cl, { opacity: f(1 - Math.min(1, o / 0.5)) });
     }
   },
   {
     name: '帮助',
+    allow: { text: 'the question mark is the point of the icon' },
     // A help badge whose question mark bobs on hover.
     svg: (u) => `<g filter="${u.sh}"><g filter="${u.hi}"><path d="${circ(15.5, 12.5, 11.5)}" fill="${u.loS}"/></g></g>
       <path d="${circ(15.5, 12.5, 11.5)}" ${OL}/>
@@ -1079,7 +1093,7 @@ const ICONS = [
       <g data-n="r4"><path d="${body}" ${OL}/>
         <path d="${circ(15.5, 13.4, 7.4)}" fill="#fff"/>
         <path d="M15.5 13.4V9.6" transform="rotate(${CLOCK_MINUTES / 2} 15.5 13.4)" stroke-width="2.6" stroke-linecap="round" data-t="stroke:#89B5FF"/>
-        <path d="M15.5 13.4V7.8" transform="rotate(${(CLOCK_MINUTES * 6) % 360} 15.5 13.4)" stroke-width="2" stroke-linecap="round" ${DEEPS}/>
+        <path d="M15.5 13.4V9" transform="rotate(${(CLOCK_MINUTES * 6) % 360} 15.5 13.4)" stroke-width="2" stroke-linecap="round" ${DEEPS}/>
         <circle cx="15.5" cy="13.4" r="1.7" ${DEEP}/></g>`;
     },
     target: (h) => ({ o: h ? 1 : 0 }),
@@ -1147,7 +1161,7 @@ const ICONS = [
     // A door with an arrow beside it. On hover the door swings open on its left hinge to
     // the bright outside and the arrow heads on out.
     svg: (u) => {
-      const frame = rr(4, 1, 12.2, 23, KR), way = rp(R(7, 4, 6.2, 20), [1.6, 1.6, 0, 0]);
+      const frame = rr(4, 1, 12.2, 23, KR), way = rp(R(6.8, 4, 6.6, 20), [1.6, 1.6, 0, 0]);
       return `
       <g filter="${u.sh}"><g filter="${u.hi}"><path d="${frame}" fill="${u.loS}"/></g></g>
       <path d="${frame}" ${OL}/>
@@ -1160,15 +1174,17 @@ const ICONS = [
     },
     target: (h) => ({ s: h ? 0.5 : 1, x: h ? 1.4 : 0 }),
     draw(p, E) {
-      const w = 6.2 * p.s, d = rp(R(7, 4, w, 20), [1.6, 1.6, 0, 0]);
+      const w = 6.6 * p.s, d = rp(R(6.8, 4, w, 20), [1.6, 1.6, 0, 0]);
       at(E.leaf, { d }); at(E.leafO, { d });
-      // The knob keeps to the free edge and never leaves the narrowing leaf.
-      at(E.knob, { cx: f(7 + w * (0.29 + 0.42 * p.s)) });
+      // The knob sits in the middle of the leaf, 2 clear of both edges, and turns away
+      // with the leaf once the leaf is too narrow to hold it.
+      at(E.knob, { cx: f(6.8 + w / 2), opacity: f(Math.max(0, Math.min(1, (p.s - 0.7) / 0.25))) });
       at(E.arrow, { transform: `translate(${f(p.x)} 0)` });
     }
   },
   {
     name: '计算器',
+    allow: { edgeGap: 'the operators are the point of the keys and need their size' },
     // A calculator with a display and four operator keys. On hover the equals key is
     // pressed, lights up, and the display fills with the result.
     svg: (u) => {

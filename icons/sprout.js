@@ -5,6 +5,7 @@ const LEFT = leafShape(10.4, 7.4), RIGHT = leafShape(13.4, 9);
 
 export default defineIcon({
   name: 'sprout',
+  allow: { offCentre: 'it sits low to leave room for the sprout growing up' },
   zh: '新芽',
   category: 'nature',
   tags: ['seedling', 'grow', 'plant', 'eco', 'start', 'growth', '成长'],

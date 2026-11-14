@@ -2,6 +2,7 @@ import { defineIcon, KR, CR, f, OL, DEEPS, rr, at } from '../packages/core/src/k
 
 export default defineIcon({
   name: 'calculator',
+  allow: { edgeGap: 'the operators are the point of the keys and need their size' },
   zh: '计算器',
   category: 'commerce',
   tags: ['math', 'calculate', 'accounting'],

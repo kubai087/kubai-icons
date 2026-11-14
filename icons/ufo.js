@@ -8,6 +8,7 @@ const LIGHTS = [8.6, 15.5, 22.4];
 
 export default defineIcon({
   name: 'ufo',
+  allow: { bare: 'the beam is light, not a part, and takes no outline' },
   zh: '飞碟',
   category: 'science',
   tags: ['flying saucer', 'alien craft', 'spaceship', 'abduction', 'space', '外星', '不明飞行物'],

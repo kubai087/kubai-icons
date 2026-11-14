@@ -2,6 +2,7 @@ import { defineIcon, f, OL, circ, at } from '../packages/core/src/kit.js';
 
 export default defineIcon({
   name: 'circle-help',
+  allow: { text: 'the question mark is the point of the icon' },
   zh: '帮助',
   category: 'interface',
   tags: ['help', 'question', 'faq', 'support'],

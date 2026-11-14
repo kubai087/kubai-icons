@@ -2,6 +2,7 @@ import { defineIcon, KR, f, OL, DEEP, rr, circ, at } from '../packages/core/src/
 
 export default defineIcon({
   name: 'gift',
+  allow: { peek: 'the bow loops cross over the ribbon' },
   zh: '礼物',
   category: 'commerce',
   tags: ['present', 'box', 'birthday', 'reward'],

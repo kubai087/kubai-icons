@@ -3,6 +3,7 @@ import { PLANE_SIDE } from './_travel-transport.js';
 
 export default defineIcon({
   name: 'plane-takeoff',
+  allow: { offCentre: 'it sits low to leave room for the plane climbing away' },
   zh: '起飞',
   category: 'transport',
   tags: ['departure', 'takeoff', 'flight', 'airport', 'departures', '出发'],

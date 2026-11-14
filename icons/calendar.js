@@ -5,6 +5,7 @@ const TODAY = 17, TOMORROW = 18;
 
 export default defineIcon({
   name: 'calendar',
+  allow: { text: 'the date is the point of the icon' },
   zh: '日历',
   category: 'time',
   tags: ['date', 'day', 'schedule', 'event'],

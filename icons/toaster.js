@@ -2,6 +2,7 @@ import { defineIcon, KR, f, OL, DEEP, rr, at } from '../packages/core/src/kit.js
 
 export default defineIcon({
   name: 'toaster',
+  allow: { offCentre: 'it sits low to leave room for the toast popping up' },
   zh: '烤面包机',
   category: 'home',
   tags: ['toast', 'breakfast', 'kitchen', 'bread', 'appliance', '吐司机', '多士炉'],

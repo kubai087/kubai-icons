@@ -6,6 +6,7 @@ const WING = 'M17.6 14.2C15.6 11.6 11.2 11.6 8.6 14.2C9.2 18.4 13 20 17 18.6C18.
 
 export default defineIcon({
   name: 'bird',
+  allow: { offCentre: 'it sits low to leave room for the wings beating up' },
   zh: '小鸟',
   category: 'nature',
   tags: ['bird', 'tweet', 'animal', 'fly', 'songbird', '鸟'],

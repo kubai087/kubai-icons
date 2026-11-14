@@ -2,6 +2,7 @@ import { defineIcon, KR, OL, rp, rr, at } from '../packages/core/src/kit.js';
 
 export default defineIcon({
   name: 'package',
+  allow: { offCentre: 'it sits low to leave room for the flaps opening above it', joint: 'the lid and the box meet corner to corner' },
   zh: '包裹',
   category: 'commerce',
   tags: ['box', 'parcel', 'delivery', 'shipping'],

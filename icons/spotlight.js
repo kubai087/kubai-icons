@@ -2,6 +2,7 @@ import { defineIcon, f, OL, rp, rr, ellipse, at } from '../packages/core/src/kit
 
 export default defineIcon({
   name: 'spotlight',
+  allow: { bare: 'the beam is light, not a part, and takes no outline' },
   zh: '聚光灯',
   category: 'media',
   tags: ['stage light', 'highlight', 'feature', 'show', 'theater', 'lamp', '舞台灯'],

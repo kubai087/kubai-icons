@@ -2,6 +2,7 @@ import { defineIcon, KR, f, OL, R, rp, rr, lines, at } from '../packages/core/sr
 
 export default defineIcon({
   name: 'search',
+  allow: { strokeWidth: 'the lens rim is 1.8, as on every magnifier in the set' },
   zh: '搜索',
   category: 'interface',
   tags: ['find', 'lookup', 'magnifier', 'zoom', 'page'],

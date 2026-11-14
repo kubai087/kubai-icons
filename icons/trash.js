@@ -4,6 +4,7 @@ const TRASH_LID = rp([[5.4, 6.6], [5.4, 4], [12.4, 4], [12.4, 1.6], [18.6, 1.6],
 
 export default defineIcon({
   name: 'trash',
+  allow: { leaves: 'the lid lifts clear of the bin on hover' },
   zh: '回收站',
   category: 'interface',
   tags: ['delete', 'remove', 'bin', 'garbage', 'recycle'],

@@ -7,6 +7,7 @@ const RICE = [[9.2, 12.8, 3.6], [12.6, 9.2, 3.8], [18.4, 9.2, 3.8], [21.8, 12.8,
 
 export default defineIcon({
   name: 'rice-bowl',
+  allow: { offCentre: 'it sits low to leave room for the steam rising on hover' },
   zh: '米饭',
   category: 'food',
   tags: ['rice', 'bowl', 'meal', 'lunch', 'asian', 'dinner', '饭碗', '盖饭'],

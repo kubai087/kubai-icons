@@ -3,6 +3,7 @@ import { steam, reveal } from './_home-food.js';
 
 export default defineIcon({
   name: 'coffee',
+  allow: { offCentre: 'it sits low to leave room for the steam rising on hover' },
   zh: '咖啡',
   category: 'food',
   tags: ['cup', 'cafe', 'drink', 'hot', 'break', 'espresso', '咖啡馆'],
