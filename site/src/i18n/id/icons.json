@@ -933,4 +933,10 @@
 "coffee-machine":["Mesin kopi","espreso","dapur"],
 "water-cooler":["Dispenser air","galon","air minum"],
 "office-chair":["Kursi kantor","kursi putar","meja kerja"],
-"standing-desk":["Meja berdiri","meja adjustable","meja kerja"]}
+"standing-desk":["Meja berdiri","meja adjustable","meja kerja"],
+"pet-bowl":["Mangkuk hewan","mangkuk anjing","makanan hewan"],
+"yarn-ball":["Gulungan benang wol","benang wol","mainan kucing"],
+"bird-cage":["Sangkar burung","kandang burung","burung peliharaan"],
+"litter-box":["Kotak pasir kucing","pasir kucing","sekop pasir"],
+"pet-food-bag":["Kantong makanan hewan","makanan anjing","makanan kucing"],
+"cat-tree":["Pohon kucing","garukan kucing","cat tree"]}

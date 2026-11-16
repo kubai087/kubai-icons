@@ -933,4 +933,10 @@
 "coffee-machine":["Macchina del caffè","espresso","cucina"],
 "water-cooler":["Distributore d'acqua","boccione","acqua potabile"],
 "office-chair":["Sedia da ufficio","sedia girevole","scrivania"],
-"standing-desk":["Scrivania regolabile","scrivania in piedi","postazione"]}
+"standing-desk":["Scrivania regolabile","scrivania in piedi","postazione"],
+"pet-bowl":["Ciotola per animali","ciotola del cane","crocchette"],
+"yarn-ball":["Gomitolo","lana","gioco per gatti"],
+"bird-cage":["Gabbia per uccelli","gabbia","pappagallo"],
+"litter-box":["Lettiera","sabbia per gatti","paletta per lettiera"],
+"pet-food-bag":["Sacco di crocchette","cibo per animali","cibo per cani"],
+"cat-tree":["Tiragraffi","albero per gatti","torre per gatti"]}

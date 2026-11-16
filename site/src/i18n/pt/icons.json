@@ -5068,5 +5068,35 @@
 "Mesa regulável",
 "mesa em pé",
 "estação de trabalho"
+],
+"pet-bowl": [
+"Comedouro",
+"tigela de ração",
+"pote de ração"
+],
+"yarn-ball": [
+"Novelo de lã",
+"lã",
+"brinquedo para gatos"
+],
+"bird-cage": [
+"Gaiola",
+"gaiola de pássaro",
+"periquito"
+],
+"litter-box": [
+"Caixa de areia",
+"areia para gatos",
+"pá de areia"
+],
+"pet-food-bag": [
+"Saco de ração",
+"ração",
+"comida para pet"
+],
+"cat-tree": [
+"Arranhador",
+"árvore para gatos",
+"torre para gatos"
 ]
 }

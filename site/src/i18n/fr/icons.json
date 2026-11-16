@@ -5570,5 +5570,35 @@
 "Bureau assis-debout",
 "bureau réglable",
 "poste de travail"
+],
+"pet-bowl": [
+"Gamelle",
+"écuelle",
+"croquettes"
+],
+"yarn-ball": [
+"Pelote de laine",
+"laine",
+"jouet pour chat"
+],
+"bird-cage": [
+"Cage à oiseaux",
+"cage",
+"perruche"
+],
+"litter-box": [
+"Litière",
+"bac à litière",
+"pelle à litière"
+],
+"pet-food-bag": [
+"Sac de croquettes",
+"nourriture pour animaux",
+"croquettes pour chat"
+],
+"cat-tree": [
+"Arbre à chat",
+"griffoir",
+"tour à chat"
 ]
 }

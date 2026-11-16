@@ -934,5 +934,11 @@
 "coffee-machine":["Máy pha cà phê","espresso","nhà bếp"],
 "water-cooler":["Cây nước nóng lạnh","bình nước","nước uống"],
 "office-chair":["Ghế văn phòng","ghế xoay","bàn làm việc"],
-"standing-desk":["Bàn nâng hạ","bàn đứng","bàn làm việc"]
+"standing-desk":["Bàn nâng hạ","bàn đứng","bàn làm việc"],
+"pet-bowl":["Bát ăn thú cưng","bát ăn chó","hạt thức ăn"],
+"yarn-ball":["Cuộn len","len","đồ chơi cho mèo"],
+"bird-cage":["Lồng chim","lồng","vẹt"],
+"litter-box":["Khay cát mèo","cát vệ sinh mèo","xẻng xúc cát"],
+"pet-food-bag":["Túi thức ăn thú cưng","thức ăn cho chó","thức ăn cho mèo"],
+"cat-tree":["Trụ cào mèo","cây cho mèo","nhà cây cho mèo"]
 }

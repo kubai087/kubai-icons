@@ -5132,5 +5132,35 @@
 "Stehschreibtisch",
 "höhenverstellbar",
 "Arbeitsplatz"
+],
+"pet-bowl": [
+"Futternapf",
+"Hundenapf",
+"Katzennapf"
+],
+"yarn-ball": [
+"Wollknäuel",
+"Garn",
+"Katzenspielzeug"
+],
+"bird-cage": [
+"Vogelkäfig",
+"Käfig",
+"Wellensittich"
+],
+"litter-box": [
+"Katzenklo",
+"Katzenstreu",
+"Streuschaufel"
+],
+"pet-food-bag": [
+"Futtersack",
+"Trockenfutter",
+"Hundefutter"
+],
+"cat-tree": [
+"Kratzbaum",
+"Kratzsäule",
+"Katzenbaum"
 ]
 }

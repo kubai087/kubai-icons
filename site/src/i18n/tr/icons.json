@@ -933,4 +933,10 @@
 "coffee-machine":["Kahve makinesi","espresso","mutfak"],
 "water-cooler":["Su sebili","damacana","içme suyu"],
 "office-chair":["Ofis sandalyesi","döner sandalye","çalışma masası"],
-"standing-desk":["Ayarlanabilir masa","ayakta çalışma masası","çalışma alanı"]}
+"standing-desk":["Ayarlanabilir masa","ayakta çalışma masası","çalışma alanı"],
+"pet-bowl":["Mama kabı","köpek kabı","mama"],
+"yarn-ball":["Yün yumağı","yün","kedi oyuncağı"],
+"bird-cage":["Kuş kafesi","kafes","muhabbet kuşu"],
+"litter-box":["Kedi tuvaleti","kedi kumu","kum küreği"],
+"pet-food-bag":["Mama torbası","kuru mama","köpek maması"],
+"cat-tree":["Kedi ağacı","tırmalama tahtası","kedi kulesi"]}
