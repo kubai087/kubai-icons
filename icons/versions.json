@@ -948,5 +948,13 @@
     "paper-shredder",
     "standing-desk",
     "water-cooler"
+  ],
+  "0.10.0": [
+    "bird-cage",
+    "cat-tree",
+    "litter-box",
+    "pet-bowl",
+    "pet-food-bag",
+    "yarn-ball"
   ]
 }

@@ -1,5 +1,11 @@
 # kubai-icons
 
+## 0.10.0
+
+### Minor Changes
+
+- [#87](https://github.com/kubai087/kubai-icons/pull/87) [`170a97c`](https://github.com/kubai087/kubai-icons/commit/170a97c16113744d98eb3ccca1c57ecae3665c05) Thanks [@kubai087](https://github.com/kubai087)! - Add six pet icons: `pet-bowl`, `yarn-ball`, `bird-cage`, `litter-box`, `pet-food-bag` and `cat-tree`.
+
 ## 0.9.0
 
 ### Minor Changes
