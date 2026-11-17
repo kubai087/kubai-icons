@@ -1,5 +1,11 @@
 # kubai-icons-static
 
+## 0.11.0
+
+### Minor Changes
+
+- [#89](https://github.com/kubai087/kubai-icons/pull/89) [`7a016bf`](https://github.com/kubai087/kubai-icons/commit/7a016bf3445a5621ab36e8ff52aac66f384df0b4) Thanks [@kubai087](https://github.com/kubai087)! - Add nine retro and retro-futurist icons: `flip-phone`, `digital-pet`, `cassette-player`, `jukebox`, `toy-robot`, `monorail`, `claw-machine`, `jetpack` and `plasma-ball`.
+
 ## 0.10.0
 
 ### Minor Changes

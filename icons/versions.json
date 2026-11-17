@@ -956,5 +956,16 @@
     "pet-bowl",
     "pet-food-bag",
     "yarn-ball"
+  ],
+  "0.11.0": [
+    "cassette-player",
+    "claw-machine",
+    "digital-pet",
+    "flip-phone",
+    "jetpack",
+    "jukebox",
+    "monorail",
+    "plasma-ball",
+    "toy-robot"
   ]
 }
