@@ -5098,5 +5098,50 @@
 "Arranhador",
 "árvore para gatos",
 "torre para gatos"
+],
+"flip-phone": [
+"Celular flip",
+"telemóvel de abrir",
+"celular"
+],
+"digital-pet": [
+"Bichinho virtual",
+"pet digital",
+"brinquedo"
+],
+"cassette-player": [
+"Toca-fitas portátil",
+"leitor de cassetes",
+"música"
+],
+"jukebox": [
+"Jukebox",
+"máquina de música",
+"discos"
+],
+"toy-robot": [
+"Robô de brinquedo",
+"robô de lata",
+"brinquedo de corda"
+],
+"monorail": [
+"Monotrilho",
+"trem elevado",
+"trem"
+],
+"claw-machine": [
+"Máquina de garra",
+"pegador de pelúcia",
+"prêmio"
+],
+"jetpack": [
+"Mochila a jato",
+"jetpack",
+"voar"
+],
+"plasma-ball": [
+"Bola de plasma",
+"lâmpada de plasma",
+"raios"
 ]
 }

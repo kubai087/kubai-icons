@@ -939,4 +939,13 @@
 "bird-cage":["Gabbia per uccelli","gabbia","pappagallo"],
 "litter-box":["Lettiera","sabbia per gatti","paletta per lettiera"],
 "pet-food-bag":["Sacco di crocchette","cibo per animali","cibo per cani"],
-"cat-tree":["Tiragraffi","albero per gatti","torre per gatti"]}
+"cat-tree":["Tiragraffi","albero per gatti","torre per gatti"],
+"flip-phone":["Telefono a conchiglia","cellulare","flip"],
+"digital-pet":["Animale virtuale","cucciolo digitale","giocattolo"],
+"cassette-player":["Lettore di cassette","mangianastri","musica"],
+"jukebox":["Jukebox","juke-box","dischi"],
+"toy-robot":["Robot giocattolo","robot di latta","giocattolo a molla"],
+"monorail":["Monorotaia","treno sopraelevato","treno"],
+"claw-machine":["Gru pesca peluche","macchina dei peluche","premio"],
+"jetpack":["Zaino a razzo","jetpack","volare"],
+"plasma-ball":["Sfera al plasma","lampada al plasma","fulmini"]}

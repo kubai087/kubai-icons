@@ -5162,5 +5162,50 @@
 "Kratzbaum",
 "Kratzsäule",
 "Katzenbaum"
+],
+"flip-phone": [
+"Klapphandy",
+"Handy",
+"Mobiltelefon"
+],
+"digital-pet": [
+"Digitales Haustier",
+"virtuelles Haustier",
+"Spielzeug"
+],
+"cassette-player": [
+"Kassettenspieler",
+"tragbarer Kassettenrekorder",
+"Musik"
+],
+"jukebox": [
+"Jukebox",
+"Musikbox",
+"Schallplatte"
+],
+"toy-robot": [
+"Spielzeugroboter",
+"Blechroboter",
+"Aufziehspielzeug"
+],
+"monorail": [
+"Einschienenbahn",
+"Monorail",
+"Hochbahn"
+],
+"claw-machine": [
+"Greifautomat",
+"Kranspiel",
+"Plüschtier"
+],
+"jetpack": [
+"Raketenrucksack",
+"Jetpack",
+"fliegen"
+],
+"plasma-ball": [
+"Plasmakugel",
+"Plasmalampe",
+"Blitz"
 ]
 }

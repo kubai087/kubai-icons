@@ -939,4 +939,13 @@
 "bird-cage":["Kuş kafesi","kafes","muhabbet kuşu"],
 "litter-box":["Kedi tuvaleti","kedi kumu","kum küreği"],
 "pet-food-bag":["Mama torbası","kuru mama","köpek maması"],
-"cat-tree":["Kedi ağacı","tırmalama tahtası","kedi kulesi"]}
+"cat-tree":["Kedi ağacı","tırmalama tahtası","kedi kulesi"],
+"flip-phone":["Kapaklı telefon","katlanır telefon","cep telefonu"],
+"digital-pet":["Dijital evcil hayvan","sanal evcil hayvan","oyuncak"],
+"cassette-player":["Kasetçalar","taşınabilir kasetçalar","müzik"],
+"jukebox":["Müzik otomatı","jukebox","plak"],
+"toy-robot":["Oyuncak robot","teneke robot","kurmalı oyuncak"],
+"monorail":["Monoray","tek raylı tren","tren"],
+"claw-machine":["Pençe makinesi","oyuncak yakalama","ödül"],
+"jetpack":["Jet sırt çantası","jetpack","uçmak"],
+"plasma-ball":["Plazma küresi","plazma lambası","şimşek"]}

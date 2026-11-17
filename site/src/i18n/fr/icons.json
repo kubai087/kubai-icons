@@ -5600,5 +5600,50 @@
 "Arbre à chat",
 "griffoir",
 "tour à chat"
+],
+"flip-phone": [
+"Téléphone à clapet",
+"portable",
+"mobile"
+],
+"digital-pet": [
+"Animal virtuel",
+"animal numérique",
+"jouet"
+],
+"cassette-player": [
+"Baladeur cassette",
+"lecteur de cassettes",
+"musique"
+],
+"jukebox": [
+"Juke-box",
+"machine à disques",
+"musique"
+],
+"toy-robot": [
+"Robot jouet",
+"robot en fer-blanc",
+"jouet mécanique"
+],
+"monorail": [
+"Monorail",
+"train suspendu",
+"métro aérien"
+],
+"claw-machine": [
+"Machine à pince",
+"attrape-peluche",
+"prix"
+],
+"jetpack": [
+"Jetpack",
+"réacteur dorsal",
+"voler"
+],
+"plasma-ball": [
+"Boule plasma",
+"lampe plasma",
+"éclairs"
 ]
 }
