@@ -967,5 +967,13 @@
     "monorail",
     "plasma-ball",
     "toy-robot"
+  ],
+  "0.12.0": [
+    "candy-cane",
+    "candy-jar",
+    "chocolate-bar",
+    "cotton-candy",
+    "gumball-machine",
+    "pudding"
   ]
 }
