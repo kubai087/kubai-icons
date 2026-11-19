@@ -108,7 +108,10 @@ export function body(x, y, w, h, rad, tabs = []) {
 //   L(d, opts)   a shape: filled, or stroked with round ends when opts.sw is set
 //   opts.tone    'a' (primary, default) or 'b' (secondary)
 //   opts.cut     [C(d, sw?)]: shapes knocked out of this layer only, in white
-//   opts.gap     clear band of this width cut round the layer out of the layers below it
+//   opts.gap     clear band of this width cut round the layer out of the layers below it: the
+//                knockout outline a front element needs where it overlaps another (GUIDE.md §6)
+//   opts.part    layers with the same part name belong to one element and never cut each other
+//                with their gaps (an arrow's shaft and head)
 //   opts.clip    draw only the part of this shape inside the clip shape: a piece of the body in
 //                the primary (an envelope flap, a screen band) keeps the body's exact corners
 export const L = (d, opts = {}) => ({ d, ...opts });
@@ -157,11 +160,13 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i' } =
       ? `<path d="${s.d}" fill="${paint}" stroke="${paint}" stroke-width="${n(extra / k)}" stroke-linejoin="round"/>`
       : `<path d="${s.d}" fill="${paint}"/>`;
   const box = 'maskUnits="userSpaceOnUse" x="-2" y="-2" width="20" height="20"><rect x="-2" y="-2" width="20" height="20" fill="#fff"/>';
-  let out = '';
+  // Each drawn layer keeps its part, so a gap cuts the layers below it except its own part's.
+  const pieces = [];
   icon.layers.forEach((l, i) => {
+    const part = l.part ?? `#${i}`;
     if (l.gap) {
       defs.push(`<mask id="${id}-gap${i}" ${box}${shape(l, '#000', l.gap * 2)}</mask>`);
-      out = `<g mask="url(#${id}-gap${i})">${out}</g>`;
+      for (const p of pieces) if (p.part !== part) p.svg = `<g mask="url(#${id}-gap${i})">${p.svg}</g>`;
     }
     let piece = shape(l, ink(l));
     if (l.clip) {
@@ -172,8 +177,9 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i' } =
       defs.push(`<mask id="${id}-cut${i}" ${box}${l.cut.map((c) => shape(c, '#000')).join('')}</mask>`);
       piece = `<g mask="url(#${id}-cut${i})">${piece}</g>`;
     }
-    out += piece;
+    pieces.push({ part, svg: piece });
   });
+  let out = pieces.map((p) => p.svg).join('');
   if (k !== 1) out = `<g transform="translate(8 8) scale(${n(k)}) translate(-8 -8)">${out}</g>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}">${defs.length ? `<defs>${defs.join('')}</defs>` : ''}${out}</svg>`;
 }

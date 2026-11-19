@@ -8,7 +8,8 @@
 //                   keyline  the outline doesn't fill its key shape (off by more than 0.25)
 //                   primary  the primary covers more than 60% of the icon's ink
 //                   tones    an icon uses only one of the two tones
-//                   spacing  two neighbouring elements are neither touching nor exactly 1 apart
+//                   spacing  two separate elements are not exactly 1 apart (touching counts)
+//                   overlap  one element overlaps another without a knockout outline (gap)
 //
 //   node check.mjs [--only name,name] [--with name,name] [--icons file] [--out dir]
 //
@@ -42,13 +43,13 @@ let uid = 0;
 const svg = (n, size, tones) => render(ICONS[n], { size, id: `i${uid++}`, ...tones });
 
 // --- Measurements ---------------------------------------------------------------------------
-const GAP = 1, TOL = 0.2, KEY_TOL = 0.25, MAX_PRIMARY = 0.6;
+const GAP = 1, TOL = 0.15, KEY_TOL = 0.25, MAX_PRIMARY = 0.6;
 const data = checked.map((n) => ({
   name: n,
   k: FIT[ICONS[n].key] || 1,
   svg: svg(n, 160),
   probe: 'data:image/svg+xml;base64,' + Buffer.from(svg(n, 160, { a: '#ff0000', b: '#0000ff' })).toString('base64'),
-  els: ICONS[n].layers.flatMap((l, li) => l.d.split(/(?=M)/).filter((d) => d.trim()).map((d) => ({ d, li, sw: l.sw || 0, tone: l.tone || 'a' })))
+  els: ICONS[n].layers.flatMap((l, li) => l.d.split(/(?=M)/).filter((d) => d.trim()).map((d) => ({ d, li, sw: l.sw || 0, tone: l.tone || 'a', gap: l.gap || 0, part: l.part || null, clip: !!l.clip })))
 }));
 const measured = evaluate(`<!doctype html><body>${data.map((d, i) => `<div data-i="${i}">${d.svg}</div>`).join('')}
 <svg id="geo" viewBox="0 0 16 16" width="160" height="160"></svg><pre id="out"></pre><script>
@@ -73,19 +74,21 @@ data.forEach((icon, n) => {
     for (let i = 0; i < 200; i++) pts.push(p.getPointAtLength((L * i) / 200));
     return { ...e, p, pts }; });
   const inside = (a, pt) => { const q = geo.createSVGPoint(); q.x = pt.x; q.y = pt.y; return a.sw ? a.p.isPointInStroke(q) : a.p.isPointInFill(q); };
-  // Per pair of layers: if any piece of one overlaps any piece of the other, they are layered on
-  // purpose; otherwise the gap is the smallest distance between their pieces.
+  // Per pair of layers (B drawn after A, so B is in front). Pieces of one layer, blue details
+  // next to blue details, and layers of one part are left out.
   const pairs = {};
   for (let i = 0; i < els.length; i++) for (let j = i + 1; j < els.length; j++) {
     const A = els[i], B = els[j];
-    if (A.li === B.li || (A.tone === 'a' && B.tone === 'a')) continue;
-    const key = A.li + '-' + B.li, pair = (pairs[key] ||= { la: A.li, lb: B.li, overlap: false, d: 1e9 });
-    if (pair.overlap) continue;
-    if (A.pts.some((pt) => inside(B, pt)) || B.pts.some((pt) => inside(A, pt))) { pair.overlap = true; continue; }
+    if (A.li === B.li || (A.tone === 'a' && B.tone === 'a') || (A.part && A.part === B.part) || B.clip) continue; // clip: a piece of the body itself
+    const key = A.li + '-' + B.li, pair = (pairs[key] ||= { la: A.li, lb: B.li, gapB: B.gap, over: 'none', d: 1e9 });
+    const bInA = B.pts.filter((pt) => inside(A, pt)).length, aInB = A.pts.filter((pt) => inside(B, pt)).length;
+    if (bInA === B.pts.length || aInB === A.pts.length) { if (pair.over === 'none') pair.over = 'within'; continue; } // printed on, or fully behind
+    if (bInA || aInB) { pair.over = 'partial'; continue; }
     let m = 1e9; for (const a of A.pts) for (const b of B.pts) m = Math.min(m, Math.hypot(a.x - b.x, a.y - b.y));
     pair.d = Math.min(pair.d, (m - A.sw / 2 - B.sw / 2) * icon.k);
   }
-  const gaps = Object.values(pairs).filter((p) => !p.overlap && p.d < 2).map((p) => [p.la, p.lb, +p.d.toFixed(2)]);
+  const gaps = Object.values(pairs).filter((p) => p.over === 'partial' || (p.over === 'none' && p.d < 2))
+    .map((p) => [p.la, p.lb, p.over === 'partial' ? (p.gapB ? 'masked' : 'overlap') : +p.d.toFixed(2)]);
   els.forEach((e) => e.p.remove());
   res[n].gaps = gaps;
 });
@@ -113,7 +116,9 @@ checked.forEach((name, i) => {
   if (m.a < 0.002 || m.b < 0.002) found.push(['tones', `uses only the ${m.a < 0.002 ? 'secondary' : 'primary'} tone`]);
   else if (share > MAX_PRIMARY) found.push(['primary', `primary is ${(share * 100).toFixed(0)}% of the ink (at most ${MAX_PRIMARY * 100}%)`]);
   for (const [la, lb, d] of m.gaps) {
-    if (d > 0.05 && Math.abs(d - GAP) > TOL) found.push(['spacing', `layers ${la} and ${lb} are ${d} apart: touch them or keep exactly ${GAP}`]);
+    if (d === 'masked') continue;
+    if (d === 'overlap') found.push(['overlap', `layer ${lb} overlaps layer ${la} with no knockout outline: give the front one gap: W`]);
+    else if (Math.abs(d - GAP) > TOL) found.push(['spacing', `layers ${la} and ${lb} are ${d} apart: keep exactly ${GAP} (touching is not allowed either)`]);
   }
   for (const [rule, text] of found) (icon.allow?.[rule] ? allowed : findings).push(`- **${name}** (${rule}): ${text}${icon.allow?.[rule] ? ` — ${icon.allow[rule]}` : ''}`);
 });
