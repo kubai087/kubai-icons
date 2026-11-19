@@ -31,8 +31,10 @@ const { ICONS } = await import(pathToFileURL(path.resolve(opt('--icons') || path
 const out = path.resolve(opt('--out') || path.join(here, 'check-out'));
 const only = list(opt('--only'));
 const extra = list(opt('--with'));
-for (const n of [...only, ...extra]) if (!ICONS[n]) throw new Error(`No icon named ${n}.`);
-const names = only.length ? [...new Set([...only, ...extra])] : Object.keys(ICONS);
+for (const n of only) if (!ICONS[n]) throw new Error(`No icon named ${n}.`);
+const missing = extra.filter((n) => !ICONS[n]);
+if (missing.length) console.warn(`Skipped --with icons that aren't in this set: ${missing.join(', ')}`);
+const names = only.length ? [...new Set([...only, ...extra.filter((n) => ICONS[n])])] : Object.keys(ICONS);
 const checked = only.length ? only : names;
 fs.mkdirSync(out, { recursive: true });
 
@@ -135,7 +137,7 @@ const keylines = (on) => {
   const line = (hl) => `fill="none" stroke="${hl ? '#F0457A' : '#3FA9F5'}" stroke-width="${hl ? 0.2 : 0.12}" ${hl ? '' : 'stroke-opacity=".55"'}`;
   const rect = (k) => `<rect x="${K[k][0]}" y="${K[k][1]}" width="${K[k][2]}" height="${K[k][3]}" ${line(on === k)}/>`;
   return `<svg viewBox="0 0 16 16" width="112" height="112" style="position:absolute;inset:0"><path d="M0 0L16 16M16 0L0 16M8 0V16M0 8H16" ${line(false)}/>
-    ${['live', 'square', 'landscape', 'wide', 'portrait'].map(rect).join('')}<circle cx="8" cy="8" r="7" ${line(on === 'circle')}/><circle cx="8" cy="8" r="4" ${line(false)}/></svg>`;
+    ${['live', 'square', 'landscape', 'wide', 'portrait', 'tall', 'flat'].map(rect).join('')}<circle cx="8" cy="8" r="7" ${line(on === 'circle')}/><circle cx="8" cy="8" r="4" ${line(false)}/></svg>`;
 };
 screenshot(`<!doctype html><meta charset="utf-8"><style>${css}.stage{position:relative;width:112px;height:112px}.stage>svg:first-child{position:absolute;inset:0}.grid{grid-template-columns:repeat(6,140px)}</style>
   <div class="wrap"><div class="grid">${names.map((n) => `<div class="cell"><div class="stage">${svg(n, 112)}${keylines(ICONS[n].key)}</div><span>${n} · ${ICONS[n].key}</span></div>`).join('')}</div></div>`,
