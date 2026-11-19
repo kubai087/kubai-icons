@@ -15,8 +15,6 @@ const AT_BUILD = Number(process.env.NEXT_PUBLIC_GITHUB_STARS) || null;
 
 type Reading = { stars: number | null; at: number };
 
-const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
-
 function load(): Reading | null {
   try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch { return null; }
 }
@@ -72,7 +70,7 @@ export function GitHubStars({ className }: { className?: string }) {
       <span className="inline-flex h-4 items-center gap-1 sm:ms-2 sm:border-s sm:ps-2">
         <Star size={16} color="#F59E0B" trigger="parent" className="size-4" />
         {/* Three digits of room are held even before a count is known. */}
-        <span className="inline-block min-w-[3ch]">{stars === null ? "" : compact.format(stars)}</span>
+        <span className="inline-block min-w-[3ch]">{stars ?? ""}</span>
       </span>
     </Button>
   );
