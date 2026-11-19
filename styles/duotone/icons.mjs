@@ -85,8 +85,9 @@ export const ICONS = {
     key: 'portrait',
     layers: [
       L(rr(2, 1, 12, 14, M), Bt),
-      L(pill(5, 5.25, 6, D) + pill(5, 7.875, 6, D)),
-      // The last line on its own layer, so the motion can write it on.
+      // One layer per line, so the motion can write them on one after another.
+      L(pill(5, 5.25, 6, D)),
+      L(pill(5, 7.875, 6, D)),
       L(pill(5, 10.5, 3.5, D))
     ]
   },
@@ -140,7 +141,10 @@ export const ICONS = {
     layers: [
       // One tower: two columns of window bars and a door.
       L(rr(2, 2, 12, 12, R), Bt),
-      L([4.5, 7, 9.5].map((y) => pill(4.5, y - 0.5, 2.25, D) + pill(9.25, y - 0.5, 2.25, D)).join('')),
+      // One layer per row of windows, so the motion can light them floor by floor.
+      L(pill(4.5, 9.0, 2.25, D) + pill(9.25, 9.0, 2.25, D)),
+      L(pill(4.5, 6.5, 2.25, D) + pill(9.25, 6.5, 2.25, D)),
+      L(pill(4.5, 4.0, 2.25, D) + pill(9.25, 4.0, 2.25, D)),
       L(rr(7, 11, 2, 3, [1, 1, 0, 0]))
     ]
   },
@@ -287,7 +291,9 @@ export const ICONS = {
     key: 'wide',
     layers: [
       L(rr(1, 2.5, 12.5, 11, R) + rr(13.5, 6, 1.5, 4, [0, 0.75, 0.75, 0]), Bt),
-      L(pill(3.75, 5, D, 6) + pill(6.25, 5, D, 6) + pill(8.75, 5, D, 6))
+      L(pill(3.75, 5, D, 6)),
+      L(pill(6.25, 5, D, 6)),
+      L(pill(8.75, 5, D, 6))
     ]
   },
   archive: {
@@ -746,7 +752,8 @@ export const ICONS = {
       // A light board and a blue clip laid over its top edge, cutting a gap of W round itself.
       L(rr(2, 2.5, 12, 12.5, M), Bt),
       L(rr(5, 1, 6, 3, 1), { gap: W }),
-      L(pill(5, 7.25, 6, D) + pill(5, 9.875, 3.5, D))
+      L(pill(5, 7.25, 6, D)),
+      L(pill(5, 9.875, 3.5, D))
     ]
   },
   inbox: {

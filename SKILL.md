@@ -38,14 +38,15 @@ metadata:
 - `GUIDE.md`：全部规则，每一条都是硬性要求。动手前完整读一遍。
 - `kit.mjs`：几何和渲染：平滑圆角、圆角矩形、胶囊、带凸起的主体、关键形状、颜色推导。直接复用，不要改。
 - `icons.mjs`：73 个范例，多数是功能图标。新图标按同样的格式追加。
-- `motion.mjs`：入场和悬停两种动效。入场让物体从后到前组装起来；悬停的动作都是物品真实会做的（见 `GUIDE.md` 第 11 节）。
+- `motions.mjs`：每个范例的悬停动效。动作贴着图标的意思，部件可以出场、退场，描边可以重新画出（见 `GUIDE.md` 第 11 节）。
+- `motion.mjs`：动效的运行代码，没有依赖，可以直接放进页面。
 - `check.mjs`：自检。截出 64/48/24/16px、参考线对位图和 1 倍屏 16px，并测量关键形状、主色占比、两种颜色、元素间距、遮挡、小部件尺寸和内嵌部件的边距，结果写进 `findings.md`。
 - `export.mjs`：导出独立 SVG，可以换品牌色，辅色自动推导。
 - `chrome.mjs`：两个脚本共用的无头 Chrome 工具。
 
 ## 流程
 
-1. 确定风格（见"两种风格"）。选了双色面性，就只读 `styles/duotone/GUIDE.md`，按它第 8–10 节的写法、自检和导出来做，下面第 2–9 步不适用；做新一套时，把 `styles/duotone/` 里的 `kit.mjs`、`icons.mjs`、`motion.mjs`、`check.mjs`、`export.mjs`、`chrome.mjs` 复制到目标位置，在那份副本里工作，保留每个文件开头的版权声明；`GUIDE.md` 和 `PROMPT.md`、`SKILL.md` 一样只留在 skill 里，不要复制进去。选了分层动态，读 `PROMPT.md`，继续下面的步骤。
+1. 确定风格（见"两种风格"）。选了双色面性，就只读 `styles/duotone/GUIDE.md`，按它第 8–10 节的写法、自检和导出来做，下面第 2–9 步不适用；做新一套时，把 `styles/duotone/` 里的 `kit.mjs`、`icons.mjs`、`motion.mjs`、`motions.mjs`、`check.mjs`、`export.mjs`、`chrome.mjs` 复制到目标位置，在那份副本里工作，保留每个文件开头的版权声明；`GUIDE.md` 和 `PROMPT.md`、`SKILL.md` 一样只留在 skill 里，不要复制进去。选了分层动态，读 `PROMPT.md`，继续下面的步骤。
 2. 确定交付形式。用户没说清楚时先问一句：
    - 动态（默认）：SVG + JS，悬停时形变，靠 `src/engine.js` 在页面里运行。适合网页和能跑 JS 的界面。
    - 静态：独立的 `.svg` 文件，没有动效，任何地方都能用：设计工具、原生 App、文档、`<img>`。用户提到"切图""SVG 文件""放进 Figma""App 里用"等，就是要静态。

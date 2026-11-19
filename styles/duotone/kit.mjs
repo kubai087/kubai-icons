@@ -164,8 +164,7 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i', mo
   const box = 'maskUnits="userSpaceOnUse" x="-2" y="-2" width="20" height="20"><rect x="-2" y="-2" width="20" height="20" fill="#fff"/>';
   // Each drawn layer keeps its part, so a gap cuts the layers below it except its own part's.
   const pieces = [];
-  // data-o is the layer's place in the drawing order (a copy takes its source's), for the entrance.
-  const tag = (l, i, svg) => (motion ? `<g data-l="${l.n ?? i}" data-o="${l.o ?? i}">${svg}</g>` : svg);
+  const tag = (l, i, svg) => (motion ? `<g data-l="${l.n ?? i}">${svg}</g>` : svg);
   icon.layers.forEach((l, i) => {
     const part = l.part ?? `#${i}`;
     if (l.gap) {

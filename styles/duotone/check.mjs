@@ -15,7 +15,7 @@
 //                            (two or more alike) under area 1.25 or 2.25 long
 //                   inset    a part inside another sits unevenly: its clearances to the nearby
 //                            edges (under 2.6) differ by more than 0.15 (GUIDE.md 6)
-//                   motion   an icon's entry in motion.mjs moves a layer it doesn't have
+//                   motion   an icon's entry in motions.mjs moves a layer it doesn't have
 //
 //   node check.mjs [--only name,name] [--with name,name] [--icons file] [--out dir]
 //
@@ -29,9 +29,9 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { render, keyBox, FIT, KEYLINES, TONES } from './kit.mjs';
 import { screenshot, evaluate } from './chrome.mjs';
-// Hover motion is optional: a set without motion.mjs is checked as static.
-const MOTION = fs.existsSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'motion.mjs'))
-  ? (await import('./motion.mjs')).MOTION : {};
+// Hover motion is optional: a set without motions.mjs is checked as static.
+const MOTION = fs.existsSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'motions.mjs'))
+  ? (await import('./motions.mjs')).MOTION : {};
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -185,12 +185,12 @@ checked.forEach((name, i) => {
   }
   const mo = MOTION[name];
   if (mo) {
-    const copies = (mo.copy || []).flatMap((c) => c.of).length;
+    const copies = (mo.copy || []).flatMap((c) => c.of).length, adds = (mo.add || []).length;
     for (const k of Object.keys(mo.moves || {})) {
-      const ok = k === 'all' || (/^\d+$/.test(k) && +k < icon.layers.length) || (/^c\d+$/.test(k) && +k.slice(1) < copies);
-      if (!ok) found.push(['motion', `motion.mjs moves "${k}", but the icon has layers 0–${icon.layers.length - 1}${copies ? ` and copies c0–c${copies - 1}` : ''}`]);
+      const ok = k === 'all' || (/^\d+$/.test(k) && +k < icon.layers.length) || (/^c\d+$/.test(k) && +k.slice(1) < copies) || (/^a\d+$/.test(k) && +k.slice(1) < adds);
+      if (!ok) found.push(['motion', `motions.mjs moves "${k}", but the icon has layers 0–${icon.layers.length - 1}${copies ? `, copies c0–c${copies - 1}` : ''}${adds ? `, added parts a0–a${adds - 1}` : ''}`]);
     }
-    for (const c of mo.copy || []) for (const i of c.of) if (i >= icon.layers.length) found.push(['motion', `motion.mjs copies layer ${i}, which doesn't exist`]);
+    for (const c of mo.copy || []) for (const i of c.of) if (i >= icon.layers.length) found.push(['motion', `motions.mjs copies layer ${i}, which doesn't exist`]);
   }
   for (const [rule, text] of found) (icon.allow?.[rule] ? allowed : findings).push(`- **${name}** (${rule}): ${text}${icon.allow?.[rule] ? ` — ${icon.allow[rule]}` : ''}`);
 });
