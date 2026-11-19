@@ -5,7 +5,7 @@
 //           portrait, tall, flat or live
 //   layers  drawn in order; the light body first (tone b), then the blue accents and details
 // Read the one closest to a new object before drawing it, and append new icons the same way.
-import { R3, R, M, r, S, q, t, D, K, rr, pill, circ, body, polygon, rot, L, C, Bt } from './kit.mjs';
+import { R3, R, M, r, S, q, t, D, K, W, rr, pill, circ, body, polygon, rot, L, C, Bt } from './kit.mjs';
 
 // A pen laid at 45° (the allowed slope for 编辑), nib at the bottom left. The nib's two edges run
 // along the grid, so it fills the box corner exactly. from and to are distances along the pen
@@ -38,7 +38,7 @@ export const ICONS = {
     key: 'square',
     layers: [
       L(rr(2, 3.5, 12, 10.5, R), Bt),
-      L(pill(4.875, 2, D, 3) + pill(9.875, 2, D, 3)),
+      L(pill(4.875, 2, D, 3) + pill(9.875, 2, D, 3), { gap: W }),
       L([5.25, 8, 10.75].map((x) => circ(x, 8.5, 0.5) + circ(x, 11.25, 0.5)).join(''))
     ]
   },
@@ -55,8 +55,9 @@ export const ICONS = {
     label: '锁',
     key: 'portrait',
     layers: [
+      // The body sits in front of the shackle and cuts a gap of W round itself.
       L('M4.75 7V5a3.25 3.25 0 0 1 6.5 0V7', { sw: K }),
-      L(rr(2, 6.5, 12, 8.5, M), Bt),
+      L(rr(2, 6.5, 12, 8.5, M), { ...Bt, gap: W }),
       L(pill(7.375, 9.5, D, 2.5))
     ]
   },
@@ -101,7 +102,7 @@ export const ICONS = {
     layers: [
       // Dome and brim are one light body; the knob and clapper are small blue accents.
       L('M3 10.5V8a5 5 0 0 1 10 0V10.5Z' + pill(2, 9.75, 12, 1.75), Bt),
-      L(rr(7.25, 2, 1.5, 1.25, [0.75, 0.75, 0, 0]) + rr(6.75, 12.5, 2.5, 1.5, [0, 0, 1.25, 1.25]))
+      L(rr(7.25, 2, 1.5, 1.25, [0.75, 0.75, 0, 0]) + rr(6.75, 12.5, 2.5, 1.5, [0, 0, 1.25, 1.25]), { gap: W })
     ]
   },
   trash: {
@@ -117,13 +118,13 @@ export const ICONS = {
     label: '礼物',
     key: 'square',
     layers: [
-      // The bow is two loops tied by a knot, resting on the lid: elements either touch or keep a
-      // gap of exactly 1, never something in between.
-      L(circ(5.75, 4, 1.375) + circ(10.25, 4, 1.375), { sw: D }),
-      L(rr(7.25, 3.75, 1.5, 2.25, [0.75, 0.75, 0, 0])),
-      L(rr(2, 6, 12, 2.5, q), Bt),
-      L(rr(3, 9.5, 10, 4.5, [S, S, r, r]), Bt),
-      L(rr(7.25, 6, 1.5, 2.5) + rr(7.25, 9.5, 1.5, 4.5))
+      // The bow (two loops and a knot) stands one gap above the lid; the ribbon is printed on
+      // the lid and the box.
+      L(circ(5.75, 3.75, 1.125) + circ(10.25, 3.75, 1.125), { sw: D }),
+      L(rr(7.25, 3.25, 1.5, 2.25, 0.75)),
+      L(rr(2, 6.5, 12, 2.5, q), Bt),
+      L(rr(3, 10, 10, 4, [S, S, r, r]), Bt),
+      L(rr(7.25, 6.5, 1.5, 2.5) + rr(7.25, 10, 1.5, 4))
     ]
   },
   smile: {
@@ -182,7 +183,7 @@ export const ICONS = {
     key: 'live',
     layers: [
       L('M1.625 10V8a6.375 6.375 0 0 1 12.75 0V10', { sw: 1.25, ...Bt }),
-      L(rr(1, 9, 3.75, 6, r) + rr(11.25, 9, 3.75, 6, r))
+      L(rr(1, 9, 3.5, 6, r) + rr(11.5, 9, 3.5, 6, r), { gap: W })
     ]
   },
   mic: {
@@ -204,7 +205,7 @@ export const ICONS = {
       // The sun sits behind the cloud: the cloud covers its lower-left quarter, so the overlap is
       // plain to see, not a touch at the edges.
       L(circ(11.25, 6, 3.5)),
-      L(pill(1, 8.5, 11.5, 5) + circ(6.25, 8.5, 3.5), Bt)
+      L(pill(1, 8.5, 11.5, 5) + circ(6.25, 8.5, 3.5), { ...Bt, gap: W })
     ]
   },
   'shopping-bag': {
@@ -212,7 +213,7 @@ export const ICONS = {
     key: 'portrait',
     layers: [
       L('M5 6.5V4.75a3 3 0 0 1 6 0V6.5', { sw: K }),
-      L(rr(2, 6, 12, 9, [S, S, R, R]), Bt)
+      L(rr(2, 6, 12, 9, [S, S, R, R]), { ...Bt, gap: W })
     ]
   },
   battery: {
@@ -250,7 +251,7 @@ export const ICONS = {
       // on the side cut off by the slot.
       L(rr(4.5, 2, 7, 2.5, q), Bt),
       L(rr(2, 5.5, 12, 6.5, M), Bt),
-      L(rr(4.5, 9.5, 7, 4.5, [0, 0, r, r])),
+      L(rr(4.5, 9.5, 7, 4.5, [0, 0, r, r]), { gap: W }),
       L(circ(11.25, 8, 0.5))
     ]
   },
@@ -271,7 +272,7 @@ export const ICONS = {
     layers: [
       // Light glass, a blue handle at 45° tucked into it, and a short blue glint.
       L(rot(12.5, 12.5, 6, 2.5, 45, 1.25)),
-      L(circ(6.75, 6.75, 5.75), Bt),
+      L(circ(6.75, 6.75, 5.75), { ...Bt, gap: W }),
       L('M4 7A3 3 0 0 1 7 4', { sw: D })
     ]
   },
@@ -310,7 +311,7 @@ export const ICONS = {
       // A light box and a blue arrow coming down into it. The arrow's head is the allowed 45°
       // slope; the tip sits 0.41 low so its rounded end lands where the drawn tip would be.
       L(rr(2, 6.5, 12, 7.5, M), Bt),
-      L(polygon([[7.25, 2], [8.75, 2], [8.75, 7.5], [11.5, 7.5], [8, 11.41], [4.5, 7.5], [7.25, 7.5]], [0.75, 0.75, 0, 1, 1, 1, 0]))
+      L(polygon([[7.25, 2], [8.75, 2], [8.75, 7.5], [11.5, 7.5], [8, 11.41], [4.5, 7.5], [7.25, 7.5]], [0.75, 0.75, 0, 1, 1, 1, 0]), { gap: W })
     ]
   },
   upload: {
@@ -318,17 +319,18 @@ export const ICONS = {
     key: 'square',
     layers: [
       L(rr(2, 6.5, 12, 7.5, M), Bt),
-      L(polygon([[8, 1.59], [11.5, 5.5], [8.75, 5.5], [8.75, 11.5], [7.25, 11.5], [7.25, 5.5], [4.5, 5.5]], [1, 1, 0, 0.75, 0.75, 0, 1]))
+      L(polygon([[8, 1.59], [11.5, 5.5], [8.75, 5.5], [8.75, 11.5], [7.25, 11.5], [7.25, 5.5], [4.5, 5.5]], [1, 1, 0, 0.75, 0.75, 0, 1]), { gap: W })
     ]
   },
   share: {
     label: '分享',
     key: 'square',
     layers: [
-      // A light box and a blue forward arrow rising out of it and turning right.
+      // A light box and a blue arrow rising out of it and turning right. The shaft stands on the
+      // box's centre line (x 7); the arrow cuts a gap of W out of the box where it crosses it.
       L(rr(2, 5, 10, 9, M), Bt),
-      L('M5.5 11V7.57A3.5 3.5 0 0 1 9 4.07H11.5', { sw: K }),
-      L(polygon([[10.91, 0.57], [14.41, 4.07], [10.91, 7.57]], 1))
+      L('M7 11V7.5A3.5 3.5 0 0 1 10.5 4H11.5', { sw: K, gap: W, part: 'arrow' }),
+      L(polygon([[11, 0.5], [14.5, 4], [11, 7.5]], 1), { gap: W, part: 'arrow' })
     ]
   },
   edit: {
@@ -387,7 +389,7 @@ export const ICONS = {
       // The locate-me crosshair (a map pin needs slopes outside the allowed list): a light disc,
       // four blue ticks laid over its rim out to the keyline, and a blue centre.
       L(circ(8, 8, 5.25), Bt),
-      L(pill(7.25, 1, K, 3) + pill(7.25, 12, K, 3) + pill(1, 7.25, 3, K) + pill(12, 7.25, 3, K)),
+      L(pill(7.25, 1, K, 3) + pill(7.25, 12, K, 3) + pill(1, 7.25, 3, K) + pill(12, 7.25, 3, K), { gap: W }),
       L(circ(8, 8, 2))
     ]
   },
@@ -398,7 +400,7 @@ export const ICONS = {
       // Two beamed notes with a level beam: the blue beam and stems first, the light heads over
       // the stem ends so the stems disappear into them.
       L(polygon([[5.5, 2], [14, 2], [14, 11], [12.5, 11], [12.5, 4.5], [7, 4.5], [7, 11], [5.5, 11]], [q, q, 0, 0, 0, 0, 0, 0])),
-      L(circ(4.5, 11.5, 2.5) + circ(11.5, 11.5, 2.5), Bt)
+      L(circ(4.5, 11.5, 2.5) + circ(11.5, 11.5, 2.5), { ...Bt, gap: W })
     ]
   },
   link: {
@@ -414,11 +416,12 @@ export const ICONS = {
     label: '购物车',
     key: 'square',
     layers: [
-      // A square basket in light sits in the corner of the blue handle-and-frame stroke; the wheels
-      // hang from the frame, exactly 1 below the basket.
-      L(rr(5, 3.5, 9, 7, M), Bt),
+      // A light basket kept one gap inside the blue handle-and-frame stroke; the wheels hang from
+      // the frame.
+      L(rr(6, 3.5, 8, 6, M), Bt),
       L('M2.75 2.75H4.25V11.25H13', { sw: K }),
-      L(circ(6, 12.75, 1.25) + circ(12, 12.75, 1.25))
+      // The wheels sit symmetrically under the basket (centre x 10).
+      L(circ(7.25, 12.75, 1.25) + circ(12.75, 12.75, 1.25))
     ]
   }
 };
