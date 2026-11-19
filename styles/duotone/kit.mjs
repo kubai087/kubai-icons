@@ -164,11 +164,12 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i', mo
   const box = 'maskUnits="userSpaceOnUse" x="-2" y="-2" width="20" height="20"><rect x="-2" y="-2" width="20" height="20" fill="#fff"/>';
   // Each drawn layer keeps its part, so a gap cuts the layers below it except its own part's.
   const pieces = [];
-  const tag = (i, svg) => (motion ? `<g data-l="${i}">${svg}</g>` : svg);
+  // data-o is the layer's place in the drawing order (a copy takes its source's), for the entrance.
+  const tag = (l, i, svg) => (motion ? `<g data-l="${l.n ?? i}" data-o="${l.o ?? i}">${svg}</g>` : svg);
   icon.layers.forEach((l, i) => {
     const part = l.part ?? `#${i}`;
     if (l.gap) {
-      defs.push(`<mask id="${id}-gap${i}" ${box}${tag(l.n ?? i, shape(l, '#000', l.gap * 2))}</mask>`);
+      defs.push(`<mask id="${id}-gap${i}" ${box}${tag(l, i, shape(l, '#000', l.gap * 2))}</mask>`);
       for (const p of pieces) if (p.part !== part) p.svg = `<g mask="url(#${id}-gap${i})">${p.svg}</g>`;
     }
     let piece = shape(l, ink(l));
@@ -180,7 +181,7 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i', mo
       defs.push(`<mask id="${id}-cut${i}" ${box}${l.cut.map((c) => shape(c, '#000')).join('')}</mask>`);
       piece = `<g mask="url(#${id}-cut${i})">${piece}</g>`;
     }
-    pieces.push({ part, svg: tag(l.n ?? i, piece) });
+    pieces.push({ part, svg: tag(l, i, piece) });
   });
   let out = pieces.map((p) => p.svg).join('');
   if (motion) out = `<g data-l="all">${out}</g>`;

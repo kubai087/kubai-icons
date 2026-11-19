@@ -26,12 +26,17 @@
 // moves. At rest a copy hides behind nothing and changes nothing; it is there to be torn off or
 // turned over while the original stays, the way the next page is under the one you turn.
 //
+// Two motions: an entrance when the icon first appears, and the hover motion above.
+// The entrance puts the object together the way it would be set down: layer by layer in drawing
+// order, back to front, each piece drops ENTER.y into place and fades in, ENTER.step ms after the
+// one before. A copy enters with the layer it copies, and a knockout outline with its layer.
+//
 // Render with render(withMotion(icon, MOTION[name]), { motion: true }) so the layers carry
-// data-l; then animate(svg, MOTION[name]) returns { hover(on) }.
+// data-l and data-o; then animate(svg, MOTION[name]) returns { enter(), hover(on) }.
 
 /** The icon with every layer named by its index, plus the copies the motion asks for. */
 export function withMotion(icon, spec) {
-  const layers = icon.layers.map((l, i) => ({ ...l, n: i, part: l.part ?? `#${i}` }));
+  const layers = icon.layers.map((l, i) => ({ ...l, n: i, o: i, part: l.part ?? `#${i}` }));
   let k = 0;
   for (const c of spec?.copy || []) {
     const copies = c.of.map((i) => ({ ...layers[i], n: `c${k++}` }));
@@ -43,6 +48,7 @@ export function withMotion(icon, spec) {
 export const DURATION = 650;
 export const STEP = 140;
 export const BACK = 520;
+export const ENTER = { y: -1.5, ms: 650, step: 70 };
 
 export function bezier(x1, y1, x2, y2) {
   const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
@@ -107,7 +113,20 @@ export function animate(svg, spec) {
   try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* not a browser */ }
   const els = Object.keys(spec?.moves || {}).map((k) => ({ p: spec.moves[k], list: [...svg.querySelectorAll(`[data-l="${k}"]`)], cur: { ...REST } }));
   const long = duration(spec);
-  let on = false, frame = 0;
+  let on = false, frame = 0, entering = 0;
+  // Entrance: every tagged layer, grouped by its place in the drawing order.
+  const order = new Map();
+  for (const node of svg.querySelectorAll('[data-o]')) {
+    const o = +node.getAttribute('data-o');
+    if (!order.has(o)) order.set(o, []);
+    order.get(o).push(node);
+  }
+  const steps = [...order.keys()].sort((a, b) => a - b).map((o) => order.get(o));
+  const settle = () => {
+    caf(entering); entering = 0;
+    for (const list of steps) for (const node of list) { node.removeAttribute('opacity'); node.setAttribute('transform', 'translate(0 0)'); }
+    for (const el of els) paint(el);
+  };
   const paint = (el) => {
     const t = transform(el.p, el.cur);
     for (const node of el.list) {
@@ -117,8 +136,24 @@ export function animate(svg, spec) {
     }
   };
   return {
+    enter() {
+      // Already hovered: the object is in use, so it just appears.
+      if (on || reduced || !steps.length) { settle(); return; }
+      caf(frame);
+      for (const el of els) el.cur = { ...REST };
+      const t0 = performance.now(), total = ENTER.ms + ENTER.step * (steps.length - 1);
+      const tick = (t) => {
+        steps.forEach((list, i) => {
+          const q = Math.min(1, Math.max(0, (t - t0 - i * ENTER.step) / ENTER.ms)), e = EASE(q);
+          for (const node of list) { node.setAttribute('transform', `translate(0 ${f(ENTER.y * (1 - e))})`); node.setAttribute('opacity', f(e)); }
+        });
+        if (t - t0 < total) entering = raf(tick); else settle();
+      };
+      entering = raf(tick);
+    },
     hover(next) {
       if (Boolean(next) === on || !els.length) return;
+      if (entering) settle();
       on = Boolean(next); caf(frame);
       // A motion cut short starts from where it is.
       const from = els.map((el) => ({ ...el.cur }));
