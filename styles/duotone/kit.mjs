@@ -150,22 +150,25 @@ export function secondary(primary, alpha = 0.4) {
 }
 
 /** SVG markup for one icon definition { key, layers }. */
-export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i' } = {}) {
+// motion: true tags each layer with data-l (its n, else its index), and the whole drawing with data-l="all",
+// so motion.mjs can move them; a layer's knockout outline carries the same tag and moves with it.
+export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i', motion = false } = {}) {
   const k = FIT[icon.key] || 1;
   const ink = (l) => (l.tone === 'b' ? b : a);
   const defs = [];
   const shape = (s, paint, extra = 0) => s.sw
-    ? `<path d="${s.d}" fill="none" stroke="${paint}" stroke-width="${n((s.sw + extra) / k)}" stroke-linecap="round" stroke-linejoin="round"/>`
+    ? `<path d="${s.d}" fill="none" stroke="${paint}" stroke-width="${n((s.sw + extra) / k)}" stroke-linecap="round" stroke-linejoin="round"${motion ? ' pathLength="1"' : ''}/>`
     : extra
       ? `<path d="${s.d}" fill="${paint}" stroke="${paint}" stroke-width="${n(extra / k)}" stroke-linejoin="round"/>`
       : `<path d="${s.d}" fill="${paint}"/>`;
   const box = 'maskUnits="userSpaceOnUse" x="-2" y="-2" width="20" height="20"><rect x="-2" y="-2" width="20" height="20" fill="#fff"/>';
   // Each drawn layer keeps its part, so a gap cuts the layers below it except its own part's.
   const pieces = [];
+  const tag = (i, svg) => (motion ? `<g data-l="${i}">${svg}</g>` : svg);
   icon.layers.forEach((l, i) => {
     const part = l.part ?? `#${i}`;
     if (l.gap) {
-      defs.push(`<mask id="${id}-gap${i}" ${box}${shape(l, '#000', l.gap * 2)}</mask>`);
+      defs.push(`<mask id="${id}-gap${i}" ${box}${tag(l.n ?? i, shape(l, '#000', l.gap * 2))}</mask>`);
       for (const p of pieces) if (p.part !== part) p.svg = `<g mask="url(#${id}-gap${i})">${p.svg}</g>`;
     }
     let piece = shape(l, ink(l));
@@ -177,9 +180,10 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i' } =
       defs.push(`<mask id="${id}-cut${i}" ${box}${l.cut.map((c) => shape(c, '#000')).join('')}</mask>`);
       piece = `<g mask="url(#${id}-cut${i})">${piece}</g>`;
     }
-    pieces.push({ part, svg: piece });
+    pieces.push({ part, svg: tag(l.n ?? i, piece) });
   });
   let out = pieces.map((p) => p.svg).join('');
+  if (motion) out = `<g data-l="all">${out}</g>`;
   if (k !== 1) out = `<g transform="translate(8 8) scale(${n(k)}) translate(-8 -8)">${out}</g>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}">${defs.length ? `<defs>${defs.join('')}</defs>` : ''}${out}</svg>`;
 }
