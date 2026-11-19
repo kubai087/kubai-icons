@@ -243,7 +243,8 @@ export const ICONS = {
     label: '钱包',
     key: 'landscape',
     layers: [
-      L(rr(1, 2, 14, 12, R3), Bt),
+      // The body's knockout outline only shows when the hover motion lifts a card out (motions.mjs).
+      L(rr(1, 2, 14, 12, R3), { ...Bt, gap: W }),
       L(pill(9.5, 6.25, 4.5, 3.5), { cut: [C(circ(11.25, 8, 0.75))] })
     ]
   },
@@ -311,7 +312,9 @@ export const ICONS = {
     layers: [
       // The flap is the top of the body itself, clipped by a circle: a round-bottomed flap
       // instead of a V, and the body's own corners, exactly.
-      L(rr(1, 2.5, 14, 11, R), Bt),
+      // The body's knockout outline only shows when the hover motion lifts a letter out from
+      // behind it (motions.mjs).
+      L(rr(1, 2.5, 14, 11, R), { ...Bt, gap: W }),
       L(rr(1, 2.5, 14, 11, R), { clip: circ(8, -0.75, 8.75) })
     ]
   },

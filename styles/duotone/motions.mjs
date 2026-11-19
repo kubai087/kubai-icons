@@ -9,7 +9,7 @@
 // dropping into an inbox. Moves are generous: 1.5–4 on the 16 grid, turns up to 30°.
 //
 // MOTION[name] = { say, moves, copy?, add?, ms? }; see motion.mjs for the keys.
-import { K, D, W, rr, circ, L } from './kit.mjs';
+import { K, D, W, Bt, rr, circ, pill, L } from './kit.mjs';
 
 const hidden = { rest: { a: 0 } };
 const same = (keys, pose) => Object.fromEntries(keys.map((k) => [k, pose]));
@@ -49,7 +49,11 @@ export const MOTION = {
   clock: { say: '分针走一圈，时针走一格', moves: { 1: { r: 360 }, 2: { r: 30 } } },
   image: { say: '太阳从山后升起', moves: { 2: { y: [-2.5, -2] } } },
   ticket: { say: '撕下票根', moves: { 1: { x: [2, 1.5], r: [24, 18], o: [12, 13.5] } } },
-  wallet: { say: '扣带拉开', moves: { 1: { x: [2, 1.5] } } },
+  wallet: {
+    say: '从钱包里抽出一张卡',
+    add: [{ layer: L(rr(2.5, 4, 9, 6, 1)), at: 0 }],
+    moves: { a0: { y: [-6, -5.5] } }
+  },
   headphones: { say: '耳罩向里夹紧', moves: { 1: { x: 1 }, 2: { x: -1 } } },
   mic: {
     say: '开始收音，两侧画出声波',
@@ -60,9 +64,20 @@ export const MOTION = {
   'shopping-bag': { say: '提起来，绕提手晃一晃', moves: { all: { y: -2, r: [14, -10, 6, -2, 0], o: [8, 2] } } },
   battery: { say: '接上电，一格一格充满', moves: { 1: { a: [0.15, 1, 1, 1] }, 2: { a: [0.15, 0.15, 1, 1] }, 3: { a: [0.15, 0.15, 0.15, 1] } } },
   archive: { say: '盖子掀起', moves: { 0: { y: [-2.5, -2], r: [-10, -8], o: [8, 4] } } },
-  mail: { say: '封口向上翻开', moves: { 1: { sy: -0.8, o: [8, 2.5] } } },
+  mail: {
+    // The flap folds up to its hinge and goes behind; a copy of it unfolds behind the letter,
+    // the way an open envelope's flap stands behind what comes out of it.
+    say: '封口翻开，信从信封里抽出来',
+    copy: [{ of: [1], at: 0 }],
+    add: [{ layer: L(rr(4, 4, 8, 8, 1), Bt), at: 1 }, { layer: L(pill(6, 6, 4, D)), at: 2 }],
+    moves: {
+      1: { sy: [0, 0], a: [1, 0], o: [8, 2.5] },
+      c0: { rest: { a: 0, sy: 0 }, sy: [0, -0.7], a: [0, 1], o: [8, 2.5] },
+      ...same(['a0', 'a1'], { y: [0, -5.5] })
+    }
+  },
   printer: { say: '进纸，出纸', moves: { 0: { y: [0.75, 0] }, 2: { y: [2.5, 2] } } },
-  home: { say: '门向外打开', moves: { 1: { sx: -0.5, o: [6.5, 12] } } },
+  home: { say: '门推开，又关上', moves: { 1: { sx: [-0.6, -0.6, 1], o: [6.5, 12] } } },
   search: { say: '放大镜四处移动查看', moves: { all: { x: [-1.5, 1.5, -0.75, 0], y: [1, -1, 0.5, 0] } } },
   settings: { say: '齿轮转半圈', moves: { 0: { r: 180 } } },
   tv: { say: '开机，画面从一条线展开', moves: { 1: { sy: [0.05, 1.08, 1], a: [0.3, 1, 1], o: [8, 6.75] } } },
@@ -103,9 +118,13 @@ export const MOTION = {
   'credit-card': { say: '刷一下卡', moves: { all: { x: [3.5, -1, 0] } } },
   shield: { say: '挡下一击，对勾重新写上', moves: { all: { y: [1, -0.5, 0], s: [0.9, 1.04, 1], o: [8, 15] }, 1: { w: [0, 0, 1] } } },
   lightbulb: {
-    say: '通电，灯丝亮起来',
-    add: [{ layer: L(circ(8, 6, 2.25)), at: 1 }],
-    moves: { a0: { ...hidden, a: [1, 0.5, 1] } }
+    // The glass lights up in the primary, with a light glint over it in place of the blue one.
+    say: '通电，整个灯泡亮起来',
+    add: [
+      { layer: L('M5.5 11V10.33A5 5 0 1 1 10.5 10.33V11Z'), at: 1 },
+      { layer: L('M5.25 6A2.75 2.75 0 0 1 8 3.25', { sw: D, ...Bt }) }
+    ],
+    moves: same(['a0', 'a1'], { ...hidden, a: [1, 0.5, 1] })
   },
   video: {
     say: '开始录制：镜头伸出，录制灯闪烁',
@@ -117,7 +136,7 @@ export const MOTION = {
   calculator: { say: '按下按键，屏幕刷新', moves: { 2: { y: [0.5, 0] }, 1: { a: [0.3, 1, 0.3, 1] } } },
   history: { say: '箭头逆时针转一圈，分针倒退一圈，时针倒退一格', moves: { ...same([0, 1, 2], { r: -360 }), 3: { r: -30 } } },
   'log-out': { say: '箭头从门里出去，再回到门口', moves: { 1: { x: [3, -3, 0], a: [0, 0, 1] } } },
-  database: { say: '顶层打开', moves: { 1: { y: [-2, -1.5] } } },
+  database: { say: '顶层弹开，又合上', moves: { 1: { y: [-2, 0] } } },
   server: { say: '硬盘读写，指示灯闪烁', moves: { 2: { x: [1, 0] }, 3: { a: [0.1, 1, 0.1, 1] } } },
   wifi: {
     say: '信号由内向外发出',
@@ -131,9 +150,11 @@ export const MOTION = {
     moves: { 1: { y: [-1.5, 0] }, 2: { sx: [0, 1, 1], o: [5, 7.875] }, 3: { sx: [0, 0, 1], o: [5, 10.5] } }
   },
   inbox: {
+    // A light sheet with a line drops in between the tray's back and its blue front, which hides
+    // its lower edge.
     say: '一封信落进托盘',
-    add: [{ layer: L(rr(5.5, 5, 5, 4.5, 1), { gap: W }) }],
-    moves: { a0: { rest: { a: 0, y: -5 }, a: 1, y: 0 }, 1: { y: [0, 0, 0.75, 0] } }
+    add: [{ layer: L(rr(4.5, 4.5, 7, 6, 1), { ...Bt, gap: W }), at: 1 }, { layer: L(pill(6, 6.5, 4, D)), at: 2 }],
+    moves: { ...same(['a0', 'a1'], { rest: { a: 0, y: -5 }, a: 1, y: 0 }), 1: { y: [0, 0, 0.75, 0] } }
   },
   receipt: { say: '账单送出来，最后一行打上', moves: { all: { y: [-1.5, 0] }, 2: { sx: [0, 1], o: [5, 10.125] } } },
   package: { say: '箱盖连同胶带掀开', moves: same([0, 2], { y: [-2.5, -2], r: [-16, -12], o: [2, 5.5] }) },
