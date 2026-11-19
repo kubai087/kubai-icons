@@ -142,7 +142,7 @@ export function keyBox(key) {
 }
 
 // Colours (GUIDE.md section 3). The secondary is the primary at 40% over white.
-export const TONES = { a: '#4767F0', b: '#B5C2F9' };
+export const TONES = { a: '#5A76F2', b: '#BDC8FA' };
 export function secondary(primary, alpha = 0.4) {
   const h = primary.replace('#', '');
   const c = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
