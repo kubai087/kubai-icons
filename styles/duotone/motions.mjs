@@ -66,16 +66,11 @@ export const MOTION = {
   battery: { say: '接上电，一格一格充满', moves: { 1: { a: [0.15, 1, 1, 1] }, 2: { a: [0.15, 0.15, 1, 1] }, 3: { a: [0.15, 0.15, 0.15, 1] } } },
   archive: { say: '盖子掀起', moves: { 0: { y: [-0.75, -0.75], r: [-4, -4], o: [8, 4] } } },
   mail: {
-    // The flap folds up to its hinge and goes behind; a copy of it unfolds behind the letter,
-    // the way an open envelope's flap stands behind what comes out of it.
-    say: '封口翻开，信从信封里抽出来',
-    copy: [{ of: [1], at: 0 }],
-    add: [{ layer: L(rr(4, 4, 8, 8, 1), Bt), at: 1 }, { layer: L(pill(6, 6, 4, D)), at: 2 }],
-    moves: {
-      1: { sy: [0, 0, 0], a: [1, 0, 0], o: [8, 2.5] },
-      c0: { rest: { a: 0, sy: 0 }, sy: [0, -0.45, -0.45], a: [0, 1, 1], o: [8, 2.5] },
-      ...same(['a0', 'a1'], { y: [0, -4, -4] })
-    }
+    // The closed envelope drops 1.5 to make room and a light sheet with a blue line (as in inbox
+    // and file-text) rises out from behind it; the envelope's knockout keeps them a gap apart.
+    say: '一封信从信封里抽出来',
+    add: [{ layer: L(rr(3.5, 4, 9, 8, 1), Bt), at: 0 }, { layer: L(pill(5.5, 5.25, 5, D)), at: 1 }],
+    moves: { ...same([0, 1], { y: [1.5, 1.5] }), ...same(['a0', 'a1'], { y: [-3.5, -3.5] }) }
   },
   printer: { say: '进纸，出纸', moves: { 0: { y: [0.75, 0] }, 2: { y: [1.2, 1.2] } } },
   home: { say: '门推开，又关上', moves: { 1: { sx: [-0.6, -0.6, 1], o: [6.5, 12] } } },
