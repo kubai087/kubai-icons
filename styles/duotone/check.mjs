@@ -16,6 +16,8 @@
 //                   inset    a part inside another sits unevenly: its clearances to the nearby
 //                            edges (under 2.6) differ by more than 0.15 (GUIDE.md 6)
 //                   motion   an icon's entry in motions.mjs moves a layer it doesn't have
+//                   reach    the hover motion carries something off the canvas (0–16) at some
+//                            point (GUIDE.md 11)
 //
 //   node check.mjs [--only name,name] [--with name,name] [--icons file] [--out dir]
 //
@@ -157,6 +159,43 @@ data.forEach((icon, n) => {
 });
 </script>`);
 
+// How far each hover motion reaches past the canvas: 20 frames per icon, drawn on a canvas with
+// a margin of 4 all round, 8px to a unit; any ink outside 0–16 counts.
+const REACH = { tol: 0.2, px: 8, frames: 20 };
+const reach = {};
+const moving = checked.filter((n) => MOTION[n]);
+if (moving.length) {
+  const { withMotion, pose } = await import('./motion.mjs');
+  const shots = [];
+  for (const name of moving) for (let f = 1; f <= REACH.frames; f++) {
+    const t = f / REACH.frames;
+    let s = render(withMotion(ICONS[name], MOTION[name]), { size: 24 * REACH.px, motion: true, id: `r${uid++}` }).replace('viewBox="0 0 16 16"', 'viewBox="-4 -4 24 24"');
+    for (const [k, p] of Object.entries(MOTION[name].moves)) {
+      const { transform, opacity, dash, hide } = pose(p, t);
+      s = s.replaceAll(`<g data-l="${k}">`, `<g data-l="${k}" transform="${transform}"${opacity === null ? '' : ` opacity="${opacity}"`}${dash === null ? '' : ` stroke-dasharray="${dash}"`}${hide ? ' stroke-opacity="0"' : ''}>`);
+    }
+    shots.push({ name, t, src: 'data:image/svg+xml;base64,' + Buffer.from(s).toString('base64') });
+  }
+  const over = evaluate(`<pre id="out"></pre><script>
+const shots = ${JSON.stringify(shots)}, N = ${24 * REACH.px}, M = ${4 * REACH.px}, U = ${REACH.px};
+const c = document.createElement('canvas'); c.width = c.height = N; const x = c.getContext('2d', { willReadFrequently: true });
+const load = (src) => new Promise((ok) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = src; });
+(async () => {
+  const out = [];
+  for (const s of shots) {
+    const im = await load(s.src); if (!im) { out.push(0); continue; }
+    x.clearRect(0, 0, N, N); x.drawImage(im, 0, 0); const d = x.getImageData(0, 0, N, N).data; let m = 0;
+    for (let i = 0; i < N * N; i++) if (d[i * 4 + 3] > 64) { const px = i % N, py = (i / N) | 0;
+      m = Math.max(m, M - px, px + 1 - (N - M), M - py, py + 1 - (N - M)); }
+    out.push(+(m / U).toFixed(2));
+  }
+  // The frames are large; drop them before the page is read back.
+  document.querySelectorAll('script').forEach((el) => el.remove());
+  document.getElementById('out').textContent = JSON.stringify(out);
+})();</script>`);
+  shots.forEach((s, i) => { if (over[i] > (reach[s.name]?.by ?? 0)) reach[s.name] = { by: over[i], t: s.t }; });
+}
+
 const findings = [], allowed = [];
 checked.forEach((name, i) => {
   const icon = ICONS[name], m = measured[i], found = [];
@@ -184,6 +223,7 @@ checked.forEach((name, i) => {
     else if (Math.abs(d - GAP) > TOL) found.push(['spacing', `layers ${la} and ${lb} are ${d} apart: keep exactly ${GAP} (touching is not allowed either)`]);
   }
   const mo = MOTION[name];
+  if (reach[name]?.by > REACH.tol) found.push(['reach', `the hover motion reaches ${reach[name].by} past the canvas (at ${Math.round(reach[name].t * 100)}% of it): keep every part inside 0–16`]);
   if (mo) {
     const copies = (mo.copy || []).flatMap((c) => c.of).length, adds = (mo.add || []).length;
     for (const k of Object.keys(mo.moves || {})) {

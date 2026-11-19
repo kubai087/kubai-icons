@@ -67,6 +67,31 @@ const HIST = (() => {
   };
 })();
 
+// The iOS-style wifi fan: a wedge and bands around (8, cy), between the radii at ±deg from
+// straight up. Bands are 1.75 thick with a gap of 1; band ends are cut along the radii and every
+// corner is rounded (c on the bands' corners, tip on the wedge's point), with the fillet circles
+// fitted to each arc and radius so the edges stay tangent.
+const FAN = (() => {
+  const cx = 8, deg = 39, th = 1.75, gap = 1, R = 11.556, c = 0.75, tip = 1;
+  const a = (deg * Math.PI) / 180, cy = 13.5 + tip / Math.sin(a) - tip, f = (v) => +v.toFixed(3);
+  const P = (r, t) => `${f(cx + r * Math.sin(t))} ${f(cy - r * Math.cos(t))}`;
+  const r0 = R - 3 * (th + gap);
+  // Corner where the radius at angle side*a meets an arc of radius r (outer: convex arc).
+  const corner = (r, side, outer) => {
+    const d = outer ? r - c : r + c, phi = Math.asin(c / d), along = Math.sqrt(d * d - c * c);
+    return { arc: P(r, side * (a - phi)), line: P(along, side * a) };
+  };
+  const band = (k) => {
+    const ro = r0 + gap + k * (th + gap) - gap, ri = ro - th;
+    const oL = corner(ro, -1, true), oR = corner(ro, 1, true), iR = corner(ri, 1, false), iL = corner(ri, -1, false);
+    return `M${oL.arc}A${f(ro)} ${f(ro)} 0 0 1 ${oR.arc}A${c} ${c} 0 0 1 ${oR.line}L${iR.line}A${c} ${c} 0 0 1 ${iR.arc}` +
+      `A${f(ri)} ${f(ri)} 0 0 0 ${iL.arc}A${c} ${c} 0 0 1 ${iL.line}L${oL.line}A${c} ${c} 0 0 1 ${oL.arc}Z`;
+  };
+  const oL = corner(r0, -1, true), oR = corner(r0, 1, true), t = tip / Math.tan(a);
+  const wedge = `M${oL.arc}A${f(r0)} ${f(r0)} 0 0 1 ${oR.arc}A${c} ${c} 0 0 1 ${oR.line}L${P(t, a)}A${tip} ${tip} 0 0 1 ${P(t, -a)}L${oL.line}A${c} ${c} 0 0 1 ${oL.arc}Z`;
+  return { band, wedge };
+})();
+
 export const ICONS = {
   folder: {
     label: '文件夹',
@@ -400,11 +425,14 @@ export const ICONS = {
     label: '分享',
     key: 'square',
     layers: [
-      // A light box and a blue arrow rising out of it and turning right. The shaft stands on the
-      // box's centre line (x 7); the arrow cuts a gap of W out of the box where it crosses it.
-      L(rr(2, 5, 10, 9, M), Bt),
-      L('M7 11V7.5A3.5 3.5 0 0 1 10.5 4H11.5', { sw: K, gap: W, part: 'arrow' }),
-      L(polygon([[11, 0.5], [14.5, 4], [11, 7.5]], 1), { gap: W, part: 'arrow' })
+      // A light box and a blue arrow rising out of it and turning right. The box is as tall as
+      // upload's and the arrow spans the same height (its foot level with upload's shaft, its head
+      // as high as upload's tip). The shaft stands on the box's centre line (x 7); the arrow cuts
+      // a gap of W out of the box where it crosses it. The shaft is drawn from the foot up, so the
+      // hover motion can grow it.
+      L(rr(2, 6.5, 10, 7.5, M), Bt),
+      L('M7 10.75V7.65A3.5 3.5 0 0 1 10.5 4.15H11.5', { sw: K, gap: W, part: 'arrow' }),
+      L(polygon([[11, 0.65], [14.5, 4.15], [11, 7.65]], 1), { gap: W, part: 'arrow' })
     ]
   },
   edit: {
@@ -706,15 +734,15 @@ export const ICONS = {
   },
   wifi: {
     label: '无线网络',
-    key: 'landscape',
+    key: 'wide',
     layers: [
-      // The usual signal symbol: a dot and three concentric arcs, each a gap of 1 from the next,
-      // all spanning the same angle. Arcs are strokes of 2 (a light body drawn as a stroke); the
-      // outer two are light, the inner arc and the dot blue.
-      L('M2 5.136A9.5 9.5 0 0 1 14 5.136', { sw: 2, ...Bt }),
-      L('M3.895 7.461A6.5 6.5 0 0 1 12.105 7.461', { sw: 2, ...Bt }),
-      L('M5.789 9.787A3.5 3.5 0 0 1 10.211 9.787', { sw: 2 }),
-      L(circ(8, 12.5, 1.5))
+      // As on iOS: a fan of one rounded wedge and three bands around a common centre, each a gap
+      // of 1 from the next, all cut along the same two radii. Outer two bands light, inner band
+      // and wedge blue (signal strength). Outer band first, wedge last.
+      L(FAN.band(3), Bt),
+      L(FAN.band(2), Bt),
+      L(FAN.band(1)),
+      L(FAN.wedge)
     ]
   },
   power: {
