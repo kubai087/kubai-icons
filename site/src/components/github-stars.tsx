@@ -62,7 +62,7 @@ export function GitHubStars({ className }: { className?: string }) {
       data-kubai-trigger
       aria-label={label}
       title={label}
-      className={cn("gap-0 px-2 text-muted-foreground tabular-nums", className)}
+      className={cn("gap-0 ps-2 pe-2.5 text-muted-foreground tabular-nums", className)}
       render={<a href={REPO} target="_blank" rel="noreferrer" />}
     >
       {/* Narrow bars keep the count, which says more than the logo does. */}
