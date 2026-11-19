@@ -96,7 +96,7 @@ The skill draws in either of two styles and asks when your request doesn't make 
 | Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour | Static SVG | [`styles/duotone/GUIDE.md`](styles/duotone/GUIDE.md) |
 
 <p align="center">
-  <img src="assets/duotone.png" alt="Twenty-six two-tone solid icons: folder, document, calendar, camera, lock, user, ID card, building, open book, bell, trash, gift, smile, chat, clock, image, ticket, wallet, headphones, microphone, cloud, shopping bag, battery, archive, mail and printer" width="720" />
+  <img src="assets/duotone.png" alt="Forty-three two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, download, a heart and a music note" width="720" />
 </p>
 
 Ask for "solid", "filled", "two-tone" or "duotone" icons, or small icons for an app's interface, and the skill uses the two-tone style.
@@ -205,7 +205,7 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 
 <br />
 
-Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 26 examples, a self-check and an export script. Names are in English.
+Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 43 examples, a self-check and an export script. Names are in English.
 
 ```bash
 node styles/duotone/check.mjs --only mail --with folder,lock     # sheets and findings.md in styles/duotone/check-out/

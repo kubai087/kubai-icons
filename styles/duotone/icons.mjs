@@ -2,10 +2,18 @@
 // Example icons in the two-tone solid style (双色面性). Each icon is { label, key, layers }:
 //   label   the Chinese name
 //   key     the key shape it fills (KEYLINES in kit.mjs): circle, square, landscape, wide,
-//           portrait or live
+//           portrait, tall, flat or live
 //   layers  drawn in order; the light body first (tone b), then the blue accents and details
 // Read the one closest to a new object before drawing it, and append new icons the same way.
-import { R3, R, M, r, S, q, t, D, K, rr, pill, circ, body, L, C, Bt } from './kit.mjs';
+import { R3, R, M, r, S, q, t, D, K, rr, pill, circ, body, polygon, rot, L, C, Bt } from './kit.mjs';
+
+// A pen laid at 45° (the allowed slope for 编辑), nib at the bottom left. The nib's two edges run
+// along the grid, so it fills the box corner exactly. from and to are distances along the pen
+// from the line where the nib meets the barrel; w is its width.
+const pen = (from, to, w = 3.5) => {
+  const a = w * Math.SQRT1_2, u = (d) => d * Math.SQRT1_2;
+  return [[2 + u(from), 14 - a - u(from)], [2 + u(to), 14 - a - u(to)], [2 + a + u(to), 14 - u(to)], [2 + a + u(from), 14 - u(from)]];
+};
 
 export const ICONS = {
   folder: {
@@ -193,9 +201,10 @@ export const ICONS = {
     label: '云',
     key: 'wide',
     layers: [
-      // A blue sun tucked behind the light cloud: they overlap rather than float apart.
-      L(circ(11.75, 5.75, 3.25)),
-      L(pill(1, 8.5, 11, 5) + circ(6, 8.5, 3.5), Bt)
+      // The sun sits behind the cloud: the cloud covers its lower-left quarter, so the overlap is
+      // plain to see, not a touch at the edges.
+      L(circ(11.25, 6, 3.5)),
+      L(pill(1, 8.5, 11.5, 5) + circ(6.25, 8.5, 3.5), Bt)
     ]
   },
   'shopping-bag': {
@@ -243,6 +252,173 @@ export const ICONS = {
       L(rr(2, 5.5, 12, 6.5, M), Bt),
       L(rr(4.5, 9.5, 7, 4.5, [0, 0, r, r])),
       L(circ(11.25, 8, 0.5))
+    ]
+  },
+  home: {
+    label: '首页',
+    key: 'square',
+    layers: [
+      // A house in one light outline: a 45° roof (the allowed slope), rounded at the ridge and
+      // the eaves. The blue door stands on the bottom edge.
+      // The ridge sits 0.62 above the keyline so the rounded tip still reaches it.
+      L(polygon([[8, 1.38], [14, 7.38], [14, 14], [2, 14], [2, 7.38]], [1.5, 1, M, M, 1]), Bt),
+      L(rr(6.5, 9.5, 3, 4.5, [1.5, 1.5, 0, 0]))
+    ]
+  },
+  search: {
+    label: '搜索',
+    key: 'live',
+    layers: [
+      // Light glass, a blue handle at 45° tucked into it, and a short blue glint.
+      L(rot(12.5, 12.5, 6, 2.5, 45, 1.25)),
+      L(circ(6.75, 6.75, 5.75), Bt),
+      L('M4 7A3 3 0 0 1 7 4', { sw: D })
+    ]
+  },
+  settings: {
+    label: '设置',
+    key: 'circle',
+    layers: [
+      // A light gear: a disc with eight teeth turned in 45° steps, and a blue hub.
+      L(circ(8, 8, 5.25) + [0, 45, 90, 135, 180, 225, 270, 315].map((a) => rot(8 + 5.6 * Math.cos((a * Math.PI) / 180), 8 + 5.6 * Math.sin((a * Math.PI) / 180), 2.8, 2.6, a, 0.75)).join(''), Bt),
+      L(circ(8, 8, 2.25))
+    ]
+  },
+  tv: {
+    label: '电视',
+    key: 'landscape',
+    layers: [
+      // Light case, blue screen, and a wide base bar a gap of 1 below.
+      L(rr(1, 2, 14, 9.5, R), Bt),
+      L(rr(3, 4, 10, 5.5, r)),
+      L(pill(4, 12.5, 8, 1.5))
+    ]
+  },
+  bookmark: {
+    label: '书签',
+    key: 'portrait',
+    layers: [
+      // A closed book with a blue ribbon hanging from its top edge; the notch is a round cut.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(6.75, 1, 3.5, 7.5, 0), { cut: [C(circ(8.5, 8.5, 1))] })
+    ]
+  },
+  download: {
+    label: '下载',
+    key: 'square',
+    layers: [
+      // A light box and a blue arrow coming down into it. The arrow's head is the allowed 45°
+      // slope; the tip sits 0.41 low so its rounded end lands where the drawn tip would be.
+      L(rr(2, 6.5, 12, 7.5, M), Bt),
+      L(polygon([[7.25, 2], [8.75, 2], [8.75, 7.5], [11.5, 7.5], [8, 11.41], [4.5, 7.5], [7.25, 7.5]], [0.75, 0.75, 0, 1, 1, 1, 0]))
+    ]
+  },
+  upload: {
+    label: '上传',
+    key: 'square',
+    layers: [
+      L(rr(2, 6.5, 12, 7.5, M), Bt),
+      L(polygon([[8, 1.59], [11.5, 5.5], [8.75, 5.5], [8.75, 11.5], [7.25, 11.5], [7.25, 5.5], [4.5, 5.5]], [1, 1, 0, 0.75, 0.75, 0, 1]))
+    ]
+  },
+  share: {
+    label: '分享',
+    key: 'square',
+    layers: [
+      // A light box and a blue forward arrow rising out of it and turning right.
+      L(rr(2, 5, 10, 9, M), Bt),
+      L('M5.5 11V7.57A3.5 3.5 0 0 1 9 4.07H11.5', { sw: K }),
+      L(polygon([[10.91, 0.57], [14.41, 4.07], [10.91, 7.57]], 1))
+    ]
+  },
+  edit: {
+    label: '编辑',
+    key: 'square',
+    layers: [
+      // Light barrel, blue nib and blue cap. The cap is cut off the barrel by a gap of 1. The far
+      // corners sit 0.41 out so their rounded ends reach the box.
+      L(polygon([[2, 14], ...pen(0, 10.304, 4)], [1, 0, 0, 0, 0]), Bt),
+      L(polygon([[2, 14], ...pen(0, 10.304, 4)], [1, 0, 0, 0, 0]), { clip: polygon([[-6, 2.828], [12, 20.828], [-6, 20.828]]) }),
+      L(polygon(pen(11.304, 13.554, 4), [0, 1, 1, 0]))
+    ]
+  },
+  heart: {
+    label: '喜欢',
+    // Two round lobes and two large arcs tangent to them, meeting in a tip rounded at 1.25: arcs
+    // instead of the slanted sides a heart is usually drawn with. A short blue glint sits 2 in.
+    key: 'landscape',
+    layers: [
+      L('M8 3.354A4 4 0 0 1 14.695 7.531A12 12 0 0 1 8.511 13.891A1.25 1.25 0 0 1 7.489 13.891A12 12 0 0 1 1.305 7.531A4 4 0 0 1 8 3.354Z', Bt),
+      L('M3.625 6A1.375 1.375 0 0 1 5 4.625', { sw: D })
+    ]
+  },
+  play: {
+    label: '播放',
+    key: 'circle',
+    layers: [
+      L(circ(8, 8, 7), Bt),
+      // The play triangle keeps its familiar proportions (not the 45° slope), centred by its
+      // centroid; every corner is rounded.
+      L(polygon([[5.75, 4], [12, 8], [5.75, 12]], 1))
+    ]
+  },
+  phone: {
+    label: '手机',
+    key: 'tall',
+    layers: [
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(pill(6.75, 3, 2.5, D) + pill(6, 11.75, 4, D))
+    ]
+  },
+  laptop: {
+    label: '电脑',
+    key: 'wide',
+    layers: [
+      // The light lid stands one gap above the blue base, which is wider: the lid shows its own
+      // corners across the gap (seam radius 1).
+      L(rr(2, 2.5, 12, 8, [M, M, S, S]), Bt),
+      L(rr(1, 11.5, 14, 2, t))
+    ]
+  },
+  location: {
+    label: '定位',
+    key: 'circle',
+    layers: [
+      // The locate-me crosshair (a map pin needs slopes outside the allowed list): a light disc,
+      // four blue ticks laid over its rim out to the keyline, and a blue centre.
+      L(circ(8, 8, 5.25), Bt),
+      L(pill(7.25, 1, K, 3) + pill(7.25, 12, K, 3) + pill(1, 7.25, 3, K) + pill(12, 7.25, 3, K)),
+      L(circ(8, 8, 2))
+    ]
+  },
+  music: {
+    label: '音乐',
+    key: 'square',
+    layers: [
+      // Two beamed notes with a level beam: the blue beam and stems first, the light heads over
+      // the stem ends so the stems disappear into them.
+      L(polygon([[5.5, 2], [14, 2], [14, 11], [12.5, 11], [12.5, 4.5], [7, 4.5], [7, 11], [5.5, 11]], [q, q, 0, 0, 0, 0, 0, 0])),
+      L(circ(4.5, 11.5, 2.5) + circ(11.5, 11.5, 2.5), Bt)
+    ]
+  },
+  link: {
+    label: '链接',
+    key: 'flat',
+    layers: [
+      // Two light half-links face each other; the blue bar joins them, exactly 1 from every edge.
+      L('M5.75 5H5a3 3 0 0 0 0 6H5.75M10.25 5H11a3 3 0 0 1 0 6H10.25', { sw: 2, ...Bt }),
+      L(pill(4, 7, 8, 2))
+    ]
+  },
+  cart: {
+    label: '购物车',
+    key: 'square',
+    layers: [
+      // A square basket in light sits in the corner of the blue handle-and-frame stroke; the wheels
+      // hang from the frame, exactly 1 below the basket.
+      L(rr(5, 3.5, 9, 7, M), Bt),
+      L('M2.75 2.75H4.25V11.25H13', { sw: K }),
+      L(circ(6, 12.75, 1.25) + circ(12, 12.75, 1.25))
     ]
   }
 };
