@@ -10,6 +10,12 @@
 //                   tones    an icon uses only one of the two tones
 //                   spacing  two separate elements are not exactly 1 apart (touching counts)
 //                   overlap  one element overlaps another without a knockout outline (gap)
+//                   size     a small primary piece is too small to read (GUIDE.md 5.1): a lone
+//                            mark under area 4, a lone line under 3 long, or a repeated piece
+//                            (two or more alike) under area 1.25 or 2.25 long
+//                   inset    a part inside another sits unevenly: its clearances to the nearby
+//                            edges (under 2.6) differ by more than 0.15 (GUIDE.md 6)
+//                   motion   an icon's entry in motion.mjs moves a layer it doesn't have
 //
 //   node check.mjs [--only name,name] [--with name,name] [--icons file] [--out dir]
 //
@@ -23,6 +29,9 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { render, keyBox, FIT, KEYLINES, TONES } from './kit.mjs';
 import { screenshot, evaluate } from './chrome.mjs';
+// Hover motion is optional: a set without motion.mjs is checked as static.
+const MOTION = fs.existsSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'motion.mjs'))
+  ? (await import('./motion.mjs')).MOTION : {};
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -44,6 +53,10 @@ const svg = (n, size, tones) => render(ICONS[n], { size, id: `i${uid++}`, ...ton
 
 // --- Measurements ---------------------------------------------------------------------------
 const GAP = 1, TOL = 0.15, KEY_TOL = 0.25, MAX_PRIMARY = 0.6;
+// Smallest primary pieces, in 16-grid units as drawn (GUIDE.md 5.1). Pieces of area 8 and up are
+// parts, not details, and are not measured. The limits carry a small allowance for the raster.
+const INSET = { near: 2.6, tol: 0.15 };
+const SIZE = { lone: { area: 4, long: 3 }, group: { area: 1.25, long: 2.25 }, part: 8, slack: 0.95 };
 const data = checked.map((n) => ({
   name: n,
   k: FIT[ICONS[n].key] || 1,
@@ -62,7 +75,15 @@ document.querySelectorAll('[data-i]').forEach((div) => {
   for (const p of div.querySelectorAll('svg path')) {
     if (p.closest('defs')) continue;
     const r = p.getBoundingClientRect(), h = ((+p.getAttribute('stroke-width') || 0) / 2) * p.getScreenCTM().a * u;
-    b = [Math.min(b[0], (r.left - s.left) * u - h), Math.min(b[1], (r.top - s.top) * u - h), Math.max(b[2], (r.right - s.left) * u + h), Math.max(b[3], (r.bottom - s.top) * u + h)];
+    let e = [(r.left - s.left) * u - h, (r.top - s.top) * u - h, (r.right - s.left) * u + h, (r.bottom - s.top) * u + h];
+    // A clipped layer only shows inside its clip: measure the overlap of the two.
+    const cg = p.closest('[clip-path]'), cp = cg && div.querySelector('clipPath[id="' + cg.getAttribute('clip-path').slice(5, -1) + '"] path');
+    if (cp) {
+      const bb = cp.getBBox(), m = cg.getScreenCTM(), k0 = m.a * u;
+      const c = [(m.e - s.left) * u + bb.x * k0, (m.f - s.top) * u + bb.y * k0];
+      e = [Math.max(e[0], c[0]), Math.max(e[1], c[1]), Math.min(e[2], c[0] + bb.width * k0), Math.min(e[3], c[1] + bb.height * k0)];
+    }
+    b = [Math.min(b[0], e[0]), Math.min(b[1], e[1]), Math.max(b[2], e[2]), Math.max(b[3], e[3])];
   }
   res[+div.dataset.i].box = b.map((v) => +v.toFixed(2));
 });
@@ -82,6 +103,20 @@ data.forEach((icon, n) => {
     if (A.li === B.li || (A.tone === 'a' && B.tone === 'a') || (A.part && A.part === B.part) || B.clip) continue; // clip: a piece of the body itself
     const key = A.li + '-' + B.li, pair = (pairs[key] ||= { la: A.li, lb: B.li, gapB: B.gap, over: 'none', d: 1e9 });
     const bInA = B.pts.filter((pt) => inside(A, pt)).length, aInB = A.pts.filter((pt) => inside(B, pt)).length;
+    if (bInA === B.pts.length && !A.sw) {
+      // B sits inside A: measure its clearance to A's edge straight left, right, up and down
+      // from B's outermost points.
+      const h = B.sw / 2, ext = [
+        B.pts.reduce((m, p) => (p.x < m.x ? p : m)), B.pts.reduce((m, p) => (p.x > m.x ? p : m)),
+        B.pts.reduce((m, p) => (p.y < m.y ? p : m)), B.pts.reduce((m, p) => (p.y > m.y ? p : m))];
+      const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+      const ins = dirs.map(([dx, dy], i) => {
+        const x0 = ext[i].x + dx * h, y0 = ext[i].y + dy * h;
+        for (let t = 0; t < 6; t += 0.02) if (!inside(A, { x: x0 + dx * t, y: y0 + dy * t })) return +(t * icon.k).toFixed(2);
+        return 99;
+      });
+      (res[n].insets ||= []).push([A.li, B.li, [+((ext[0].x + ext[1].x) / 2).toFixed(1), +((ext[2].y + ext[3].y) / 2).toFixed(1)], ins]);
+    }
     if (bInA === B.pts.length || aInB === A.pts.length) { if (pair.over === 'none') pair.over = 'within'; continue; } // printed on, or fully behind
     if (bInA || aInB) { pair.over = 'partial'; continue; }
     let m = 1e9; for (const a of A.pts) for (const b of B.pts) m = Math.min(m, Math.hypot(a.x - b.x, a.y - b.y));
@@ -101,6 +136,21 @@ data.forEach((icon, n) => {
     const px = x.getImageData(0, 0, 160, 160).data; let a = 0, b = 0;
     for (let i = 0; i < px.length; i += 4) { const al = px[i + 3] / 255; a += (px[i] / 255) * al; b += (px[i + 2] / 255) * al; }
     res[n].a = a / 25600; res[n].b = b / 25600;
+    // Separate primary pieces (red in the probe; 10px to a unit): area, sides, and whether it is
+    // line-like (at least twice as long as wide).
+    const on = new Uint8Array(25600), lab = new Int32Array(25600), pieces = [];
+    for (let i = 0; i < 25600; i++) on[i] = px[i * 4 + 3] > 127 && px[i * 4] > px[i * 4 + 2] ? 1 : 0;
+    for (let s0 = 0; s0 < 25600; s0++) {
+      if (!on[s0] || lab[s0]) continue;
+      lab[s0] = 1; const st = [s0]; let area = 0, x0 = 160, y0 = 160, x1 = 0, y1 = 0;
+      while (st.length) { const i = st.pop(), xx = i % 160, yy = (i / 160) | 0; area++;
+        x0 = Math.min(x0, xx); x1 = Math.max(x1, xx); y0 = Math.min(y0, yy); y1 = Math.max(y1, yy);
+        for (const j of [i - 1, i + 1, i - 160, i + 160]) if (j >= 0 && j < 25600 && on[j] && !lab[j] && Math.abs((j % 160) - xx) <= 1) { lab[j] = 1; st.push(j); } }
+      if (area < 4) continue;
+      const w = (x1 - x0 + 1) / 10, h = (y1 - y0 + 1) / 10;
+      pieces.push({ area: area / 100, long: Math.max(w, h), short: Math.min(w, h), at: [+((x0 + x1) / 20).toFixed(1), +((y0 + y1) / 20).toFixed(1)] });
+    }
+    res[n].pieces = pieces;
     if (--left === 0) document.getElementById('out').textContent = JSON.stringify(res);
   };
   im.src = icon.probe;
@@ -115,10 +165,32 @@ checked.forEach((name, i) => {
   const share = m.a / (m.a + m.b);
   if (m.a < 0.002 || m.b < 0.002) found.push(['tones', `uses only the ${m.a < 0.002 ? 'secondary' : 'primary'} tone`]);
   else if (share > MAX_PRIMARY) found.push(['primary', `primary is ${(share * 100).toFixed(0)}% of the ink (at most ${MAX_PRIMARY * 100}%)`]);
+  const like = (p, q) => Math.abs(p.long - q.long) <= 0.25 && Math.abs(p.short - q.short) <= 0.25;
+  for (const p of m.pieces.filter((q) => q.area < SIZE.part)) {
+    const group = m.pieces.some((q) => q !== p && like(p, q)), line = p.long >= 2 * p.short, lim = group ? SIZE.group : SIZE.lone;
+    const what = `${group ? 'repeated' : 'lone'} ${line ? 'line' : 'mark'} at ${p.at.join(', ')}`;
+    if (line && p.long < lim.long * SIZE.slack) found.push(['size', `${what} is ${p.long} long (at least ${lim.long})`]);
+    else if (!line && p.area < lim.area * SIZE.slack) found.push(['size', `${what} has area ${p.area} (at least ${lim.area})`]);
+  }
+  for (const [la, lb, at, ins] of m.insets || []) {
+    if (Math.min(...ins) < 0.1) continue; // hangs from or stands on an edge: part of the outline
+    const near = ins.filter((v) => v < INSET.near);
+    if (near.length >= 2 && Math.max(...near) - Math.min(...near) > INSET.tol)
+      found.push(['inset', `layer ${lb} at ${at.join(', ')} sits unevenly in layer ${la}: clearances left ${ins[0]}, right ${ins[1]}, top ${ins[2]}, bottom ${ins[3]}; make the nearby ones equal`]);
+  }
   for (const [la, lb, d] of m.gaps) {
     if (d === 'masked') continue;
     if (d === 'overlap') found.push(['overlap', `layer ${lb} overlaps layer ${la} with no knockout outline: give the front one gap: W`]);
     else if (Math.abs(d - GAP) > TOL) found.push(['spacing', `layers ${la} and ${lb} are ${d} apart: keep exactly ${GAP} (touching is not allowed either)`]);
+  }
+  const mo = MOTION[name];
+  if (mo) {
+    const copies = (mo.copy || []).flatMap((c) => c.of).length;
+    for (const k of Object.keys(mo.moves || {})) {
+      const ok = k === 'all' || (/^\d+$/.test(k) && +k < icon.layers.length) || (/^c\d+$/.test(k) && +k.slice(1) < copies);
+      if (!ok) found.push(['motion', `motion.mjs moves "${k}", but the icon has layers 0–${icon.layers.length - 1}${copies ? ` and copies c0–c${copies - 1}` : ''}`]);
+    }
+    for (const c of mo.copy || []) for (const i of c.of) if (i >= icon.layers.length) found.push(['motion', `motion.mjs copies layer ${i}, which doesn't exist`]);
   }
   for (const [rule, text] of found) (icon.allow?.[rule] ? allowed : findings).push(`- **${name}** (${rule}): ${text}${icon.allow?.[rule] ? ` — ${icon.allow[rule]}` : ''}`);
 });

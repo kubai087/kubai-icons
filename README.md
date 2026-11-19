@@ -93,10 +93,10 @@ The skill draws in either of two styles and asks when your request doesn't make 
 | Style | Looks | Delivers | Rules |
 | --- | --- | --- | --- |
 | Layered (default) | Folder-like back and front pieces, outside outlines, shadows, hover motion | Animated SVG + JS, or static SVG | [`PROMPT.md`](PROMPT.md) |
-| Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour | Static SVG | [`styles/duotone/GUIDE.md`](styles/duotone/GUIDE.md) |
+| Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour; hover motion the object itself would make | Static SVG, or SVG + JS for the motion | [`styles/duotone/GUIDE.md`](styles/duotone/GUIDE.md) |
 
 <p align="center">
-  <img src="assets/duotone.png" alt="Forty-three two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, download, a heart and a music note" width="720" />
+  <img src="assets/duotone.png" alt="Seventy-three two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, status marks in circles, a database, wifi and a store" width="720" />
 </p>
 
 Ask for "solid", "filled", "two-tone" or "duotone" icons, or small icons for an app's interface, and the skill uses the two-tone style.
@@ -205,7 +205,7 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 
 <br />
 
-Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 43 examples, a self-check and an export script. Names are in English.
+Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 73 examples with their hover motion, a self-check and an export script. Names are in English.
 
 ```bash
 node styles/duotone/check.mjs --only mail --with folder,lock     # sheets and findings.md in styles/duotone/check-out/
