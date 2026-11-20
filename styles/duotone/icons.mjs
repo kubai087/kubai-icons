@@ -2539,3 +2539,126 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Group 2 of the same batch.
+// file-spreadsheet's table: one blue block on the sheet cut by straight seams 1 wide into two
+// columns and three rows (as table cuts the sheet), one layer per row.
+const SHEET_TABLE = (y) => L(rr(4.5, 4.75, 7, 6.5, 1), { clip: rr(0, y, 16, 1.5), cut: [C(rr(7.5, 0, 1, 16))] });
+Object.assign(ICONS, {
+  'file-spreadsheet': {
+    label: '表格文件',
+    key: 'portrait',
+    layers: [L(SHEET, Bt), SHEET_TABLE(4.75), SHEET_TABLE(7.25), SHEET_TABLE(9.75)]
+  },
+  'file-archive': {
+    label: '压缩文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with a zip: blue teeth hanging from the top edge, alternating either
+      // side of the centre line, and one gap below them a pull with a hole.
+      L(SHEET, Bt),
+      L(rr(6.75, 1, 1.25, 1.25) + rr(8, 2.25, 1.25, 1.25) + rr(6.75, 3.5, 1.25, 1.25) + rr(8, 4.75, 1.25, 1.25)),
+      L(rr(6.25, 7, 3.5, 4.5, 1), { cut: [C(pill(7.375, 8.75, 1.25, 1.5))] })
+    ]
+  },
+  newspaper: {
+    label: '报纸',
+    key: 'landscape',
+    layers: [
+      // A light page: a blue headline across the top, and under it a picture block on the left
+      // with two lines of text beside it. One layer per text line, so they can be printed in turn.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(pill(3.5, 4.5, 9, D)),
+      L(rr(3.5, 7.25, 3.5, 4.25, 1)),
+      L(pill(8, 7.75, 4.5, D)),
+      L(pill(8, 10.25, 3, D))
+    ]
+  },
+  'filing-cabinet': {
+    label: '文件柜',
+    key: 'portrait',
+    layers: [
+      // A light cabinet cut straight across into two drawers by a gap of 1 (as server's rack
+      // units, standing up), each with a blue handle on its centre.
+      L(rr(2, 1, 12, 6.5, [M, M, 0, 0]), Bt),
+      L(rr(2, 8.5, 12, 6.5, [0, 0, M, M]), Bt),
+      L(pill(6, 3.625, 4, D)),
+      L(pill(6, 11.125, 4, D))
+    ]
+  },
+  'git-commit': {
+    label: '提交',
+    key: 'flat',
+    layers: [
+      // A blue line through a light node (a disc filling the height) that cuts a gap of W out of
+      // it; a blue dot is printed on the node's centre.
+      L('M1.75 8H14.25', { sw: K }),
+      L(circ(8, 8, 4), { ...Bt, gap: W }),
+      L(circ(8, 8, 1.75))
+    ]
+  },
+  'git-branch': {
+    label: '分支',
+    key: 'square',
+    layers: [
+      // Light lines and blue nodes that cut a gap of W out of them: a trunk between two nodes on
+      // the left, and a branch that leaves it at the bottom node and bends up to a node on the
+      // right. Trunk and branch are one element (one part); the branch is drawn from the trunk
+      // outward. Small nodes keep the blue under 60%.
+      L('M3.5 3.5V12.5', { sw: 2, ...Bt, part: 'lines' }),
+      L('M3.5 12.5H6A6.5 6.5 0 0 0 12.5 6V3.5', { sw: 2, ...Bt, part: 'lines' }),
+      L(circ(3.5, 3.5, 1.5) + circ(3.5, 12.5, 1.5), { gap: W }),
+      L(circ(12.5, 3.5, 1.5), { gap: W })
+    ]
+  },
+  'git-merge': {
+    label: '合并分支',
+    key: 'square',
+    layers: [
+      // git-branch the other way: one node at the top of the trunk, and a branch from a node at
+      // the lower right that bends round into the trunk under it. Drawn from the branch's node.
+      L('M3.5 3.5V13', { sw: 2, ...Bt, part: 'lines' }),
+      L('M12.5 12.5H10A6.5 6.5 0 0 1 3.5 6V3.5', { sw: 2, ...Bt, part: 'lines' }),
+      L(circ(3.5, 3.5, 1.5), { gap: W }),
+      L(circ(12.5, 12.5, 1.5), { gap: W })
+    ]
+  },
+  bug: {
+    label: '缺陷',
+    key: 'square',
+    layers: [
+      // A beetle seen from above: a light body split down the middle into two wing cases, a blue
+      // head one gap above it, and three blue legs a side, one gap out. The legs are two layers
+      // (each a left, right, left set), so they can step in turn.
+      L(rr(5.25, 5, 5.5, 9, 2.75), { ...Bt, cut: [C(rr(7.5, 0, 1, 16))] }),
+      L(rr(6, 2, 4, 2, [2, 2, 0.5, 0.5])),
+      L(pill(2, 6.125, 2.25, D) + pill(11.75, 8.875, 2.25, D) + pill(2, 11.625, 2.25, D)),
+      L(pill(11.75, 6.125, 2.25, D) + pill(2, 8.875, 2.25, D) + pill(11.75, 11.625, 2.25, D))
+    ]
+  },
+  rss: {
+    label: '订阅',
+    key: 'square',
+    layers: [
+      // code's tile with the feed mark in blue: a dot in the lower left corner, the same 1.75
+      // in from the left and bottom edges, and two quarter rings about it a gap of 1 apart.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L(circ(5.25, 10.75, 1.5)),
+      L('M5.25 7.5A3.25 3.25 0 0 1 8.5 10.75', { sw: K }),
+      L('M5.25 5A5.75 5.75 0 0 1 11 10.75', { sw: K })
+    ]
+  },
+  'wrap-text': {
+    label: '自动换行',
+    key: 'landscape',
+    layers: [
+      // menu's light bars at the top and a short one at the bottom; between them a blue line runs
+      // to the end, turns down round a half circle and comes back as an arrow (the allowed 45°
+      // head), pointing to where the next line starts.
+      L('M2 3H14', { sw: 2, ...Bt }),
+      L('M2 13H5', { sw: 2, ...Bt }),
+      L('M2 7.5H12.25A2 2 0 0 1 12.25 11.5H9.25', { sw: K, part: 'arrow' }),
+      L('M10.75 9.75L9 11.5L10.75 13.25', { sw: K, part: 'arrow' })
+    ]
+  }
+});
