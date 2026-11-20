@@ -200,7 +200,23 @@ export const MOTION = {
     say: '开关拨到右边，轨道亮起，打开',
     add: [{ layer: L(pill(1, 4, 14, 8)), at: 1 }, { layer: L(circ(5, 8, 3), Bt) }],
     moves: { 1: { x: 6 }, a0: { ...hidden, a: 1 }, a1: { ...hidden, a: 1, x: 6 } }
-  }
+  },
+  'circle-minus': { say: '一笔划出减号', moves: { 1: { w: [0, 1] } } },
+  'circle-dot': { say: '圆点重新落进圆圈，选中', moves: { 1: { s: [0, 1], o: [8, 8] } } },
+  checkbox: { say: '勾上复选框', moves: { 1: { w: [0, 1] } } },
+  'plus-square': { say: '先写竖，再写横', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  'more-horizontal': {
+    say: '三个点从左往右依次点出来',
+    moves: { 1: { s: [0, 1, 1, 1], o: [5, 8] }, 2: { s: [0, 0, 1, 1], o: [8, 8] }, 3: { s: [0, 0, 0, 1], o: [11, 8] } }
+  },
+  loader: { say: '蓝色的一段沿圆环转一圈', moves: { 1: { r: 360, o: [8, 8] } } },
+  appearance: { say: '深色的一半转到另一边，切换外观', moves: { 1: { r: 180, o: [8, 8] } } },
+  'rotate-ccw': {
+    say: '圆弧逆时针画一圈，画到头箭头弹出',
+    moves: { 0: { w: [0, 1, 1] }, 1: { a: [0, 0, 1], s: [0.4, 0.4, 1], o: [3.757, 3.757] } }
+  },
+  'log-in': { say: '箭头从外面伸进门里', moves: { 1: { sx: [0, 1], o: [2, 8] } } },
+  sidebar: { say: '侧栏收起后再展开', moves: { 1: { sx: [0.2, 1], o: [1, 8] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
@@ -217,5 +233,7 @@ Object.assign(MOTION, {
   'search-sparkle': { say: '星光一闪', moves: twinkle('search-sparkle') },
   'image-sparkle': { say: '星光一闪', moves: twinkle('image-sparkle') },
   'bell-off': { say: '斜线重新划过', moves: draw('bell-off') },
-  'eye-off': { say: '斜线重新划过', moves: draw('eye-off') }
+  'eye-off': { say: '斜线重新划过', moves: draw('eye-off') },
+  'zoom-in': { say: '加号转一圈，放大', moves: spin('zoom-in') },
+  'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') }
 });

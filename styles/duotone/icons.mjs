@@ -965,6 +965,106 @@ export const ICONS = {
       L(pill(1, 4, 14, 8), Bt),
       L(circ(5, 8, 3))
     ]
+  },
+  'circle-minus': {
+    label: '移除',
+    key: 'circle',
+    layers: [
+      // circle-plus without its upright stroke.
+      L(circ(8, 8, 7), Bt),
+      L('M5 8H11', { sw: K })
+    ]
+  },
+  'circle-dot': {
+    label: '单选',
+    key: 'circle',
+    layers: [
+      // A selected radio button: a light disc and a blue dot at its centre, 4 in from the rim.
+      L(circ(8, 8, 7), Bt),
+      L(circ(8, 8, 3))
+    ]
+  },
+  checkbox: {
+    label: '复选框',
+    key: 'square',
+    layers: [
+      // A light box with circle-check's check, centred.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M5.25 7.75L7.25 9.75L10.75 6.25', { sw: K })
+    ]
+  },
+  'plus-square': {
+    label: '新增',
+    key: 'square',
+    layers: [
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M8 5V11', { sw: K }),
+      L('M5 8H11', { sw: K })
+    ]
+  },
+  'more-horizontal': {
+    label: '更多',
+    key: 'flat',
+    layers: [
+      // A light capsule (toggle's track) with three blue dots a gap of 1 apart; the outer dots
+      // are concentric with the capsule's round ends. One layer per dot, so the motion can put
+      // them down one after another.
+      L(pill(1, 4, 14, 8), Bt),
+      L(circ(5, 8, 1)),
+      L(circ(8, 8, 1)),
+      L(circ(11, 8, 1))
+    ]
+  },
+  loader: {
+    label: '加载',
+    key: 'circle',
+    layers: [
+      // A light ring (history's: stroke 2, outer edge on the keyline) with a blue quarter printed
+      // on it from the top round to the right; its round ends stay inside the ring.
+      L(circ(8, 8, 6), { ...Bt, sw: 2 }),
+      L('M8 2A6 6 0 0 1 14 8', { sw: 2 })
+    ]
+  },
+  appearance: {
+    label: '外观',
+    key: 'circle',
+    layers: [
+      // One disc, half light and half blue: the blue half is clipped from the same disc, so it
+      // keeps the outline exactly and meets the light half with no seam.
+      L(circ(8, 8, 7), Bt),
+      L(circ(8, 8, 7), { clip: rr(8, 0, 9, 16, 0) })
+    ]
+  },
+  'rotate-ccw': {
+    label: '逆时针旋转',
+    key: 'circle',
+    layers: [
+      // rotate-cw mirrored: the ring opens at the upper left and the head points on round
+      // counterclockwise, down and to the left.
+      L('M2.091 9.042A6 6 0 1 0 3.757 3.757', { ...Bt, sw: 2, part: 'arrow' }),
+      L(polygon([[1.282, 1.282], [6.232, 6.232], [0.992, 6.522]], 1), { part: 'arrow' })
+    ]
+  },
+  'log-in': {
+    label: '登录',
+    key: 'square',
+    layers: [
+      // log-out turned round: the light door on the right and the blue arrow coming in from the
+      // left, its head on the door, cutting a gap of W round itself.
+      L(rr(6.5, 2, 7.5, 12, M), Bt),
+      L(polygon([[2, 7.25], [7.5, 7.25], [7.5, 4.5], [11.41, 8], [7.5, 11.5], [7.5, 8.75], [2, 8.75]], [0.75, 0, 1, 1, 1, 0, 0.75]), { gap: W })
+    ]
+  },
+  sidebar: {
+    label: '侧边栏',
+    key: 'landscape',
+    layers: [
+      // One window split by a straight seam 1 wide (as chart-pie): a blue side panel 4 wide on
+      // the left, the light content area on the right. Both are taken from the same outline, so
+      // they keep its corners and the seam's ends stay square.
+      L(rr(1, 2, 14, 12, R3), { ...Bt, cut: [C(rr(-1, -1, 7, 18))] }),
+      L(rr(1, 2, 14, 12, R3), { clip: rr(-1, -1, 6, 18) })
+    ]
   }
 };
 
@@ -978,5 +1078,7 @@ Object.assign(ICONS, {
   'search-sparkle': badge(ICONS.search, 'sparkle', { drop: [2], label: 'AI 搜索' }),
   'image-sparkle': badge(ICONS.image, 'sparkle', { drop: [2], label: 'AI 生成图片' }),
   'bell-off': badge(ICONS.bell, 'off', { label: '免打扰' }),
-  'eye-off': badge(ICONS.eye, 'off', { label: '隐藏' })
+  'eye-off': badge(ICONS.eye, 'off', { label: '隐藏' }),
+  'zoom-in': badge(ICONS.search, 'plus', { at: [6.75, 6.75], drop: [2], label: '放大' }),
+  'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' })
 });
