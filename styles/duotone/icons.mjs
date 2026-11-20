@@ -2912,7 +2912,7 @@ Object.assign(ICONS, {
 
 // Batch: transport, travel and sports (group 5)
 const TRACTOR = rr(1.5, 2.5, 6, 7.5, [M, M, 0, 0]) + rr(7.5, 6, 7.5, 4, [0, r, r, 0]);
-const SKIRT = polygon([[2.5, 1], [13.5, 1], [10, 10], [6, 10]], [1, 1, 0.5, 0.5]);
+const SKIRT = polygon([[1.5, 1], [14.5, 1], [10, 10], [6, 10]], [1, 1, 0.5, 0.5]);
 
 Object.assign(ICONS, {
   igloo: {
@@ -2933,7 +2933,7 @@ Object.assign(ICONS, {
       // in front of it with a gap of W.
       L('M5 14V4.25A2.5 2.5 0 0 1 7.5 1.75H11', { sw: K, part: 'post' }),
       L(rr(2, 13.5, 6, 1.5, [0.75, 0.75, 0, 0]), { part: 'post' }),
-      L(rr(9.25, 1, 4.75, 3.25, [1.5, 1.5, 1, 1]), { ...Bt, gap: W })
+      L(rr(8.5, 1, 5.5, 4.5, [2, 2, 1, 1]), { ...Bt, gap: W })
     ]
   },
   lantern: {
@@ -2942,10 +2942,10 @@ Object.assign(ICONS, {
     layers: [
       // A blue cap with a loop on top, one gap above a light glass with a blue flame in it (the
       // drop's point), and a blue foot one gap below.
-      L('M6.75 3A1.25 1.25 0 0 1 9.25 3', { sw: K, part: 'cap' }),
+      L('M6.75 3.5V3A1.25 1.25 0 0 1 9.25 3V3.5', { sw: K, part: 'cap' }),
       L(rr(4.5, 2.75, 7, 1.5, [0.75, 0.75, 0, 0]), { part: 'cap' }),
       L(rr(4, 5.25, 8, 7, r), Bt),
-      L(dropPath(9.25, 1.5, 6.75, 0.5)),
+      L(dropPath(9.13, 1.25, 6.59, 0.5)),
       L(rr(3, 13.25, 10, 1.75, [0, 0, 0.75, 0.75]))
     ]
   },
@@ -3030,7 +3030,7 @@ Object.assign(ICONS, {
     ]
   },
   'toy-robot': {
-    label: '机器人',
+    label: '铁皮机器人',
     key: 'square',
     layers: [
       // A blue antenna one gap above a light head with two blue eyes, 2 in from its top and sides.
