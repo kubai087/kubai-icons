@@ -1727,6 +1727,81 @@ export const ICONS = {
       L(pill(5.375, 5.25, D, 2) + pill(9.375, 5.25, D, 2)),
       L('M5.25 9H10.75A2.75 2.75 0 0 1 5.25 9Z', { sw: D })
     ]
+  },
+  terminal: {
+    label: '终端',
+    key: 'landscape',
+    layers: [
+      // A light window with a blue prompt (a chevron, the allowed 45°) and a cursor line on its
+      // baseline; the prompt sits 2.25 in from the left.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L('M4 6L6 8L4 10', { sw: K }),
+      L(pill(7.5, 9.375, 4, D))
+    ]
+  },
+  code: {
+    label: '代码',
+    key: 'square',
+    layers: [
+      // type's tile with a pair of blue angle brackets (45°), a gap of 1 apart. One layer each.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6.75 6L4.75 8L6.75 10', { sw: K }),
+      L('M9.25 6L11.25 8L9.25 10', { sw: K })
+    ]
+  },
+  brackets: {
+    label: '方括号',
+    key: 'square',
+    layers: [
+      // type's tile with a pair of blue square brackets, 2.25 in from its edges. One layer each.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6.5 5H5V11H6.5', { sw: K }),
+      L('M9.5 5H11V11H9.5', { sw: K })
+    ]
+  },
+  umbrella: {
+    label: '雨伞',
+    key: 'square',
+    layers: [
+      // A light canopy (a half disc whose two corners are rounded at 0.75) and, one gap below it,
+      // a blue handle on its centre line ending in a hook.
+      L('M2.804 8A0.75 0.75 0 0 1 2.062 7.143A6 6 0 0 1 13.938 7.143A0.75 0.75 0 0 1 13.196 8Z', Bt),
+      L('M8 9.75V12A1.25 1.25 0 0 1 5.5 12', { sw: K })
+    ]
+  },
+  'cloud-rain': {
+    label: '下雨',
+    key: 'wide',
+    layers: [
+      // cloud-upload's cloud, lower and smaller, with three blue drops one gap below it. One
+      // layer per drop.
+      L(pill(1, 4.5, 14, 5) + circ(8.5, 5.5, 3), Bt),
+      L(pill(3.875, 10.5, D, 3)),
+      L(pill(7.375, 10.5, D, 3)),
+      L(pill(10.875, 10.5, D, 3))
+    ]
+  },
+  'cloud-snow': {
+    label: '下雪',
+    key: 'wide',
+    layers: [
+      // cloud-rain's cloud with blue flakes (dots) instead of drops. One layer per flake.
+      L(pill(1, 4.5, 14, 5) + circ(8.5, 5.5, 3), Bt),
+      L(circ(4.5, 11.375, 0.875)),
+      L(circ(8, 12.625, 0.875)),
+      L(circ(11.5, 11.375, 0.875))
+    ]
+  },
+  backpack: {
+    label: '书包',
+    key: 'portrait',
+    layers: [
+      // A blue carry loop behind a light bag with a round top, which cuts a gap of W round itself;
+      // a blue front pocket 2.25 in from the bag's sides and bottom.
+      L('M6 4.5V3.25A1.5 1.5 0 0 1 7.5 1.75H8.5A1.5 1.5 0 0 1 10 3.25V4.5', { sw: K }),
+      L(rr(2, 3.5, 12, 11.5, [5, 5, M, M]), { ...Bt, gap: W }),
+      L(rr(4.25, 9.5, 7.5, 3.25, r))
+    ]
   }
 };
 

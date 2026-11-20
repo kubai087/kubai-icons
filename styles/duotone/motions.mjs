@@ -347,7 +347,20 @@ export const MOTION = {
   banknote: { say: '翻过来查看', moves: { all: { sx: [-1, 1, 1] } } },
   meh: { say: '嘴角左右一撇', moves: { 2: { x: [-0.5, 0.5, 0] } } },
   frown: { say: '嘴角往下一沉', moves: { 2: { y: 0.4 }, 1: { sy: 0.8, o: [8, 6.25] } } },
-  laugh: { say: '笑得眯起眼', moves: { 1: { sy: 0.35, o: [8, 6.25] }, 2: { sy: [1.2, 1], o: [8, 9] } } }
+  laugh: { say: '笑得眯起眼', moves: { 1: { sy: 0.35, o: [8, 6.25] }, 2: { sy: [1.2, 1], o: [8, 9] } } },
+  terminal: { say: '光标闪烁，等待输入', moves: { 2: { a: [0, 1, 0, 1] } } },
+  code: { say: '两个尖括号向两边张开再合上', moves: { 1: { x: [-0.5, 0] }, 2: { x: [0.5, 0] } } },
+  brackets: { say: '两个方括号向两边张开再合上', moves: { 1: { x: [-0.5, 0] }, 2: { x: [0.5, 0] } } },
+  umbrella: { say: '伞面撑开', moves: { 0: { sy: [0.3, 1], o: [8, 8] } } },
+  'cloud-rain': {
+    say: '雨滴依次落下',
+    moves: { 1: { y: [-1.5, 0, 0, 0], a: [0, 1, 1, 1] }, 2: { y: [-1.5, -1.5, 0, 0], a: [0, 0, 1, 1] }, 3: { y: [-1.5, -1.5, -1.5, 0], a: [0, 0, 0, 1] } }
+  },
+  'cloud-snow': {
+    say: '雪花左右飘着落下',
+    moves: { 1: { x: [0.5, 0], y: [-1.5, 0], a: [0, 1] }, 2: { x: [-0.5, 0], y: [-1.5, 0], a: [0, 1] }, 3: { x: [0.5, 0], y: [-1.5, 0], a: [0, 1] } }
+  },
+  backpack: { say: '提起来，绕提手晃一晃', moves: { all: { y: [-0.5, -0.5, -0.5, -0.5], r: [4, -3, 1.5, 0], o: [8, 1.75] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
