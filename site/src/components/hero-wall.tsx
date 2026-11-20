@@ -11,7 +11,7 @@ import { useIconStyle } from "@/components/browser/prefs";
 import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
-import { useWallLoop } from "@/lib/wall-motion";
+import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
 
 const WALL = [Folder, Mail, Calendar, Lock, Settings, Trash, Bell, Camera, Bookmark, AlarmClock, Notebook, Compass, Download, CloudUpload, Gift, Package, Heart, Star, Key, Smartphone];
 /**
@@ -71,9 +71,11 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, run
   const [turn, setTurn] = useState(false);
   const [held, setHeld] = useState(false);
   const [saved, setSaved] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
 
   useEffect(() => {
-    if (!running || held || told) return;
+    if (!running || !onScreen || held || told) return;
     // Every turn is read from the page clock, so throttled timers cannot bring tiles into step.
     const phase = () => (performance.now() + PERIOD - offset) % PERIOD;
     let timer = 0;
@@ -81,12 +83,13 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, run
     const rest = () => { setTurn(false); timer = window.setTimeout(play, PERIOD - phase() + 1); };
     timer = window.setTimeout(play, PERIOD - phase() + 1);
     return () => { window.clearTimeout(timer); setTurn(false); };
-  }, [running, held, offset, told]);
+  }, [running, onScreen, held, offset, told]);
 
   const toggles = Icon === Bookmark && !duo;
   const hover = turn || held || playing;
   return (
     <div
+      ref={ref}
       className={cn(tile(), "rise-in aspect-square", playing && "bg-surface-hover")}
       // Tiles arrive along the diagonals, after the headline.
       style={{ "--i": 2 + (index % 5) + Math.floor(index / 5) } as CSSProperties}

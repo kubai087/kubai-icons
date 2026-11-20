@@ -9,7 +9,7 @@ import { loadIcon, loadIndex, peekIcon, type IconMeta } from "@/lib/icons";
 import { tile } from "@/components/kit/styles";
 import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
-import { useWallLoop } from "@/lib/wall-motion";
+import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
 
 /** Time in the hover pose, and how much loop each tile adds, in milliseconds (as the home page wall). */
 const HOLD = 1400;
@@ -21,8 +21,10 @@ const strideFor = (n: number) => { let s = 7; while (n > 1 && gcd(s, n) !== 1) s
 const LoopTile = memo(function LoopTile({ name, icon, color, offset, period, running }: { name: string; icon: KubaiIconData; color: string; offset: number; period: number; running: boolean }) {
   const [turn, setTurn] = useState(false);
   const [held, setHeld] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
   useEffect(() => {
-    if (!running || held) return;
+    if (!running || !onScreen || held) return;
     // Turns are read from the page clock, so throttled timers cannot bring tiles into step.
     const phase = () => (performance.now() + period - offset) % period;
     let timer = 0;
@@ -30,9 +32,10 @@ const LoopTile = memo(function LoopTile({ name, icon, color, offset, period, run
     const rest = () => { setTurn(false); timer = window.setTimeout(play, period - phase() + 1); };
     timer = window.setTimeout(play, period - phase() + 1);
     return () => { window.clearTimeout(timer); setTurn(false); };
-  }, [running, held, offset, period]);
+  }, [running, onScreen, held, offset, period]);
   return (
     <div
+      ref={ref}
       title={name}
       className={cn(tile({ interactive: false }), "aspect-square")}
       onPointerEnter={(e) => e.pointerType === "mouse" && setHeld(true)}

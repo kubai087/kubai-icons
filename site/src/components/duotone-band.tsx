@@ -19,7 +19,7 @@ import { panel, tile } from "@/components/kit/styles";
 import { WallPause } from "@/components/kit/wall-pause";
 import { hasIconPages } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import { useWallLoop } from "@/lib/wall-motion";
+import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
 
 /** Fifteen objects both styles draw, each as [layered, two-tone], mixed so neighbours differ. */
@@ -44,8 +44,10 @@ const offsetOf = (i: number) => ((i * 7) % PAIRS.length) * PER_TILE;
 const BandTile = memo(function BandTile({ Icon, style, offset, running }: { Icon: IconComponent; style: Style; offset: number; running: boolean }) {
   const [turn, setTurn] = useState(false);
   const [held, setHeld] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
   useEffect(() => {
-    if (!running || held) return;
+    if (!running || !onScreen || held) return;
     // Turns are read from the page clock, so throttled timers cannot bring tiles into step.
     const phase = () => (performance.now() + PERIOD - offset) % PERIOD;
     let timer = 0;
@@ -53,9 +55,10 @@ const BandTile = memo(function BandTile({ Icon, style, offset, running }: { Icon
     const rest = () => { setTurn(false); timer = window.setTimeout(play, PERIOD - phase() + 1); };
     timer = window.setTimeout(play, PERIOD - phase() + 1);
     return () => { window.clearTimeout(timer); setTurn(false); };
-  }, [running, held, offset]);
+  }, [running, onScreen, held, offset]);
   return (
     <div
+      ref={ref}
       aria-hidden
       className={cn(tile(), "aspect-square")}
       onPointerEnter={(e) => e.pointerType === "mouse" && setHeld(true)}

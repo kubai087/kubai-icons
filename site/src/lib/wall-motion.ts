@@ -41,16 +41,48 @@ const subscribeReduced = (fn: () => void) => {
 /** Whether the system asks for reduced motion, following the setting as it changes. */
 export const useReducedMotion = () => useSyncExternalStore(subscribeReduced, () => matchMedia(REDUCE).matches, () => false);
 
-/** Whether a looping wall should run: on screen, not paused, and without reduced motion. */
+const subscribeShown = (fn: () => void) => {
+  document.addEventListener("visibilitychange", fn);
+  return () => document.removeEventListener("visibilitychange", fn);
+};
+
+/** Whether the page's tab is showing. A hidden tab draws nothing, so the walls rest. */
+export const usePageShown = () => useSyncExternalStore(subscribeShown, () => !document.hidden, () => true);
+
+/** Whether a looping wall should run: on screen in a showing tab, not paused, and without reduced motion. */
 export function useWallLoop(ref: RefObject<Element | null>) {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [ref]);
+  const visible = useOnScreen(ref);
+  const shown = usePageShown();
   const isPaused = useWallsPaused();
   const reduced = useReducedMotion();
-  return visible && !isPaused && !reduced;
+  return visible && shown && !isPaused && !reduced;
+}
+
+// One observer for every wall and tile on the page, each element with its own callback.
+let observer: IntersectionObserver | null = null;
+const callbacks = new Map<Element, (on: boolean) => void>();
+function watch(el: Element, fn: (on: boolean) => void) {
+  observer ??= new IntersectionObserver((entries) => {
+    for (const entry of entries) callbacks.get(entry.target)?.(entry.isIntersecting);
+  });
+  callbacks.set(el, fn);
+  observer.observe(el);
+  return () => {
+    callbacks.delete(el);
+    observer?.unobserve(el);
+  };
+}
+
+/**
+ * Whether an element is on screen. A wall runs while any of it shows; each tile also checks
+ * its own, so a wall taller than the screen, or one scrolled nearly out of view, moves only
+ * the icons that can be seen.
+ */
+export function useOnScreen(ref: RefObject<Element | null>) {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    return watch(ref.current, setOn);
+  }, [ref]);
+  return on;
 }
