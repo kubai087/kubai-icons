@@ -2646,3 +2646,112 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: transport, travel and sports (group 3)
+// A fuel pump's light body, and its blue hose: a bracket on the right, one gap from the body.
+const PUMP = rr(2, 1, 8, 14, [M, M, S, S]);
+const HOSE = L('M11.75 4.75H12.25A1 1 0 0 1 13.25 5.75V11.75A1 1 0 0 1 12.25 12.75H11.75', { sw: K });
+// A road running away from the viewer: it narrows toward the top (the slopes).
+const ROAD = polygon([[6, 1], [10, 1], [14.4, 15], [1.6, 15]], [0.5, 0.5, 0.75, 0.75]);
+const TOWER = polygon([[5.75, 6], [10.25, 6], [13.17, 15], [2.83, 15]], [0, 0, 0.5, 0.5]) + rr(4, 5, 8, 1.5, 0.5);
+
+Object.assign(ICONS, {
+  fuel: {
+    label: '加油机',
+    key: 'portrait',
+    layers: [
+      // A light fuel pump with a blue screen 2 in from its top and sides, and the blue hose.
+      L(PUMP, Bt),
+      L(rr(4, 3, 4, 3.5, 1)),
+      HOSE
+    ]
+  },
+  'ev-charger': {
+    label: '充电桩',
+    key: 'portrait',
+    layers: [
+      // fuel's pump and hose with battery-charging's blue bolt on its face (the slopes).
+      L(PUMP, Bt),
+      L(polygon([[6.9, 3.25], [6.4, 7], [8, 7], [5.1, 12.75], [5.6, 9], [4, 9]], 0.5)),
+      HOSE
+    ]
+  },
+  'steering-wheel': {
+    label: '方向盘',
+    key: 'circle',
+    layers: [
+      // A light rim with two spokes across and one down, all one body, and a blue hub: the spokes clipped
+      // across their middle.
+      // The rim's inner circle runs the other way, so it is a hole the spokes fill in.
+      L(circ(8, 8, 7) + 'M3.25 8A4.75 4.75 0 1 0 12.75 8A4.75 4.75 0 1 0 3.25 8Z' + rr(2, 6.5, 12, 3, 0) + rr(6.75, 8, 2.5, 6, 0), Bt),
+      L(rr(2, 6.5, 12, 3, 0), { clip: pill(5, 6.5, 6, 3) })
+    ]
+  },
+  'traffic-light': {
+    label: '红绿灯',
+    key: 'tall',
+    layers: [
+      // A light housing with three blue lamps down its middle, one layer each.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(circ(8, 4.25, 1.75)),
+      L(circ(8, 8, 1.75)),
+      L(circ(8, 11.75, 1.75))
+    ]
+  },
+  signpost: {
+    label: '路标',
+    key: 'portrait',
+    layers: [
+      // A blue post behind two light boards that cut a gap of W round themselves, one pointing
+      // right and one left: each pointed end needs slopes.
+      L(pill(7.25, 2, K, 13)),
+      L(polygon([[4.25, 1], [12, 1], [14.3, 2.75], [12, 4.5], [4.25, 4.5]], [0.75, 0, 0.5, 0, 0.75]), { ...Bt, gap: W }),
+      L(polygon([[4, 5.5], [11.75, 5.5], [11.75, 9], [4, 9], [1.7, 7.25]], [0, 0.75, 0.75, 0, 0.5]), { ...Bt, gap: W })
+    ]
+  },
+  route: {
+    label: '路线',
+    key: 'square',
+    layers: [
+      // A light winding path (the light stroke 2) and, in front of its ends, a blue start and a
+      // blue end with white centres, cutting a gap of W round themselves.
+      L('M4 12H10A2 2 0 0 0 10 8H6A2 2 0 0 1 6 4H12', { ...Bt, sw: 2 }),
+      L(circ(4, 12, 2), { gap: W, cut: [C(circ(4, 12, 0.75))] }),
+      L(circ(12, 4, 2), { gap: W, cut: [C(circ(12, 4, 0.75))] })
+    ]
+  },
+  road: {
+    label: '道路',
+    key: 'portrait',
+    layers: [
+      // A light road narrowing into the distance (the slopes) with three blue centre dashes,
+      // one layer each.
+      L(ROAD, Bt),
+      L(pill(7.375, 3.2, D, 2.4)),
+      L(pill(7.375, 7, D, 2.5)),
+      L(pill(7.375, 11, D, 2.5))
+    ]
+  },
+  lighthouse: {
+    label: '灯塔',
+    key: 'tall',
+    layers: [
+      // A blue lantern with a round top, one gap above a light tower: a gallery wider than its top,
+      // then the tower widening to its base (the slopes), with a blue band printed across it.
+      L(rr(5.75, 1, 4.5, 3, [2.25, 2.25, 0.5, 0.5])),
+      L(TOWER, Bt),
+      L(TOWER, { clip: rr(0, 9.5, 16, 2.25) })
+    ]
+  },
+  binoculars: {
+    label: '双筒望远镜',
+    key: 'landscape',
+    layers: [
+      // Two light barrels joined by a bridge, a blue lens low in each (1.25 in from the sides and
+      // bottom), and blue eyepieces one gap above.
+      L(rr(1, 5, 6, 9, M) + rr(9, 5, 6, 9, M) + rr(6, 7, 4, 3, 0), Bt),
+      L(circ(4, 11, 1.75) + circ(12, 11, 1.75)),
+      L(rr(2.5, 2, 3, 2, [0.75, 0.75, 0, 0]) + rr(10.5, 2, 3, 2, [0.75, 0.75, 0, 0]))
+    ]
+  }
+});

@@ -475,3 +475,26 @@ Object.assign(MOTION, {
   skateboard: { say: '滑板跳起再落地', moves: { all: { y: [-1, 0.25, 0], r: [-8, 2, 0], o: [8, 12] } } },
   'hiking-boot': { say: '迈步：脚跟抬起再落下', moves: { all: { r: [8, 0], o: [15, 13.5] } } }
 });
+
+// Batch: transport, travel and sports (group 3)
+Object.assign(MOTION, {
+  fuel: { say: '开始加油，屏幕上的数字跳动', ms: 700, moves: { 1: { a: [0.3, 1, 0.3, 1] } } },
+  'ev-charger': { say: '接通电源，闪电亮两下', ms: 700, moves: { 1: { a: [0.2, 1, 0.2, 1] } } },
+  'steering-wheel': { say: '方向盘向左打，再向右打，回正', moves: { all: { r: [-40, 30, 0] } } },
+  'traffic-light': {
+    say: '三盏灯依次亮起',
+    moves: { 1: { a: [1, 0.25, 0.25, 1] }, 2: { a: [0.25, 1, 0.25, 1] }, 3: { a: [0.25, 0.25, 1, 1] } }
+  },
+  signpost: { say: '两块路牌依次指向各自的方向', moves: { 1: { x: [0.75, 0, 0] }, 2: { x: [0, -0.75, 0] } } },
+  route: {
+    say: '路线从起点画到终点',
+    moves: { 0: { w: [0, 1, 1] }, 2: { s: [0, 0, 1], o: [12, 4] } }
+  },
+  road: { say: '车道线由远及近逐段亮起，像车在向前开', moves: { 1: { a: [1, 0.25, 0.25, 1] }, 2: { a: [0.25, 1, 0.25, 1] }, 3: { a: [0.25, 0.25, 1, 1] } } },
+  lighthouse: {
+    say: '灯塔亮灯，向两侧射出光束',
+    add: [{ layer: L('M1.5 2.5H4.125', { sw: D }) }, { layer: L('M14.5 2.5H11.875', { sw: D }) }],
+    moves: { 0: { a: [0.3, 1] }, ...same(['a0', 'a1'], { rest: { a: 0, w: 0 }, a: 1, w: [0, 1] }) }
+  },
+  binoculars: { say: '举起望远镜，左右看看', moves: { all: { x: [-0.75, 0.75, 0], y: [-0.5, -0.5, 0] } } }
+});
