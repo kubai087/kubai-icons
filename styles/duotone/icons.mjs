@@ -2532,3 +2532,117 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: transport, travel and sports (group 2)
+// A regular pentagon of circumradius R round (cx, cy), one point at deg (-90 is straight up).
+const pent = (cx, cy, R, deg = -90, c = 0.5) => polygon(Array.from({ length: 5 }, (_, i) => {
+  const a = ((deg + 72 * i) * Math.PI) / 180;
+  return [f3(cx + R * Math.cos(a)), f3(cy + R * Math.sin(a))];
+}), c);
+const BALL = circ(8, 8, 7);
+// A boot's light upper: a tall shaft at the back and a round toe.
+const SHOE = body(1, 7, 14, 4, [0, 3, 0, 0], [{ x: 1, w: 6.5, h: 4.5, c: r }]);
+
+Object.assign(ICONS, {
+  basketball: {
+    label: '篮球',
+    key: 'circle',
+    layers: [
+      // A light ball with blue seams clipped to it: a cross and a curve on each side.
+      L(BALL, Bt),
+      L('M8 1V15M1 8H15M3.5 2.6A6.75 6.75 0 0 1 3.5 13.4M12.5 2.6A6.75 6.75 0 0 0 12.5 13.4', { sw: D, clip: BALL })
+    ]
+  },
+  'soccer-ball': {
+    label: '足球',
+    key: 'circle',
+    layers: [
+      // A light ball with a blue pentagon in the middle (the slopes: the ball is known by its
+      // pentagons) and five more beyond its points, cut off by the ball's edge.
+      L(BALL, Bt),
+      L(pent(8, 8, 2.75) + [0, 1, 2, 3, 4].map((i) => {
+        const a = ((-90 + 72 * i) * Math.PI) / 180;
+        return pent(f3(8 + 7 * Math.cos(a)), f3(8 + 7 * Math.sin(a)), 2.75, 90 + 72 * i);
+      }).join(''), { clip: BALL })
+    ]
+  },
+  'tennis-ball': {
+    label: '网球',
+    key: 'circle',
+    layers: [
+      // A light ball with its two blue seams: curves bowing in from the left and right.
+      L(BALL, Bt),
+      L('M2 3.25A6.5 6.5 0 0 1 2 12.75M14 3.25A6.5 6.5 0 0 0 14 12.75', { sw: K, clip: BALL })
+    ]
+  },
+  dumbbell: {
+    label: '哑铃',
+    key: 'flat',
+    layers: [
+      // A blue bar behind two light weights, each a tall plate with a shorter one outside it;
+      // the weights cut a gap of W round themselves.
+      L(pill(3, 7, 10, 2)),
+      L(rr(3, 4, 2.5, 8, 1.25) + rr(1, 5.5, 2.5, 5, 1) + rr(10.5, 4, 2.5, 8, 1.25) + rr(12.5, 5.5, 2.5, 5, 1), { ...Bt, gap: W })
+    ]
+  },
+  medal: {
+    label: '奖牌',
+    key: 'tall',
+    layers: [
+      // A blue ribbon in a V (the slopes: the two straps meet under the medal) behind a light
+      // medal that cuts a gap of W round itself, with a blue star on it.
+      L(polygon([[3.25, 1], [6.5, 1], [8, 5], [9.5, 1], [12.75, 1], [10, 8.5], [6, 8.5]], [0.75, 0.75, 0.5, 0.75, 0.75, 0, 0])),
+      L(circ(8, 10, 5), { ...Bt, gap: W }),
+      L(polygon(starPts(8, 10.2, 2.6, 1.15), 0.5))
+    ]
+  },
+  target: {
+    label: '靶心',
+    key: 'circle',
+    layers: [
+      // A light target with a blue ring and a blue bull's-eye.
+      L(BALL, Bt),
+      L(circ(8, 8, 5), { cut: [C(circ(8, 8, 3.75))] }),
+      L(circ(8, 8, 1.75))
+    ]
+  },
+  'golf-flag': {
+    label: '高尔夫',
+    key: 'portrait',
+    layers: [
+      // flag-triangle's blue pole and light pennant, the pole standing one gap above a light hole.
+      L(pill(4, 1, K, 11.5)),
+      L(polygon([[6.5, 1], [15.43, 4.75], [6.5, 8.5]], [S, 0.75, S]), Bt),
+      L(pill(2, 13.5, 7, 1.5), Bt)
+    ]
+  },
+  dice: {
+    label: '骰子',
+    key: 'square',
+    layers: [
+      // A light die showing five: blue pips 2 in from its edges.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L([[5, 5], [11, 5], [8, 8], [5, 11], [11, 11]].map(([x, y]) => circ(x, y, 1)).join(''))
+    ]
+  },
+  skateboard: {
+    label: '滑板',
+    key: 'flat',
+    layers: [
+      // A long light deck and, one gap below, two blue wheels with white hubs.
+      L(pill(1, 4, 14, 3), Bt),
+      L(circ(4.5, 10, 2) + circ(11.5, 10, 2), { cut: [C(circ(4.5, 10, 0.75)), C(circ(11.5, 10, 0.75))] })
+    ]
+  },
+  'hiking-boot': {
+    label: '登山靴',
+    key: 'wide',
+    layers: [
+      // A boot from the side: a light upper with a tall shaft at the back and a round toe, two
+      // blue laces across the shaft (2 in from its sides and top), and a blue sole one gap below.
+      L(SHOE, Bt),
+      L(pill(3, 4.5, 2.5, D) + pill(3, 7, 2.5, D)),
+      L(rr(1, 12, 14, 1.5, 0.5))
+    ]
+  }
+});

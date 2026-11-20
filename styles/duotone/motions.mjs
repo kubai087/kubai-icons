@@ -457,3 +457,21 @@ Object.assign(MOTION, {
   anchor: { say: '锚绕顶环摆动，停住', moves: { all: tilt([9, -6, 3, 0], [8, 3]) } },
   lifebuoy: { say: '救生圈抛出去，转着落回', moves: { all: { y: [-1, 0.25, 0], r: [-60, -90, -90] } } }
 });
+
+// Batch: transport, travel and sports (group 2)
+Object.assign(MOTION, {
+  basketball: { say: '拍两下球', moves: { all: { y: [1, -0.75, 0.5, 0] } } },
+  'soccer-ball': { say: '足球滚动一下', moves: { all: { r: 72 } } },
+  'tennis-ball': { say: '网球弹起，旋转着落下', moves: { all: { y: [-1, 0.5, 0], r: [90, 160, 180] } } },
+  dumbbell: { say: '举起哑铃，停在高处', moves: { all: { y: [-1.25, -1] } } },
+  medal: { say: '奖牌绕挂带摆动，停住', moves: { all: { r: [8, -6, 3, 0], o: [8, 1] } } },
+  target: {
+    say: '一支飞镖飞来，正中靶心',
+    add: [{ layer: L('M8 8L12 4', { sw: K, gap: W }) }],
+    moves: { a0: { rest: { a: 0 }, a: [0, 1], x: [3, 0], y: [-3, 0] } }
+  },
+  'golf-flag': { say: '旗面迎风飘动', moves: { 1: { sx: [0.8, 1.06, 0.92, 1], sy: [1, 0.94, 1.04, 1], o: [6.5, 4.75] } } },
+  dice: { say: '掷出骰子，翻滚后落定', moves: { all: { y: [-1, 0.25, 0], r: [-8, 3, 0] } } },
+  skateboard: { say: '滑板跳起再落地', moves: { all: { y: [-1, 0.25, 0], r: [-8, 2, 0], o: [8, 12] } } },
+  'hiking-boot': { say: '迈步：脚跟抬起再落下', moves: { all: { r: [8, 0], o: [15, 13.5] } } }
+});
