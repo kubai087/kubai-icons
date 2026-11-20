@@ -2562,6 +2562,121 @@ Object.assign(ICONS, {
       L(rr(3.5, 2, 3.5, 5, [1, 1, 0, 0]) + rr(9, 2, 3.5, 5, [1, 1, 0, 0])),
       L(rr(1, 5.5, 14, 8.5, M), { ...Bt, gap: W }),
       L(pill(11.25, 8, D, 3.5))
+// Batch: food, nature, health and science
+// Helpers for this batch. AP is a point at distance t along, and s across, a line through (8, 8)
+// at -45° (up and to the right); PLUS is a plus sign len across with arms th thick.
+const AP = (t, s = 0) => [f3(8 + (t + s) * Math.SQRT1_2), f3(8 + (s - t) * Math.SQRT1_2)];
+const PLUS = (cx, cy, len, th) => {
+  const a = len / 2, b = th / 2;
+  return [[-b, -a], [b, -a], [b, -b], [a, -b], [a, b], [b, b], [b, a], [-b, a], [-b, b], [-a, b], [-a, -b], [-b, -b]].map(([x, y]) => [cx + x, cy + y]);
+};
+const PLUS_R = (c) => [c, c, 0, c, c, 0, c, c, 0, c, c, 0];
+// A pill (capsule) at -45°, 5 wide, split across its middle by a gap of 1.
+const CAPSULE = { lo: polygon(AXIS(8, 8, -45, -7.45, -0.5, 5), [2.5, 0, 0, 2.5]), hi: polygon(AXIS(8, 8, -45, 0.5, 7.45, 5), [0, 2.5, 2.5, 0]) };
+// A sticking plaster at -45°, 6 wide, with round ends.
+const BAND = polygon(AXIS(8, 8, -45, -7.243, 7.243, 6), 3);
+// A syringe at -45°: barrel, needle at the lower left, plunger rod and thumb plate at the upper right.
+const BARREL = polygon(AXIS(8, 8, -45, -4.5, 2.25, 5), r);
+const NEEDLE = polygon(AXIS(8, 8, -45, -8.22, -4.4, D), D / 2);
+// A test tube at -45°: round bottom at the lower left, a rim one gap past its open end.
+const TUBE = polygon(AXIS(8, 8, -45, -7.55, 3.25, 4.5), [2.25, S, S, 2.25]);
+// A conical flask: a neck that widens with two slopes to a flat base.
+const FLASK = polygon([[6, 2], [10, 2], [10, 5.75], [14, 11.75], [14, 14], [2, 14], [2, 11.75], [6, 5.75]], [1, 1, r, r, r, r, r, r]);
+// A beaker: a rim wider than the glass by 1 on each side, straight sides, round bottom corners.
+const BEAKER = polygon([[2, 2], [14, 2], [14, 3.5], [13, 3.5], [13, 14], [3, 14], [3, 3.5], [2, 3.5]], [0.5, 0.5, 0.5, 0, R, R, 0, 0.5]);
+
+Object.assign(ICONS, {
+  pill: {
+    label: '胶囊',
+    key: 'square',
+    layers: [
+      // A capsule laid at 45°: a blue half and a light half, cut straight across by a gap of 1.
+      L(CAPSULE.lo),
+      L(CAPSULE.hi, Bt)
+    ]
+  },
+  pills: {
+    label: '药瓶',
+    key: 'tall',
+    layers: [
+      // A blue cap one gap above a light bottle, and a blue cross on the bottle's face.
+      L(rr(4, 1, 8, 3, 1.25)),
+      L(rr(3, 5, 10, 10, R), Bt),
+      L(polygon(PLUS(8, 10, 4.5, 1.75), PLUS_R(0.75)))
+    ]
+  },
+  'first-aid': {
+    label: '急救箱',
+    key: 'landscape',
+    layers: [
+      // briefcase's handle and case, with a blue cross centred on the case instead of a clasp.
+      L('M5.75 6V3.75A1 1 0 0 1 6.75 2.75H9.25A1 1 0 0 1 10.25 3.75V6', { sw: K }),
+      L(rr(1, 5.5, 14, 8.5, M), { ...Bt, gap: W }),
+      L(polygon(PLUS(8, 9.75, 4.5, 1.75), PLUS_R(0.75)))
+    ]
+  },
+  'hospital-cross': {
+    label: '医疗',
+    key: 'square',
+    layers: [
+      // A large light cross with arms 4.5 wide, and a small blue cross drawn on its centre.
+      L(polygon(PLUS(8, 8, 12, 4.5), PLUS_R(r)), Bt),
+      L('M8 6V10', { sw: K }),
+      L('M6 8H10', { sw: K })
+    ]
+  },
+  bandage: {
+    label: '创可贴',
+    key: 'square',
+    layers: [
+      // A light plaster laid at 45° with round ends; its middle pad is the plaster clipped in
+      // blue, with four white holes.
+      L(BAND, Bt),
+      L(BAND, { clip: polygon(AXIS(8, 8, -45, -2.5, 2.5, 8)), cut: [C([[-1, -1.25], [-1, 1.25], [1, -1.25], [1, 1.25]].map(([a, b]) => circ(...AP(a, b), 0.625)).join(''))] })
+    ]
+  },
+  syringe: {
+    label: '注射器',
+    key: 'square',
+    layers: [
+      // A syringe laid at 45°. A blue plunger rod runs into the light barrel, which cuts a gap of
+      // W round itself; the thumb plate is on its end. The medicine is the lower end of the barrel
+      // clipped in blue, and the needle continues it.
+      L(polygon(AXIS(8, 8, -45, 1, 4.9, 1.5), 0) + polygon(AXIS(8, 8, -45, 4.75, 6.25, 5), 0.5)),
+      L(BARREL, { ...Bt, gap: W }),
+      L(BARREL + NEEDLE, { clip: polygon(AXIS(8, 8, -45, -9, -2.5, 9)) })
+    ]
+  },
+  beaker: {
+    label: '烧杯',
+    key: 'square',
+    layers: [
+      // A light beaker with a rim, blue liquid in its lower half (the glass clipped), and one blue
+      // tick on the glass above it.
+      L(BEAKER, Bt),
+      L(BEAKER, { clip: rr(0, 9, 16, 7) }),
+      L(pill(5, 5.625, 3, D))
+    ]
+  },
+  flask: {
+    label: '烧瓶',
+    key: 'square',
+    layers: [
+      // A conical flask: the neck widens to the base with two slopes (GUIDE §1: the cone is what
+      // makes it a flask). Blue liquid fills the bottom (the flask clipped).
+      L(FLASK, Bt),
+      L(FLASK, { clip: rr(0, 10, 16, 6) })
+    ]
+  },
+  'test-tube': {
+    label: '试管',
+    key: 'square',
+    layers: [
+      // A light test tube laid at 45°, round at the bottom; blue liquid in its lower end (the tube
+      // clipped), and a blue rim one gap past its open end.
+      L(TUBE, Bt),
+      L(TUBE, { clip: polygon(AXIS(8, 8, -45, -9, -2.5, 9)) }),
+      L(polygon(AXIS(8, 8, -45, 4.25, 5.75, 6), 0.5))
     ]
   }
 });
@@ -2702,6 +2817,280 @@ Object.assign(ICONS, {
       L(rr(1, 4, 14, 8, M), Bt),
       L(pill(4, 6.25, 8, 3.5)),
       L(circ(8, 8, 1), Bt)
+// A pizza slice: a triangle (the slopes) pointing down, its crust the top clipped in blue.
+const SLICE = polygon([[1.1, 2], [14.9, 2], [8, 15.4]], [r, r, 1]);
+// A cake 6 tall, its frosting the top clipped by a band with three round drips.
+const CAKE = rr(2, 8, 12, 6, M);
+// A band from the top of the canvas down to y, whose lower edge bulges into round drips of
+// radius 1 centred at xs: one outline, so it clips in one piece.
+const DRIPS = (y, xs) => `M0 0H16V${y}` + [...xs].sort((a, b) => b - a).map((x) => `H${x + 1}A1 1 0 0 1 ${x - 1} ${y}`).join('') + 'H0Z';
+const FROSTING = DRIPS(10, [4.5, 8, 11.5]);
+// A bottle: a neck standing on the body, with a seam corner where it meets the cap's gap.
+const BOTTLE = body(3, 7, 10, 8, R, [{ x: 5.5, w: 5, h: 2.5, c: S }]);
+// A milk carton: a gable top (two slopes) on a straight body.
+const CARTON = polygon([[5.5, 3.5], [10.5, 3.5], [13, 7], [13, 15], [3, 15], [3, 7]], [1, 1, 1, M, M, 1]);
+// A wine glass's bowl: straight sides and a round bottom.
+const BOWL = rr(3, 1, 10, 8, [S, S, 5, 5]);
+// An ice pop: a round top and a straight body; its coating is the top clipped with three drips.
+const POP = rr(3, 1, 10, 9.5, [5, 5, M, M]);
+const COATING = DRIPS(5.5, [5, 8, 11]);
+// A mug handle on the right, a loop of stroke K whose rows are y0 and y1.
+const HANDLE = (x0, y0, y1) => `M${x0} ${y0}H11.75A1.5 1.5 0 0 1 13.25 ${y0 + 1.5}V${y1 - 1.5}A1.5 1.5 0 0 1 11.75 ${y1}H${x0}`;
+Object.assign(ICONS, {
+  mug: {
+    label: '马克杯',
+    key: 'square',
+    layers: [
+      // A blue handle behind a light mug, which cuts a gap of W round itself.
+      L(HANDLE(9.5, 5, 10.5), { sw: K }),
+      L(rr(2, 2, 8.5, 12, [S, S, M, M]), { ...Bt, gap: W })
+    ]
+  },
+  coffee: {
+    label: '咖啡',
+    key: 'square',
+    layers: [
+      // mug's handle and a shorter cup, with two blue lines of steam one gap above it.
+      L(HANDLE(9.5, 7.75, 11.75), { sw: K }),
+      L(rr(2, 6, 8.5, 8, [S, S, M, M]), { ...Bt, gap: W }),
+      L(pill(4.125, 2, D, 3)),
+      L(pill(7.125, 2, D, 3))
+    ]
+  },
+  'cup-soda': {
+    label: '汽水',
+    key: 'tall',
+    layers: [
+      // A blue straw runs behind a blue lid (which cuts a gap of W round itself); the light cup is
+      // one gap below the lid.
+      L('M8.75 5.5V2.75A1 1 0 0 1 9.75 1.75H11.25', { sw: K }),
+      L(rr(3, 4.5, 10, 1.75, 0.75), { gap: W }),
+      L(rr(4, 7.25, 8, 7.75, [S, S, M, M]), Bt)
+    ]
+  },
+  wine: {
+    label: '红酒',
+    key: 'tall',
+    layers: [
+      // A light glass: the bowl, and one gap below it the stem on its foot. The wine is the lower
+      // half of the bowl clipped in blue.
+      L(BOWL, Bt),
+      L(BOWL, { clip: rr(0, 5, 16, 11) }),
+      L(body(4.5, 13.5, 7, 1.5, 0.5, [{ x: 7.25, w: 1.5, h: 3.5, c: 0.5 }]), Bt)
+    ]
+  },
+  beer: {
+    label: '啤酒',
+    key: 'square',
+    layers: [
+      // A beer mug: one light outline of glass and a head of foam (two circles over its top), a
+      // blue handle behind it, and two blue ribs on the glass.
+      L(HANDLE(9.5, 7.25, 11.75), { sw: K }),
+      L(rr(2, 5.5, 8.5, 8.5, [0, 0, M, M]) + pill(2, 4.25, 8.5, 2.5) + circ(4.25, 4.25, 2.25) + circ(8.5, 4.75, 2), { ...Bt, gap: W }),
+      L(pill(4.125, 8, D, 4) + pill(7.125, 8, D, 4))
+    ]
+  },
+  milk: {
+    label: '牛奶',
+    key: 'tall',
+    layers: [
+      // A carton with a gable top (two slopes: the carton's shape is the gable), a blue cap one
+      // gap above it, and a blue drop on its face.
+      L(rr(5.5, 1, 5, 1.5, 0.5)),
+      L(CARTON, Bt),
+      L(dropPath(11.25, 1.75, 7.6, 0.5))
+    ]
+  },
+  bottle: {
+    label: '水瓶',
+    key: 'tall',
+    layers: [
+      // A blue cap one gap above a light bottle with a neck, and a blue label band round it (the
+      // bottle clipped).
+      L(rr(5.5, 1, 5, 2.5, 1)),
+      L(BOTTLE, Bt),
+      L(BOTTLE, { clip: rr(0, 9.75, 16, 2.75) })
+    ]
+  },
+  pizza: {
+    label: '披萨',
+    key: 'square',
+    layers: [
+      // A slice: a triangle pointing down (the slopes and the point are the slice), its crust
+      // the top clipped in blue, and one blue slice of pepperoni.
+      L(SLICE, Bt),
+      L(SLICE, { clip: rr(0, 0, 16, 4.5) }),
+      L(circ(8, 8, 1.25))
+    ]
+  },
+  cake: {
+    label: '蛋糕',
+    key: 'square',
+    layers: [
+      // A light cake with blue frosting dripping over its top (the cake clipped), a light candle
+      // one gap above it, and a blue flame (a drop: its point is the flame) one gap above that.
+      L(CAKE, Bt),
+      L(CAKE, { clip: FROSTING }),
+      L(rr(7.25, 5, 1.5, 2, 0.5), Bt),
+      L(dropPath(3, 1, 1.55, 0.5))
+    ]
+  },
+  'ice-pop': {
+    label: '冰棍',
+    key: 'tall',
+    layers: [
+      // A light ice pop with a blue coating dripping over its round top (the pop clipped), and a
+      // blue stick one gap below it.
+      L(POP, Bt),
+      L(POP, { clip: COATING }),
+      L(rr(7, 11.5, 2, 3.5, [S, S, 1, 1]))
+    ]
+  },
+  cookie: {
+    label: '饼干',
+    key: 'circle',
+    layers: [
+      // A light cookie with a round bite out of its upper right, and four blue chips.
+      L(circ(8, 8, 7), { ...Bt, cut: [C(circ(14, 2, 3))] }),
+      L([[5, 6], [8.5, 8.5], [5.5, 11], [10.5, 11.5]].map(([x, y]) => circ(x, y, 0.75)).join(''))
+    ]
+  }
+});
+
+// A leaf: eye's outline (two arcs, tips rounded at rf) w long and h wide, centred on (cx, cy)
+// and turned by deg. Turning keeps the arcs circular.
+const lens = (cx, cy, w, h, rf, deg) => {
+  const a = w / 2, b = h / 2, e = ((a - rf) ** 2 - (b - rf) ** 2) / (2 * (b - rf)), R0 = b + e;
+  const k = rf / (R0 - rf), fx = a - rf, t = (deg * Math.PI) / 180, c = Math.cos(t), sn = Math.sin(t);
+  const P = (sx, sy) => { const x = sx * fx * (1 + k), y = sy * e * k; return `${f3(cx + x * c - y * sn)} ${f3(cy + x * sn + y * c)}`; };
+  return `M${P(-1, -1)}A${f3(R0)} ${f3(R0)} 0 0 1 ${P(1, -1)}A${rf} ${rf} 0 0 1 ${P(1, 1)}A${f3(R0)} ${f3(R0)} 0 0 1 ${P(-1, 1)}A${rf} ${rf} 0 0 1 ${P(-1, -1)}Z`;
+};
+// A planet's ring: a capsule outline (half length l, half width b) round (8, 8) turned by deg,
+// split into the half in front of the planet (below) and the half behind it.
+const RING = (() => {
+  const l = 4.8, b = 1.75, t = (-20 * Math.PI) / 180, c = Math.cos(t), sn = Math.sin(t);
+  const P = (x, y) => `${f3(8 + x * c - y * sn)} ${f3(8 + x * sn + y * c)}`;
+  return {
+    front: `M${P(-l - b, 0)}A${b} ${b} 0 0 0 ${P(-l, b)}L${P(l, b)}A${b} ${b} 0 0 0 ${P(l + b, 0)}`,
+    back: `M${P(l + b, 0)}A${b} ${b} 0 0 0 ${P(l, -b)}L${P(-l, -b)}A${b} ${b} 0 0 0 ${P(-l - b, 0)}`
+  };
+})();
+// A row of waves from x 2 to 14 along y: four shallow arcs, alternately up and down.
+const WAVE = (y) => `M2 ${y}A2 2 0 0 1 5 ${y}A2 2 0 0 0 8 ${y}A2 2 0 0 1 11 ${y}A2 2 0 0 0 14 ${y}`;
+// A pine: two tiers that narrow to a point (the slopes), as one outline.
+const PINE = polygon([[8, 0.4], [11.6, 5.5], [10.25, 5.5], [13.6, 11.5], [2.4, 11.5], [5.75, 5.5], [4.4, 5.5]], [1, 0.5, 0, 1, 1, 0, 0.5]);
+// A mountain: one peak (the slopes), its snow the top clipped with round drips.
+const PEAK = polygon([[8, 0.55], [15.8, 14], [0.2, 14]], [1.5, 1, 1]);
+
+Object.assign(ICONS, {
+  tree: {
+    label: '树',
+    key: 'tall',
+    layers: [
+      // A light round crown on a blue trunk; the crown cuts a gap of W round itself.
+      L(rr(7, 8, 2, 7, [0, 0, 1, 1])),
+      L(circ(8, 6, 5), { ...Bt, gap: W })
+    ]
+  },
+  'tree-pine': {
+    label: '松树',
+    key: 'tall',
+    layers: [
+      // Two light tiers that narrow to a point (GUIDE §1: a pine is read by its pointed tiers),
+      // and a blue trunk one gap below.
+      L(PINE, Bt),
+      L(rr(7, 12.5, 2, 2.5, [S, S, 1, 1]))
+    ]
+  },
+  leaf: {
+    label: '叶子',
+    key: 'square',
+    layers: [
+      // A leaf laid at 45°: two arcs whose tips are rounded at 0.75. A blue stalk runs behind it
+      // (the leaf cuts a gap of W round itself), and a blue midrib is drawn on it.
+      L(`M${AP(-7.4).join(' ')}L${AP(-3.5).join(' ')}`, { sw: K }),
+      L(lens(...AP(1.9), 12.8, 6.5, 0.75, -45), { ...Bt, gap: W }),
+      L(`M${AP(-0.6).join(' ')}L${AP(4.4).join(' ')}`, { sw: D })
+    ]
+  },
+  sprout: {
+    label: '新芽',
+    key: 'square',
+    layers: [
+      // A blue stem and two light leaves (two arcs each) opening from its top; the leaves cut a
+      // gap of W round themselves.
+      L('M8 13.25V9.85', { sw: K }),
+      L(lens(4.83, 5.19, 8, 3.5, 0.75, 50) + lens(11.17, 5.19, 8, 3.5, 0.75, -50), { ...Bt, gap: W })
+    ]
+  },
+  mountain: {
+    label: '山',
+    key: 'landscape',
+    layers: [
+      // One peak (GUIDE §1: a mountain is its slopes and point), snow on its top in blue.
+      L(PEAK, Bt),
+      L(PEAK, { clip: DRIPS(6, [8]) })
+    ]
+  },
+  planet: {
+    label: '行星',
+    key: 'wide',
+    layers: [
+      // A light planet with a blue ring (capsule outlines, not ellipses): the back half of the
+      // ring is behind the planet and the front half crosses it, each cutting a gap of W.
+      L(RING.back, { sw: K, part: 'ring' }),
+      L(circ(8, 8, 5.5), { ...Bt, gap: W }),
+      L(RING.front, { sw: K, part: 'ring', gap: W })
+    ]
+  },
+  waves: {
+    label: '海浪',
+    key: 'wide',
+    layers: [
+      // Three rows of waves (shallow arcs, stroke 2), the top one blue.
+      L(WAVE(4.4), { sw: 2 }),
+      L(WAVE(8), { ...Bt, sw: 2 }),
+      L(WAVE(11.6), { ...Bt, sw: 2 })
+    ]
+  },
+  flower: {
+    label: '花',
+    key: 'circle',
+    layers: [
+      // Eight light round petals round a light disc, and a blue centre printed on the disc.
+      L(circ(8, 8, 3.5) + Array.from({ length: 8 }, (_, i) => circ(f3(8 + 4.75 * Math.cos((i * Math.PI) / 4)), f3(8 + 4.75 * Math.sin((i * Math.PI) / 4)), 2.25)).join(''), Bt),
+      L(circ(8, 8, 2.25))
+    ]
+  },
+  cactus: {
+    label: '仙人掌',
+    key: 'portrait',
+    layers: [
+      // A light cactus: a trunk and two arms (strokes 2.5) bent up from it, one element; a blue
+      // pot one gap below.
+      L(pill(6, 1, 4, 10.5), { ...Bt, part: 'cactus' }),
+      L('M3.25 5V7A1.75 1.75 0 0 0 5 8.75H6.5', { ...Bt, sw: 2.5, part: 'cactus' }),
+      L('M12.75 3.5V5.25A1.75 1.75 0 0 1 11 7H9.5', { ...Bt, sw: 2.5, part: 'cactus' }),
+      L(rr(3.5, 12.5, 9, 2.5, 1))
+    ]
+  },
+  mushroom: {
+    label: '蘑菇',
+    key: 'landscape',
+    layers: [
+      // A light domed cap with three blue spots, and a blue stem one gap below it.
+      L(rr(1, 2, 14, 7, [7, 7, r, r]), Bt),
+      L(circ(5, 6.5, 0.875) + circ(8, 5.25, 0.875) + circ(11, 6.5, 0.875)),
+      L(rr(5.5, 10, 5, 4, [S, S, r, r]))
+    ]
+  },
+  paw: {
+    label: '爪印',
+    key: 'square',
+    layers: [
+      // A light pad and four blue toes round its top, each one gap or more from it.
+      L(circ(8, 10.5, 3.5), Bt),
+      L(circ(3.5, 6.5, 1.5) + circ(6, 3.5, 1.5) + circ(10, 3.5, 1.5) + circ(12.5, 6.5, 1.5))
     ]
   }
 });
@@ -4381,6 +4770,329 @@ Object.assign(ICONS, {
       L('M4.25 4.5V1.75H8V4.5', { sw: K }),
       L(CAN, { ...Bt, gap: W }),
       L(rot(12.466, 4.034, 2.5, 2, -45, 0.75))
+// A cheese wedge: a straight front face under a top face that slopes up to the right.
+const WEDGE = polygon([[1, 7.5], [15, 1.4], [15, 14], [1, 14]], [1, 1, R, R]);
+// A soup bowl: a straight rim and a round bottom, 14 wide.
+const BOWL_SOUP = rr(1, 6, 14, 8, [S, S, 7, 7]);
+// A chocolate bar: four squares above a wrapper, cut apart by straight gaps of W.
+const CHOC = rr(2, 1, 12, 14, M);
+
+Object.assign(ICONS, {
+  'chocolate-bar': {
+    label: '巧克力',
+    key: 'portrait',
+    layers: [
+      // A light bar with four squares cut apart by straight gaps (seams through one outline),
+      // half wrapped in a blue wrapper (the bar clipped).
+      L(CHOC, { ...Bt, cut: [C('M8 0V9', W), C('M0 4.75H16', W), C('M0 9H16', W)] }),
+      L(CHOC, { clip: rr(0, 9.5, 16, 6.5) })
+    ]
+  },
+  cheese: {
+    label: '奶酪',
+    key: 'landscape',
+    layers: [
+      // A wedge (its top face slopes: GUIDE §1, the wedge is what makes it cheese). The top face
+      // is the wedge clipped in blue; two blue holes on the front face.
+      L(WEDGE, Bt),
+      L(WEDGE, { clip: polygon([[0, 7.5], [16, 1.5], [16, 7.5]]) }),
+      L(circ(4.25, 10.75, 1.25) + circ(9.75, 10.75, 1.25))
+    ]
+  },
+  burger: {
+    label: '汉堡',
+    key: 'landscape',
+    layers: [
+      // A light top bun with three blue sesame seeds, a blue patty and a light bottom bun, each
+      // one gap from the next.
+      L(rr(1, 2, 14, 5.5, [5, 5, S, S]), Bt),
+      L(circ(5, 4.75, 0.625) + circ(8, 4.75, 0.625) + circ(11, 4.75, 0.625)),
+      L(pill(1, 8.5, 14, 2.25)),
+      L(rr(1, 11.75, 14, 2.25, [S, S, 1, 1]), Bt)
+    ]
+  },
+
+  fries: {
+    label: '薯条',
+    key: 'square',
+    layers: [
+      // Four blue fries standing in a light box, which cuts a gap of W round itself.
+      L(rr(3, 2.75, 1.75, 6, 0.875)),
+      L(rr(5.75, 2, 1.75, 6, 0.875)),
+      L(rr(8.5, 3, 1.75, 6, 0.875)),
+      L(rr(11.25, 2.25, 1.75, 6, 0.875)),
+      L(rr(2, 7, 12, 7, [S, S, R, R]), { ...Bt, gap: W })
+    ]
+  },
+  popcorn: {
+    label: '爆米花',
+    key: 'square',
+    layers: [
+      // Light popcorn (three circles) heaped behind a light bucket that cuts a gap of W round
+      // itself; two blue stripes on the bucket (the bucket clipped).
+      L(circ(4.5, 5.5, 2.5) + circ(8, 4.5, 2.5) + circ(11.5, 5.5, 2.5), Bt),
+      L(rr(2, 8, 12, 6, [S, S, M, M]), { ...Bt, gap: W }),
+      L(rr(2, 8, 12, 6, [S, S, M, M]), { clip: rr(5, 0, 1.75, 16) + rr(9.25, 0, 1.75, 16) })
+    ]
+  },
+  soup: {
+    label: '汤',
+    key: 'landscape',
+    layers: [
+      // A light bowl with a round bottom and three blue lines of steam one gap above it.
+      L(BOWL_SOUP, Bt),
+      L(pill(4.875, 2, D, 3)),
+      L(pill(7.375, 2, D, 3)),
+      L(pill(9.875, 2, D, 3))
+    ]
+  },
+  noodles: {
+    label: '面条',
+    key: 'landscape',
+    layers: [
+      // soup's bowl with two blue chopsticks standing in it, behind its rim (the bowl cuts a gap of
+      // W round itself).
+      L(pill(8.75, 2, 1.5, 7) + pill(11.75, 2, 1.5, 7)),
+      L(BOWL_SOUP, { ...Bt, gap: W })
+    ]
+  },
+
+  'heart-pulse': {
+    label: '心率',
+    key: 'landscape',
+    layers: [
+      // heart's outline with activity's pulse line across it (its peaks need slopes).
+      L(ICONS.heart.layers[0].d, Bt),
+      L('M3.75 8.25H5.5L6.75 5.75L8.75 10.25L10 8.25H12.25', { sw: K })
+    ]
+  }
+});
+
+// A pancake on top of the stack, its syrup the top clipped with two round drips.
+const CAKE_TOP = pill(2, 4.5, 12, 3);
+// A telescope's tube at -30° (up and to the right), 3.5 wide.
+const SCOPE = polygon(AXIS(8, 6.25, -30, -6.65, 6.65, 3.5), r);
+// An ice-cream cone: wide at the top, narrowing to a point (the slopes).
+const CONE_IC = polygon([[3.75, 10], [12.25, 10], [8, 15.6]], [1, 1, 1]);
+
+Object.assign(ICONS, {
+  'salt-shaker': {
+    label: '盐瓶',
+    key: 'tall',
+    layers: [
+      // A blue domed cap with three white holes, one gap above a light jar.
+      L(rr(4, 1, 8, 4.5, [4, 4, S, S]), { cut: [C(circ(6.25, 3.75, 0.625) + circ(8, 2.75, 0.625) + circ(9.75, 3.75, 0.625))] }),
+      L(rr(3, 6.5, 10, 8.5, [S, S, M, M]), Bt)
+    ]
+  },
+  pancake: {
+    label: '煎饼',
+    key: 'landscape',
+    layers: [
+      // A stack of three light pancakes, each one gap from the next; blue syrup drips over the
+      // top one (it clipped), and a blue pat of butter sits one gap above.
+      L(rr(6.5, 2, 3, 1.5, 0.5)),
+      L(CAKE_TOP, Bt),
+      L(CAKE_TOP, { clip: DRIPS(6, [5.5, 10.5]) }),
+      L(pill(1, 8.5, 14, 2.25), Bt),
+      L(pill(1, 11.75, 14, 2.25), Bt)
+    ]
+  },
+  'ice-cream': {
+    label: '冰淇淋',
+    key: 'tall',
+    layers: [
+      // A light scoop with a round top, and one gap below it a blue cone narrowing to a point
+      // (GUIDE §1: the cone is read by its point).
+      L(rr(3, 1, 10, 8, [5, 5, S, S]), Bt),
+      L(CONE_IC)
+    ]
+  },
+  candy: {
+    label: '糖果',
+    key: 'flat',
+    layers: [
+      // A light round sweet, and its wrapper twisted into a blue triangle on each side (the
+      // slopes are the twist), each one gap from it.
+      L(circ(8, 8, 3.5), Bt),
+      L(polygon([[1, 2.4], [3.6, 8], [1, 13.6]], 0.5)),
+      L(polygon([[15, 2.4], [15, 13.6], [12.4, 8]], 0.5))
+    ]
+  },
+  cherry: {
+    label: '樱桃',
+    key: 'square',
+    layers: [
+      // Two light cherries on blue stalks (straight slopes, as cherry stalks are) that meet at the
+      // top; the cherries cut a gap of W round themselves.
+      L('M4.75 9.5L9.25 2.75M11.25 9.5L9.25 2.75', { sw: K }),
+      L(circ(4.75, 11.25, 2.75) + circ(11.25, 11.25, 2.75), { ...Bt, gap: W })
+    ]
+  },
+
+
+  telescope: {
+    label: '天文望远镜',
+    key: 'square',
+    layers: [
+      // A light tube raised at 30° (the slope is how a telescope points at the sky) with a blue
+      // band at its front end, standing on three blue legs that it cuts with a gap of W.
+      L('M8 8.5L4.75 13.25M8 8.5L11.25 13.25M8 8.5V13.25', { sw: K }),
+      L(SCOPE, { ...Bt, gap: W }),
+      L(SCOPE, { clip: polygon(AXIS(8, 6.25, -30, 4, 9, 8)) })
+    ]
+  },
+  ufo: {
+    label: '飞碟',
+    key: 'flat',
+    layers: [
+      // A blue dome behind a light saucer, which cuts a gap of W round itself.
+      L(rr(4.5, 4, 7, 4.5, [3.5, 3.5, 0, 0])),
+      L(pill(1, 7.5, 14, 4.5), { ...Bt, gap: W })
+    ]
+  },
+  pi: {
+    label: '圆周率',
+    key: 'square',
+    layers: [
+      // A pi on a light tile, as heading: the bar, then the two legs.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.5 4.5H11.5', { sw: K }),
+      L('M6.25 4.5V11.5M9.75 4.5V11.5', { sw: K })
+    ]
+  },
+  sigma: {
+    label: '求和',
+    key: 'square',
+    layers: [
+      // A sigma on a light tile, written in one stroke (its middle point needs two slopes).
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M11.5 4.5H4.5L8.25 8L4.5 11.5H11.5', { sw: K })
+    ]
+  }
+});
+
+// A birdhouse: home's outline (a 45° roof), its roof clipped in blue.
+const NEST = polygon([[8, 1.38], [14, 7.38], [14, 14], [2, 14], [2, 7.38]], [1.5, 1, M, M, 1]);
+// A volcano: a cone with a flat top (the slopes), its lava the top clipped with two drips.
+const VOLCANO = polygon([[5.5, 5.5], [10.5, 5.5], [15.8, 14], [0.2, 14]], 1);
+// A martini glass's bowl: wide at the top, narrowing to a point at the stem (the slopes).
+const MARTINI = polygon([[1.4, 2], [14.6, 2], [8, 9.75]], [0.5, 0.5, 1]);
+// A muffin's paper case: narrower at the bottom (the slopes are the case).
+const CASE = polygon([[3, 8.5], [13, 8.5], [11.75, 14], [4.25, 14]], [S, S, r, r]);
+
+Object.assign(ICONS, {
+  'wind-turbine': {
+    label: '风力发电机',
+    key: 'square',
+    layers: [
+      // Three light blades 120° apart round a blue hub that cuts a gap of W round itself, and a
+      // blue tower one gap below the hub, between the two lower blades.
+      L([-90, 30, 150].map((a) => polygon(AXIS(8, 8.75, a, -1.125, 6.75, 2.25), 1.125)).join(''), Bt),
+      L(circ(8, 8.75, 1.5), { gap: W }),
+      L(rr(7.125, 11.25, 1.75, 2.75, [0.5, 0.5, 0, 0]))
+    ]
+  },
+  beehive: {
+    label: '蜂箱',
+    key: 'square',
+    layers: [
+      // A light domed hive cut into three tiers by straight gaps, and a blue door standing on its
+      // bottom edge.
+      L(rr(2, 2, 12, 12, [6, 6, M, M]), { ...Bt, cut: [C('M0 5.75H16', W), C('M0 9.5H16', W)] }),
+      L(rr(6.5, 11, 3, 3, [1.5, 1.5, 0, 0]))
+    ]
+  },
+  birdhouse: {
+    label: '鸟屋',
+    key: 'square',
+    layers: [
+      // home's outline with its roof in blue (the house clipped) and a round blue hole.
+      L(NEST, Bt),
+      L(NEST, { clip: rr(0, 0, 16, 6.25) }),
+      L(circ(8, 9.75, 1.75))
+    ]
+  },
+  volcano: {
+    label: '火山',
+    key: 'landscape',
+    layers: [
+      // A light cone with a flat top (GUIDE §1: the slopes are the volcano), blue lava running
+      // over its top (it clipped with two drips), and a blue blob of lava one gap above.
+      L(VOLCANO, Bt),
+      L(VOLCANO, { clip: DRIPS(7.25, [6.75, 9.25]) }),
+      L(circ(8, 3.25, 1.25))
+    ]
+  },
+  utensils: {
+    label: '餐具',
+    key: 'portrait',
+    layers: [
+      // A light fork (its tines cut apart by two straight gaps) and a blue knife with a round
+      // tip, side by side.
+      L(rr(2, 1, 5, 6.5, [1, 1, 2.5, 2.5]) + pill(3.625, 6, 1.75, 9), { ...Bt, cut: [C('M3.667 0V4.5', W), C('M5.333 0V4.5', W)] }),
+      L(rr(9.5, 1, 4.5, 8.5, [4.5, S, 0, 0]) + pill(11.5, 7.5, 2.5, 7.5))
+    ]
+  },
+  cocktail: {
+    label: '鸡尾酒',
+    key: 'square',
+    layers: [
+      // A light martini glass (GUIDE §1: the bowl narrows to a point), the drink in its lower
+      // part clipped in blue, and a light stem on its foot one gap below.
+      L(MARTINI, Bt),
+      L(MARTINI, { clip: rr(0, 4.75, 16, 12) }),
+      L(body(4, 12.5, 8, 1.5, 0.5, [{ x: 7.25, w: 1.5, h: 2.35, c: 0.5 }]), Bt)
+    ]
+  },
+  muffin: {
+    label: '玛芬',
+    key: 'square',
+    layers: [
+      // A light domed top one gap above a blue paper case (narrower at the bottom), whose pleats
+      // are straight gaps.
+      L(rr(2, 2, 12, 5.5, [5.5, 5.5, S, S]), Bt),
+      L(CASE, { cut: [C('M6.5 8V15', W), C('M9.5 8V15', W)] })
+    ]
+  },
+  'chef-hat': {
+    label: '厨师帽',
+    key: 'square',
+    layers: [
+      // A light puffed top (three circles over a body) and a blue band one gap below.
+      L(circ(4.75, 6.25, 2.75) + circ(8, 4.75, 2.75) + circ(11.25, 6.25, 2.75) + rr(4, 6, 8, 4, [0, 0, S, S]), Bt),
+      L(rr(4, 11, 8, 3, 1))
+    ]
+  },
+  'baby-bottle': {
+    label: '奶瓶',
+    key: 'tall',
+    layers: [
+      // A blue teat on its collar, one gap above a light bottle with two blue measure lines.
+      L(body(4, 4.5, 8, 2, 0.75, [{ x: 6, w: 4, h: 3.5, c: 2 }])),
+      L(rr(3, 7.5, 10, 7.5, [S, S, M, M]), Bt),
+      L(pill(5, 9.5, 2.5, D) + pill(5, 11.75, 2.5, D))
+    ]
+  },
+  'bunsen-burner': {
+    label: '本生灯',
+    key: 'tall',
+    layers: [
+      // A blue flame (a drop: its point is the flame) over a light burner tube on a light base,
+      // each one gap from the next.
+      L(dropPath(5, 2.25, 0.6, 0.5)),
+      L(rr(6.75, 8.25, 2.5, 4, [S, S, 0.5, 0.5]), Bt),
+      L(rr(3, 13.25, 10, 1.75, 0.75), Bt)
+    ]
+  },
+  bread: {
+    label: '面包',
+    key: 'landscape',
+    layers: [
+      // A light slice of toast in one outline (two round lobes over a body) with a blue pat of
+      // butter on it.
+      L('M2 11.5V7.95A3.5 3.5 0 1 1 8 5.5A3.5 3.5 0 1 1 14 7.95V11.5A2.5 2.5 0 0 1 11.5 14H4.5A2.5 2.5 0 0 1 2 11.5Z', Bt),
+      L(rr(6, 7.5, 4, 3.5, 1))
     ]
   }
 });

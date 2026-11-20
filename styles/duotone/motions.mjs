@@ -766,4 +766,91 @@ Object.assign(MOTION, {
   'fire-truck': { say: '云梯升起', moves: { 3: turnAbout([-12, -10], [1.5, 4.25]) } },
   trailer: { say: '被拖着向前走，又停下', moves: { all: { x: [0.75, -0.25, 0] } } },
   'gas-can': { say: '油桶倾斜，往外倒油', moves: { all: turnAbout([6, 5], [2, 15]) } }
+// Batch: food, nature, health and science
+// polygon isn't in the import list at the top; a namespace import of our own keeps this batch
+// apart from the other batches' edits.
+import * as kitFood from './kit.mjs';
+Object.assign(MOTION, {
+  pill: { say: '胶囊两半拉开，再合上', moves: { 0: { x: [-0.5, 0], y: [0.5, 0] }, 1: { x: [0.5, 0], y: [-0.5, 0] } } },
+  pills: { say: '拧开瓶盖，盖子转着抬起', moves: { 0: { y: [-0.5, -0.75, -0.75], sx: [-1, 1, 1], o: [8, 2.5] } } },
+  'first-aid': { say: '提起急救箱，绕提手晃一晃', moves: { all: { y: [-0.75, -0.75, -0.75, -0.75], r: [4, -3, 1.5, 0], o: [8, 2] } } },
+  'hospital-cross': { say: '中间的十字先写竖，再写横', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  bandage: { say: '创可贴落下，贴平', moves: { all: { y: [-0.75, 0.2, 0], r: [-10, 0, 0] } } },
+  syringe: { say: '推动活塞，再松开', moves: { 0: { x: [-0.7, 0], y: [0.7, 0] } } },
+  beaker: { say: '倒入液体，液面升起', moves: { 1: { sy: [0.4, 1], o: [8, 14] } } },
+  flask: { say: '摇晃烧瓶，混合液体', ms: 800, moves: { all: { r: [-8, 6, -3, 0], o: [8, 14] } } },
+  'test-tube': { say: '摇晃试管，混合液体', ms: 800, moves: { all: { r: [-10, 8, -4, 0], o: [8, 8] } } }
+});
+
+Object.assign(MOTION, {
+  mug: { say: '端起杯子喝一口，再放下', moves: { all: { y: [-0.75, -0.75, 0], r: [-8, -8, 0], o: [6.25, 14] } } },
+  coffee: { say: '热气一缕缕冒上来', moves: { 2: { y: [-0.75, 0, 0], a: [0, 1, 1] }, 3: { y: [0, -0.75, 0], a: [1, 0, 1] } } },
+  'cup-soda': { say: '杯子摇一摇，吸管跟着晃', ms: 800, moves: { all: { r: [-6, 5, -2, 0], o: [8, 15] } } },
+  wine: { say: '晃动酒杯，酒在杯中晃动', ms: 800, moves: { all: { r: [-7, 6, -3, 0], o: [8, 15] }, 1: { r: [6, -5, 2, 0], o: [8, 9] } } },
+  beer: { say: '举杯碰一下', moves: { all: { y: [-0.75, -0.75, 0], r: [-8, 4, 0], o: [6.25, 14] } } },
+  milk: { say: '倒牛奶：盒子向左倾斜，再立回来', moves: { all: { r: [-12, -12, 0], o: [8, 15] } } },
+  bottle: { say: '拧开瓶盖，盖子转着抬起', moves: { 0: { y: [-0.5, -0.75, -0.75], sx: [-1, 1, 1], o: [8, 2.25] } } },
+  pizza: { say: '拿起一块披萨', moves: { all: { y: [-1, -0.75] } } },
+  cake: { say: '烛火摇曳', ms: 800, moves: { 3: { sx: [0.75, 1.1, 0.9, 1], sy: [1.15, 0.9, 1.05, 1], o: [8, 4] } } },
+  'ice-pop': { say: '冰棍摇一摇', ms: 800, moves: { all: { r: [6, -5, 3, 0], o: [8, 15] } } },
+  cookie: { say: '饼干翻个面，再翻回来', moves: { all: { sx: [-1, 1, 1], o: [8, 8] } } }
+});
+
+Object.assign(MOTION, {
+  tree: { say: '树冠在风中摇摆', ms: 800, moves: { 1: { r: [5, -4, 2, 0], o: [8, 12] } } },
+  'tree-pine': { say: '松树在风中摇摆', ms: 800, moves: { 0: { r: [4, -3, 1.5, 0], o: [8, 12] } } },
+  leaf: { say: '叶子随风摆动', ms: 800, moves: { all: { r: [-8, 6, -3, 0], o: [3, 13] } } },
+  sprout: { say: '新芽长出来，两片叶子张开', moves: { 0: { sy: [0.5, 1], o: [8, 14] }, 1: { s: [0.5, 1], o: [8, 8.5] } } },
+  mountain: { say: '山顶落下积雪', moves: { 1: { sy: [0.3, 1], o: [8, 1.2] } } },
+  planet: { say: '光环绕着行星转动', moves: { ...same([0, 2], { r: [-12, 0], o: [8, 8] }) } },
+  waves: { say: '海浪一层层起伏', ms: 800, moves: { 0: { x: [0.5, -0.5, 0] }, 1: { x: [-0.5, 0.5, 0] }, 2: { x: [0.5, -0.5, 0] } } },
+  flower: { say: '花瓣张开，花朵开放', moves: { 0: { s: [0.6, 1], o: [8, 8] } } },
+  cactus: { say: '仙人掌长高', moves: same([0, 1, 2], { sy: [0.8, 1], o: [8, 11.5] }) },
+  mushroom: { say: '蘑菇从地里冒出来', moves: { all: { sy: [0.7, 1], o: [8, 14] } } },
+  paw: { say: '按下一个爪印', moves: { all: { y: [-1, 0.25, 0] } } }
+});
+
+Object.assign(MOTION, {
+  'chocolate-bar': { say: '拆开包装，包装纸往下拉开', moves: { 1: { y: [0.75, 0.5] } } },
+  cheese: { say: '按一下奶酪，压扁再弹回', moves: { all: { sy: [0.88, 1.05, 1], o: [8, 14] } } },
+  burger: { say: '掀起顶上的面包', moves: same([0, 1], { y: [-1, -0.75] }) },
+  fries: { say: '薯条一根根冒出来', moves: { 0: { y: [-0.75, 0, 0, 0] }, 1: { y: [0, -0.75, 0, 0] }, 2: { y: [0, 0, -0.75, 0] }, 3: { y: [0, 0, 0, -0.75, 0] } } },
+  popcorn: { say: '爆米花跳起来', moves: { 0: { y: [-1, 0, -0.5, 0] } } },
+  soup: { say: '热气一缕缕冒上来', moves: { 1: { y: [-0.75, 0, 0], a: [0, 1, 1] }, 2: { y: [0, -0.75, 0], a: [1, 0, 1] }, 3: { y: [0, 0, -0.75, 0], a: [1, 1, 0, 1] } } },
+  noodles: { say: '用筷子把面条挑起来', moves: { 0: { y: [-1, -0.75] } } },
+  'heart-pulse': { say: '心跳一下，脉搏线重新画出', moves: { 0: { s: [1.06, 0.97, 1], o: [8, 8.5] }, 1: { w: [0, 1] } } }
+});
+
+Object.assign(MOTION, {
+  'salt-shaker': { say: '撒盐：盐瓶左右摇两下', ms: 800, moves: { all: { r: [-12, 10, -6, 0], o: [8, 8] } } },
+  pancake: { say: '糖浆往下流，黄油滑一下', moves: { 2: { sy: [0.6, 1], o: [8, 4.5] }, 0: { x: [0.5, 0] } } },
+  'ice-cream': { say: '冰淇淋球晃一晃', ms: 800, moves: { 0: { r: [5, -4, 2, 0], o: [8, 9] } } },
+  candy: { say: '糖纸两端拧一下', moves: { 1: { sy: [0.6, 1], o: [2.5, 8] }, 2: { sy: [0.6, 1], o: [13.5, 8] } } },
+  cherry: { say: '樱桃绕着果梗晃一晃', ms: 800, moves: { all: { r: [6, -5, 2, 0], o: [9.25, 2.75] } } },
+  telescope: { say: '望远镜上下转动，对准天空', moves: same([1, 2], { r: [-6, 3, 0], o: [8, 7.5] }) },
+  ufo: {
+    say: '飞碟悬停，放出一道光束',
+    add: [{ layer: L(kitFood.polygon([[6, 13], [10, 13], [11.5, 15.5], [4.5, 15.5]], 0.5)) }],
+    moves: { all: { y: [-0.75, 0.25, 0] }, a0: { ...hidden, a: [0, 1, 1] } }
+  },
+  pi: { say: '先写横，再写两竖', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  sigma: { say: '求和符号一笔写出', moves: { 1: { w: [0, 1] } } }
+});
+
+Object.assign(MOTION, {
+  'wind-turbine': { say: '风吹动叶片转一圈', moves: same([0, 1], { r: 120, o: [8, 8.75] }) },
+  beehive: {
+    say: '一只蜜蜂从门口飞出来',
+    add: [{ layer: L(circ(8, 12.5, 1)) }],
+    moves: { a0: { ...hidden, x: [2.5, 4], y: [-4, -7.5], a: [1, 1] } }
+  },
+  birdhouse: { say: '鸟屋挂在枝上晃一晃', ms: 800, moves: { all: { r: [4, -3, 1.5, 0], o: [8, 1.5] } } },
+  volcano: { say: '火山涌出熔岩', moves: { 2: { y: [-1, 0], a: [0, 1] }, 1: { sy: [0.85, 1], o: [8, 5.5] } } },
+  utensils: { say: '刀叉碰一下', moves: { 0: { r: [6, 0], o: [4.5, 15] }, 1: { r: [-6, 0], o: [12.75, 15] } } },
+  cocktail: { say: '举杯碰一下', moves: { all: { r: [-7, 4, 0], o: [8, 14] } } },
+  muffin: { say: '玛芬烤好，顶部鼓起来', moves: { 0: { sy: [0.8, 1.06, 1], o: [8, 7.5] } } },
+  'chef-hat': { say: '摘下帽子致意', moves: { all: { y: [-1, -0.75], r: [-8, -6], o: [8, 14] } } },
+  'baby-bottle': { say: '摇匀奶瓶', ms: 800, moves: { all: { r: [-10, 8, -4, 0], o: [8, 8] } } },
+  'bunsen-burner': { say: '点燃，火焰跳动', ms: 800, moves: { 0: { sx: [0.75, 1.1, 0.9, 1], sy: [1.15, 0.9, 1.05, 1], o: [8, 7.25] } } },
+  bread: { say: '把黄油抹开', moves: { 1: { sx: [1.5, 1.4], sy: [0.8, 0.85], o: [8, 9.25] } } }
 });
