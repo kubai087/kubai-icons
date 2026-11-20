@@ -33,11 +33,11 @@ metadata:
 - `scripts/measure.js`：测量规则的代码，由自检脚本加载。量的是动作有没有跳帧、结束时是否平稳停下，尺寸和居中，分层，线宽，过小的细节，细缝，被盖住的描边露头，尖角接缝处的毛刺，以及落在背景上却没有描边的边。
 - `scripts/export.mjs`：静态导出。把图标渲染成不依赖脚本和样式表的独立 SVG 文件，可以指定色板、主色和静止或悬停状态。
 
-以上是分层动态风格。双色面性风格是一个单独的 skill（`kubai-duotone`），全部文件在 `styles/duotone/` 里，规则、文件说明和流程见那里的 `SKILL.md`。
+以上为分层动态风格的文件。双色面性风格是独立的 skill（`kubai-duotone`），文件位于 `styles/duotone/`，规则、文件说明和流程见其中的 `SKILL.md`。
 
 ## 流程
 
-1. 确定风格（见"两种风格"）。选了双色面性：装了 `kubai-duotone` skill 就用它；没装就读 `styles/duotone/SKILL.md`，按它的流程做，下面第 2–9 步不适用。选了分层动态，读 `PROMPT.md`，继续下面的步骤。
+1. 确定风格（见"两种风格"）。选择双色面性时：已安装 `kubai-duotone` skill 则使用该 skill，否则阅读 `styles/duotone/SKILL.md` 并按其流程执行，以下第 2–9 步不适用。选择分层动态时，阅读 `PROMPT.md`，继续以下步骤。
 2. 确定交付形式。用户没说清楚时先问一句：
    - 动态（默认）：SVG + JS，悬停时形变，靠 `src/engine.js` 在页面里运行。适合网页和能跑 JS 的界面。
    - 静态：独立的 `.svg` 文件，没有动效，任何地方都能用：设计工具、原生 App、文档、`<img>`。用户提到"切图""SVG 文件""放进 Figma""App 里用"等，就是要静态。
