@@ -523,3 +523,11 @@ Object.assign(MOTION, {
   'nut-bolt': { say: '螺母拧一圈', moves: { 0: { r: 60, o: [8, 8] } } },
   bucket: { say: '提起水桶，绕提手晃一晃', moves: { all: { r: [8, -6, 3, 0], o: [8, 1.75] } } }
 });
+
+// Batch: home and tools (group 5)
+Object.assign(MOTION, {
+  barn: { say: '谷仓大门打开，又关上', moves: same([2, 3], { sx: [0.3, 0.3, 1], o: [8, 11] }) },
+  kettle: { say: '水开了，壶盖被顶起几下', ms: 800, moves: { 2: { y: [-0.75, 0, -0.5, 0] } } },
+  'office-chair': { say: '办公椅转一圈', moves: { all: { sx: [-1, 1, 1] } } },
+  'standing-desk': { say: '桌面降下，又升回原位', moves: { 0: { y: [1.5, 1.5, 0] }, 1: { sy: [0.82, 0.82, 1], o: [8, 14] } } }
+});

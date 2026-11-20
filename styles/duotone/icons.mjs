@@ -2894,3 +2894,52 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: home and tools (group 5)
+const BARN = polygon([[8, 1.6], [15, 6.5], [15, 14], [1, 14], [1, 6.5]], [1.5, 1, R, R, 1]);
+const BARN_DOOR = rr(4.5, 8, 7, 6, [1, 1, 0, 0]);
+Object.assign(ICONS, {
+  barn: {
+    label: '谷仓',
+    key: 'landscape',
+    layers: [
+      // A light barn under a pitched roof (slopes, as home), a blue hayloft dot, and a blue door
+      // on the bottom edge braced by a light X (the brace is the barn's mark).
+      L(BARN, Bt),
+      L(circ(8, 5, 1.125)),
+      L(BARN_DOOR, { clip: BARN }),
+      L('M4.5 8L11.5 14M11.5 8L4.5 14', { sw: D, ...Bt, clip: BARN_DOOR })
+    ]
+  },
+  kettle: {
+    label: '水壶',
+    key: 'landscape',
+    layers: [
+      // A blue handle behind a light kettle with a short spout (slopes: the spout is the
+      // kettle's mark), and a blue lid with a knob one gap above.
+      L('M11 7H12.75A1.5 1.5 0 0 1 14.25 8.5V10A1.5 1.5 0 0 1 12.75 11.5H11', { sw: K }),
+      L(rr(3.5, 6, 8.5, 8, [S, S, M, M]) + polygon([[4.5, 7.5], [0.9, 6], [0.9, 7.75], [4.5, 10.5]], [0, 0.5, 0.5, 0]), { ...Bt, gap: W }),
+      L(body(4.5, 3.5, 6.5, 1.5, 0.5, [{ x: 6.75, w: 2, h: 1.5, c: 0.5 }]))
+    ]
+  },
+  'office-chair': {
+    label: '办公椅',
+    key: 'tall',
+    layers: [
+      // A light back, a wider light seat one gap below, and one gap below that a blue column on
+      // a blue base.
+      L(rr(4, 1, 8, 6, M), Bt),
+      L(rr(3, 8, 10, 2.5, t), Bt),
+      L(body(3, 13.5, 10, 1.5, 0.5, [{ x: 7.25, w: 1.5, h: 2, c: 0 }]))
+    ]
+  },
+  'standing-desk': {
+    label: '升降桌',
+    key: 'landscape',
+    layers: [
+      // A light desktop and, one gap below, two blue legs that can grow and shrink.
+      L(rr(1, 2, 14, 2.5, q), Bt),
+      L(pill(3, 5.5, 1.5, 8.5) + pill(11.5, 5.5, 1.5, 8.5))
+    ]
+  }
+});
