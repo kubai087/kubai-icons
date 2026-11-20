@@ -1316,6 +1316,107 @@ export const ICONS = {
       L(pill(1, 7, 14, 6.5) + circ(8.5, 7, 4.5), Bt),
       L(polygon([[8, 4.59], [10.5, 7.5], [8.75, 7.5], [8.75, 11.5], [7.25, 11.5], [7.25, 7.5], [5.5, 7.5]], [1, 0.5, 0, 0.75, 0.75, 0, 0.5]), { gap: W })
     ]
+  },
+  'text-cursor': {
+    label: '文本光标',
+    key: 'wide',
+    layers: [
+      // A light text field with a line of typed text and an I-beam cursor after it, both blue
+      // and both 2.25 in from the field's edges.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(pill(3.25, 7.375, 3.5, D)),
+      L('M9 5.25V10.75M7.5 5.25H10.5M7.5 10.75H10.5', { sw: K })
+    ]
+  },
+  'text-size': {
+    label: '字号',
+    key: 'square',
+    layers: [
+      // type's tile with a large T and, standing on the same baseline, a small one.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.75 4.75H9.25M7 4.75V11.25', { sw: K }),
+      L('M9.75 8.25H11.25M10.5 8.25V11.25', { sw: K })
+    ]
+  },
+  'panel-bottom': {
+    label: '底部面板',
+    key: 'landscape',
+    layers: [
+      // sidebar turned on its side: one window cut by a straight seam 1 wide into a light page
+      // above and a blue panel 3.5 high below.
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(-1, -1, 18, 10.5) }),
+      L(rr(1, 2, 14, 12, R3), { clip: rr(-1, 10.5, 18, 7) })
+    ]
+  },
+  rows: {
+    label: '分行',
+    key: 'landscape',
+    layers: [
+      // columns turned on its side: three rows a third high, the middle one blue.
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(-1, -1, 18, 3 + 10 / 3) }),
+      L(rr(1, 2, 14, 12, R3), { clip: rr(-1, 3 + 10 / 3, 18, 10 / 3) }),
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(-1, 4 + 20 / 3, 18, 8) })
+    ]
+  },
+  'layout-dashboard': {
+    label: '数据看板',
+    key: 'square',
+    layers: [
+      // Four cards in two columns a gap of 1 apart: tall over short on the left, short over
+      // tall on the right; the tall left card is blue. The outer corners are rounded at M, the
+      // inner ones at 1, so the four together keep one rounded outline.
+      L(rr(2, 2, 5.5, 7, [M, 1, 1, 1])),
+      L(rr(2, 10, 5.5, 4, [1, 1, 1, M]), Bt),
+      L(rr(8.5, 2, 5.5, 4, [1, M, 1, 1]), Bt),
+      L(rr(8.5, 7, 5.5, 7, [1, 1, M, 1]), Bt)
+    ]
+  },
+  kanban: {
+    label: '看板',
+    key: 'landscape',
+    layers: [
+      // A light board with three blue lanes of cards hanging from the same top line, a gap of
+      // 1 apart and 2.25 in from the board's edges. One layer per lane, so a card can move.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(rr(3.25, 4.25, 2.5, 7.5, 1)),
+      L(rr(6.75, 4.25, 2.5, 4, 1)),
+      L(rr(10.25, 4.25, 2.5, 5.5, 1))
+    ]
+  },
+  folders: {
+    label: '多个文件夹',
+    key: 'landscape',
+    layers: [
+      // Two folders drawn like copy: the blue one behind at the top right, the light one in
+      // front at the bottom left, cutting a gap of W out of it and covering about a third of it.
+      L(body(5, 3.5, 10, 7, M, [{ x: 5, w: 4.5, h: 1.5, c: 0.75 }])),
+      L(body(1, 8, 9.5, 6, M, [{ x: 1, w: 4, h: 1.5, c: 0.75 }]), { ...Bt, gap: W })
+    ]
+  },
+  notepad: {
+    label: '记事本',
+    key: 'portrait',
+    layers: [
+      // A pad of paper: a blue gummed band on top cut off by a straight seam (as package's lid),
+      // and two blue lines on the light sheet.
+      L(rr(2, 1, 12, 14, M), { clip: rr(-1, -1, 18, 4) }),
+      L(rr(2, 1, 12, 14, M), { ...Bt, clip: rr(-1, 4, 18, 13) }),
+      L(pill(5, 7.75, 6, D) + pill(5, 10.375, 6, D))
+    ]
+  },
+  headset: {
+    label: '客服耳麦',
+    key: 'live',
+    layers: [
+      // headphones with a boom: a light arm (a thin support, as the headband) runs from under
+      // the left cup to a blue mic one gap clear of the right cup; the cups cut a gap of W round
+      // themselves.
+      L('M1.625 10V8a6.375 6.375 0 0 1 12.75 0V10', { sw: 1.25, ...Bt }),
+      L('M3 13.25H8.5', { sw: D, ...Bt, part: 'boom' }),
+      L(pill(7.75, 12.375, 2.75, 1.75), { part: 'boom' }),
+      L(rr(1, 9, 3.5, 6, r), { gap: W }),
+      L(rr(11.5, 9, 3.5, 6, r), { gap: W })
+    ]
   }
 };
 

@@ -276,7 +276,30 @@ export const MOTION = {
   },
   hash: { say: '先写两竖，再写两横', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
   notebook: { say: '在封面上写下名字', moves: { 1: { sx: [0, 1], o: [7.25, 5.625] } } },
-  'cloud-upload': { say: '箭头从云里往上长出来', moves: { 1: { sy: [0, 1], o: [8, 11.5] } } }
+  'cloud-upload': { say: '箭头从云里往上长出来', moves: { 1: { sy: [0, 1], o: [8, 11.5] } } },
+  'text-cursor': { say: '输入文字，光标随之右移', moves: { 1: { sx: 10 / 7, o: [3.25, 8] }, 2: { x: 1.5 } } },
+  'text-size': { say: '小的 T 在底线上放大一号，再回到原样', moves: { 2: { s: [1.25, 1], o: [10.5, 11.25] } } },
+  'panel-bottom': { say: '底部面板升高，上面的页面让出位置', moves: { 0: { sy: 0.8, o: [8, 2] }, 1: { sy: 10 / 7, o: [8, 14] } } },
+  rows: {
+    say: '中间一行变高，上下两行让开',
+    moves: { 0: { sy: 0.85, o: [8, 2] }, 1: { sy: 1.3, o: [8, 8] }, 2: { sy: 0.85, o: [8, 14] } }
+  },
+  'layout-dashboard': {
+    say: '高低卡片互换位置',
+    moves: { 0: { sy: 4 / 7, o: [8, 2] }, 1: { sy: 7 / 4, o: [8, 14] }, 2: { sy: 7 / 4, o: [8, 2] }, 3: { sy: 4 / 7, o: [8, 14] } }
+  },
+  kanban: {
+    // Back to rest at the end: held, the three lanes end up nearly equal and say nothing.
+    say: '一张卡片从第一列移到第二列，再移回来',
+    moves: { 1: { sy: [5.5 / 7.5, 5.5 / 7.5, 1], o: [8, 4.25] }, 2: { sy: [6 / 4, 6 / 4, 1], o: [8, 4.25] } }
+  },
+  folders: { say: '两个文件夹错开', moves: { 0: { x: 0.5, y: -0.5 }, 1: { x: -0.5, y: 0.5 } } },
+  notepad: {
+    say: '撕下一页，往下滑落淡出，下面是新的一页',
+    copy: [{ of: [1, 2] }],
+    moves: same(['c0', 'c1'], { y: [0.5, 1.5], r: [3, 6], a: [0.7, 0], o: [14, 4.5] })
+  },
+  headset: { say: '话筒杆抬到嘴边', moves: same([1, 2], { r: -8, o: [3, 13.25] }) }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own

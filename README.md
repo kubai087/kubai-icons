@@ -96,7 +96,7 @@ The skill draws in either of two styles and asks when your request doesn't make 
 | Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour; lively hover motion that acts out what the icon means | Static SVG, or SVG + JS for the motion | [`styles/duotone/`](styles/duotone), also released on its own as the `kubai-duotone` skill |
 
 <p align="center">
-  <img src="assets/duotone.png" alt="A hundred and twenty-eight two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, status marks in circles, a database, wifi and a store, and variants with a plus, a check, a sparkle or an off slash" width="720" />
+  <img src="assets/duotone.png" alt="A hundred and thirty-seven two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, status marks in circles, a database, wifi and a store, and variants with a plus, a check, a sparkle or an off slash" width="720" />
 </p>
 
 Ask for "solid", "filled", "two-tone" or "duotone" icons, or small icons for an app's interface, and the skill uses the two-tone style.
@@ -205,7 +205,7 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 
 <br />
 
-Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 128 examples with their hover motion (eleven of them variants with a badge: plus, minus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
+Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 137 examples with their hover motion (eleven of them variants with a badge: plus, minus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
 
 It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [latest release](https://github.com/kubai087/kubai-icons/releases/latest) and unzip it into your skills folder:
 
