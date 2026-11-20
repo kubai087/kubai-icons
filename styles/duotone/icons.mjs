@@ -1197,6 +1197,125 @@ export const ICONS = {
       L(rr(1, 2, 14, 12, R3), { clip: rr(6, -1, 4, 18) }),
       L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(11, -1, 6, 18) })
     ]
+  },
+  indent: {
+    label: '增加缩进',
+    key: 'wide',
+    layers: [
+      // menu's light bars at the top and bottom; the middle line is blue and set in, with a
+      // small blue chevron (the allowed 45°) pointing at it, a gap of 1 from it and the bars.
+      L('M2 3.5H14', { sw: 2, ...Bt }),
+      L('M2 12.5H14', { sw: 2, ...Bt }),
+      L('M2.5 6.25L4.25 8L2.5 9.75M7 8H14', { sw: K })
+    ]
+  },
+  outdent: {
+    label: '减少缩进',
+    key: 'wide',
+    layers: [
+      // indent with the chevron pointing back to the left.
+      L('M2 3.5H14', { sw: 2, ...Bt }),
+      L('M2 12.5H14', { sw: 2, ...Bt }),
+      L('M4.25 6.25L2.5 8L4.25 9.75M7 8H14', { sw: K })
+    ]
+  },
+  type: {
+    label: '字体',
+    key: 'square',
+    layers: [
+      // The text-format family: a light tile with a blue letter drawn with the K stroke, kept
+      // inside the central 8. One layer per stroke, so the motion can write them in order.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M5 5H11', { sw: K }),
+      L('M8 5V11', { sw: K })
+    ]
+  },
+  heading: {
+    label: '标题',
+    key: 'square',
+    layers: [
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M5.25 4.5V11.5', { sw: K }),
+      L('M10.75 4.5V11.5', { sw: K }),
+      L('M5.25 8H10.75', { sw: K })
+    ]
+  },
+  bold: {
+    label: '加粗',
+    key: 'square',
+    layers: [
+      // A B of straight strokes and two half-round bowls, the lower one a little wider; drawn
+      // in one stroke from the waist, round the lower bowl, up the stem and round the upper one.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M5.5 8H8.75A1.75 1.75 0 0 1 8.75 11.5H5.5V4.5H8.25A1.75 1.75 0 0 1 8.25 8', { sw: K })
+    ]
+  },
+  underline: {
+    label: '下划线',
+    key: 'square',
+    layers: [
+      // A U and, a gap of 1 below it, the line.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6 4.75V6.75A2 2 0 0 0 10 6.75V4.75', { sw: K }),
+      L('M4.75 11.25H11.25', { sw: K })
+    ]
+  },
+  maximize: {
+    label: '全屏',
+    key: 'square',
+    layers: [
+      // A light screen with four blue corner marks pointing out, 2 in from its edges. One layer
+      // per corner, so the motion can push them out to the edges.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.75 6.75V4.75H6.75', { sw: K }),
+      L('M9.25 4.75H11.25V6.75', { sw: K }),
+      L('M11.25 9.25V11.25H9.25', { sw: K }),
+      L('M6.75 11.25H4.75V9.25', { sw: K })
+    ]
+  },
+  minimize: {
+    label: '退出全屏',
+    key: 'square',
+    layers: [
+      // maximize's corner marks turned to point in. Their corners stay 1.5 apart (not 1), so at
+      // 16px the four marks don't close up into a plus.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.75 6.5H6.5V4.75', { sw: K }),
+      L('M9.5 4.75V6.5H11.25', { sw: K }),
+      L('M11.25 9.5H9.5V11.25', { sw: K }),
+      L('M6.5 11.25V9.5H4.75', { sw: K })
+    ]
+  },
+  hash: {
+    label: '话题',
+    key: 'circle',
+    layers: [
+      // An upright hash on a light disc, as the status marks: two uprights, then two cross bars.
+      L(circ(8, 8, 7), Bt),
+      L('M6.5 4.5V11.5M9.5 4.5V11.5', { sw: K }),
+      L('M4.5 6.5H11.5M4.5 9.5H11.5', { sw: K })
+    ]
+  },
+  notebook: {
+    label: '笔记本',
+    key: 'portrait',
+    layers: [
+      // A light notebook with three blue rings crossing its left edge, cutting a gap of W round
+      // themselves (as calendar's posts), and a blue label line on the cover.
+      L(rr(3.5, 1, 10.5, 14, M), Bt),
+      L(pill(7.25, 5, 4, D)),
+      L(pill(2, 3.375, 3, D) + pill(2, 7.375, 3, D) + pill(2, 11.375, 3, D), { gap: W })
+    ]
+  },
+  'cloud-upload': {
+    label: '上传到云端',
+    key: 'wide',
+    layers: [
+      // A light cloud of a long pill and one round top, with a smaller upload arrow standing on
+      // it, cutting a gap of W round itself.
+      L(pill(1, 7, 14, 6.5) + circ(8.5, 7, 4.5), Bt),
+      L(polygon([[8, 4.59], [10.5, 7.5], [8.75, 7.5], [8.75, 11.5], [7.25, 11.5], [7.25, 7.5], [5.5, 7.5]], [1, 0.5, 0, 0.75, 0.75, 0, 0.5]), { gap: W })
+    ]
   }
 };
 
@@ -1212,5 +1331,6 @@ Object.assign(ICONS, {
   'bell-off': badge(ICONS.bell, 'off', { label: '免打扰' }),
   'eye-off': badge(ICONS.eye, 'off', { label: '隐藏' }),
   'zoom-in': badge(ICONS.search, 'plus', { at: [6.75, 6.75], drop: [2], label: '放大' }),
-  'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' })
+  'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' }),
+  unlink: badge(ICONS.link, 'off', { label: '取消链接' })
 });

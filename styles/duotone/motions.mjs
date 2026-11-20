@@ -258,7 +258,25 @@ export const MOTION = {
   columns: {
     say: '中间一栏变宽，两侧让开',
     moves: { 0: { sx: 0.875, o: [1, 8] }, 1: { sx: 1.25, o: [8, 8] }, 2: { sx: 0.875, o: [15, 8] } }
-  }
+  },
+  indent: { say: '中间一行向右推进一格', moves: { 2: { x: [0.75, 0] } } },
+  outdent: { say: '中间一行向左退回一格', moves: { 2: { x: [-0.75, 0] } } },
+  type: { say: '先写横，再写竖', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  heading: { say: '两竖一横依次写出', moves: { 1: { w: [0, 1, 1, 1] }, 2: { w: [0, 0, 1, 1] }, 3: { w: [0, 0, 0, 1] } } },
+  bold: { say: '字母一笔写出', moves: { 1: { w: [0, 1] } } },
+  underline: { say: '先写字母，再在下面划线', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  maximize: {
+    say: '四个角向外撑开，铺满屏幕',
+    moves: { 1: { x: -0.75, y: -0.75 }, 2: { x: 0.75, y: -0.75 }, 3: { x: 0.75, y: 0.75 }, 4: { x: -0.75, y: 0.75 } }
+  },
+  minimize: {
+    // Back to rest at the end: held pulled in, the four marks would close up into a plus.
+    say: '四个角向里收拢一下',
+    moves: { 1: { x: [0.5, 0], y: [0.5, 0] }, 2: { x: [-0.5, 0], y: [0.5, 0] }, 3: { x: [-0.5, 0], y: [-0.5, 0] }, 4: { x: [0.5, 0], y: [-0.5, 0] } }
+  },
+  hash: { say: '先写两竖，再写两横', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  notebook: { say: '在封面上写下名字', moves: { 1: { sx: [0, 1], o: [7.25, 5.625] } } },
+  'cloud-upload': { say: '箭头从云里往上长出来', moves: { 1: { sy: [0, 1], o: [8, 11.5] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
@@ -277,5 +295,6 @@ Object.assign(MOTION, {
   'bell-off': { say: '斜线重新划过', moves: draw('bell-off') },
   'eye-off': { say: '斜线重新划过', moves: draw('eye-off') },
   'zoom-in': { say: '加号转一圈，放大', moves: spin('zoom-in') },
-  'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') }
+  'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') },
+  unlink: { say: '斜线重新划过，断开链接', moves: draw('unlink') }
 });
