@@ -2757,3 +2757,107 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Group 4 of the same batch.
+// component's four diamonds: squares turned 45° about points d out from the centre, side s, so
+// neighbours are one gap apart and the outer tips reach the 12 box once rounded.
+const COMP_D = 3.509, COMP_S = 3.962;
+const diamond = (cx, cy) => rot(cx, cy, COMP_S, COMP_S, 45, 0.75);
+// graduation-cap's board: a diamond twice as wide as tall, the side corners just past the live
+// area so their rounded ends land on it.
+const BOARD = polygon([[8, 2.38], [15.618, 6.189], [8, 9.998], [0.382, 6.189]], [1, 0.5, 1, 0.5]);
+Object.assign(ICONS, {
+  move: {
+    label: '移动',
+    key: 'circle',
+    layers: [
+      // A light disc with a blue cross whose four ends carry small heads (the allowed 45°).
+      L(circ(8, 8, 7), Bt),
+      L('M8 3.75V12.25M3.75 8H12.25M6.5 5.25L8 3.75L9.5 5.25M10.75 6.5L12.25 8L10.75 9.5M9.5 10.75L8 12.25L6.5 10.75M5.25 9.5L3.75 8L5.25 6.5', { sw: K })
+    ]
+  },
+  'contact-book': {
+    label: '通讯录',
+    key: 'portrait',
+    layers: [
+      // A light book whose spine is a blue band of the body itself (clipped, as credit-card's
+      // stripe), and user's head and shoulders in blue on the face, evenly inset from the spine
+      // and the right edge.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(2, 1, 12, 14, M), { clip: rr(0, 0, 4.5, 16) }),
+      L(circ(9.25, 6, 1.75)),
+      L(rr(6.25, 8.75, 6, 3.25, [3, 3, 1, 1]))
+    ]
+  },
+  siren: {
+    label: '警报',
+    key: 'square',
+    layers: [
+      // A light dome on a blue base a gap of 1 below it, and three short blue rays a gap out:
+      // one above, one either side.
+      L(rr(5.25, 5, 5.5, 6, [2.75, 2.75, 0, 0]), Bt),
+      L(rr(2, 12, 12, 2, t)),
+      L(pill(7.25, 2, K, 2) + pill(2, 7.25, 2.25, K) + pill(11.75, 7.25, 2.25, K))
+    ]
+  },
+  braces: {
+    label: '花括号',
+    key: 'square',
+    layers: [
+      // code's tile with a pair of blue curly braces built from quarter arcs of radius 1, their
+      // points facing out, 2 in from the tile's edges and a gap of 1 apart. One layer each.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6.75 4.75A1 1 0 0 0 5.75 5.75V7A1 1 0 0 1 4.75 8A1 1 0 0 1 5.75 9V10.25A1 1 0 0 0 6.75 11.25', { sw: K }),
+      L('M9.25 4.75A1 1 0 0 1 10.25 5.75V7A1 1 0 0 0 11.25 8A1 1 0 0 0 10.25 9V10.25A1 1 0 0 1 9.25 11.25', { sw: K })
+    ]
+  },
+  component: {
+    label: '组件',
+    key: 'square',
+    layers: [
+      // Four diamonds round the centre, a gap of 1 apart: light above and below, blue left and
+      // right. The component mark is made of turned squares, so it needs their 45° sides.
+      L(diamond(8, 8 - COMP_D), Bt),
+      L(diamond(8 + COMP_D, 8)),
+      L(diamond(8, 8 + COMP_D), Bt),
+      L(diamond(8 - COMP_D, 8))
+    ]
+  },
+  sitemap: {
+    label: '站点地图',
+    key: 'square',
+    layers: [
+      // A blue page on top and three light pages in a row below, joined by blue lines that stop
+      // a gap of 1 short of each page.
+      L('M8 7.125V8M3.667 8.875V8H12.333V8.875M8 8V8.875', { sw: D }),
+      L(rr(5.5, 2, 5, 3.5, 1)),
+      L(rr(2, 10.5, 3.333, 3.5, 1), Bt),
+      L(rr(6.333, 10.5, 3.333, 3.5, 1), Bt),
+      L(rr(10.667, 10.5, 3.333, 3.5, 1), Bt)
+    ]
+  },
+  'graduation-cap': {
+    label: '学士帽',
+    key: 'wide',
+    layers: [
+      // A light board (a diamond: the board seen at an angle is known by its slanted sides) in
+      // front of a blue band, cutting a gap of W out of it, and a blue tassel hanging on the right
+      // one gap from the band.
+      L(rr(4.5, 8, 7, 5.5, [0, 0, r, r])),
+      L('M13.25 6.5V10.75', { sw: K }),
+      L(BOARD, { ...Bt, gap: W })
+    ]
+  },
+  'gallery-view': {
+    label: '画廊视图',
+    key: 'landscape',
+    layers: [
+      // A large light picture over a row of three blue thumbnails, each part a gap of 1 from the
+      // next; the outer corners round as one outline (seams 1 inside). One layer per thumbnail.
+      L(rr(1, 2, 14, 7.5, [R3, R3, S, S]), Bt),
+      L(rr(1, 10.5, 4, 3.5, [S, S, S, r])),
+      L(rr(6, 10.5, 4, 3.5, S)),
+      L(rr(11, 10.5, 4, 3.5, [S, S, r, S]))
+    ]
+  }
+});
