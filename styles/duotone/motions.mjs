@@ -319,7 +319,25 @@ export const MOTION = {
     say: '逐个输入字符，光标闪烁',
     moves: { 1: { s: [0, 1, 1, 1], o: [4.125, 8] }, 2: { s: [0, 0, 1, 1], o: [6.875, 8] }, 3: { s: [0, 0, 0, 1], o: [9.625, 8] } }
   },
-  'lock-keyhole': { say: '钥匙孔转过去，再转回来', moves: { 2: { r: [90, 0], o: [8, 10] } } }
+  'lock-keyhole': { say: '钥匙孔转过去，再转回来', moves: { 2: { r: [90, 0], o: [8, 10] } } },
+  pause: { say: '两条竖杠依次落下，暂停', moves: { 1: { sy: [0, 1, 1], o: [8, 8] }, 2: { sy: [0, 0, 1], o: [8, 8] } } },
+  stop: { say: '按下停止键', moves: { all: { s: [0.88, 1.04, 1] } } },
+  'skip-forward': { say: '三角向前一推，跳到下一首', moves: { 1: { x: [0.75, 0] } } },
+  'skip-back': { say: '三角向后一推，回到上一首', moves: { 1: { x: [-0.75, 0] } } },
+  'audio-lines': {
+    say: '声波从中间向两边依次跳动',
+    moves: {
+      2: { sy: [0.6, 1, 1, 1], o: [8, 8] },
+      ...same([1, 3], { sy: [1, 0.5, 1, 1], o: [8, 8] }),
+      ...same([0, 4], { sy: [1, 1, 2, 1], o: [8, 8] })
+    }
+  },
+  'picture-in-picture': { say: '小窗移到左上角', moves: { 1: { x: -5, y: -4.25 } } },
+  subtitles: { say: '字幕一行行出现', moves: { 1: { sx: [0, 1, 1], o: [3.25, 8.625] }, 2: { sx: [0, 0, 1], o: [3.25, 11.125] } } },
+  save: { say: '滑盖拉开再合上，写入磁盘', moves: { 1: { x: [1, 1, 0] } } },
+  'battery-medium': { say: '接上电，一格一格充上', moves: { 1: { a: [0.15, 1, 1] }, 2: { a: [0.15, 0.15, 1] } } },
+  'battery-low': { say: '电量低，最后一格闪烁', moves: { 1: { a: [0.15, 1, 0.15, 1] } } },
+  mouse: { say: '滚轮上下滚动', moves: { 1: { y: [0.75, -0.75, 0] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own

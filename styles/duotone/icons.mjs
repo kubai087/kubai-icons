@@ -1510,6 +1510,119 @@ export const ICONS = {
       L(rr(2, 6.5, 12, 8.5, M), { ...Bt, gap: W }),
       L(circ(8, 10, 1.5) + rr(7.25, 10, 1.5, 3, [0, 0, 0.75, 0.75]))
     ]
+  },
+  pause: {
+    label: '暂停',
+    key: 'circle',
+    layers: [
+      // play's disc with two blue bars 2 wide and 1.5 apart, centred. One layer per bar.
+      L(circ(8, 8, 7), Bt),
+      L(rr(5.25, 5, 2, 6, 1)),
+      L(rr(8.75, 5, 2, 6, 1))
+    ]
+  },
+  stop: {
+    label: '停止',
+    key: 'circle',
+    layers: [
+      L(circ(8, 8, 7), Bt),
+      L(rr(5.25, 5.25, 5.5, 5.5, r))
+    ]
+  },
+  'skip-forward': {
+    label: '下一首',
+    key: 'circle',
+    layers: [
+      // play's triangle, smaller (same proportions), and a blue bar one gap past its tip; the
+      // two together are centred on the disc.
+      L(circ(8, 8, 7), Bt),
+      L(polygon([[4.5, 5], [9.18, 8], [4.5, 11]], 1)),
+      L(rr(10, 5, 1.5, 6, 0.75))
+    ]
+  },
+  'skip-back': {
+    label: '上一首',
+    key: 'circle',
+    layers: [
+      // skip-forward mirrored.
+      L(circ(8, 8, 7), Bt),
+      L(polygon([[11.5, 5], [11.5, 11], [6.82, 8]], 1)),
+      L(rr(4.5, 5, 1.5, 6, 0.75))
+    ]
+  },
+  'audio-lines': {
+    label: '音频波形',
+    key: 'live',
+    layers: [
+      // Five bars 2 thick and a gap of 1 apart, centred on one line and tallest in the middle,
+      // which is blue. One layer per bar, so the motion can make them bounce in turn.
+      L('M2 7V9', { sw: 2, ...Bt }),
+      L('M5 4.5V11.5', { sw: 2, ...Bt }),
+      L('M8 2V14', { sw: 2 }),
+      L('M11 4.5V11.5', { sw: 2, ...Bt }),
+      L('M14 7V9', { sw: 2, ...Bt })
+    ]
+  },
+  'picture-in-picture': {
+    label: '画中画',
+    key: 'landscape',
+    layers: [
+      // A light window with a small blue window in its lower right corner, 2.25 from both
+      // nearby edges.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(rr(8.25, 8.5, 4.5, 3.25, 1))
+    ]
+  },
+  subtitles: {
+    label: '字幕',
+    key: 'landscape',
+    layers: [
+      // A light screen with two rows of caption text near its bottom, each row two blue lines a
+      // gap of 1 apart, 2.25 in from the sides and the bottom. One layer per row.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(pill(3.25, 8, 3, D) + pill(7.25, 8, 5.5, D)),
+      L(pill(3.25, 10.5, 5.5, D) + pill(9.75, 10.5, 3, D))
+    ]
+  },
+  save: {
+    label: '保存',
+    key: 'square',
+    layers: [
+      // A diskette: a light case with a blue shutter hanging from its top edge and a blue label
+      // standing on its bottom edge, both clipped to the case so they follow its outline there.
+      L(rr(2, 2, 12, 12, M), Bt),
+      L(rr(5, 2, 5, 3.5, [0, 0, 1, 1]), { clip: rr(2, 2, 12, 12, M) }),
+      L(rr(4, 8.5, 8, 5.5, [r, r, 0, 0]), { clip: rr(2, 2, 12, 12, M) })
+    ]
+  },
+  'battery-medium': {
+    label: '电量中',
+    key: 'wide',
+    layers: [
+      // battery-full with two cells.
+      L(rr(1, 2.5, 12.5, 11, R) + rr(13.5, 6, 1.5, 4, [0, 0.75, 0.75, 0]), Bt),
+      L(pill(3.75, 5, D, 6)),
+      L(pill(6.25, 5, D, 6))
+    ]
+  },
+  'battery-low': {
+    label: '电量低',
+    key: 'wide',
+    layers: [
+      // battery-full with one cell.
+      L(rr(1, 2.5, 12.5, 11, R) + rr(13.5, 6, 1.5, 4, [0, 0.75, 0.75, 0]), Bt),
+      L(pill(3.75, 5, D, 6))
+    ]
+  },
+  mouse: {
+    label: '鼠标',
+    key: 'tall',
+    layers: [
+      // A light mouse (a capsule 10 wide) split between its two buttons by a straight seam 1
+      // wide from the top, and a blue wheel one gap below the seam's end.
+      L(pill(3, 1, 10, 14), { ...Bt, cut: [C(rr(7.5, -1, 1, 4.5))] }),
+      L(pill(7.25, 4.5, 1.5, 3))
+    ]
   }
 };
 
