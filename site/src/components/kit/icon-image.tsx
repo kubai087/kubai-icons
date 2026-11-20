@@ -68,7 +68,8 @@ const recall = (key: string) => {
   return bmp;
 };
 const keyOf = (icon: KubaiIconData, { color, variant = "color", badgeColor }: IconLook, pose: Pose, px: number) =>
-  `${icon.name}|${color}|${variant}|${badgeColor}|${pose}|${px}`;
+  // A two-tone icon shares its name with the layered one, so the style is part of the key.
+  `${icon.style === "duotone" ? "duotone:" : ""}${icon.name}|${color}|${variant}|${badgeColor}|${pose}|${px}`;
 /** True when two bitmap keys show the same icon, pose and size in different colours. */
 const recoloured = (a: string | null, b: string) => {
   if (!a || a === b) return false;
