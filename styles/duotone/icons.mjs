@@ -1623,6 +1623,110 @@ export const ICONS = {
       L(pill(3, 1, 10, 14), { ...Bt, cut: [C(rr(7.5, -1, 1, 4.5))] }),
       L(pill(7.25, 4.5, 1.5, 3))
     ]
+  },
+  tablet: {
+    label: '平板',
+    key: 'portrait',
+    layers: [
+      // phone at the wider portrait size, with the same two blue lines.
+      L(rr(2, 1, 12, 14, R), Bt),
+      L(pill(6.5, 3, 3, D) + pill(6, 11.75, 4, D))
+    ]
+  },
+  usb: {
+    label: 'U 盘',
+    key: 'tall',
+    layers: [
+      // A light stick and, one gap above it, a blue connector with two square holes in it.
+      L(rr(5, 1, 6, 3.5, [1, 1, 0, 0]), { cut: [C(rr(6.375, 2, 1.25, 1.25) + rr(8.375, 2, 1.25, 1.25))] }),
+      L(rr(3, 5.5, 10, 9.5, M), Bt)
+    ]
+  },
+  plug: {
+    label: '插头',
+    key: 'square',
+    layers: [
+      // Two blue prongs, one gap above a light body whose bottom corners are rounded right down,
+      // and one gap below it a short blue cable on the centre line.
+      L(pill(5.25, 2, 1.5, 3.5) + pill(9.25, 2, 1.5, 3.5)),
+      L(rr(2, 6.5, 12, 4, [1, 1, 2, 2]), Bt),
+      L(rr(7, 11.5, 2, 2.5, [0, 0, 1, 1]))
+    ]
+  },
+  disc: {
+    label: '光盘',
+    key: 'circle',
+    layers: [
+      // A light disc with a blue hub ring (its hole white) and a short blue glint, 2 in from
+      // the rim, that shows it turning.
+      L(circ(8, 8, 7), Bt),
+      L(circ(8, 8, 2.5), { cut: [C(circ(8, 8, 1))] }),
+      L('M3.75 8A4.25 4.25 0 0 1 8 3.75', { sw: D })
+    ]
+  },
+  speaker: {
+    label: '音箱',
+    key: 'portrait',
+    layers: [
+      // A light cabinet with a small blue tweeter and a large blue woofer on its centre line,
+      // 2.25 in from the top and the bottom.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(circ(8, 4.5, 1.25)),
+      L(circ(8, 10, 2.75))
+    ]
+  },
+  router: {
+    label: '路由器',
+    key: 'landscape',
+    layers: [
+      // Two blue antennas one gap above a light box with three blue lights, 2.25 in from its
+      // left and bottom edges. One layer per light.
+      L(pill(3.5, 2, 1.5, 4.5) + pill(11, 2, 1.5, 4.5)),
+      L(rr(1, 7.5, 14, 6.5, M), Bt),
+      L(circ(4, 11, 0.75)),
+      L(circ(6.5, 11, 0.75)),
+      L(circ(9, 11, 0.75))
+    ]
+  },
+  banknote: {
+    label: '纸币',
+    key: 'wide',
+    layers: [
+      // A light note with a blue round mark in the middle and a blue dot towards each end.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(circ(8, 8, 2.5)),
+      L(circ(4, 8, 0.75) + circ(12, 8, 0.75))
+    ]
+  },
+  meh: {
+    label: '一般',
+    key: 'circle',
+    layers: [
+      // smile with a straight mouth.
+      L(circ(8, 8, 7), Bt),
+      L(pill(5.375, 5.25, D, 2) + pill(9.375, 5.25, D, 2)),
+      L('M5.75 10.5H10.25', { sw: D })
+    ]
+  },
+  frown: {
+    label: '难过',
+    key: 'circle',
+    layers: [
+      // smile with the mouth turned over.
+      L(circ(8, 8, 7), Bt),
+      L(pill(5.375, 5.25, D, 2) + pill(9.375, 5.25, D, 2)),
+      L('M5.5 11.5a2.5 2.5 0 0 1 5 0', { sw: D })
+    ]
+  },
+  laugh: {
+    label: '大笑',
+    key: 'circle',
+    layers: [
+      // smile with the mouth wide open: a blue half disc.
+      L(circ(8, 8, 7), Bt),
+      L(pill(5.375, 5.25, D, 2) + pill(9.375, 5.25, D, 2)),
+      L('M5.25 9H10.75A2.75 2.75 0 0 1 5.25 9Z', { sw: D })
+    ]
   }
 };
 

@@ -337,7 +337,17 @@ export const MOTION = {
   save: { say: '滑盖拉开再合上，写入磁盘', moves: { 1: { x: [1, 1, 0] } } },
   'battery-medium': { say: '接上电，一格一格充上', moves: { 1: { a: [0.15, 1, 1] }, 2: { a: [0.15, 0.15, 1] } } },
   'battery-low': { say: '电量低，最后一格闪烁', moves: { 1: { a: [0.15, 1, 0.15, 1] } } },
-  mouse: { say: '滚轮上下滚动', moves: { 1: { y: [0.75, -0.75, 0] } } }
+  mouse: { say: '滚轮上下滚动', moves: { 1: { y: [0.75, -0.75, 0] } } },
+  tablet: { say: '转成横屏，再转回竖屏', moves: { all: { r: [90, 90, 0, 0], o: [8, 8] } } },
+  usb: { say: '向上插进接口', moves: { all: { y: [-0.75, 0] } } },
+  plug: { say: '向上插进插座', moves: { all: { y: [-0.75, 0] } } },
+  disc: { say: '光盘转一圈', moves: { 2: { r: 360, o: [8, 8] } } },
+  speaker: { say: '低音喇叭随声音振动', moves: { 2: { s: [0.85, 1.1, 0.9, 1], o: [8, 10] } } },
+  router: { say: '指示灯依次亮起', moves: { 2: { a: [0.2, 1, 1, 1] }, 3: { a: [0.2, 0.2, 1, 1] }, 4: { a: [0.2, 0.2, 0.2, 1] } } },
+  banknote: { say: '翻过来查看', moves: { all: { sx: [-1, 1, 1] } } },
+  meh: { say: '嘴角左右一撇', moves: { 2: { x: [-0.5, 0.5, 0] } } },
+  frown: { say: '嘴角往下一沉', moves: { 2: { y: 0.4 }, 1: { sy: 0.8, o: [8, 6.25] } } },
+  laugh: { say: '笑得眯起眼', moves: { 1: { sy: 0.35, o: [8, 6.25] }, 2: { sy: [1.2, 1], o: [8, 9] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
