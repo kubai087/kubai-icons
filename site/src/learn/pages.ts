@@ -63,8 +63,8 @@ export const GUIDES: LearnPage[] = [
   },
   {
     href: "/docs/guides/colors-dark-mode/",
-    label: "Colors and dark mode",
-    zh: "颜色和深色模式",
+    label: "Set colors and dark mode",
+    zh: "设置颜色和深色模式",
     title: "Icon colors, themes and dark mode",
     zhTitle: "图标颜色、主题和深色模式",
     description: "Recolor animated icons from one accent color, switch to the soft variant for a page or theme, and adapt icons to dark mode.",
@@ -72,8 +72,8 @@ export const GUIDES: LearnPage[] = [
   },
   {
     href: "/docs/guides/figma/",
-    label: "Design tools",
-    zh: "设计工具",
+    label: "Use in design tools",
+    zh: "在设计工具中使用",
     title: "Use the icons in Figma and design tools",
     zhTitle: "在 Figma 和设计工具中使用图标",
     description: "Copy or download Kubai Icons as SVG or PNG for Figma, Sketch, Keynote and native apps, in any color, and keep a set in one ZIP.",
@@ -81,12 +81,12 @@ export const GUIDES: LearnPage[] = [
   },
   {
     href: "/docs/guides/duotone/",
-    label: "Two-tone style",
-    zh: "双色风格",
+    label: "Switch style (layered / two-tone)",
+    zh: "切换风格（分层/双色）",
     title: "Two-tone icons: the solid style",
     zhTitle: "双色面性图标",
     description: "Solid two-tone icons on a 16 grid, with a light body, accents in your brand color and a hover motion. Same names and props as the layered icons, so switching style is one import.",
-    zhDescription: "16 网格的实心双色图标：浅色主体加品牌色点缀，悬停时有动效。名字和参数与分层图标相同，切换风格只需要改一行 import。",
+    zhDescription: "16 网格的实心双色图标：浅色主体加品牌色点缀，悬停时播放动效。名称和参数与分层图标相同，切换风格只需修改一行 import。",
   },
 ];
 

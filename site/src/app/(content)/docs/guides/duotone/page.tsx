@@ -15,7 +15,7 @@ export default function Page() {
         {page.title}
       </Title>
       <DuotoneWall />
-      <p>Hover an icon to play its motion. In the <Link href="/icons/?style=duotone">icon browser</Link>, choose <strong>Two-tone</strong> to search them, recolor them and copy their code.</p>
+      <p>The icons play their motion in turn; an icon under the pointer holds its hover pose. To search, recolor and copy them, choose <strong>Two-tone</strong> in the <Link href="/icons/?style=duotone">icon browser</Link>.</p>
       <h2>Switch style by import path</h2>
       <p>A two-tone icon has the same name and props as the layered one, so switching style is one import. Each package has a <code>duotone</code> path:</p>
       <Code lang="tsx" code={`// Layered
