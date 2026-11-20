@@ -133,8 +133,11 @@ export function duoPose(ic, t) {
   return out;
 }
 
-let reduced = false;
-try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* not a browser */ }
+// The query is kept and its `matches` read on each motion, so a change to the setting takes
+// effect at once, without a reload.
+let motionQuery = null;
+try { motionQuery = matchMedia('(prefers-reduced-motion: reduce)'); } catch { /* not a browser */ }
+const reduced = () => Boolean(motionQuery && motionQuery.matches);
 // Looked up on each call, so a page or test that replaces them later is followed.
 const raf = (fn) => (typeof requestAnimationFrame === 'function' ? requestAnimationFrame(fn) : setTimeout(() => fn(Date.now()), 16));
 const caf = (id) => (typeof cancelAnimationFrame === 'function' ? cancelAnimationFrame(id) : clearTimeout(id));
@@ -159,7 +162,7 @@ export function animateDuotone(svg, ic) {
   const go = (instant) => {
     caf(frame);
     const from = els.map((el) => ({ ...el.cur }));
-    if (instant || reduced) { els.forEach((el, i) => { el.cur = { ...el.cur, ...values(el.p, 1, from[i], on) }; paint(el); }); return; }
+    if (instant || reduced()) { els.forEach((el, i) => { el.cur = { ...el.cur, ...values(el.p, 1, from[i], on) }; paint(el); }); return; }
     const run = on ? long : DUO_BACK, t0 = now();
     const tick = (t) => {
       if (stopped) return;

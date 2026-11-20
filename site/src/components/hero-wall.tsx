@@ -5,7 +5,9 @@ import {
   Download, CloudUpload, Gift, Package, Heart, Star, Key, Smartphone,
 } from "kubai-icons-react";
 import { tile } from "@/components/kit/styles";
+import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
+import { useWallLoop } from "@/lib/wall-motion";
 
 const WALL = [Folder, Mail, Calendar, Lock, Settings, Trash, Bell, Camera, Bookmark, AlarmClock, Notebook, Compass, Download, CloudUpload, Gift, Package, Heart, Star, Key, Smartphone];
 const COLORS = ["#5393FF", "#6366F1", "#EC4899", "#F97316", "#22C55E", "#06B6D4", "#8B5CF6", "#F43F5E", "#14B8A6", "#0284C7"];
@@ -83,25 +85,24 @@ const WallTile = memo(function WallTile({ Icon, color, offset, running, index, t
   );
 });
 
-/** The homepage icon grid: each icon loops its motion on its own beat while on screen. */
+/**
+ * The homepage icon grid: each icon loops its motion on its own beat while on screen, unless
+ * the visitor pauses the walls or asks for reduced motion.
+ */
 export function HeroWall() {
   const ref = useRef<HTMLDivElement>(null);
-  const [running, setRunning] = useState(false);
+  const running = useWallLoop(ref);
   const beat = useHeroBeat(running);
 
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting));
-    observer.observe(ref.current!);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div ref={ref} className="grid w-full max-w-xl grid-cols-5 gap-tiles lg:max-w-none">
-      {WALL.map((Icon, i) => {
-        const line = STORY.findIndex((s) => s.Icon === Icon);
-        return <WallTile key={i} Icon={Icon} color={COLORS[i % COLORS.length]} offset={offsetOf(i)} running={running} index={i} told={line >= 0} playing={line >= 0 && line === beat} />;
-      })}
+    <div className="w-full max-w-xl lg:max-w-none">
+      <div ref={ref} className="grid grid-cols-5 gap-tiles">
+        {WALL.map((Icon, i) => {
+          const line = STORY.findIndex((s) => s.Icon === Icon);
+          return <WallTile key={i} Icon={Icon} color={COLORS[i % COLORS.length]} offset={offsetOf(i)} running={running} index={i} told={line >= 0} playing={line >= 0 && line === beat} />;
+        })}
+      </div>
+      <div className="rise-in mt-2 flex justify-end [--i:7]"><WallPause /></div>
     </div>
   );
 }

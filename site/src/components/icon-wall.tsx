@@ -8,7 +8,9 @@ import {
 } from "kubai-icons-react";
 import { RiTwitterXLine } from "@remixicon/react";
 import { tile } from "@/components/kit/styles";
+import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
+import { useWallLoop } from "@/lib/wall-motion";
 
 export type WallFriend = { slug: string; name: string; site: string; host: string; image: string; sponsored?: boolean };
 
@@ -103,14 +105,7 @@ type Item = { kind: "icon"; k: number } | { kind: "card"; card: WallCard };
  */
 export function IconWall({ cards }: { cards: WallCard[] }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [running, setRunning] = useState(false);
-
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !ref.current) return;
-    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting));
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const running = useWallLoop(ref);
 
   const counts = GRIDS.map((g) => {
     const used = cards.reduce((sum, c) => sum + (c.tall ? g.tall : g.short), 0);
@@ -128,6 +123,8 @@ export function IconWall({ cards }: { cards: WallCard[] }) {
 
   return (
     <div className="@container">
+      {/* Above the wall, which can run several screens tall, so it is found before the motion. */}
+      <div className="mb-2 flex justify-end"><WallPause /></div>
       <div
         ref={ref}
         className="grid grid-flow-row-dense grid-cols-[repeat(var(--cols),minmax(0,1fr))] gap-tiles [--cols:4] sm:[--cols:6] lg:[--cols:8] xl:[--cols:10]"
