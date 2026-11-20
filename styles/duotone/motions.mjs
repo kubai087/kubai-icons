@@ -535,4 +535,128 @@ Object.assign(MOTION, {
 // Batch: home and tools (group 6)
 Object.assign(MOTION, {
   'window-frame': { say: '窗户向两边推开，又关上', moves: { 0: { sx: [0.45, 0.45, 1], o: [2.5, 7] }, 1: { sx: [0.45, 0.45, 1], o: [13.5, 7] } } }
+// Batch: devices and media
+Object.assign(MOTION, {
+  monitor: {
+    say: '开机，屏幕从一条线展开亮起',
+    add: [{ layer: L(rr(3, 4, 10, 4.5, 1)) }],
+    moves: { a0: { ...hidden, a: 1, sy: [0.05, 1.08, 1], o: [8, 6.25] } }
+  },
+  desktop: {
+    say: '开机，屏幕从一条线展开亮起',
+    add: [{ layer: L(rr(3, 4, 5, 3.5, 1)) }],
+    moves: { a0: { ...hidden, a: 1, sy: [0.05, 1.08, 1], o: [5.5, 5.75] } }
+  },
+  smartphone: { say: '一条新通知从顶部滑入', moves: { 1: { y: [-1.5, 0], a: [0, 1] } } },
+  watch: {
+    say: '活动圆环画满一圈',
+    add: [{ layer: L('M6.25 8A1.75 1.75 0 0 1 8 6.25', { sw: D }) }],
+    moves: { a0: { rest: { a: 0, w: 0 }, a: 1, w: [0, 1] } }
+  },
+  gamepad: {
+    say: '按下按键，手柄振动',
+    ms: 700,
+    moves: { all: { x: [-0.4, 0.4, -0.3, 0.3, 0] }, 3: { s: [0.7, 0.7, 1, 1, 1], o: [11.875, 5.625] } }
+  },
+  bluetooth: {
+    say: '配对中，两侧亮起信号点',
+    add: [{ layer: L(circ(1.25, 8, 0.75)) }, { layer: L(circ(14.75, 8, 0.75)) }],
+    moves: same(['a0', 'a1'], { ...hidden, a: [1, 0.3, 1] })
+  },
+  cpu: { say: '通电运算，核心闪烁', moves: { 2: { a: [0.2, 1, 0.2, 1] } } },
+  'hard-drive': {
+    say: '磁盘转起来，指示灯闪烁',
+    ms: 800,
+    moves: { all: { x: [-0.25, 0.25, -0.25, 0.25, 0] }, 2: { a: [0.2, 1, 0.2, 1, 1] }, 3: { a: [1, 0.2, 1, 0.2, 1] } }
+  },
+  'sd-card': { say: '向下插进卡槽', moves: { all: { y: [0.75, 0] } } },
+  'sim-card': { say: '从卡托中弹出，抬起', moves: { all: { y: [-0.75, -0.75], r: [-6, -6], o: [8, 15] } } },
+  webcam: { say: '镜头左右环视一圈', moves: { 1: { x: [-1, 1, 0] } } },
+  signal: {
+    // Blue copies of the two light bars fade in, lower one first.
+    say: '信号一格一格变满',
+    add: [{ layer: { ...L(rr(8.5, 5, 2.25, 9, 1)) } }, { layer: { ...L(rr(11.75, 2, 2.25, 12, 1)) } }],
+    moves: { a0: { ...hidden, a: [0, 1, 1] }, a1: { ...hidden, a: [0, 0, 1] } }
+  }
+});
+
+Object.assign(MOTION, {
+  volume: { say: '音量调大，声波一圈圈向外传出', moves: { 1: { w: [0, 1, 1, 1] }, 2: { w: [0, 0, 1, 1] }, 3: { w: [0, 0, 0, 1] } } },
+  repeat: { say: '循环转过半圈', moves: { all: { r: 180, o: [8, 8] } } },
+  shuffle: { say: '两条路线上下交换', moves: { all: { sy: -1, o: [8, 8] } } },
+  film: { say: '放映中，画面闪动', moves: { 1: { a: [0.3, 1, 0.3, 1] } } },
+  clapperboard: { say: '打板：板条掀起再拍下', moves: { 1: { r: [-7, 0], o: [1, 5] } } },
+  vinyl: { say: '唱片转一圈', moves: { 2: { r: 360, o: [8, 8] } } },
+  equalizer: { say: '推子各自滑到新的位置', moves: { 1: { y: -3 }, 2: { y: 4 }, 3: { y: -2.5 } } },
+  cast: { say: '投屏信号从角落向外亮起', moves: { 1: { a: [0.2, 1, 1] }, 2: { a: [0.2, 0.2, 1] } } },
+  live: {
+    // A blue copy of the light outer arcs fades in over them.
+    say: '开始直播，信号向外发出，外圈亮起',
+    add: [{ layer: { ...ICONS.live.layers[0], tone: 'a' } }],
+    moves: { 1: { s: [1.15, 1], o: [8, 8] }, a0: { ...hidden, a: [0, 1] } }
+  },
+  focus: {
+    say: '取景框向中间收紧，锁定对焦',
+    moves: { 0: { x: 0.75, y: 0.75 }, 1: { x: -0.75, y: 0.75 }, 2: { x: -0.75, y: -0.75 }, 3: { x: 0.75, y: -0.75 } }
+  }
+});
+
+const closeIn = { 0: { s: 0.88, o: [8, 8] } };
+Object.assign(MOTION, {
+  'scan-barcode': { say: '取景框向中间收紧，对准条码', moves: closeIn },
+  'scan-qr': { say: '取景框向中间收紧，对准二维码', moves: closeIn },
+  'scan-text': { say: '文字逐行识别出来', moves: { 1: { sx: [0, 1, 1, 1], o: [5, 5.625] }, 2: { sx: [0, 0, 1, 1], o: [5, 8] }, 3: { sx: [0, 0, 0, 1], o: [5, 10.375] } } },
+  remote: { say: '按下中间的按键', moves: { 1: { s: [0.8, 1], o: [8, 6] }, 2: { a: [0.3, 1] } } },
+  'power-bank': { say: '电量灯从下往上逐个亮起', moves: { 2: { a: [0.15, 1, 1, 1] }, 3: { a: [0.15, 0.15, 1, 1] }, 4: { a: [0.15, 0.15, 0.15, 1] } } },
+  nfc: { say: '感应信号由内向外发出', moves: { 2: { a: [0.15, 1, 1] }, 3: { a: [0.15, 0.15, 1] } } },
+  antenna: { say: '两根天线张开，搜索信号', moves: { 0: { r: -8, o: [7, 10] }, 1: { r: 8, o: [9, 10] } } },
+  'walkie-talkie': { say: '对方讲话，喇叭逐条响起', moves: { 2: { a: [0.2, 1, 1, 1] }, 3: { a: [0.2, 0.2, 1, 1] }, 4: { a: [0.2, 0.2, 0.2, 1] } } },
+  'game-console': { say: '按方向键，再按下按钮', moves: { 2: { x: [0.4, 0] }, 3: { s: [1, 0.7, 1], o: [9.25, 12.125] } } }
+});
+
+Object.assign(MOTION, {
+  'phone-vibrate': { say: '振动：左右抖动后停住', ms: 800, moves: { all: { r: [-8, 8, -6, 6, -3, 0] }, ...same([2, 3], { a: [1, 0.3, 1, 0.3, 1, 1] }) } },
+  'tablet-smartphone': { say: '两台设备向两边分开', moves: { 0: { x: -0.5, y: -0.5 }, 1: { x: 0.5, y: 0.5 } } },
+  'e-reader': { say: '翻到下一页，文字逐行出现', moves: { 2: { sx: [0, 1, 1, 1], o: [5.5, 5.625] }, 3: { sx: [0, 0, 1, 1], o: [5.5, 8] }, 4: { sx: [0, 0, 0, 1], o: [5.5, 10.375] } } },
+  'server-rack': { say: '中间一台沿导轨拉出，指示灯闪烁', moves: { 2: { x: [0.75, 0.75] }, 4: { a: [0.2, 1, 0.2, 1] } } },
+  'memory-stick': { say: '芯片依次亮起，开始读写', moves: { 1: { a: [0.2, 1, 1, 1] }, 2: { a: [0.2, 0.2, 1, 1] }, 3: { a: [0.2, 0.2, 0.2, 1] } } },
+  polaroid: { say: '照片从出片口继续送出', moves: { 2: { y: 0.75 } } },
+  slideshow: { say: '下一张幻灯片从左向右展开', moves: { 1: { sx: [0, 1], o: [3, 6.75] } } },
+  joystick: { say: '摇杆向一侧扳倒', moves: same([0, 1], { r: 15, o: [8, 11] }) }
+});
+
+Object.assign(MOTION, {
+  'music-player': {
+    say: '按下中间键，屏幕亮起',
+    add: [{ layer: L(circ(8, 10, 1.125)) }],
+    moves: { 1: { a: [0.3, 1] }, a0: { ...hidden, a: [1, 0] } }
+  },
+  piano: { say: '按下一个和弦', moves: { 0: { y: [0.4, 0.4] }, 2: { y: [0, 0.4] }, 4: { y: [0.4, 0.4] } } },
+  turntable: { say: '唱臂转到唱片上', moves: { 2: { r: -20, o: [12.625, 5.25] } } },
+  'film-reel': { say: '胶卷盘转一圈', moves: { 1: { r: 360, o: [8, 8] } } },
+  'projector-screen': { say: '拉下幕布', moves: { 1: { sy: 1.13, o: [8, 5] }, 2: { y: 0.75 } } },
+  'flip-phone': { say: '来电：手机振动，屏幕亮起', ms: 800, moves: { all: { r: [-6, 6, -4, 4, 0] }, 2: { a: [0.3, 1, 0.3, 1, 1] } } },
+  'vr-headset': { say: '转头向两边看看', moves: { ...same([1, 2], { x: [0.75, -0.75, 0] }) } },
+  bot: { say: '眨眼，天线晃一晃', moves: { 0: { r: [10, -8, 4, 0], o: [8, 6] }, ...same([2, 3], { sy: [0.1, 1], o: [8, 9.5] }) } },
+  drone: { say: '螺旋桨转起来，机身升起', moves: { all: { y: -0.75 }, ...same([0, 1, 2, 3], { a: [0.4, 1, 0.4, 1] }) } }
+});
+
+Object.assign(MOTION, {
+  'crt-monitor': { say: '开机，画面从一条线展开', moves: { 1: { sy: [0.05, 1.08, 1], a: [0.3, 1, 1], o: [6.75, 6.875] } } },
+  'retro-computer': {
+    say: '开机，屏幕上出现一行字',
+    add: [{ layer: L(pill(5.5, 4.625, 3.5, D), Bt) }],
+    moves: { a0: { ...hidden, a: 1, sx: [0, 1], o: [5.5, 5.25] } }
+  },
+  typewriter: { say: '打一个字，滚筒带着纸向左移一格', moves: { ...same([0, 1], { x: [-0.75, -0.75] }), 3: { y: [0.4, 0] } } },
+  'music-library': { say: '从后面抽出一张专辑', moves: { 0: { y: [-1, -0.75] } } },
+  'paper-shredder': { say: '纸被送入，碎条从下方出来', moves: { 0: { y: [0.75, 0.75] }, 2: { sy: [0.3, 1], o: [8, 11] } } },
+  drum: { say: '两根鼓槌落下，敲击鼓面', moves: { 0: { r: [12, 0], o: [3.5, 1.75] }, 1: { r: [-12, 0], o: [12.5, 1.75] }, 2: { y: [0.3, 0] } } },
+  jukebox: { say: '点唱机播放，喇叭随音乐亮起', moves: { 2: { a: [0.2, 1, 0.2, 1] }, 3: { a: [1, 0.2, 1, 1] } } }
+});
+
+Object.assign(MOTION, {
+  aperture: { say: '叶片转动，光圈收小', moves: { 0: { r: 30, o: [8, 8] }, 1: { r: 30, s: 0.6, o: [8, 8] } } },
+  'ethernet-port': { say: '接通网络，触点依次亮起', moves: { 1: { a: [0.2, 1, 1, 1, 1] }, 2: { a: [0.2, 0.2, 1, 1, 1] }, 3: { a: [0.2, 0.2, 0.2, 1, 1] }, 4: { a: [0.2, 0.2, 0.2, 0.2, 1] } } },
+  'camera-retro': { say: '按下快门：镜头一收一放', moves: { 3: { s: [0.4, 1], o: [8, 9] } } }
 });

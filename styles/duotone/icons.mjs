@@ -185,6 +185,13 @@ const CONE = polygon([[6.75, 1], [9.25, 1], [12.75, 12], [3.25, 12]], [1, 1, S, 
 // An hourglass's glass: two bulbs that taper to a waist.
 const GLASS = polygon([[3.5, 3.5], [12.5, 3.5], [9.25, 8], [12.5, 12.5], [3.5, 12.5], [6.75, 8]], [1, 1, 1.5, 1, 1, 1.5]);
 
+// --- Devices and media ---------------------------------------------------------------------
+
+// A right-angled arrow head pointing right (or left) with its tip at (tx, cy), half-height 2.5;
+// the tip is drawn 0.41 past tx so the rounded tip lands on it (as history's head).
+const headR = (tx, cy) => polygon([[tx - 2.09, cy - 2.5], [tx + 0.41, cy], [tx - 2.09, cy + 2.5]], [0.5, 1, 0.5]);
+const headL = (tx, cy) => polygon([[tx + 2.09, cy + 2.5], [tx - 0.41, cy], [tx + 2.09, cy - 2.5]], [0.5, 1, 0.5]);
+
 export const ICONS = {
   folder: {
     label: '文件夹',
@@ -2803,6 +2810,136 @@ Object.assign(ICONS, {
       L(rr(3, 1, 10, 14, R), Bt),
       L(pill(6, 3.75, 4, D)),
       L(circ(8, 9.5, 2.75))
+// Batch: devices and media
+Object.assign(ICONS, {
+  monitor: {
+    label: '显示器',
+    key: 'landscape',
+    layers: [
+      // laptop's light lid as a free-standing screen, and one gap below it a blue stand: a neck
+      // on the centre line rising from a flat foot.
+      L(rr(1, 2, 14, 8.5, M), Bt),
+      L(body(4.5, 12.5, 7, 1.5, 0.5, [{ x: 7, w: 2, h: 1, c: 0 }]))
+    ]
+  },
+  desktop: {
+    label: '台式电脑',
+    key: 'landscape',
+    layers: [
+      // monitor, narrower, on its own stand, and one gap to its right a blue tower.
+      L(rr(1, 2, 9, 7.5, M), Bt),
+      L(body(3, 12.5, 5, 1.5, 0.5, [{ x: 4.75, w: 1.5, h: 2, c: 0 }])),
+      L(rr(11, 2, 4, 12, r))
+    ]
+  },
+  smartphone: {
+    label: '智能手机',
+    key: 'tall',
+    layers: [
+      // phone's light body with a blue notification card 2 in from the sides and the home bar
+      // at the bottom.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(rr(5, 4, 6, 3.5, 1)),
+      L(pill(6, 11.75, 4, D))
+    ]
+  },
+  watch: {
+    label: '智能手表',
+    key: 'tall',
+    layers: [
+      // A blue strap running behind a light face that cuts a gap of W round itself, and on the
+      // face a blue activity ring three quarters closed.
+      L(rr(5, 1, 6, 14, 1)),
+      L(rr(3, 3.5, 10, 9, M), { ...Bt, gap: W }),
+      L('M8 6.25A1.75 1.75 0 1 1 6.25 8', { sw: D })
+    ]
+  },
+  gamepad: {
+    label: '游戏手柄',
+    key: 'wide',
+    layers: [
+      // A light controller in one outline (a wide capsule with two round grips below it), a blue D-pad on the left and
+      // two blue buttons on the right, each 2.125 in from the nearby edges.
+      L('M5 2.5H11A4 4 0 0 1 14.109 9.018A3 3 0 1 1 8.5 10.5H7.5A3 3 0 1 1 1.891 9.018A4 4 0 0 1 5 2.5Z', Bt),
+      L(pill(3.125, 5.875, 3.75, D) + pill(4.375, 4.625, D, 3.75)),
+      L(circ(10.125, 7.375, 1)),
+      L(circ(11.875, 5.625, 1))
+    ]
+  },
+  bluetooth: {
+    label: '蓝牙',
+    key: 'tall',
+    layers: [
+      // A light capsule with the blue Bluetooth rune on it. The rune's slanted strokes are what
+      // makes it the Bluetooth mark (GUIDE §1, slopes the object needs).
+      L(pill(3, 1, 10, 14), Bt),
+      L('M5.5 5.75L10.5 10.25L8 12.5V3.5L10.5 5.75L5.5 10.25', { sw: K })
+    ]
+  },
+  cpu: {
+    label: '处理器',
+    key: 'square',
+    layers: [
+      // Three blue pins on each side running under a light chip, which cuts a gap of W round
+      // itself, and a blue core 2.25 in from the chip's edges.
+      L([5.75, 8, 10.25].map((c) => rr(c - 0.625, 2, D, 2.25, [0.625, 0.625, 0, 0]) + rr(c - 0.625, 11.75, D, 2.25, [0, 0, 0.625, 0.625]) +
+        rr(2, c - 0.625, 2.25, D, [0.625, 0, 0, 0.625]) + rr(11.75, c - 0.625, 2.25, D, [0, 0.625, 0.625, 0])).join('')),
+      L(rr(4.25, 4.25, 7.5, 7.5, M), { ...Bt, gap: W }),
+      L(rr(6.5, 6.5, 3, 3, 1))
+    ]
+  },
+  'hard-drive': {
+    label: '硬盘',
+    key: 'wide',
+    layers: [
+      // A light drive with a blue slot and two blue activity lights along its lower front, each
+      // 2.375 in from the nearby edges. One layer per light.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(pill(3.375, 9.875, 4, D)),
+      L(circ(9.75, 10.5, 0.625)),
+      L(circ(12, 10.5, 0.625))
+    ]
+  },
+  'sd-card': {
+    label: '存储卡',
+    key: 'tall',
+    layers: [
+      // A light card with its top right corner cut off at 45°: the clipped corner is what makes
+      // it a memory card (GUIDE §1). Three blue contacts below the top edge.
+      L(polygon([[3, 1], [10.5, 1], [13, 3.5], [13, 15], [3, 15]], [M, 1, 1, M, M]), Bt),
+      L([5, 7.25, 9.5].map((x) => pill(x, 4, D, 3)).join(''))
+    ]
+  },
+  'sim-card': {
+    label: 'SIM 卡',
+    key: 'portrait',
+    layers: [
+      // A light card with its top right corner cut off at 45° (GUIDE §1), and a blue chip whose
+      // contact pads are split by white slits: one across, one down the lower half.
+      L(polygon([[2, 1], [10, 1], [14, 5], [14, 15], [2, 15]], [M, 1, 1, M, M]), Bt),
+      L(rr(4.5, 7, 7, 5.5, r), { cut: [C(rr(4, 9.25, 8, 1) + rr(7.5, 10, 1, 3))] })
+    ]
+  },
+  webcam: {
+    label: '摄像头',
+    key: 'portrait',
+    layers: [
+      // A light round head with camera's blue lens ring at its centre, and one gap below it a
+      // blue foot.
+      L(circ(8, 6.75, 5.75), Bt),
+      L(circ(8, 6.75, 2.5), { cut: [C(circ(8, 6.75, 1.125))] }),
+      L(rr(4.5, 13.5, 7, 1.5, 0.5))
+    ]
+  },
+  signal: {
+    label: '信号',
+    key: 'square',
+    layers: [
+      // Four bars a gap of 1 apart, rising to the right; the first two are blue (signal strength).
+      L(rr(2, 11, 2.25, 3, 1)),
+      L(rr(5.25, 8, 2.25, 6, 1)),
+      L(rr(8.5, 5, 2.25, 9, 1), Bt),
+      L(rr(11.75, 2, 2.25, 12, 1), Bt)
     ]
   }
 });
@@ -2955,6 +3092,580 @@ Object.assign(ICONS, {
       L(rr(2.5, 2, 5, 9.5, [R, 0, 0, S]), { ...Bt, cut: [C(rr(0, 6.25, 16, 1))] }),
       L(rr(8.5, 2, 5, 9.5, [0, R, S, 0]), { ...Bt, cut: [C(rr(0, 6.25, 16, 1))] }),
       L(rr(2, 12.5, 12, 1.5, 0.5))
+Object.assign(ICONS, {
+  volume: {
+    label: '音量',
+    key: 'wide',
+    layers: [
+      // A light speaker: a box and a cone that flares out from it. The cone's slanted sides are
+      // what makes it a speaker (GUIDE §1). Three blue sound waves round the cone's mouth, each a
+      // gap of 1 from the next.
+      L(polygon([[1, 5.5], [3.25, 5.5], [6.75, 2.5], [6.75, 13.5], [3.25, 10.5], [1, 10.5]], [1, 0, 1, 1, 0, 1]), Bt),
+      L('M8.518 6.232A2.5 2.5 0 0 1 8.518 9.768', { sw: K }),
+      L('M10.466 4.654A5 5 0 0 1 10.466 11.346', { sw: K }),
+      L('M12.66 3.383A7.5 7.5 0 0 1 12.66 12.617', { sw: K })
+    ]
+  },
+  repeat: {
+    label: '循环播放',
+    key: 'square',
+    layers: [
+      // A light loop in two halves, each ending in a blue arrow head (top running right, bottom
+      // running left); each half starts a gap of 1 past the other's head. The four layers are
+      // one loop, so they share a part.
+      L('M3 8.61V6.3A2.5 2.5 0 0 1 5.5 3.8H12', { sw: 2, ...Bt, part: 'loop' }),
+      L(headR(14, 3.8), { part: 'loop' }),
+      L('M13 7.39V9.7A2.5 2.5 0 0 1 10.5 12.2H4', { sw: 2, ...Bt, part: 'loop' }),
+      L(headL(2, 12.2), { part: 'loop' })
+    ]
+  },
+  shuffle: {
+    label: '随机播放',
+    key: 'square',
+    layers: [
+      // Two light paths that cross on 45° slopes (the crossing is what reads as shuffle, GUIDE
+      // §1), each ending in a blue head pointing right; the rising one is in front and cuts a
+      // gap of W round itself.
+      L('M3 3.8H3.5L11.9 12.2H12.5', { sw: 2, ...Bt, part: 'down' }),
+      L(headR(14, 12.2), { part: 'down' }),
+      L('M3 12.2H3.5L11.9 3.8H12.5', { sw: 2, ...Bt, part: 'up', gap: W }),
+      L(headR(14, 3.8), { part: 'up', gap: W })
+    ]
+  },
+  film: {
+    label: '胶片',
+    key: 'landscape',
+    layers: [
+      // One rounded strip cut straight across twice: blue perforated edges (the sprocket holes
+      // white) and a light frame between them.
+      L(rr(1, 2, 14, 2.5), { clip: rr(1, 2, 14, 12, R3), cut: [C([4.25, 6.75, 9.25, 11.75].map((x) => rr(x - 0.625, 2.625, D, D, 0.25)).join(''))] }),
+      L(rr(1, 5.5, 14, 5), { ...Bt, clip: rr(1, 2, 14, 12, R3) }),
+      L(rr(1, 11.5, 14, 2.5), { clip: rr(1, 2, 14, 12, R3), cut: [C([4.25, 6.75, 9.25, 11.75].map((x) => rr(x - 0.625, 12.125, D, D, 0.25)).join(''))] })
+    ]
+  },
+  clapperboard: {
+    label: '场记板',
+    key: 'landscape',
+    layers: [
+      // A light slate and, one gap above it, the blue clapper with white stripes on a 45° slant
+      // (the slanted stripes are what makes it a clapper, GUIDE §1).
+      L(rr(1, 6, 14, 8, M), Bt),
+      L(rr(1, 2, 14, 3, [1, 1, 0.5, 0.5]), { cut: [C([4, 7.5, 11].map((x) => rot(x, 3.5, 1, 5, 45)).join(''))] })
+    ]
+  },
+  vinyl: {
+    label: '黑胶唱片',
+    key: 'circle',
+    layers: [
+      // A light record with a blue label (its spindle hole white) and two short blue groove
+      // sheens on opposite sides, 2 in from the rim.
+      L(circ(8, 8, 7), Bt),
+      L(circ(8, 8, 2.25), { cut: [C(circ(8, 8, 0.75))] }),
+      L('M3.75 8A4.25 4.25 0 0 1 8 3.75M12.25 8A4.25 4.25 0 0 1 8 12.25', { sw: D })
+    ]
+  },
+  equalizer: {
+    label: '均衡器',
+    key: 'square',
+    layers: [
+      // Three light fader tracks with a blue knob on each at a different level; each knob cuts
+      // a gap of W round itself. One layer per knob.
+      L('M4 3V13M8 3V13M12 3V13', { sw: 2, ...Bt }),
+      L(rr(2, 8, 4, 2.5, 1), { gap: W }),
+      L(rr(6, 3, 4, 2.5, 1), { gap: W }),
+      L(rr(10, 6.5, 4, 2.5, 1), { gap: W })
+    ]
+  },
+  cast: {
+    label: '投屏',
+    key: 'landscape',
+    layers: [
+      // A light screen with the cast mark in its lower left corner: a blue quarter disc and a
+      // blue wave round it, both clipped to the screen and cutting a gap of W out of it.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(circ(1, 14, 3.5), { clip: rr(1, 2, 14, 12, R3), gap: W }),
+      L('M1 8.75A5.25 5.25 0 0 1 6.25 14', { sw: K, clip: rr(1, 2, 14, 12, R3), gap: W })
+    ]
+  },
+  live: {
+    label: '直播',
+    key: 'wide',
+    layers: [
+      // A blue point sending waves both ways: blue inner arcs and light outer arcs (the light
+      // ones stroked 2), each a gap of 1 from the next.
+      L('M3.908 3.612A6 6 0 0 0 3.908 12.388M12.092 3.612A6 6 0 0 1 12.092 12.388', { sw: 2, ...Bt }),
+      L('M5.702 5.702A3.25 3.25 0 0 0 5.702 10.298M10.298 5.702A3.25 3.25 0 0 1 10.298 10.298', { sw: K }),
+      L(circ(8, 8, 1.5))
+    ]
+  },
+  focus: {
+    label: '对焦',
+    key: 'square',
+    layers: [
+      // Four light viewfinder corners (stroked 2) round a blue subject at the centre. One layer
+      // per corner, so the motion can close them in.
+      L('M3 6.5V5A2 2 0 0 1 5 3H6.5', { sw: 2, ...Bt }),
+      L('M9.5 3H11A2 2 0 0 1 13 5V6.5', { sw: 2, ...Bt }),
+      L('M13 9.5V11A2 2 0 0 1 11 13H9.5', { sw: 2, ...Bt }),
+      L('M6.5 13H5A2 2 0 0 1 3 11V9.5', { sw: 2, ...Bt }),
+      L(circ(8, 8, 2.25))
+    ]
+  }
+});
+
+// The viewfinder corners shared by focus and the scan icons: light, stroked 2, on the square.
+const CORNERS = ['M3 6.5V5A2 2 0 0 1 5 3H6.5', 'M9.5 3H11A2 2 0 0 1 13 5V6.5', 'M13 9.5V11A2 2 0 0 1 11 13H9.5', 'M6.5 13H5A2 2 0 0 1 3 11V9.5'];
+const viewfinder = () => L(CORNERS.join(''), { sw: 2, ...Bt });
+
+Object.assign(ICONS, {
+  'scan-barcode': {
+    label: '扫描条码',
+    key: 'square',
+    layers: [
+      // focus's light corners round three blue bars of a barcode: the outer two a gap of 1
+      // inside the corners, the middle one shorter so it keeps 2 clear of the corners' ends.
+      viewfinder(),
+      L(rr(5, 5, 1.5, 6, 0.5)),
+      L(rr(7.375, 6, D, 4, 0.5)),
+      L(rr(9.5, 5, 1.5, 6, 0.5))
+    ]
+  },
+  'scan-qr': {
+    label: '扫码',
+    key: 'square',
+    layers: [
+      // focus's light corners round a blue QR code a gap of 1 inside them: three finder squares
+      // (their centres white) and a solid square.
+      viewfinder(),
+      L(rr(5, 5, 2.5, 2.5, 0.75) + rr(8.5, 5, 2.5, 2.5, 0.75) + rr(5, 8.5, 2.5, 2.5, 0.75), { cut: [C(circ(6.25, 6.25, 0.5) + circ(9.75, 6.25, 0.5) + circ(6.25, 9.75, 0.5))] }),
+      L(rr(8.5, 8.5, 2.5, 2.5, 0.75))
+    ]
+  },
+  'scan-text': {
+    label: '识别文字',
+    key: 'square',
+    layers: [
+      // focus's light corners round three blue lines of text, a gap of 1 inside them. One layer
+      // per line.
+      viewfinder(),
+      L(pill(5.75, 5, 4.5, D)),
+      L(pill(5.75, 7.375, 4.5, D)),
+      L(pill(5.75, 9.75, 3, D))
+    ]
+  },
+  remote: {
+    label: '遥控器',
+    key: 'tall',
+    layers: [
+      // phone's light body with a large blue round button near the top and four blue keys in a
+      // square below it.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(circ(8, 6, 2.5)),
+      L([6.75, 9.25].map((x) => circ(x, 10, 0.75) + circ(x, 12.25, 0.75)).join(''))
+    ]
+  },
+  'power-bank': {
+    label: '充电宝',
+    key: 'wide',
+    layers: [
+      // A light body with battery-charging's blue bolt (slopes the bolt needs, GUIDE §1) on the
+      // left and a column of three blue charge lights on the right. One layer per light.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(polygon([[8.25, 3.6], [7.5, 7], [9.5, 7], [4.25, 12.4], [5, 9], [3, 9]], 0.5)),
+      L(circ(12, 10.25, 0.625)),
+      L(circ(12, 8, 0.625)),
+      L(circ(12, 5.75, 0.625))
+    ]
+  },
+  nfc: {
+    label: 'NFC 感应',
+    key: 'square',
+    layers: [
+      // A light card with a blue point and two blue waves going out from it to the right, each
+      // a gap of 1 from the next. One layer per wave.
+      L(rr(2, 2, 12, 12, M), Bt),
+      L(circ(5.4, 8, 1.125)),
+      L('M7.433 5.967A2.875 2.875 0 0 1 7.433 10.033', { sw: K }),
+      L('M9.693 4.765A5.375 5.375 0 0 1 9.693 11.235', { sw: K })
+    ]
+  },
+  antenna: {
+    label: '天线',
+    key: 'square',
+    layers: [
+      // Two blue rods spread in a V (slopes the antenna needs, GUIDE §1) rising from behind a
+      // light domed base, which cuts a gap of W round itself.
+      L('M7 10L4 2.75', { sw: K }),
+      L('M9 10L12 2.75', { sw: K }),
+      L(rr(2, 9, 12, 5, [2.5, 2.5, r, r]), { ...Bt, gap: W })
+    ]
+  },
+  'walkie-talkie': {
+    label: '对讲机',
+    key: 'tall',
+    layers: [
+      // A blue antenna rising from behind a light body, which cuts a gap of W round itself, and
+      // three blue speaker lines 2 in from the sides. One layer per line.
+      L(pill(4.5, 1, 1.5, 5)),
+      L(rr(3, 5, 10, 10, R), { ...Bt, gap: W }),
+      L(pill(5, 7.125, 6, D)),
+      L(pill(5, 9.375, 6, D)),
+      L(pill(5, 11.625, 6, D))
+    ]
+  },
+  'game-console': {
+    label: '游戏机',
+    key: 'portrait',
+    layers: [
+      // A light handheld with a blue screen 2 in from the top and sides, and below it a blue
+      // D-pad and two blue buttons.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(4, 3, 8, 5, 1)),
+      L(pill(4.375, 10.625, 3.25, D) + pill(5.375, 9.625, D, 3.25)),
+      L(circ(9.25, 12.125, 0.75)),
+      L(circ(11.25, 10.375, 0.75))
+    ]
+  }
+});
+
+Object.assign(ICONS, {
+  'phone-vibrate': {
+    label: '振动',
+    key: 'live',
+    layers: [
+      // phone a little narrower, with a blue vibration line one gap out on each side.
+      L(rr(3.5, 1, 9, 14, M), Bt),
+      L(pill(6.5, 3, 3, D) + pill(5.5, 11.75, 5, D)),
+      L('M1.75 5V11', { sw: K }),
+      L('M14.25 5V11', { sw: K })
+    ]
+  },
+  'tablet-smartphone': {
+    label: '多设备',
+    key: 'landscape',
+    layers: [
+      // A light tablet and, in front of its lower right corner, a blue phone that cuts a gap of
+      // W round itself.
+      L(rr(1, 2, 11, 9, M), Bt),
+      L(rr(9.5, 5, 5.5, 9, r), { gap: W })
+    ]
+  },
+  'e-reader': {
+    label: '电子书阅读器',
+    key: 'portrait',
+    layers: [
+      // A light reader with a blue screen 2 in from every edge, showing three light lines of
+      // text. One layer per line.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(4, 3, 8, 10, 1)),
+      L(pill(6, 5, 4, D), Bt),
+      L(pill(6, 7.375, 4, D), Bt),
+      L(pill(6, 9.75, 2.5, D), Bt)
+    ]
+  },
+  'server-rack': {
+    label: '服务器机柜',
+    key: 'portrait',
+    layers: [
+      // A light cabinet holding three blue units, a gap of 1 apart and 2.25 in from the sides,
+      // top and bottom, each with a light status light as far in from its end as from its top
+      // and bottom. One layer per unit.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(4.25, 3.25, 7.5, 2.5, 1)),
+      L(rr(4.25, 6.75, 7.5, 2.5, 1)),
+      L(rr(4.25, 10.25, 7.5, 2.5, 1)),
+      L(circ(10.5, 4.5, 0.625) + circ(10.5, 8, 0.625) + circ(10.5, 11.5, 0.625), Bt)
+    ]
+  },
+  'memory-stick': {
+    label: '内存条',
+    key: 'flat',
+    layers: [
+      // A light board with its key notch in the bottom edge and three blue chips, 2 in from the
+      // edges. One layer per chip.
+      L(rr(1, 4, 14, 8, M), { ...Bt, cut: [C(rr(9.5, 11, 1, 2))] }),
+      L(rr(3, 6, 2.5, 4, 0.75)),
+      L(rr(6.75, 6, 2.5, 4, 0.75)),
+      L(rr(10.5, 6, 2.5, 4, 0.75))
+    ]
+  },
+  polaroid: {
+    label: '拍立得',
+    key: 'square',
+    layers: [
+      // A light instant camera with camera's blue lens ring, and a blue print coming out of the
+      // slot at the bottom, cutting a gap of W round itself (as printer's sheet).
+      L(rr(2, 2, 12, 9.5, M), Bt),
+      L(circ(8, 6, 2.5), { cut: [C(circ(8, 6, 1.25))] }),
+      L(rr(4, 9.5, 8, 4.5, [0, 0, r, r]), { gap: W })
+    ]
+  },
+  slideshow: {
+    label: '幻灯片',
+    key: 'landscape',
+    layers: [
+      // A light screen with a blue slide 2 in from its edges, and one gap below it the page
+      // markers: the current page a blue bar, the other two light dots, a gap of 1 apart.
+      L(rr(1, 2, 14, 9.5, M), Bt),
+      L(rr(3, 4, 10, 5.5, 1)),
+      L(pill(4, 12.5, 3, 1.5)),
+      L(circ(8.75, 13.25, 0.75) + circ(11.25, 13.25, 0.75), Bt)
+    ]
+  },
+  joystick: {
+    label: '摇杆',
+    key: 'portrait',
+    layers: [
+      // A blue ball on a blue stick rising from behind a light base, which cuts a gap of W round
+      // itself.
+      L(pill(7.25, 4, 1.5, 8), { part: 'stick' }),
+      L(circ(8, 3.75, 2.75), { part: 'stick' }),
+      L(rr(2, 10, 12, 5, [2, 2, r, r]), { ...Bt, gap: W })
+    ]
+  }
+});
+
+// piano's four white keys: one rounded outline cut straight down by three slits of 1.
+const PIANO = rr(1, 2.5, 14, 11, R);
+const pianoKey = (i) => L(rr(1 + i * 3.75, 2.5, 2.75, 11), { ...Bt, clip: PIANO });
+
+Object.assign(ICONS, {
+  'music-player': {
+    label: '音乐播放器',
+    key: 'tall',
+    layers: [
+      // A light player with a blue screen 2 in from the top and sides and, below it, a blue
+      // click wheel stroked round the light centre button.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(rr(5, 3, 6, 3, 1)),
+      L(circ(8, 10, 2.25), { sw: K })
+    ]
+  },
+  piano: {
+    label: '钢琴',
+    key: 'wide',
+    layers: [
+      // Four light white keys (one outline cut by straight slits) and two blue black keys
+      // hanging from the top edge over the outer slits, each cutting a gap of W round itself.
+      pianoKey(0), pianoKey(1), pianoKey(2), pianoKey(3),
+      L(rr(3, 2.5, 2.5, 6, [0, 0, 1, 1]), { clip: PIANO, gap: W }),
+      L(rr(10.5, 2.5, 2.5, 6, [0, 0, 1, 1]), { clip: PIANO, gap: W })
+    ]
+  },
+  turntable: {
+    label: '唱片机',
+    key: 'landscape',
+    layers: [
+      // A light deck seen from above, a blue platter (its spindle hole white) 2 in from the
+      // left, top and bottom, and a blue tonearm parked a gap of 1 to its right.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(circ(7, 8, 4), { cut: [C(circ(7, 8, 0.75))] }),
+      L('M12.625 4.4V10', { sw: D })
+    ]
+  },
+  'film-reel': {
+    label: '电影胶卷盘',
+    key: 'circle',
+    layers: [
+      // A light reel with five blue windows round a blue hub, the windows 2.75 in from the rim
+      // and a gap of 1 out from the hub.
+      L(circ(8, 8, 7), Bt),
+      L([0, 1, 2, 3, 4].map((i) => { const a = ((-90 + 72 * i) * Math.PI) / 180; return circ(+(8 + 3.75 * Math.cos(a)).toFixed(3), +(8 + 3.75 * Math.sin(a)).toFixed(3), 1.5); }).join('') + circ(8, 8, 1.25))
+    ]
+  },
+  'projector-screen': {
+    label: '投影幕布',
+    key: 'landscape',
+    layers: [
+      // A blue roller housing, a light screen hanging one gap below it (its top corners square,
+      // cut off by the housing's slot) and, one gap below the screen, a blue pull knob on the
+      // centre line.
+      L(rr(1, 2, 14, 2, 0.75)),
+      L(rr(2, 5, 12, 5.75, [0, 0, r, r]), Bt),
+      L(circ(8, 12.875, 1.125))
+    ]
+  },
+  'flip-phone': {
+    label: '翻盖手机',
+    key: 'tall',
+    layers: [
+      // An open flip phone: one light outline cut straight across at the hinge, a blue screen in
+      // the top half and a blue keypad of six keys in the bottom half.
+      L(rr(3, 1, 10, 6.5, [R, R, 0, 0]), Bt),
+      L(rr(3, 8.5, 10, 6.5, [0, 0, R, R]), Bt),
+      L(rr(5, 3, 6, 2.5, 1)),
+      L([5.125, 8, 10.875].map((x) => circ(x, 10.625, 0.625) + circ(x, 12.875, 0.625)).join(''))
+    ]
+  },
+  'vr-headset': {
+    label: 'VR 眼镜',
+    key: 'flat',
+    layers: [
+      // A light visor with a round notch for the nose in its bottom edge and two blue lenses, 2 in
+      // from the sides and top and 2 above the notch.
+      L(rr(1, 4, 14, 8, M), { ...Bt, cut: [C(circ(8, 12, 1.5))] }),
+      L(rr(3, 6, 3.5, 2.5, 1)),
+      L(rr(9.5, 6, 3.5, 2.5, 1))
+    ]
+  },
+  bot: {
+    label: '机器人',
+    key: 'square',
+    layers: [
+      // A blue antenna (a ball on a stem) rising from behind a light head, which cuts a gap of W
+      // round itself, and two blue eyes.
+      L(pill(7.375, 3, D, 3.5) + circ(8, 3, 1), { part: 'antenna' }),
+      L(rr(2, 5, 12, 9, M), { ...Bt, gap: W }),
+      L(circ(5.75, 9.5, 1.125)),
+      L(circ(10.25, 9.5, 1.125))
+    ]
+  },
+  drone: {
+    label: '无人机',
+    key: 'live',
+    layers: [
+      // A drone seen from above: four light rotor rings (stroked 2) at the corners and a blue
+      // body in the middle that overlaps them and cuts a gap of W round itself. One layer per
+      // rotor.
+      L(circ(4, 4, 2), { sw: 2, ...Bt }),
+      L(circ(12, 4, 2), { sw: 2, ...Bt }),
+      L(circ(4, 12, 2), { sw: 2, ...Bt }),
+      L(circ(12, 12, 2), { sw: 2, ...Bt }),
+      L(rr(5.5, 5.5, 5, 5, r), { gap: W })
+    ]
+  }
+});
+
+Object.assign(ICONS, {
+  'crt-monitor': {
+    label: 'CRT 显示器',
+    key: 'landscape',
+    layers: [
+      // A deep light set with a blue screen 2 in from its left, top and bottom, two blue dials
+      // in a column to its right, and one gap below the set a blue foot.
+      L(rr(1, 2, 14, 9.75, M), Bt),
+      L(rr(3, 4, 7.5, 5.75, r)),
+      L(circ(12.25, 4.625, 0.625) + circ(12.25, 6.875, 0.625)),
+      L(pill(4.5, 12.75, 7, D))
+    ]
+  },
+  'retro-computer': {
+    label: '复古电脑',
+    key: 'portrait',
+    layers: [
+      // A light all-in-one with a blue screen 2 in from the top and sides, a blue floppy slot
+      // below it at the right, and one gap below the case a blue foot.
+      L(rr(2, 1, 12, 11.5, M), Bt),
+      L(rr(4, 3, 8, 4.5, r)),
+      L(pill(7.75, 9.5, 4.5, D)),
+      L(pill(4, 13.5, 8, 1.5))
+    ]
+  },
+  typewriter: {
+    label: '打字机',
+    key: 'landscape',
+    layers: [
+      // A light sheet standing up behind a blue roller, which cuts a gap of W round itself, and
+      // one gap below the roller a light body with a row of five blue keys.
+      L(rr(4, 2, 8, 6, [1, 1, 0, 0]), Bt),
+      L(pill(2, 6, 12, 2), { gap: W }),
+      L(rr(1, 9, 14, 5, M), Bt),
+      L([3.5, 5.75, 8, 10.25, 12.5].map((x) => circ(x, 11.5, 0.625)).join(''))
+    ]
+  },
+  'music-library': {
+    label: '音乐库',
+    key: 'square',
+    layers: [
+      // Two light album sleeves, the front one cutting a gap of W round itself, and a blue
+      // eighth note on the front one.
+      L(rr(5, 2, 9, 9, M), Bt),
+      L(rr(2, 5, 9, 9, M), { ...Bt, gap: W, part: 'front' }),
+      L(circ(6, 10.75, 1.25) + rr(6, 7, D, 3.75, [0.625, 0, 0, 0]) + pill(6, 7, 3, D), { part: 'front', gap: W })
+    ]
+  },
+  'paper-shredder': {
+    label: '碎纸机',
+    key: 'square',
+    layers: [
+      // A blue page going into a light shredder, which cuts a gap of W round itself, and one
+      // gap below it three blue strips coming out.
+      L(rr(4, 2, 8, 5, [1, 1, 0, 0])),
+      L(rr(2, 5, 12, 5, M), { ...Bt, gap: W }),
+      L('M5 11.625V13.375M8 11.625V13.375M11 11.625V13.375', { sw: D })
+    ]
+  },
+  drum: {
+    label: '鼓',
+    key: 'live',
+    layers: [
+      // A blue drum head and, one gap below it, a light shell; two blue sticks raised above the
+      // head on a slant (the angle is what shows them striking, GUIDE §1), a gap of 1 clear.
+      L('M3.5 1.75L6 4.25', { sw: K }),
+      L('M12.5 1.75L10 4.25', { sw: K }),
+      L(rr(1, 6, 14, 2, t)),
+      L(rr(2, 9, 12, 6, [S, S, M, M]), Bt)
+    ]
+  },
+  jukebox: {
+    label: '点唱机',
+    key: 'portrait',
+    layers: [
+      // A light cabinet with an arched top, a blue record in its arch (the spindle hole white)
+      // and two blue speaker lines below, 2 in from the sides. One layer per line.
+      L(rr(2, 1, 12, 14, [6, 6, M, M]), Bt),
+      L(circ(8, 6.25, 2.5), { cut: [C(circ(8, 6.25, 0.75))] }),
+      L(pill(4, 9.75, 8, D)),
+      L(pill(4, 11.75, 8, D))
+    ]
+  }
+});
+
+// An aperture's six blades: a hexagonal opening of radius 3 and, from each corner, the slit
+// between two blades running on along the next edge out past the rim.
+const APERTURE = (() => {
+  const V = Array.from({ length: 6 }, (_, k) => { const a = ((-90 + 60 * k) * Math.PI) / 180; return [8 + 3 * Math.cos(a), 8 + 3 * Math.sin(a)]; });
+  const slits = V.map((v, k) => { const u = V[(k + 5) % 6], dx = v[0] - u[0], dy = v[1] - u[1], l = Math.hypot(dx, dy);
+    return `M${f3(v[0])} ${f3(v[1])}L${f3(v[0] + (dx * 7) / l)} ${f3(v[1] + (dy * 7) / l)}`; }).join('');
+  return { hex: polygon(V.map(([x, y]) => [f3(x), f3(y)]), 0.75), slits };
+})();
+
+Object.assign(ICONS, {
+  aperture: {
+    label: '光圈',
+    key: 'circle',
+    layers: [
+      // A light iris split into six blades by white slits, round a blue hexagonal opening. The
+      // blades' straight edges at 60° to each other are what make it an aperture (GUIDE §1).
+      // The opening is printed on the iris, so the two layers are one part.
+      L(circ(8, 8, 7), { ...Bt, cut: [C(APERTURE.slits, W)], part: 'iris' }),
+      L(APERTURE.hex, { part: 'iris' })
+    ]
+  },
+  'ethernet-port': {
+    label: '网口',
+    key: 'square',
+    layers: [
+      // A light socket with its latch tab on top (as camera's body) and four blue contacts in a
+      // row, 2 in from the sides and top. One layer per contact.
+      L(body(2, 4, 12, 10, M, [{ x: 5, w: 6, h: 2, c: r }]), Bt),
+      L(pill(4, 6, D, 3)),
+      L(pill(6.25, 6, D, 3)),
+      L(pill(8.5, 6, D, 3)),
+      L(pill(10.75, 6, D, 3))
+    ]
+  },
+  'camera-retro': {
+    label: '复古相机',
+    key: 'square',
+    layers: [
+      // A light film camera with a small shutter button on top, a blue leather band across it
+      // (clipped to the body) and a light lens over the band, cutting a gap of W round itself,
+      // with a blue glass at its centre.
+      L(body(2, 4, 12, 10, R, [{ x: 3.5, w: 3, h: 2, c: 1 }]), Bt),
+      L(rr(2, 7, 12, 4), { clip: body(2, 4, 12, 10, R, [{ x: 3.5, w: 3, h: 2, c: 1 }]) }),
+      L(circ(8, 9, 3.25), { ...Bt, gap: W }),
+      L(circ(8, 9, 1.5))
     ]
   }
 });
