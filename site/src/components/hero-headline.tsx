@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { STORY, useHeroBeat } from "@/components/hero-wall";
 import { useIconStyle } from "@/components/browser/prefs";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
+import { useWallLoop } from "@/lib/wall-motion";
 import { HERO_TITLE_ZH } from "@/components/hero-title-zh";
 
 /**
@@ -53,15 +54,8 @@ function OutlinedPhrase({ text }: { text: string }) {
 /** The headline, with the icons of the wall's story playing inside it. */
 export function HeroHeadline({ className }: { className?: string }) {
   const ref = useRef<HTMLHeadingElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
-    observer.observe(ref.current!);
-    return () => observer.disconnect();
-  }, []);
-  const beat = useHeroBeat(visible);
+  // It plays with the wall, so the wall's pause switch stops it too.
+  const beat = useHeroBeat(useWallLoop(ref));
   const [style] = useIconStyle();
   const locale = useLocale();
   const [before, after] = SLOGANS[locale];

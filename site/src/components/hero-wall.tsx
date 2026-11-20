@@ -8,8 +8,10 @@ import * as Duo from "kubai-icons-react/duotone";
 import { Segmented } from "@/components/kit/segmented";
 import { tile } from "@/components/kit/styles";
 import { useIconStyle } from "@/components/browser/prefs";
+import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
+import { useWallLoop } from "@/lib/wall-motion";
 
 const WALL = [Folder, Mail, Calendar, Lock, Settings, Trash, Bell, Camera, Bookmark, AlarmClock, Notebook, Compass, Download, CloudUpload, Gift, Package, Heart, Star, Key, Smartphone];
 /**
@@ -100,24 +102,22 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, run
   );
 });
 
-/** The homepage icon grid: each icon loops its motion on its own beat while on screen; a switch above it shows the two-tone style. */
+/**
+ * The homepage icon grid: each icon loops its motion on its own beat while on screen, unless
+ * the visitor pauses the walls or asks for reduced motion. A switch above it shows the
+ * two-tone style.
+ */
 export function HeroWall() {
   const ref = useRef<HTMLDivElement>(null);
-  const [running, setRunning] = useState(false);
+  const running = useWallLoop(ref);
   const beat = useHeroBeat(running);
   const [style, setStyle] = useIconStyle();
   const tr = useTr();
 
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting));
-    observer.observe(ref.current!);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div className="flex w-full max-w-xl flex-col gap-3 lg:max-w-none">
-      <div className="rise-in flex justify-end [--i:1]">
+      <div className="rise-in flex items-center justify-end gap-2 [--i:1]">
+        <WallPause />
         <Segmented
           value={style}
           onChange={setStyle}
