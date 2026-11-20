@@ -2861,3 +2861,84 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Group 5 of the same batch.
+// heatmap's cells: grid's nine tiles, a gap of 1 apart, read across the rows.
+const cell = (i, j) => rr(2 + (i * 13) / 3, 2 + (j * 13) / 3, 10 / 3, 10 / 3, 1);
+const HOT = [[1, 0], [0, 1], [1, 1], [2, 2]];
+// cube: a hexagon (corners turned 120°) split into three faces by seams 1 wide that run from the
+// centre to three corners; each face is the hexagon clipped to its sector, so it keeps the
+// hexagon's own corners.
+const HEX_R = 7.2, hexPt = (deg) => [f3(8 + HEX_R * Math.cos((deg * Math.PI) / 180)), f3(8 + HEX_R * Math.sin((deg * Math.PI) / 180))];
+const HEX = polygon([-90, -30, 30, 90, 150, 210].map(hexPt), r);
+const [HEX_UR, HEX_UL] = [hexPt(-30), hexPt(210)];
+const CUBE_SEAMS = [C(`M8 8L${HEX_UL[0]} ${HEX_UL[1]}M8 8L${HEX_UR[0]} ${HEX_UR[1]}M8 8V16`, W)];
+const face = (pts) => ({ clip: polygon(pts), cut: CUBE_SEAMS });
+Object.assign(ICONS, {
+  heatmap: {
+    label: '热力图',
+    key: 'square',
+    layers: [
+      // grid's nine tiles; four of them, the hot ones, are blue. One layer per hot tile, so they
+      // can light up in turn.
+      L([0, 1, 2].flatMap((j) => [0, 1, 2].map((i) => [i, j])).filter(([i, j]) => !HOT.some(([a, b]) => a === i && b === j)).map(([i, j]) => cell(i, j)).join(''), Bt),
+      ...HOT.map(([i, j]) => L(cell(i, j)))
+    ]
+  },
+  pilcrow: {
+    label: '段落标记',
+    key: 'square',
+    layers: [
+      // code's tile with a blue pilcrow: a half-round bowl against the first of two stems joined
+      // across the top. Bowl and stems are one element.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M8.5 4V9H7A2.5 2.5 0 0 1 7 4Z', { part: 'glyph' }),
+      L('M8.5 11.25V4.75H10.75V11.25', { sw: K, part: 'glyph' })
+    ]
+  },
+  cube: {
+    label: '立方体',
+    key: 'portrait',
+    layers: [
+      // A cube seen corner on: a hexagon cut into its three faces by seams 1 wide, the top and left
+      // faces light and the right face blue. A cube has no outline without its slanted edges, so
+      // the hexagon's sides are the slopes this object needs (GUIDE.md §1).
+      L(HEX, { ...Bt, ...face([[8, 8], [17, 2.8], [17, -2], [-1, -2], [-1, 2.8]]) }),
+      L(HEX, { ...Bt, ...face([[8, 8], [-1, 2.8], [-1, 18], [8, 18]]) }),
+      L(HEX, face([[8, 8], [8, 18], [17, 18], [17, 2.8]]))
+    ]
+  },
+  'git-fork': {
+    label: '派生',
+    key: 'square',
+    layers: [
+      // git-branch's lines and nodes: a line rising from a node at the bottom that splits in two,
+      // each half turning with two quarter arcs up to a node at the top.
+      L('M8 12.5V9.5A2 2 0 0 0 6 7.5H5.5A2 2 0 0 1 3.5 5.5V3.5M8 9.5A2 2 0 0 1 10 7.5H10.5A2 2 0 0 0 12.5 5.5V3.5', { sw: 2, ...Bt }),
+      L(circ(8, 12.5, 1.5), { gap: W }),
+      L(circ(3.5, 3.5, 1.5) + circ(12.5, 3.5, 1.5), { gap: W })
+    ]
+  },
+  landmark: {
+    label: '银行',
+    key: 'square',
+    layers: [
+      // A bank: a light pediment (its shallow slopes are what tell a bank from a house), four
+      // blue columns a gap of 1 below it, and a light base a gap below them.
+      L(polygon([[8, 1.85], [14, 5], [2, 5]], [1, 0.5, 0.5]), Bt),
+      L([3, 5.833, 8.667, 11.5].map((x) => pill(x, 6, K, 5)).join('')),
+      L(rr(2, 12, 12, 2, t), Bt)
+    ]
+  },
+  angry: {
+    label: '生气',
+    key: 'circle',
+    layers: [
+      // frown's face with the eyes drawn as two short strokes slanting down towards the nose (the
+      // slope is the frowning brow; level eyes would read as meh).
+      L(circ(8, 8, 7), Bt),
+      L('M4.75 5.25L7 6.375M11.25 5.25L9 6.375', { sw: D }),
+      L('M5.5 11.5a2.5 2.5 0 0 1 5 0', { sw: D })
+    ]
+  }
+});
