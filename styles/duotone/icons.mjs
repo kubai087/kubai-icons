@@ -2882,3 +2882,107 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// A pancake on top of the stack, its syrup the top clipped with two round drips.
+const CAKE_TOP = pill(2, 4.5, 12, 3);
+// A telescope's tube at -30° (up and to the right), 3.5 wide.
+const SCOPE = polygon(AXIS(8, 6.25, -30, -6.65, 6.65, 3.5), r);
+// An ice-cream cone: wide at the top, narrowing to a point (the slopes).
+const CONE_IC = polygon([[3.75, 10], [12.25, 10], [8, 15.6]], [1, 1, 1]);
+
+Object.assign(ICONS, {
+  'salt-shaker': {
+    label: '盐瓶',
+    key: 'tall',
+    layers: [
+      // A blue domed cap with three white holes, one gap above a light jar.
+      L(rr(4, 1, 8, 4.5, [4, 4, S, S]), { cut: [C(circ(6.25, 3.75, 0.625) + circ(8, 2.75, 0.625) + circ(9.75, 3.75, 0.625))] }),
+      L(rr(3, 6.5, 10, 8.5, [S, S, M, M]), Bt)
+    ]
+  },
+  pancake: {
+    label: '煎饼',
+    key: 'landscape',
+    layers: [
+      // A stack of three light pancakes, each one gap from the next; blue syrup drips over the
+      // top one (it clipped), and a blue pat of butter sits one gap above.
+      L(rr(6.5, 2, 3, 1.5, 0.5)),
+      L(CAKE_TOP, Bt),
+      L(CAKE_TOP, { clip: DRIPS(6, [5.5, 10.5]) }),
+      L(pill(1, 8.5, 14, 2.25), Bt),
+      L(pill(1, 11.75, 14, 2.25), Bt)
+    ]
+  },
+  'ice-cream': {
+    label: '冰淇淋',
+    key: 'tall',
+    layers: [
+      // A light scoop with a round top, and one gap below it a blue cone narrowing to a point
+      // (GUIDE §1: the cone is read by its point).
+      L(rr(3, 1, 10, 8, [5, 5, S, S]), Bt),
+      L(CONE_IC)
+    ]
+  },
+  candy: {
+    label: '糖果',
+    key: 'flat',
+    layers: [
+      // A light round sweet, and its wrapper twisted into a blue triangle on each side (the
+      // slopes are the twist), each one gap from it.
+      L(circ(8, 8, 3.5), Bt),
+      L(polygon([[1, 2.4], [3.6, 8], [1, 13.6]], 0.5)),
+      L(polygon([[15, 2.4], [15, 13.6], [12.4, 8]], 0.5))
+    ]
+  },
+  cherry: {
+    label: '樱桃',
+    key: 'square',
+    layers: [
+      // Two light cherries on blue stalks (straight slopes, as cherry stalks are) that meet at the
+      // top; the cherries cut a gap of W round themselves.
+      L('M4.75 9.5L9.25 2.75M11.25 9.5L9.25 2.75', { sw: K }),
+      L(circ(4.75, 11.25, 2.75) + circ(11.25, 11.25, 2.75), { ...Bt, gap: W })
+    ]
+  },
+
+
+  telescope: {
+    label: '天文望远镜',
+    key: 'square',
+    layers: [
+      // A light tube raised at 30° (the slope is how a telescope points at the sky) with a blue
+      // band at its front end, standing on three blue legs that it cuts with a gap of W.
+      L('M8 8.5L4.75 13.25M8 8.5L11.25 13.25M8 8.5V13.25', { sw: K }),
+      L(SCOPE, { ...Bt, gap: W }),
+      L(SCOPE, { clip: polygon(AXIS(8, 6.25, -30, 4, 9, 8)) })
+    ]
+  },
+  ufo: {
+    label: '飞碟',
+    key: 'flat',
+    layers: [
+      // A blue dome behind a light saucer, which cuts a gap of W round itself.
+      L(rr(4.5, 4, 7, 4.5, [3.5, 3.5, 0, 0])),
+      L(pill(1, 7.5, 14, 4.5), { ...Bt, gap: W })
+    ]
+  },
+  pi: {
+    label: '圆周率',
+    key: 'square',
+    layers: [
+      // A pi on a light tile, as heading: the bar, then the two legs.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.5 4.5H11.5', { sw: K }),
+      L('M6.25 4.5V11.5M9.75 4.5V11.5', { sw: K })
+    ]
+  },
+  sigma: {
+    label: '求和',
+    key: 'square',
+    layers: [
+      // A sigma on a light tile, written in one stroke (its middle point needs two slopes).
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M11.5 4.5H4.5L8.25 8L4.5 11.5H11.5', { sw: K })
+    ]
+  }
+});

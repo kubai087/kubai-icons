@@ -442,6 +442,9 @@ Object.assign(MOTION, {
 });
 
 // Batch: food, nature, health and science
+// polygon isn't in the import list at the top; a namespace import of our own keeps this batch
+// apart from the other batches' edits.
+import * as kitFood from './kit.mjs';
 Object.assign(MOTION, {
   pill: { say: '胶囊两半拉开，再合上', moves: { 0: { x: [-0.5, 0], y: [0.5, 0] }, 1: { x: [0.5, 0], y: [-0.5, 0] } } },
   pills: { say: '拧开瓶盖，盖子转着抬起', moves: { 0: { y: [-0.5, -0.75, -0.75], sx: [-1, 1, 1], o: [8, 2.5] } } },
@@ -491,4 +494,20 @@ Object.assign(MOTION, {
   soup: { say: '热气一缕缕冒上来', moves: { 1: { y: [-0.75, 0, 0], a: [0, 1, 1] }, 2: { y: [0, -0.75, 0], a: [1, 0, 1] }, 3: { y: [0, 0, -0.75, 0], a: [1, 1, 0, 1] } } },
   noodles: { say: '用筷子把面条挑起来', moves: { 0: { y: [-1, -0.75] } } },
   'heart-pulse': { say: '心跳一下，脉搏线重新画出', moves: { 0: { s: [1.06, 0.97, 1], o: [8, 8.5] }, 1: { w: [0, 1] } } }
+});
+
+Object.assign(MOTION, {
+  'salt-shaker': { say: '撒盐：盐瓶左右摇两下', ms: 800, moves: { all: { r: [-12, 10, -6, 0], o: [8, 8] } } },
+  pancake: { say: '糖浆往下流，黄油滑一下', moves: { 2: { sy: [0.6, 1], o: [8, 4.5] }, 0: { x: [0.5, 0] } } },
+  'ice-cream': { say: '冰淇淋球晃一晃', ms: 800, moves: { 0: { r: [5, -4, 2, 0], o: [8, 9] } } },
+  candy: { say: '糖纸两端拧一下', moves: { 1: { sy: [0.6, 1], o: [2.5, 8] }, 2: { sy: [0.6, 1], o: [13.5, 8] } } },
+  cherry: { say: '樱桃绕着果梗晃一晃', ms: 800, moves: { all: { r: [6, -5, 2, 0], o: [9.25, 2.75] } } },
+  telescope: { say: '望远镜上下转动，对准天空', moves: same([1, 2], { r: [-6, 3, 0], o: [8, 7.5] }) },
+  ufo: {
+    say: '飞碟悬停，放出一道光束',
+    add: [{ layer: L(kitFood.polygon([[6, 13], [10, 13], [11.5, 15.5], [4.5, 15.5]], 0.5)) }],
+    moves: { all: { y: [-0.75, 0.25, 0] }, a0: { ...hidden, a: [0, 1, 1] } }
+  },
+  pi: { say: '先写横，再写两竖', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  sigma: { say: '求和符号一笔写出', moves: { 1: { w: [0, 1] } } }
 });
