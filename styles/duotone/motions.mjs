@@ -531,3 +531,8 @@ Object.assign(MOTION, {
   'office-chair': { say: '办公椅转一圈', moves: { all: { sx: [-1, 1, 1] } } },
   'standing-desk': { say: '桌面降下，又升回原位', moves: { 0: { y: [1.5, 1.5, 0] }, 1: { sy: [0.82, 0.82, 1], o: [8, 14] } } }
 });
+
+// Batch: home and tools (group 6)
+Object.assign(MOTION, {
+  'window-frame': { say: '窗户向两边推开，又关上', moves: { 0: { sx: [0.45, 0.45, 1], o: [2.5, 7] }, 1: { sx: [0.45, 0.45, 1], o: [13.5, 7] } } }
+});

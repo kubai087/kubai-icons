@@ -2943,3 +2943,18 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: home and tools (group 6)
+Object.assign(ICONS, {
+  'window-frame': {
+    label: '窗户',
+    key: 'square',
+    layers: [
+      // Two light casements cut apart down the middle, each cut across by a straight seam into
+      // two panes, and a wider blue sill one gap below.
+      L(rr(2.5, 2, 5, 9.5, [R, 0, 0, S]), { ...Bt, cut: [C(rr(0, 6.25, 16, 1))] }),
+      L(rr(8.5, 2, 5, 9.5, [0, R, S, 0]), { ...Bt, cut: [C(rr(0, 6.25, 16, 1))] }),
+      L(rr(2, 12.5, 12, 1.5, 0.5))
+    ]
+  }
+});
