@@ -7,7 +7,7 @@ import { CodeBlock } from "@/components/code-block";
 import { JsonLd } from "@/components/json-ld";
 import { IconLinks } from "@/components/browser/icon-links";
 import { Container, Heading } from "@/components/kit/layout";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { iconByName } from "@/lib/catalog";
 import { localize, type Locale } from "@/lib/i18n";
 import { pascal, type IconMeta } from "@/lib/icons";
@@ -55,9 +55,9 @@ export function SetsIndex({ locale }: { locale: Locale }) {
         <Heading level={1} title={zh ? INDEX.zhTitle : INDEX.title} lead={zh ? INDEX.zhDescription : INDEX.description} />
         <div className="flex items-center gap-3">
           <span className="text-control text-muted-foreground">{zh ? `${COLLECTIONS.length} 个合集` : `${COLLECTIONS.length} sets`}</span>
-          <Button variant="outline" nativeButton={false} render={<Link href={localize("/icons/", locale)} prefetch={false} />}>
+          <Link href={localize("/icons/", locale)} prefetch={false} className={buttonVariants({ variant: "outline" })}>
             <RiSearchLine data-icon="inline-start" />{zh ? "搜索全部图标" : "Search all icons"}
-          </Button>
+          </Link>
         </div>
       </div>
       <SetCards sets={COLLECTIONS} locale={locale} />
@@ -92,9 +92,9 @@ export function SetPageBody({ id, locale }: { id: string; locale: Locale }) {
           <Heading level={1} title={title} lead={zh ? c.zhIntro : c.intro} />
           <div className="flex items-center gap-3">
             <span className="text-control text-muted-foreground">{zh ? `${count} 个图标` : `${count} icons`}</span>
-            <Button variant="outline" nativeButton={false} render={<a href={saveHref(c)} />}>
+            <a href={saveHref(c)} className={buttonVariants({ variant: "outline" })}>
               <RiBookmarkLine data-icon="inline-start" />{zh ? "全部加入收藏夹" : "Add all to my collection"}
-            </Button>
+            </a>
           </div>
         </div>
         <IconLinks icons={icons} locale={locale} />

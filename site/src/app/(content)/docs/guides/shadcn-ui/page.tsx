@@ -43,7 +43,7 @@ import { Rocket } from "kubai-icons-react";
 </Button>
 
 // Base UI-based projects
-<Button render={<Link href="/deploy" />} data-kubai-trigger>
+<Button nativeButton={false} render={<Link href="/deploy" />} data-kubai-trigger>
   <Rocket trigger="parent" /> Deploy
 </Button>`} />
       <h2>Sidebar</h2>

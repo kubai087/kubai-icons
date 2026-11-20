@@ -6,7 +6,7 @@ import { SkillPrompt } from "@/components/skill-prompt";
 import { absolute, HOME_DESCRIPTION, HOME_DESCRIPTION_ZH, SITE_NAME } from "@/lib/seo";
 import { localize, pick, type Locale } from "@/lib/i18n";
 import { AUTHOR, MODULE_DEMO, REPO } from "@/lib/site";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { InstallTabs } from "@/components/install-tabs";
 import { AgentGuide } from "@/components/agent-guide";
 import { Container } from "@/components/kit/layout";
@@ -53,12 +53,12 @@ export function HomePage({ locale }: { locale: Locale }) {
             </p>
           </div>
           <div className="rise-in flex flex-wrap gap-3 [--i:3]">
-            <Button size="xl" render={<Link href={localize("/icons/", locale)} />}>
+            <Link href={localize("/icons/", locale)} className={buttonVariants({ size: "xl" })}>
               {pick(locale, "Browse icons", "浏览图标")}
               <RiArrowRightSLine data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 motion-reduce:transition-none" />
-            </Button>
+            </Link>
             <AgentGuide />
-            <Button size="xl" variant="ghost" className="px-3 text-muted-foreground max-sm:hidden" render={<Link href={localize("/docs/", locale)} />}>{pick(locale, "Documentation", "查看文档")}</Button>
+            <Link href={localize("/docs/", locale)} className={buttonVariants({ size: "xl", variant: "ghost", className: "px-3 text-muted-foreground max-sm:hidden" })}>{pick(locale, "Documentation", "查看文档")}</Link>
           </div>
           <div className="rise-in [--i:4]"><InstallTabs /></div>
           <div className="rise-in flex flex-col gap-1 text-control [--i:5]">

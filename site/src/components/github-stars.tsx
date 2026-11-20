@@ -2,7 +2,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { RiGithubLine } from "@remixicon/react";
 import { Star } from "kubai-icons-react";
-import { Button } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { REPO, fetchStars } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
@@ -57,13 +57,15 @@ export function GitHubStars({ className }: { className?: string }) {
 
   const label = stars === null ? "GitHub" : tr("{count} stars on GitHub", "GitHub 星标数：{count}", { count: stars.toLocaleString("en") });
   return (
-    <Button
-      variant="outline"
+    // A plain link styled as a button, so it keeps link semantics.
+    <a
+      href={REPO}
+      target="_blank"
+      rel="noreferrer"
       data-kubai-trigger
       aria-label={label}
       title={label}
-      className={cn("gap-0 ps-2 pe-2.5 text-muted-foreground tabular-nums", className)}
-      render={<a href={REPO} target="_blank" rel="noreferrer" />}
+      className={cn(buttonVariants({ variant: "outline" }), "gap-0 ps-2 pe-2.5 text-muted-foreground tabular-nums", className)}
     >
       {/* Narrow bars keep the count, which says more than the logo does. */}
       <RiGithubLine className="size-[18px] max-sm:hidden" />
@@ -72,6 +74,6 @@ export function GitHubStars({ className }: { className?: string }) {
         {/* Three digits of room are held even before a count is known. */}
         <span className="inline-block min-w-[3ch]">{stars ?? ""}</span>
       </span>
-    </Button>
+    </a>
   );
 }

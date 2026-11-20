@@ -6,7 +6,7 @@ import { RiFileCopyLine, RiSearchLine } from "@remixicon/react";
 import { Search } from "kubai-icons-react";
 import { copyText } from "@/components/copy-button";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 import { Segmented } from "@/components/kit/segmented";
 import { SizeControl } from "@/components/kit/size-control";
@@ -267,9 +267,9 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
                 {query.trim() ? tr("No icons for “{query}”", "未找到与“{query}”相关的图标", { query: query.trim() }) : tr("No icons here yet", "暂无图标")}
               </h2>
               <div className="mt-5 flex flex-wrap justify-center gap-2">
-                <Button render={<a href={requestUrl(query)} target="_blank" rel="noreferrer" onClick={() => track("request_icon", { q: query })} />}>
+                <a href={requestUrl(query)} target="_blank" rel="noreferrer" onClick={() => track("request_icon", { q: query })} className={buttonVariants()}>
                   {tr("Request this icon", "申请此图标")}
-                </Button>
+                </a>
                 <Button variant="outline" onClick={() => { copyText(agentPrompt(query, locale)); track("request_icon", { q: query, via: "agent_prompt" }); }}>
                   <RiFileCopyLine data-icon="inline-start" />
                   {tr("Copy agent prompt", "复制提示词")}

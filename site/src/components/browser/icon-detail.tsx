@@ -2,7 +2,7 @@
 import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ElementType, type ReactNode } from "react";
 import { RiArrowRightSLine, RiBookmarkFill, RiBookmarkLine, RiCheckLine, RiDownloadLine, RiFileCopyLine, RiGithubLine, RiPlayFill } from "@remixicon/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { CodeBlock } from "@/components/code-block";
 import { copyText } from "@/components/copy-button";
@@ -246,9 +246,9 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           <Button size="icon-xl" variant="outline" onClick={() => toggleSaved({ name: meta.name, color, variant, badge: mainBc })} aria-pressed={saved} aria-label={tr("Save to collection", "加入收藏夹")} title={saved ? tr("Remove from collection", "移出收藏夹") : tr("Save to collection", "加入收藏夹")}>
             {saved ? <RiBookmarkFill /> : <RiBookmarkLine />}
           </Button>
-          <Button size="icon-xl" variant="outline" render={<a href={source} target="_blank" rel="noreferrer" />} aria-label={tr("View source on GitHub", "在 GitHub 上查看源码")} title={tr("View source on GitHub", "在 GitHub 上查看源码")}>
+          <a href={source} target="_blank" rel="noreferrer" className={buttonVariants({ size: "icon-xl", variant: "outline" })} aria-label={tr("View source on GitHub", "在 GitHub 上查看源码")} title={tr("View source on GitHub", "在 GitHub 上查看源码")}>
             <RiGithubLine />
-          </Button>
+          </a>
         </div>
     
         {variants.length > 0 && (

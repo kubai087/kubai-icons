@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Container, Heading } from "@/components/kit/layout";
 import { chip } from "@/components/kit/styles";
 import { IconLinks } from "@/components/browser/icon-links";
@@ -59,7 +59,7 @@ export function CategoryPageBody({ id, locale }: { id: string; locale: Locale })
       <Breadcrumbs trail={[{ name: pick(locale, "Icons", "图标"), path: localize("/icons/", locale) }, { name, path: localize(`/icons/category/${id}/`, locale) }]} />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Heading level={1} title={titleFor(name, locale)} lead={visibleLead(icons.length, locale)} />
-        <Button variant="outline" nativeButton={false} render={<Link href={localize(`/icons/?category=${id}`, locale)} prefetch={false} />}>{pick(locale, "Search and recolor", "在图标库中查看")}</Button>
+        <Link href={localize(`/icons/?category=${id}`, locale)} prefetch={false} className={buttonVariants({ variant: "outline" })}>{pick(locale, "Search and recolor", "在图标库中查看")}</Link>
       </div>
       <IconLinks icons={icons} locale={locale} />
       </div>
