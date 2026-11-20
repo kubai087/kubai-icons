@@ -8,5 +8,6 @@
   { "slug": "aprilnea", "name": "AprilNEA", "site": "https://aprilnea.me/", "preview": "https://aprilnea.me/en" },
   { "slug": "dmthefounder", "name": "DMtheFounder", "site": "https://dmthefounder.com/" },
   { "slug": "astrafoundry", "name": "AstraFoundry", "site": "https://astrafoundry.si/" },
-  { "slug": "karl-coding", "name": "Karl Coding", "site": "https://www.leekarl.com/" }
+  { "slug": "karl-coding", "name": "Karl Coding", "site": "https://www.leekarl.com/" },
+  { "slug": "topinspo", "name": "Topinspo", "site": "https://topinspo.design/skills" }
 ]
