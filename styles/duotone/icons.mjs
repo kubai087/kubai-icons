@@ -1417,6 +1417,99 @@ export const ICONS = {
       L(rr(1, 9, 3.5, 6, r), { gap: W }),
       L(rr(11.5, 9, 3.5, 6, r), { gap: W })
     ]
+  },
+  'chart-donut': {
+    label: '环形图',
+    key: 'circle',
+    layers: [
+      // chart-pie with a hole of radius 3.5: a light ring whose upper right quarter is cut away
+      // along two straight seams 1 wide, and that quarter in blue, clipped from the same ring.
+      L(circ(8, 8, 7), { ...Bt, cut: [C(circ(8, 8, 3.5)), C(rr(7.5, -1, 10, 9.5))] }),
+      L(circ(8, 8, 7), { clip: rr(8.5, 0, 8, 7.5), cut: [C(circ(8, 8, 3.5))] })
+    ]
+  },
+  'chart-column-stacked': {
+    label: '堆叠柱状图',
+    key: 'square',
+    layers: [
+      // chart-bar's three bars, each cut by a straight seam 1 wide: a blue lower part and a
+      // light upper part, both clipped from the bar so they keep its corners.
+      ...[[2, 7.5, 10.5], [2 + 13 / 3, 2, 8], [2 + 26 / 3, 5, 9.5]].flatMap(([x, y, s]) => [
+        L(rr(x, y, 10 / 3, 14 - y, 1), { clip: rr(x - 1, s, 6, 6) }),
+        L(rr(x, y, 10 / 3, 14 - y, 1), { ...Bt, clip: rr(x - 1, 0, 6, s - 1) })
+      ])
+    ]
+  },
+  'chart-gantt': {
+    label: '甘特图',
+    key: 'landscape',
+    layers: [
+      // A light board with three blue task bars, staggered to the right, a gap of 1 apart and
+      // 2.25 in from the board's edges. One layer per bar.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(pill(3.25, 4.25, 5, 11 / 6)),
+      L(pill(6, 4.25 + 17 / 6, 5, 11 / 6)),
+      L(pill(9, 4.25 + 34 / 6, 3.75, 11 / 6))
+    ]
+  },
+  'chart-candlestick': {
+    label: 'K 线图',
+    key: 'square',
+    layers: [
+      // Three candles on chart-bar's columns: a body and a wick through it, one element each;
+      // the middle one is blue. One layer per candle.
+      L(pill(2 + 5 / 3 - D / 2, 4, D, 8) + rr(2, 6, 10 / 3, 4.5, 1), Bt),
+      L(pill(8 - D / 2, 2, D, 9) + rr(2 + 13 / 3, 4, 10 / 3, 4.5, 1)),
+      L(pill(2 + 26 / 3 + 5 / 3 - D / 2, 4.5, D, 9.5) + rr(2 + 26 / 3, 6.5, 10 / 3, 4.5, 1), Bt)
+    ]
+  },
+  presentation: {
+    label: '演示',
+    key: 'square',
+    layers: [
+      // A light board with a small blue bar chart, and one gap below it a blue leg on the
+      // board's centre line. One layer per bar.
+      L(rr(2, 2, 12, 8.5, M), Bt),
+      L(pill(5.125, 5.5, D, 3)),
+      L(pill(7.375, 4, D, 4.5)),
+      L(pill(9.625, 5, D, 3.5)),
+      L(rr(7, 11.5, 2, 2.5, [0, 0, 1, 1]))
+    ]
+  },
+  'alarm-clock': {
+    label: '闹钟',
+    key: 'square',
+    layers: [
+      // clock's face, a little smaller, with two blue bells behind its upper corners; the face
+      // cuts a gap of W round itself. The hands are kept 2 clear of the rim.
+      L(circ(3.75, 3.75, 1.75) + circ(12.25, 3.75, 1.75)),
+      L(circ(8, 8.75, 5.25), { ...Bt, gap: W }),
+      L('M8 6.25V8.75', { sw: K }),
+      L('M8 8.75H10', { sw: K })
+    ]
+  },
+  password: {
+    label: '密码',
+    key: 'wide',
+    layers: [
+      // text-cursor's field with three masked characters (blue dots a gap of 1 apart) and the
+      // cursor after them, 2 clear of the field's edges. One layer per dot.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(circ(4.125, 8, 0.875)),
+      L(circ(6.875, 8, 0.875)),
+      L(circ(9.625, 8, 0.875)),
+      L('M12.25 5.25V10.75', { sw: K })
+    ]
+  },
+  'lock-keyhole': {
+    label: '锁孔',
+    key: 'portrait',
+    layers: [
+      // lock with a keyhole (a round hole and a slot below it, one shape) in place of the slot.
+      L('M4.75 7V5a3.25 3.25 0 0 1 6.5 0V7', { sw: K }),
+      L(rr(2, 6.5, 12, 8.5, M), { ...Bt, gap: W }),
+      L(circ(8, 10, 1.5) + rr(7.25, 10, 1.5, 3, [0, 0, 0.75, 0.75]))
+    ]
   }
 };
 

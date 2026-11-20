@@ -299,7 +299,27 @@ export const MOTION = {
     copy: [{ of: [1, 2] }],
     moves: same(['c0', 'c1'], { y: [0.5, 1.5], r: [3, 6], a: [0.7, 0], o: [14, 4.5] })
   },
-  headset: { say: '话筒杆抬到嘴边', moves: same([1, 2], { r: -8, o: [3, 13.25] }) }
+  headset: { say: '话筒杆抬到嘴边', moves: same([1, 2], { r: -8, o: [3, 13.25] }) },
+  'chart-donut': { say: '蓝色的一段从环形图中拉出来', moves: { 1: { x: 0.75, y: -0.75 } } },
+  'chart-column-stacked': {
+    say: '柱子从底部依次长起来',
+    moves: { ...same([0, 1], { sy: [0, 1, 1, 1], o: [8, 14] }), ...same([2, 3], { sy: [0, 0, 1, 1], o: [8, 14] }), ...same([4, 5], { sy: [0, 0, 0, 1], o: [8, 14] }) }
+  },
+  'chart-gantt': {
+    say: '任务条依次向右排开',
+    moves: { 1: { sx: [0, 1, 1, 1], o: [3.25, 8] }, 2: { sx: [0, 0, 1, 1], o: [6, 8] }, 3: { sx: [0, 0, 0, 1], o: [9, 8] } }
+  },
+  'chart-candlestick': { say: '行情变动，蜡烛移到新的价位', moves: { 0: { y: -1 }, 1: { y: 1 }, 2: { y: -1 } } },
+  presentation: {
+    say: '图表的柱子依次长起来',
+    moves: { 1: { sy: [0, 1, 1, 1], o: [8, 8.5] }, 2: { sy: [0, 0, 1, 1], o: [8, 8.5] }, 3: { sy: [0, 0, 0, 1], o: [8, 8.5] } }
+  },
+  'alarm-clock': { say: '闹钟响起，左右摇晃', moves: { all: { r: [-8, 8, -6, 6, 0], o: [8, 8.75] } } },
+  password: {
+    say: '逐个输入字符，光标闪烁',
+    moves: { 1: { s: [0, 1, 1, 1], o: [4.125, 8] }, 2: { s: [0, 0, 1, 1], o: [6.875, 8] }, 3: { s: [0, 0, 0, 1], o: [9.625, 8] } }
+  },
+  'lock-keyhole': { say: '钥匙孔转过去，再转回来', moves: { 2: { r: [90, 0], o: [8, 10] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
