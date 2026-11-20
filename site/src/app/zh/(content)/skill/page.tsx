@@ -27,7 +27,7 @@ export default function Page() {
 如果已经存在，则改为拉取最新版本），
 确认该文件夹中有 SKILL.md，准备好后告诉我。`} />
       <div className="my-5 space-y-5">
-          <p>以上方式会同时安装两种风格。如只需双色风格，从<a href={`${REPO}/releases/latest`}>最新版本</a>下载 <code>kubai-duotone</code>，解压到同一个 Skills 文件夹。</p>
+          <p>以上方式会同时安装两种风格。如只需双色风格，从<a href={`${REPO}/releases/tag/v2.0.0`}>最新版本</a>下载 <code>kubai-duotone</code>，解压到同一个 Skills 文件夹。</p>
           <h2>使用</h2>
           <p>安装完成后，让智能体为你的项目绘制图标即可，例如：“使用 Kubai Icons Skill，为这个仓库中的功能绘制图标。”不支持 Skill 的智能体可以读取克隆文件夹中的 <code>SKILL.md</code> 并按其说明操作。</p>
           <h2>分享你的图标</h2>

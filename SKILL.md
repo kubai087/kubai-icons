@@ -1,9 +1,9 @@
 ---
 name: kubai-icons
-description: 生成一套风格统一的功能图标，有两种风格可选。分层动态（默认）：沿用 Lumno 书签文件夹图标的构造，后片、内容、前片分层，外描边，所有颜色从一个主色推导，悬停时形变，也可以导出静态 SVG。双色面性：16 网格的实心双色静态 SVG，浅色主体加主色点缀，适合界面里的小尺寸图标。用户要做图标、功能图标、动态图标、静态 SVG 图标、面性或双色图标、duotone 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
+description: 生成一套风格统一的功能图标，有两种风格可选。分层动态（默认）：沿用 Lumno 书签文件夹图标的构造，后片、内容、前片分层，外描边，所有颜色从一个主色推导，悬停时形变，也可以导出静态 SVG。双色面性：16 网格的实心双色图标，浅色主体加主色点缀，悬停时有表现含义的动效，也可以导出静态 SVG，适合界面里的小尺寸图标。用户要做图标、功能图标、动态图标、静态 SVG 图标、面性或双色图标、duotone 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
 license: Kubai Icons License (source-available). Complete terms in LICENSE.
 metadata:
-  version: "1.3.0"
+  version: "2.0.0"
   display_name: "Kubai 动态图标"
   display_name_en: "Kubai Icons"
   description_zh: "按同一种风格稳定地画出功能图标。两种风格可选：文件夹式的前后分层、外描边、悬停时做物体本身会做的动作的动态图标；或者 16 网格、浅色主体加主色点缀的双色面性图标。"

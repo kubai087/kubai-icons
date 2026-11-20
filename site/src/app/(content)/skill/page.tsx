@@ -27,7 +27,7 @@ clone ${REPO} into your skills folder as kubai-icons
 if it's already there, pull the latest version instead),
 make sure SKILL.md exists in that folder, and tell me when it's ready.`} />
       <div className="my-5 space-y-5">
-          <p>This installs both styles. For the two-tone style on its own, download <code>kubai-duotone</code> from the <a href={`${REPO}/releases/latest`}>latest release</a> and unzip it into the same skills folder.</p>
+          <p>This installs both styles. For the two-tone style on its own, download <code>kubai-duotone</code> from the <a href={`${REPO}/releases/tag/v2.0.0`}>latest release</a> and unzip it into the same skills folder.</p>
           <h2>Use</h2>
           <p>Once the skill is installed, ask your agent to draw icons for your project, for example: &quot;Use the Kubai Icons skill to draw icons for the features in this repository.&quot; An agent without skill support can read <code>SKILL.md</code> from the cloned folder and follow it.</p>
           <h2>Share your icons</h2>

@@ -56,7 +56,7 @@ Clone the repository into your skills folder. In Codex, use `~/.agents/skills` i
 git clone https://github.com/kubai087/kubai-icons.git ~/.claude/skills/kubai-icons
 ```
 
-Or download `kubai-icons-v*.zip` from the [latest release](https://github.com/kubai087/kubai-icons/releases/latest) and unzip it there:
+Or download `kubai-icons-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.0.0) and unzip it there:
 
 ```bash
 unzip kubai-icons-v*.zip -d ~/.claude/skills/
@@ -207,7 +207,7 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 
 Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 502 examples with their hover motion (eleven of them variants with a badge: plus, minus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
 
-It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [latest release](https://github.com/kubai087/kubai-icons/releases/latest) and unzip it into your skills folder:
+It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.0.0) and unzip it into your skills folder:
 
 ```bash
 unzip kubai-duotone-v*.zip -d ~/.claude/skills/

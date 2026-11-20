@@ -2,9 +2,9 @@
 
 本文件记录双色面性风格的历次修改。每条写明问题、改法和对应的 `GUIDE.md` 章节，遇到同类问题时可直接查阅。
 
-## 0.1.0（未发布）
+## 2.0.0（2026-11-20）
 
-首个独立版本。此前该风格位于 kubai-icons skill 的 `styles/duotone/`，现作为 `kubai-duotone` skill 单独发布。
+首个独立版本，随 Kubai Icons Skill 2.0 发布。此前该风格位于 kubai-icons skill 的 `styles/duotone/`，现作为 `kubai-duotone` skill 单独发布。本版共有 218 个范例，均已导入图标库，可从 `kubai-icons/duotone` 等路径引用。
 
 ### 规则调整：表现物体所必需的斜边和尖角
 
