@@ -380,7 +380,21 @@ export const MOTION = {
     moves: { 0: { s: [0.75, 1.06, 1], o: [6.78, 9.22] }, 1: { s: [1, 0.4, 1.15, 1], r: [0, 0, 90, 90], o: [11.75, 4.25] } }
   },
   droplet: { say: '水滴落下，触底时压扁一下', moves: { all: { y: [-0.75, 0, 0], sy: [1, 0.85, 1], o: [8, 15] } } },
-  hourglass: { say: '沙子漏下来，在下半部堆起', moves: { 2: { sy: [0, 1], o: [8, 12.5] } } }
+  hourglass: { say: '沙子漏下来，在下半部堆起', moves: { 2: { sy: [0, 1], o: [8, 12.5] } } },
+  'battery-charging': { say: '闪电亮两下，开始充电', ms: 700, moves: { 1: { a: [0.2, 1, 0.2, 1] } } },
+  'moon-star': {
+    say: '月亮沉下去再升起，星星一闪',
+    moves: { 0: { y: [0.75, -0.5, 0], a: [0.3, 1, 1] }, 1: { s: [1, 0.5, 1.15, 1], r: [0, 0, 90, 90], o: [10.75, 5.25] } }
+  },
+  tag: { say: '吊牌绕着孔晃一晃', moves: { all: { r: [6, -4, 2, 0], o: [5.5, 8] } } },
+  megaphone: { say: '喊话，喇叭口随声音振动', moves: { 1: { sy: [1.06, 1, 1.06, 1], o: [4, 8] }, 2: { x: [0.5, 0, 0.5, 0] } } },
+  crown: { say: '戴上王冠', moves: { all: { y: [-1, 0.25, 0], r: [-6, 2, 0], o: [8, 14] } } },
+  gem: { say: '宝石转一圈', moves: { all: { sx: [-1, 1, 1], o: [8, 8] } } },
+  plane: { say: '飞机向前飞走，再从下方飞回原位', moves: { all: { y: [-1, -1, 1, 0], a: [1, 0, 0, 1] } } },
+  'flag-triangle': { say: '旗面迎风飘动', moves: { 1: { sx: [0.8, 1.06, 0.92, 1], sy: [1, 0.94, 1.04, 1], o: [4.5, 5.25] } } },
+  'traffic-cone': { say: '锥桶被碰了一下，左右晃动', ms: 800, moves: { all: { r: [-8, 6, -3, 0], o: [8, 15] } } },
+  award: { say: '奖章翻过来，再翻回正面', moves: same([1, 2], { sx: [-1, 1, 1], o: [8, 6] }) },
+  'mouse-pointer-click': { say: '按下鼠标，指针一沉，点击处的波纹向外扩开', moves: { 0: { s: [0.88, 1], o: [5.4, 5.4] }, 1: { s: [0.4, 1], a: [0, 1], o: [5.8, 5.8] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own

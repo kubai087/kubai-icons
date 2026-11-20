@@ -151,6 +151,16 @@ const sparkleAt = (cx, cy, T, f = 0.5, rho = (1.75 * T) / 3) => {
 // A folded map: three panels whose top and bottom edges zigzag at each fold.
 const MAP = polygon([[1, 3.5], [5.667, 2], [10.333, 3.5], [15, 2], [15, 12.5], [10.333, 14], [5.667, 12.5], [1, 14]], [r, 1, 1, r, r, 1, 1, r]);
 
+// A cut gem: a flat table, a girdle at its widest, and a point at the bottom.
+const GEM = polygon([[4.5, 2], [11.5, 2], [15.3, 5.75], [8, 14.6], [0.7, 5.75]], [1, 1, 0.75, 1, 0.75]);
+
+// A plane seen from above in one light outline: a fuselage, swept wings and a swept tail.
+const PLANE = pill(6.75, 2, 2.5, 12) + polygon([[2, 8.25], [8, 4.5], [14, 8.25], [14, 11.25], [8, 9], [2, 11.25]], [0.75, 0, 0.75, 0.75, 0, 0.75]) +
+  polygon([[4.5, 12.25], [8, 10.5], [11.5, 12.25], [11.5, 14], [8, 12.5], [4.5, 14]], [0.5, 0, 0.5, 0.5, 0, 0.5]);
+
+// A traffic cone: a narrow flat top widening to the base.
+const CONE = polygon([[6.75, 1], [9.25, 1], [12.75, 12], [3.25, 12]], [1, 1, S, S]);
+
 // An hourglass's glass: two bulbs that taper to a waist.
 const GLASS = polygon([[3.5, 3.5], [12.5, 3.5], [9.25, 8], [12.5, 12.5], [3.5, 12.5], [6.75, 8]], [1, 1, 1.5, 1, 1, 1.5]);
 
@@ -2047,6 +2057,119 @@ export const ICONS = {
       L(rr(2, 1, 12, 1.5, 0.5) + rr(2, 13.5, 12, 1.5, 0.5)),
       L(GLASS, Bt),
       L(GLASS, { clip: rr(0, 10.5, 16, 3) })
+    ]
+  },
+  'battery-charging': {
+    label: '充电中',
+    key: 'wide',
+    layers: [
+      // battery-full's light body with a blue bolt printed on it: the bolt's zigzag and point
+      // need slopes. Its points are rounded at 0.5 and it keeps 2 in from the edges.
+      L(rr(1, 2.5, 12.5, 11, R) + rr(13.5, 6, 1.5, 4, [0, 0.75, 0.75, 0]), Bt),
+      L(polygon([[9.25, 3.6], [8.5, 7], [10.5, 7], [5.25, 12.4], [6, 9], [4, 9]], 0.5))
+    ]
+  },
+  'moon-star': {
+    label: '星月',
+    key: 'circle',
+    layers: [
+      // moon's crescent with the badge's sparkle in its bite, one gap from the inner edge.
+      L(crescent(7, 10.72, 5.28, 4.75), Bt),
+      L(sparkleAt(10.75, 5.25, 3.9))
+    ]
+  },
+  tag: {
+    label: '标签',
+    key: 'wide',
+    layers: [
+      // A price tag: a light card whose left end comes to a point (two slopes), rounded at 1.5, and
+      // a blue eyelet on the centre line. The point sits past the keyline.
+      L(polygon([[0.5, 8], [5, 2.5], [15, 2.5], [15, 13.5], [5, 13.5]], [1.5, 1.5, R, R, 1.5]), Bt),
+      L(circ(5.5, 8, 1.25))
+    ]
+  },
+  megaphone: {
+    label: '喇叭',
+    key: 'landscape',
+    layers: [
+      // A light horn widening to the right (two slopes), a blue mouthpiece and a blue rim, each one
+      // gap from the horn.
+      L(rr(1, 5.25, 2, 5.5, [r, 0.5, 0.5, r])),
+      L(polygon([[4, 5.25], [12, 2], [12, 14], [4, 10.75]], [0.5, 1, 1, 0.5]), Bt),
+      L(pill(13, 2, 2, 12))
+    ]
+  },
+  crown: {
+    label: '皇冠',
+    key: 'landscape',
+    layers: [
+      // A light crown whose top rises to three points (slopes) and a blue band one gap below. The
+      // points sit past the keyline so the rounded tips land on it.
+      L(polygon([[0.3, 3.6], [5, 7], [8, 1.2], [11, 7], [15.7, 3.6], [13.25, 11.25], [2.75, 11.25]], [0.75, 0.5, 0.75, 0.5, 0.75, 1, 1]), Bt),
+      L(rr(2.75, 12.25, 10.5, 1.75, 0.75))
+    ]
+  },
+  gem: {
+    label: '宝石',
+    key: 'landscape',
+    layers: [
+      // A cut gem: a flat table, the widest point at the girdle, and sides running down to a point
+      // (the slopes). The crown above the girdle is the gem clipped in blue.
+      L(GEM, Bt),
+      L(GEM, { clip: rr(0, 0, 16, 5.75) })
+    ]
+  },
+  plane: {
+    label: '飞机',
+    key: 'square',
+    layers: [
+      // A plane seen from above in one outline: a light fuselage and swept wings and tail (the
+      // slopes) in blue, clipped from the same outline as map's panels. With a blue fuselage and
+      // light wings, the thin wings dropped out at 16px.
+      L(PLANE, Bt),
+      L(PLANE, { clip: rr(0, 0, 6.75, 16) + rr(9.25, 0, 6.75, 16) })
+    ]
+  },
+  'flag-triangle': {
+    label: '三角旗',
+    key: 'portrait',
+    layers: [
+      // flag's blue pole and, one gap away, a light pennant that narrows to a point (the slopes).
+      L(pill(2, 1, K, 14)),
+      L(polygon([[4.5, 1], [15.43, 5.25], [4.5, 9.5]], [S, 0.75, S]), Bt)
+    ]
+  },
+  'traffic-cone': {
+    label: '路障',
+    key: 'portrait',
+    layers: [
+      // A light cone that widens to the base (the slopes) with a blue stripe printed across it, and
+      // a blue base one gap below.
+      L(CONE, Bt),
+      L(CONE, { clip: rr(0, 6, 16, 2.5) }),
+      L(rr(2, 13, 12, 2, t))
+    ]
+  },
+  award: {
+    label: '奖章',
+    key: 'tall',
+    layers: [
+      // A light rosette in front of two blue ribbon tails, cutting a gap of W round itself; each
+      // tail ends in a V notch (the slopes). A blue centre on the rosette.
+      L(polygon([[4.25, 8], [7.25, 8], [7.25, 15.8], [5.75, 14.2], [4.25, 15.8]], [0, 0, 0.5, 0.5, 0.5]) +
+        polygon([[8.75, 8], [11.75, 8], [11.75, 15.8], [10.25, 14.2], [8.75, 15.8]], [0, 0, 0.5, 0.5, 0.5])),
+      L(circ(8, 6, 5), { ...Bt, gap: W }),
+      L(circ(8, 6, 2.25))
+    ]
+  },
+  'mouse-pointer-click': {
+    label: '点击',
+    key: 'square',
+    layers: [
+      // A light pointer (two slopes meeting in a point, notched at the back) and a blue click ripple:
+      // a quarter arc round its tip. Separate click lines read as an arrow aimed at the pointer.
+      L(polygon([[5.4, 5.4], [15.35, 9.5], [11.1, 11.1], [9.5, 15.35]], [1, 0.75, 0.5, 0.75]), Bt),
+      L('M2.6 5.8A3.2 3.2 0 0 1 5.8 2.6', { sw: D })
     ]
   }
 };
