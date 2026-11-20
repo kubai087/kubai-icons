@@ -3739,6 +3739,154 @@ Object.assign(ICONS, {
       // A thick light ring with four blue bands: the ring clipped in blue across its axes.
       L(BUOY.d, { ...Bt, cut: BUOY.cut }),
       L(BUOY.d, { cut: BUOY.cut, clip: rr(6.25, 0, 3.5, 16) + rr(0, 6.25, 16, 3.5) })
+// Batch: remaining functional categories
+// The sheet shared by the file types: file-text's light page, with the type printed in blue.
+const SHEET = rr(2, 1, 12, 14, M);
+// The sound waves either side of bell-ring's dome: arcs about the dome's centre (8, 8), one gap
+// out, from 33° to 57° above the level, so they reach the keyline at the top and the side.
+const ringArc = (side) => {
+  const p = (deg) => { const a = (deg * Math.PI) / 180; return `${f3(8 + side * 6.25 * Math.cos(a))} ${f3(8 - 6.25 * Math.sin(a))}`; };
+  return side < 0 ? `M${p(33)}A6.25 6.25 0 0 1 ${p(57)}` : `M${p(57)}A6.25 6.25 0 0 1 ${p(33)}`;
+};
+// A quotation mark centred at x: a disc and, rising from its left side, a tail that curves over
+// to the right (a circular arc), so the two make a 6.
+const quoteTail = (cx) => `M${cx - 0.75} 9.25A3.5 3.5 0 0 1 ${cx + 0.75} 5.25`;
+Object.assign(ICONS, {
+  'external-link': {
+    label: '外部链接',
+    key: 'square',
+    layers: [
+      // A light box and a blue arrow leaving it at 45° from its centre to the upper right. The
+      // head is a right-angled corner whose legs run along the grid (the allowed 45° arrow head);
+      // the arrow cuts a gap of W where it crosses the box, as share's does. The head's side
+      // corners are the small arrow's 0.5, or the head rounds off into a pen. The box is sized so
+      // its corner stays one gap from the head, and the shaft starts at its centre.
+      L(rr(2, 4.48, 9.52, 9.52, R), Bt),
+      L('M6.76 9.24L12 4', { sw: K, gap: W, part: 'arrow' }),
+      L(polygon([[9, 2], [14, 2], [14, 7]], [0.5, 1, 0.5]), { gap: W, part: 'arrow' })
+    ]
+  },
+  ban: {
+    label: '禁止',
+    key: 'circle',
+    layers: [
+      // A light disc struck through by one blue slash at 45° (the cross's slope), as circle-x's
+      // strokes but only the one from the upper left.
+      L(circ(8, 8, 7), Bt),
+      L('M4.75 4.75L11.25 11.25', { sw: K })
+    ]
+  },
+  sort: {
+    label: '排序',
+    key: 'wide',
+    layers: [
+      // menu's light bars getting shorter from top to bottom, and a blue arrow pointing down on
+      // the right, one gap from the longest bar. One layer per bar, so the motion can lay them
+      // out in order.
+      L('M2 3.5H9.75', { sw: 2, ...Bt }),
+      L('M2 8H7.25', { sw: 2, ...Bt }),
+      L('M2 12.5H4.75', { sw: 2, ...Bt }),
+      L('M12.5 3.25V12.75M10.75 11L12.5 12.75L14.25 11', { sw: K })
+    ]
+  },
+  'list-checks': {
+    label: '任务清单',
+    key: 'landscape',
+    layers: [
+      // Two rows of list: a blue check (circle-check's, the allowed 45°) and a light bar one gap
+      // to its right. One layer per check, so the motion can tick them off in turn.
+      L('M1.75 4L3.75 6L7 2.75', { sw: K }),
+      L('M1.75 11.25L3.75 13.25L7 10', { sw: K }),
+      L(pill(8.28, 3.125, 6.72, 2.5) + pill(8.28, 10.375, 6.72, 2.5), Bt)
+    ]
+  },
+  strikethrough: {
+    label: '删除线',
+    key: 'square',
+    layers: [
+      // underline's tile with a blue S built from two circular arcs (half-turns of radius 1.625),
+      // and a line through its middle. Letter and line are one element, so they share a part.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M9.407 5.563A1.625 1.625 0 1 0 8 8A1.625 1.625 0 1 1 6.593 10.438', { sw: K, part: 'glyph' }),
+      L('M4.75 8H11.25', { sw: K, part: 'glyph' })
+    ]
+  },
+  quote: {
+    label: '引用',
+    key: 'square',
+    layers: [
+      // code's tile with a pair of blue quotation marks: each a disc with a tail curving up out
+      // of its left side. Disc and tail are one element (one part); one part per mark.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L(circ(5.75, 9.25, 1.5), { part: 'q0' }),
+      L(quoteTail(5.75), { sw: K, part: 'q0' }),
+      L(circ(10.25, 9.25, 1.5), { part: 'q1' }),
+      L(quoteTail(10.25), { sw: K, part: 'q1' })
+    ]
+  },
+  'bell-ring': {
+    label: '响铃提醒',
+    key: 'square',
+    layers: [
+      // bell with a smaller dome (radius 4.5), so two blue sound waves fit at its upper corners,
+      // one gap out from the dome and concentric with it. Knob and clapper as bell's.
+      L('M3.5 10.5V8a4.5 4.5 0 0 1 9 0V10.5Z' + pill(2.5, 9.75, 11, 1.5), Bt),
+      L(circ(8, 3.75, 1.25) + rr(6.25, 12.25, 3.5, 1.75, [0.5, 0.5, 1.75, 1.75]), { gap: W }),
+      L(ringArc(-1) + ringArc(1), { sw: K })
+    ]
+  },
+  'file-code': {
+    label: '代码文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with code's pair of angle brackets centred on it.
+      L(SHEET, Bt),
+      L('M6.75 6L4.75 8L6.75 10', { sw: K }),
+      L('M9.25 6L11.25 8L9.25 10', { sw: K })
+    ]
+  },
+  'file-image': {
+    label: '图片文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet holding image's picture: a blue hill rising from the bottom edge
+      // (clipped to the sheet) and a sun 2.25 in from the right edge. The hill's top sits well
+      // left of the sun; under it, a sun over a centred hill reads as a head and shoulders.
+      L(SHEET, Bt),
+      L(circ(4.5, 18, 8), { clip: SHEET }),
+      L(circ(10.5, 5.5, 1.25))
+    ]
+  },
+  'file-chart': {
+    label: '报表文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with three blue bars standing on one baseline, a gap of 1 apart; the
+      // middle one is the tallest. One layer per bar, so they can grow in turn.
+      L(SHEET, Bt),
+      L(rr(4.75, 8, 1.5, 4, [0.75, 0.75, 0, 0])),
+      L(rr(7.25, 5, 1.5, 7, [0.75, 0.75, 0, 0])),
+      L(rr(9.75, 6.75, 1.5, 5.25, [0.75, 0.75, 0, 0]))
+    ]
+  },
+  'file-video': {
+    label: '视频文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with play's triangle (width 0.78 of its height), centred by its centroid.
+      L(SHEET, Bt),
+      L(polygon([[6.7, 5.5], [10.6, 8], [6.7, 10.5]], 1))
+    ]
+  },
+  'file-audio': {
+    label: '音频文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with a blue note: a round head, and a stem rising from its right side
+      // that turns right into a short flag. Head and stem are one element.
+      L(SHEET, Bt),
+      L(circ(6.75, 10.25, 1.75), { part: 'note' }),
+      L('M7.75 10.25V5H10.5', { sw: K, part: 'note' })
     ]
   }
 });
@@ -4172,6 +4320,125 @@ Object.assign(ICONS, {
       L(SHOE, Bt),
       L(pill(3, 4.5, 2.5, D) + pill(3, 7, 2.5, D)),
       L(rr(1, 12, 14, 1.5, 0.5))
+// Group 2 of the same batch.
+// file-spreadsheet's table: one blue block on the sheet cut by straight seams 1 wide into two
+// columns and three rows (as table cuts the sheet), one layer per row.
+const SHEET_TABLE = (y) => L(rr(4.5, 4.75, 7, 6.5, 1), { clip: rr(0, y, 16, 1.5), cut: [C(rr(7.5, 0, 1, 16))] });
+Object.assign(ICONS, {
+  'file-spreadsheet': {
+    label: '表格文件',
+    key: 'portrait',
+    layers: [L(SHEET, Bt), SHEET_TABLE(4.75), SHEET_TABLE(7.25), SHEET_TABLE(9.75)]
+  },
+  'file-archive': {
+    label: '压缩文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with a zip: blue teeth hanging from the top edge, alternating either
+      // side of the centre line, and one gap below them a pull with a hole.
+      L(SHEET, Bt),
+      L(rr(6.75, 1, 1.25, 1.25) + rr(8, 2.25, 1.25, 1.25) + rr(6.75, 3.5, 1.25, 1.25) + rr(8, 4.75, 1.25, 1.25)),
+      L(rr(6.25, 7, 3.5, 4.5, 1), { cut: [C(pill(7.375, 8.75, 1.25, 1.5))] })
+    ]
+  },
+  newspaper: {
+    label: '报纸',
+    key: 'landscape',
+    layers: [
+      // A light page: a blue headline across the top, and under it a picture block on the left
+      // with two lines of text beside it. One layer per text line, so they can be printed in turn.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(pill(3.5, 4.5, 9, D)),
+      L(rr(3.5, 7.25, 3.5, 4.25, 1)),
+      L(pill(8, 7.75, 4.5, D)),
+      L(pill(8, 10.25, 3, D))
+    ]
+  },
+  'filing-cabinet': {
+    label: '文件柜',
+    key: 'portrait',
+    layers: [
+      // A light cabinet cut straight across into two drawers by a gap of 1 (as server's rack
+      // units, standing up), each with a blue handle on its centre.
+      L(rr(2, 1, 12, 6.5, [M, M, 0, 0]), Bt),
+      L(rr(2, 8.5, 12, 6.5, [0, 0, M, M]), Bt),
+      L(pill(6, 3.625, 4, D)),
+      L(pill(6, 11.125, 4, D))
+    ]
+  },
+  'git-commit': {
+    label: '提交',
+    key: 'flat',
+    layers: [
+      // A blue line through a light node (a disc filling the height) that cuts a gap of W out of
+      // it; a blue dot is printed on the node's centre.
+      L('M1.75 8H14.25', { sw: K }),
+      L(circ(8, 8, 4), { ...Bt, gap: W }),
+      L(circ(8, 8, 1.75))
+    ]
+  },
+  'git-branch': {
+    label: '分支',
+    key: 'square',
+    layers: [
+      // Light lines and blue nodes that cut a gap of W out of them: a trunk between two nodes on
+      // the left, and a branch that leaves it at the bottom node and bends up to a node on the
+      // right. Trunk and branch are one element (one part); the branch is drawn from the trunk
+      // outward. Small nodes keep the blue under 60%.
+      L('M3.5 3.5V12.5', { sw: 2, ...Bt, part: 'lines' }),
+      L('M3.5 12.5H6A6.5 6.5 0 0 0 12.5 6V3.5', { sw: 2, ...Bt, part: 'lines' }),
+      L(circ(3.5, 3.5, 1.5) + circ(3.5, 12.5, 1.5), { gap: W }),
+      L(circ(12.5, 3.5, 1.5), { gap: W })
+    ]
+  },
+  'git-merge': {
+    label: '合并分支',
+    key: 'square',
+    layers: [
+      // git-branch the other way: one node at the top of the trunk, and a branch from a node at
+      // the lower right that bends round into the trunk under it. Drawn from the branch's node.
+      L('M3.5 3.5V13', { sw: 2, ...Bt, part: 'lines' }),
+      L('M12.5 12.5H10A6.5 6.5 0 0 1 3.5 6V3.5', { sw: 2, ...Bt, part: 'lines' }),
+      L(circ(3.5, 3.5, 1.5), { gap: W }),
+      L(circ(12.5, 12.5, 1.5), { gap: W })
+    ]
+  },
+  bug: {
+    label: '缺陷',
+    key: 'square',
+    layers: [
+      // A beetle seen from above: a light body split down the middle into two wing cases, a blue
+      // head one gap above it, and three blue legs a side, one gap out. The legs are two layers
+      // (each a left, right, left set), so they can step in turn.
+      L(rr(5.25, 5, 5.5, 9, 2.75), { ...Bt, cut: [C(rr(7.5, 0, 1, 16))] }),
+      L(rr(6, 2, 4, 2, [2, 2, 0.5, 0.5])),
+      L(pill(2, 6.125, 2.25, D) + pill(11.75, 8.875, 2.25, D) + pill(2, 11.625, 2.25, D)),
+      L(pill(11.75, 6.125, 2.25, D) + pill(2, 8.875, 2.25, D) + pill(11.75, 11.625, 2.25, D))
+    ]
+  },
+  rss: {
+    label: '订阅',
+    key: 'square',
+    layers: [
+      // code's tile with the feed mark in blue: a dot in the lower left corner, the same 1.75
+      // in from the left and bottom edges, and two quarter rings about it a gap of 1 apart.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L(circ(5.25, 10.75, 1.5)),
+      L('M5.25 7.5A3.25 3.25 0 0 1 8.5 10.75', { sw: K }),
+      L('M5.25 5A5.75 5.75 0 0 1 11 10.75', { sw: K })
+    ]
+  },
+  'wrap-text': {
+    label: '自动换行',
+    key: 'landscape',
+    layers: [
+      // menu's light bars at the top and a short one at the bottom; between them a blue line runs
+      // to the end, turns down round a half circle and comes back as an arrow (the allowed 45°
+      // head), pointing to where the next line starts.
+      L('M2 3H14', { sw: 2, ...Bt }),
+      L('M2 13H5', { sw: 2, ...Bt }),
+      L('M2 7.5H12.25A2 2 0 0 1 12.25 11.5H9.25', { sw: K, part: 'arrow' }),
+      L('M10.75 9.75L9 11.5L10.75 13.25', { sw: K, part: 'arrow' })
     ]
   }
 });
@@ -4362,6 +4629,97 @@ Object.assign(ICONS, {
       L(rr(1, 5, 6, 9, M) + rr(9, 5, 6, 9, M) + rr(6, 7, 4, 3, 0), Bt),
       L(circ(4, 11, 1.75) + circ(12, 11, 1.75)),
       L(rr(2.5, 2, 3, 2, [0.75, 0.75, 0, 0]) + rr(10.5, 2, 3, 2, [0.75, 0.75, 0, 0]))
+// Group 3 of the same batch.
+// The square arrows: code's tile with arrow-up-down's blue arrow (a K shaft and a 45° head),
+// turned to each side. ARROW_IN gives the stroke for a direction: up, right, down or left.
+const ARROW_IN = {
+  up: 'M8 11.25V4.75M5.25 7.5L8 4.75L10.75 7.5',
+  right: 'M4.75 8H11.25M8.5 5.25L11.25 8L8.5 10.75',
+  down: 'M8 4.75V11.25M5.25 8.5L8 11.25L10.75 8.5',
+  left: 'M11.25 8H4.75M7.5 5.25L4.75 8L7.5 10.75'
+};
+const squareArrow = (dir, label) => ({ label, key: 'square', layers: [L(rr(2, 2, 12, 12, R), Bt), L(ARROW_IN[dir], { sw: K })] });
+// sync's two arrows: rotate-cw's light ring split into two arcs about (8, 8), each with its
+// blue head at the clockwise end; the second is the first turned half round.
+const SYNC_HEAD = [[15.008, 6.522], [9.768, 6.232], [14.718, 1.282]];
+const half = (pts) => pts.map(([x, y]) => [f3(16 - x), f3(16 - y)]);
+// layers' outlines: a diamond whose sides rise 2.75 over 7 (the stack's slope), and V-shaped
+// bands under it that run parallel to its lower sides, each a gap of 1 below the last.
+const LAYER_RISE = 2.75, LAYER_GAP = f3(1 / Math.cos(Math.atan2(2.75, 7)));
+const layerBand = (a, th) => polygon([[1, a], [8, a + LAYER_RISE], [15, a], [15, a + th], [8, a + LAYER_RISE + th], [1, a + th]], [0.75, 1, 0.75, 0.75, 1, 0.75]);
+Object.assign(ICONS, {
+  'square-arrow-up': squareArrow('up', '方形向上箭头'),
+  'square-arrow-right': squareArrow('right', '方形向右箭头'),
+  'square-arrow-down': squareArrow('down', '方形向下箭头'),
+  'square-arrow-left': squareArrow('left', '方形向左箭头'),
+  sync: {
+    label: '同步',
+    key: 'circle',
+    layers: [
+      // Two light arcs of rotate-cw's ring, each running 130° clockwise to its blue head (the
+      // same head as rotate-cw's), one arrow over the top and one under the bottom. Each arc
+      // starts one gap clear of the other arrow's head.
+      L('M2.023 7.477A6 6 0 0 1 12.243 3.757', { ...Bt, sw: 2, part: 'a0' }),
+      L(polygon(SYNC_HEAD, 1), { part: 'a0' }),
+      L('M13.977 8.523A6 6 0 0 1 3.757 12.243', { ...Bt, sw: 2, part: 'a1' }),
+      L(polygon(half(SYNC_HEAD), 1), { part: 'a1' })
+    ]
+  },
+  'cloud-fog': {
+    label: '雾',
+    key: 'landscape',
+    layers: [
+      // cloud-rain's cloud, and one gap below it two blue bands of mist set off from each other,
+      // reaching the left and the right edge in turn.
+      L(pill(1, 4, 14, 5) + circ(8.5, 5, 3), Bt),
+      L(pill(1, 10, 10.5, K)),
+      L(pill(4.5, 12.5, 10.5, K))
+    ]
+  },
+  sunrise: {
+    label: '日出',
+    key: 'square',
+    layers: [
+      // Half of sun on a light horizon (a bar 2 thick) a gap of 1 below it, with two of sun's
+      // dots one gap out; above it a blue arrow (arrow-up-down's) points up. The horizon cuts a gap round itself
+      // for the motion, where the sun comes up from behind it.
+      L('M4.75 11A3.25 3.25 0 0 1 11.25 11Z', Bt),
+      L(circ(4.376, 7.376, 0.875) + circ(11.624, 7.376, 0.875)),
+      L(pill(2, 12, 12, 2), { ...Bt, gap: W }),
+      L('M8 6V2.75M6 4.75L8 2.75L10 4.75', { sw: K })
+    ]
+  },
+  sunset: {
+    label: '日落',
+    key: 'square',
+    layers: [
+      // sunrise with the arrow pointing down, towards the horizon.
+      L('M4.75 11A3.25 3.25 0 0 1 11.25 11Z', Bt),
+      L(circ(4.376, 7.376, 0.875) + circ(11.624, 7.376, 0.875)),
+      L(pill(2, 12, 12, 2), { ...Bt, gap: W }),
+      L('M8 2.75V6M6 4L8 6L10 4', { sw: K })
+    ]
+  },
+  layers: {
+    label: '图层',
+    key: 'landscape',
+    layers: [
+      // A stack seen from above: a light diamond on top and two V-shaped bands under it, the
+      // first blue, the second light, each one gap below the last. A layer has no shape without
+      // its slanted sides, so they are the slopes this object needs (GUIDE.md §1).
+      L(polygon([[8, 1.9], [15, 1.9 + LAYER_RISE], [8, 1.9 + 2 * LAYER_RISE], [1, 1.9 + LAYER_RISE]], [1.25, 1, 1.25, 1]), Bt),
+      L(layerBand(f3(1.9 + LAYER_RISE + LAYER_GAP), 2.25)),
+      L(layerBand(f3(1.9 + LAYER_RISE + 2 * LAYER_GAP + 2.25), 2.25), Bt)
+    ]
+  },
+  ghost: {
+    label: '幽灵',
+    key: 'square',
+    layers: [
+      // A light dome whose hem is receipt's three scallops (half circles of radius 2), and two
+      // blue eyes.
+      L(rr(2, 2, 12, 10, [6, 6, 0, 0]) + [4, 8, 12].map((x) => circ(x, 12, 2)).join(''), Bt),
+      L(pill(5.875, 5.5, D, 2.5) + pill(8.875, 5.5, D, 2.5))
     ]
   }
 });
@@ -4561,6 +4919,106 @@ Object.assign(ICONS, {
       // middle step.
       L(polygon([[1, 7], [5.5, 7], [5.5, 2], [10.5, 2], [10.5, 9.5], [15, 9.5], [15, 14], [1, 14]], [1, 0, 1, 1, 0, 1, 1, 1]), Bt),
       L('M8 4.5V7.75', { sw: D })
+// Group 4 of the same batch.
+// component's four diamonds: squares turned 45° about points d out from the centre, side s, so
+// neighbours are one gap apart and the outer tips reach the 12 box once rounded.
+const COMP_D = 3.509, COMP_S = 3.962;
+const diamond = (cx, cy) => rot(cx, cy, COMP_S, COMP_S, 45, 0.75);
+// graduation-cap's board: a diamond twice as wide as tall, the side corners just past the live
+// area so their rounded ends land on it.
+const BOARD = polygon([[8, 2.38], [15.618, 6.189], [8, 9.998], [0.382, 6.189]], [1, 0.5, 1, 0.5]);
+Object.assign(ICONS, {
+  move: {
+    label: '移动',
+    key: 'circle',
+    layers: [
+      // A light disc with a blue cross whose four ends carry small heads (the allowed 45°).
+      L(circ(8, 8, 7), Bt),
+      L('M8 3.75V12.25M3.75 8H12.25M6.5 5.25L8 3.75L9.5 5.25M10.75 6.5L12.25 8L10.75 9.5M9.5 10.75L8 12.25L6.5 10.75M5.25 9.5L3.75 8L5.25 6.5', { sw: K })
+    ]
+  },
+  'contact-book': {
+    label: '通讯录',
+    key: 'portrait',
+    layers: [
+      // A light book whose spine is a blue band of the body itself (clipped, as credit-card's
+      // stripe), and user's head and shoulders in blue on the face, evenly inset from the spine
+      // and the right edge.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(2, 1, 12, 14, M), { clip: rr(0, 0, 4.5, 16) }),
+      L(circ(9.25, 6, 1.75)),
+      L(rr(6.25, 8.75, 6, 3.25, [3, 3, 1, 1]))
+    ]
+  },
+  siren: {
+    label: '警报',
+    key: 'square',
+    layers: [
+      // A light dome on a blue base a gap of 1 below it, and three short blue rays a gap out:
+      // one above, one either side.
+      L(rr(5.25, 5, 5.5, 6, [2.75, 2.75, 0, 0]), Bt),
+      L(rr(2, 12, 12, 2, t)),
+      L(pill(7.25, 2, K, 2) + pill(2, 7.25, 2.25, K) + pill(11.75, 7.25, 2.25, K))
+    ]
+  },
+  braces: {
+    label: '花括号',
+    key: 'square',
+    layers: [
+      // code's tile with a pair of blue curly braces built from quarter arcs of radius 1, their
+      // points facing out, 2 in from the tile's edges and a gap of 1 apart. One layer each.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6.75 4.75A1 1 0 0 0 5.75 5.75V7A1 1 0 0 1 4.75 8A1 1 0 0 1 5.75 9V10.25A1 1 0 0 0 6.75 11.25', { sw: K }),
+      L('M9.25 4.75A1 1 0 0 1 10.25 5.75V7A1 1 0 0 0 11.25 8A1 1 0 0 0 10.25 9V10.25A1 1 0 0 1 9.25 11.25', { sw: K })
+    ]
+  },
+  component: {
+    label: '组件',
+    key: 'square',
+    layers: [
+      // Four diamonds round the centre, a gap of 1 apart: light above and below, blue left and
+      // right. The component mark is made of turned squares, so it needs their 45° sides.
+      L(diamond(8, 8 - COMP_D), Bt),
+      L(diamond(8 + COMP_D, 8)),
+      L(diamond(8, 8 + COMP_D), Bt),
+      L(diamond(8 - COMP_D, 8))
+    ]
+  },
+  sitemap: {
+    label: '站点地图',
+    key: 'square',
+    layers: [
+      // A blue page on top and three light pages in a row below, joined by blue lines that stop
+      // a gap of 1 short of each page.
+      L('M8 7.125V8M3.667 8.875V8H12.333V8.875M8 8V8.875', { sw: D }),
+      L(rr(5.5, 2, 5, 3.5, 1)),
+      L(rr(2, 10.5, 3.333, 3.5, 1), Bt),
+      L(rr(6.333, 10.5, 3.333, 3.5, 1), Bt),
+      L(rr(10.667, 10.5, 3.333, 3.5, 1), Bt)
+    ]
+  },
+  'graduation-cap': {
+    label: '学士帽',
+    key: 'wide',
+    layers: [
+      // A light board (a diamond: the board seen at an angle is known by its slanted sides) in
+      // front of a blue band, cutting a gap of W out of it, and a blue tassel hanging on the right
+      // one gap from the band.
+      L(rr(4.5, 8, 7, 5.5, [0, 0, r, r])),
+      L('M13.25 6.5V10.75', { sw: K }),
+      L(BOARD, { ...Bt, gap: W })
+    ]
+  },
+  'gallery-view': {
+    label: '画廊视图',
+    key: 'landscape',
+    layers: [
+      // A large light picture over a row of three blue thumbnails, each part a gap of 1 from the
+      // next; the outer corners round as one outline (seams 1 inside). One layer per thumbnail.
+      L(rr(1, 2, 14, 7.5, [R3, R3, S, S]), Bt),
+      L(rr(1, 10.5, 4, 3.5, [S, S, S, r])),
+      L(rr(6, 10.5, 4, 3.5, S)),
+      L(rr(11, 10.5, 4, 3.5, [S, S, r, S]))
     ]
   }
 });
@@ -4650,6 +5108,83 @@ Object.assign(ICONS, {
       L(TRACTOR, Bt),
       L(rr(3, 4, 3, 2.5, 0.75)),
       L(circ(4.5, 10, 3.5) + circ(13, 11.5, 2), { gap: W, cut: [C(circ(4.5, 10, 1.25)), C(circ(13, 11.5, 0.75))] })
+// Group 5 of the same batch.
+// heatmap's cells: grid's nine tiles, a gap of 1 apart, read across the rows.
+const cell = (i, j) => rr(2 + (i * 13) / 3, 2 + (j * 13) / 3, 10 / 3, 10 / 3, 1);
+const HOT = [[1, 0], [0, 1], [1, 1], [2, 2]];
+// cube: a hexagon (corners turned 120°) split into three faces by seams 1 wide that run from the
+// centre to three corners; each face is the hexagon clipped to its sector, so it keeps the
+// hexagon's own corners.
+const HEX_R = 7.2, hexPt = (deg) => [f3(8 + HEX_R * Math.cos((deg * Math.PI) / 180)), f3(8 + HEX_R * Math.sin((deg * Math.PI) / 180))];
+const HEX = polygon([-90, -30, 30, 90, 150, 210].map(hexPt), r);
+const [HEX_UR, HEX_UL] = [hexPt(-30), hexPt(210)];
+const CUBE_SEAMS = [C(`M8 8L${HEX_UL[0]} ${HEX_UL[1]}M8 8L${HEX_UR[0]} ${HEX_UR[1]}M8 8V16`, W)];
+const face = (pts) => ({ clip: polygon(pts), cut: CUBE_SEAMS });
+Object.assign(ICONS, {
+  heatmap: {
+    label: '热力图',
+    key: 'square',
+    layers: [
+      // grid's nine tiles; four of them, the hot ones, are blue. One layer per hot tile, so they
+      // can light up in turn.
+      L([0, 1, 2].flatMap((j) => [0, 1, 2].map((i) => [i, j])).filter(([i, j]) => !HOT.some(([a, b]) => a === i && b === j)).map(([i, j]) => cell(i, j)).join(''), Bt),
+      ...HOT.map(([i, j]) => L(cell(i, j)))
+    ]
+  },
+  pilcrow: {
+    label: '段落标记',
+    key: 'square',
+    layers: [
+      // code's tile with a blue pilcrow: a half-round bowl against the first of two stems joined
+      // across the top. Bowl and stems are one element.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M8.5 4V9H7A2.5 2.5 0 0 1 7 4Z', { part: 'glyph' }),
+      L('M8.5 11.25V4.75H10.75V11.25', { sw: K, part: 'glyph' })
+    ]
+  },
+  cube: {
+    label: '立方体',
+    key: 'portrait',
+    layers: [
+      // A cube seen corner on: a hexagon cut into its three faces by seams 1 wide, the top and left
+      // faces light and the right face blue. A cube has no outline without its slanted edges, so
+      // the hexagon's sides are the slopes this object needs (GUIDE.md §1).
+      L(HEX, { ...Bt, ...face([[8, 8], [17, 2.8], [17, -2], [-1, -2], [-1, 2.8]]) }),
+      L(HEX, { ...Bt, ...face([[8, 8], [-1, 2.8], [-1, 18], [8, 18]]) }),
+      L(HEX, face([[8, 8], [8, 18], [17, 18], [17, 2.8]]))
+    ]
+  },
+  'git-fork': {
+    label: '派生',
+    key: 'square',
+    layers: [
+      // git-branch's lines and nodes: a line rising from a node at the bottom that splits in two,
+      // each half turning with two quarter arcs up to a node at the top.
+      L('M8 12.5V9.5A2 2 0 0 0 6 7.5H5.5A2 2 0 0 1 3.5 5.5V3.5M8 9.5A2 2 0 0 1 10 7.5H10.5A2 2 0 0 0 12.5 5.5V3.5', { sw: 2, ...Bt }),
+      L(circ(8, 12.5, 1.5), { gap: W }),
+      L(circ(3.5, 3.5, 1.5) + circ(12.5, 3.5, 1.5), { gap: W })
+    ]
+  },
+  landmark: {
+    label: '银行',
+    key: 'square',
+    layers: [
+      // A bank: a light pediment (its shallow slopes are what tell a bank from a house), four
+      // blue columns a gap of 1 below it, and a light base a gap below them.
+      L(polygon([[8, 1.85], [14, 5], [2, 5]], [1, 0.5, 0.5]), Bt),
+      L([3, 5.833, 8.667, 11.5].map((x) => pill(x, 6, K, 5)).join('')),
+      L(rr(2, 12, 12, 2, t), Bt)
+    ]
+  },
+  angry: {
+    label: '生气',
+    key: 'circle',
+    layers: [
+      // frown's face with the eyes drawn as two short strokes slanting down towards the nose (the
+      // slope is the frowning brow; level eyes would read as meh).
+      L(circ(8, 8, 7), Bt),
+      L('M4.75 5.25L7 6.375M11.25 5.25L9 6.375', { sw: D }),
+      L('M5.5 11.5a2.5 2.5 0 0 1 5 0', { sw: D })
     ]
   }
 });
@@ -4968,6 +5503,99 @@ Object.assign(ICONS, {
       // A sigma on a light tile, written in one stroke (its middle point needs two slopes).
       L(rr(2, 2, 12, 12, R), Bt),
       L('M11.5 4.5H4.5L8.25 8L4.5 11.5H11.5', { sw: K })
+// Group 6 of the same batch.
+// file's page: file-text's sheet with its upper right corner cut along a 45° fold, as sticky-note's.
+const PAGE = polygon([[2, 1], [10, 1], [14, 5], [14, 15], [2, 15]], [M, 1, 1, M, M]);
+// badge-verified's rosette: a disc ringed by twelve round scallops whose outer edge is the keyline.
+const ROSETTE = circ(8, 8, 5.5) + Array.from({ length: 12 }, (_, i) => {
+  const a = ((i * 30) * Math.PI) / 180;
+  return circ(f3(8 + 5.75 * Math.cos(a)), f3(8 + 5.75 * Math.sin(a)), 1.25);
+}).join('');
+// folder-open's front cover: level along the top, its right side slanting in towards the bottom
+// as the cover falls open. The top right corner sits past the live area so its rounded end lands on it.
+const COVER = polygon([[1, 7.5], [15.85, 7.5], [13, 14], [1, 14]], [1, 1.5, 2, R]);
+Object.assign(ICONS, {
+  file: {
+    label: '文档',
+    key: 'portrait',
+    layers: [
+      // A blank page with its upper right corner folded down: the fold is a 45° cut (the page's
+      // dog-ear is the one thing a blank page is known by), and the flap is the page clipped in
+      // blue below and left of the fold, as sticky-note's.
+      L(PAGE, Bt),
+      L(PAGE, { clip: rr(10, -1, 6, 6, [0, 0, 0, 1]) })
+    ]
+  },
+  'folder-open': {
+    label: '打开的文件夹',
+    key: 'landscape',
+    layers: [
+      // folder fallen open: the back with its tab stands up in blue, and the light front cover
+      // lies in front of it, cutting a gap of W, its right side slanting in as it opens. The
+      // cover's slanted side is what tells an open folder from a closed one.
+      L(body(1, 4, 12.5, 10, R, [{ x: 1, w: 6, h: 2, c: r }])),
+      L(COVER, { ...Bt, gap: W })
+    ]
+  },
+  reply: {
+    label: '回复',
+    key: 'landscape',
+    layers: [
+      // message-square's bubble with a blue reply arrow centred on it: a stroke that comes up and
+      // turns left on a quarter arc, ending in a 45° head. Shaft and head are one element.
+      L(rr(1, 2, 14, 12, [R3, R3, R3, 0]), Bt),
+      L('M11 11.25V9.5A2.5 2.5 0 0 0 8.5 7H5.5', { sw: K, part: 'arrow' }),
+      L('M7 5L5 7L7 9', { sw: K, part: 'arrow' })
+    ]
+  },
+  rainbow: {
+    label: '彩虹',
+    key: 'flat',
+    layers: [
+      // Two bands arching over a common centre a gap of 1 apart: the outer one light, the inner
+      // one blue. Drawn from left to right, so the motion can paint them across the sky.
+      L('M2 11A6 6 0 0 1 14 11', { sw: 2, ...Bt }),
+      L('M5 11A3 3 0 0 1 11 11', { sw: 2 })
+    ]
+  },
+  workflow: {
+    label: '工作流',
+    key: 'square',
+    layers: [
+      // Two steps: a blue box at the upper left and a light one at the lower right, joined by a
+      // blue line that leaves the first, turns on a quarter arc and stops a gap of 1 short of the second.
+      L(rr(2, 2, 5, 5, r)),
+      L('M4.5 8.625V9.5A2 2 0 0 0 6.5 11.5H7.375', { sw: D }),
+      L(rr(9, 9, 5, 5, r), Bt)
+    ]
+  },
+  'corner-down-right': {
+    label: '向右下转弯',
+    key: 'square',
+    layers: [
+      // code's tile with a blue arrow that runs down, turns on a quarter arc and points right
+      // (the allowed 45° head), as wide as it is tall and evenly inset from the tile's edges.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.8125 4.8125V7.5625A2 2 0 0 0 6.8125 9.5625H11.1875M9.5625 7.9375L11.1875 9.5625L9.5625 11.1875', { sw: K })
+    ]
+  },
+  'corner-up-left': {
+    label: '向左上转弯',
+    key: 'square',
+    layers: [
+      // corner-down-right turned half round: up, then left.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M11.1875 11.1875V8.4375A2 2 0 0 0 9.1875 6.4375H4.8125M6.4375 8.0625L4.8125 6.4375L6.4375 4.8125', { sw: K })
+    ]
+  },
+  'badge-verified': {
+    label: '认证徽章',
+    key: 'circle',
+    layers: [
+      // A light rosette (a disc with twelve round scallops, all circles) and a blue check, smaller
+      // than circle-check's so it clears the scallops evenly.
+      L(ROSETTE, Bt),
+      L('M6 8L7.25 9.25L10 6.5', { sw: K })
     ]
   }
 });
@@ -5093,6 +5721,60 @@ Object.assign(ICONS, {
       // butter on it.
       L('M2 11.5V7.95A3.5 3.5 0 1 1 8 5.5A3.5 3.5 0 1 1 14 7.95V11.5A2.5 2.5 0 0 1 11.5 14H4.5A2.5 2.5 0 0 1 2 11.5Z', Bt),
       L(rr(6, 7.5, 4, 3.5, 1))
+// Group 7 of the same batch.
+// Moves a path drawn with absolute M, L, A and Z by (dx, dy): crescent() always centres on (8, 8).
+const shiftPath = (d, dx, dy) => d.replace(/([MLA])([^MLAZ]*)/g, (_, c, a) => {
+  const v = a.trim().split(/[\s,]+/).map(Number);
+  if (c === 'A') return `A${v.slice(0, 5).join(' ')} ${f3(v[5] + dx)} ${f3(v[6] + dy)}`;
+  return c + v.map((x, i) => f3(i % 2 ? x + dy : x + dx)).join(' ');
+});
+// sticky-notes' front note: sticky-note's shape, 8.5 square, at the lower left.
+const NOTE_FRONT = polygon([[2, 5.5], [10.5, 5.5], [10.5, 11], [7.5, 14], [2, 14]], [M, M, 1, 1, M]);
+Object.assign(ICONS, {
+  'sticky-notes': {
+    label: '便签组',
+    key: 'square',
+    layers: [
+      // Two notes: a blue one behind at the upper right, and in front a light one with
+      // sticky-note's folded corner (the 45° fold, its flap clipped in blue), cutting a gap of W
+      // out of the one behind and covering about a third of it, as copy's sheets do.
+      L(rr(5.5, 2, 8.5, 8.5, M)),
+      L(NOTE_FRONT, { ...Bt, gap: W, part: 'front' }),
+      L(NOTE_FRONT, { clip: rr(7.5, 11, 6, 6, [1, 0, 0, 0]), part: 'front' })
+    ]
+  },
+  'cloud-moon': {
+    label: '夜间多云',
+    key: 'wide',
+    layers: [
+      // cloud with moon's crescent in place of the sun: a blue disc of radius 3.75 bitten at the
+      // upper left, so the horns show above the cloud, which covers its lower left.
+      L(shiftPath(crescent(3.75, 6.23, 6.23, 2.79), 3.25, -2.05)),
+      L(pill(1, 8.5, 11.5, 5) + circ(6.25, 8.5, 3.5), { ...Bt, gap: W })
+    ]
+  },
+  'file-diff': {
+    label: '文件对比',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with a blue plus over a minus: lines added and lines taken out.
+      L(SHEET, Bt),
+      L('M8 4.5V8.5M6 6.5H10', { sw: K }),
+      L('M6 11H10', { sw: K })
+    ]
+  },
+  'git-pull-request': {
+    label: '合并请求',
+    key: 'square',
+    layers: [
+      // git-branch's light lines and blue nodes: a trunk between two nodes on the left, and on the
+      // right a line that rises from a node, turns left on a quarter arc and ends in a blue head
+      // (the allowed 45°) pointing at the trunk. Line and head are one element.
+      L('M3.5 3.5V12.5', { sw: 2, ...Bt }),
+      L('M12.5 12.5V6A2 2 0 0 0 10.5 4H8.75', { sw: 2, ...Bt, part: 'arrow' }),
+      L('M9.75 2.75L8.5 4L9.75 5.25', { sw: K, part: 'arrow' }),
+      L(circ(3.5, 3.5, 1.5) + circ(3.5, 12.5, 1.5), { gap: W }),
+      L(circ(12.5, 12.5, 1.5), { gap: W })
     ]
   }
 });
