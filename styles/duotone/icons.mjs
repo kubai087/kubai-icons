@@ -154,6 +154,17 @@ const MAP = polygon([[1, 3.5], [5.667, 2], [10.333, 3.5], [15, 2], [15, 12.5], [
 // A cut gem: a flat table, a girdle at its widest, and a point at the bottom.
 const GEM = polygon([[4.5, 2], [11.5, 2], [15.3, 5.75], [8, 14.6], [0.7, 5.75]], [1, 1, 0.75, 1, 0.75]);
 
+// A bar laid along a line through (cx, cy) at deg (0 is to the right, -45 up and to the right):
+// from distance t0 to t1 along it, w wide. With point, the far end narrows to a point instead.
+const AXIS = (cx, cy, deg, t0, t1, w, _ = null, point = false) => {
+  const a = (deg * Math.PI) / 180, u = [Math.cos(a), Math.sin(a)], v = [-u[1], u[0]];
+  const P = (t, s) => [f3(cx + t * u[0] + s * v[0]), f3(cy + t * u[1] + s * v[1])];
+  return point ? [P(t0, -w / 2), P(t1, 0), P(t0, w / 2)] : [P(t0, -w / 2), P(t1, -w / 2), P(t1, w / 2), P(t0, w / 2)];
+};
+
+// A sticky note with its lower right corner folded along a 45° line.
+const NOTE = polygon([[2, 2], [14, 2], [14, 10], [10, 14], [2, 14]], [R, R, 1, 1, R]);
+
 // A funnel chart's outline: wide at the top, narrowing to the bottom.
 const FUNNEL = polygon([[1.4, 2], [14.6, 2], [10.5, 14], [5.5, 14]], [r, r, 1, 1]);
 
@@ -2302,6 +2313,61 @@ export const ICONS = {
       // distances along the pentagon's spokes. Drawn 5% taller to fill the circle, as star.
       L(polygon(RADAR([1, 1, 1, 1, 1], 7.36), 1), Bt),
       L(polygon(RADAR([0.62, 0.66, 0.42, 0.56, 0.38], 7.36), 0.5))
+    ]
+  },
+  'sticky-note': {
+    label: '便签',
+    key: 'square',
+    layers: [
+      // A light note with its lower right corner folded over: the fold is a 45° cut, and the flap
+      // is the note clipped in blue below and right of the fold. Two blue lines, one layer each.
+      L(NOTE, Bt),
+      L(NOTE, { clip: rr(10, 10, 6, 6, [1, 0, 0, 0]) }),
+      L('M5 5.5H11', { sw: D }),
+      L('M5 8.25H8.5', { sw: D })
+    ]
+  },
+  gauge: {
+    label: '仪表',
+    key: 'circle',
+    layers: [
+      // A light dial, three blue tick dots along its upper arc, and a blue needle that tapers to
+      // a point (slopes) from a round hub below the centre.
+      L(circ(8, 8, 7), Bt),
+      L([-150, -90, -30].map((a) => circ(f3(8 + 4.75 * Math.cos((a * Math.PI) / 180)), f3(9 + 4.75 * Math.sin((a * Math.PI) / 180)), 0.75)).join('')),
+      L(circ(8, 9, 1.75) + polygon(AXIS(8, 9, -60, -0.5, 4.25, 2.5, [0, 0.5, 0], true), 0))
+    ]
+  },
+  eraser: {
+    label: '橡皮擦',
+    key: 'square',
+    layers: [
+      // An eraser laid at 45°, as pencil: a blue rubber end and a light sleeve, cut straight
+      // across by a gap of 1.
+      L(polygon(AXIS(8, 8, -45, -6.9, -2.25, 5), [r, 0, 0, r])),
+      L(polygon(AXIS(8, 8, -45, -1.25, 6.9, 5), [0, r, r, 0]), Bt)
+    ]
+  },
+  wand: {
+    label: '魔法棒',
+    key: 'square',
+    layers: [
+      // A light stick laid at 45° with a blue tip printed on it, and the badge's sparkle one gap
+      // past the tip.
+      L(polygon(AXIS(8, 8, -45, -8.1, 1.66, 2.75), 1.375), Bt),
+      L(polygon(AXIS(8, 8, -45, -8.1, 1.66, 2.75), 1.375), { clip: polygon(AXIS(8, 8, -45, -1.5, 4, 6)) }),
+      L(sparkleAt(11, 5, 3))
+    ]
+  },
+  shapes: {
+    label: '形状',
+    key: 'square',
+    layers: [
+      // A blue triangle (the slopes) over a light circle and a light square, each one gap from
+      // the others.
+      L(polygon([[8, 1.42], [13.25, 7.5], [2.75, 7.5]], 1)),
+      L(circ(4.75, 11.25, 2.75), Bt),
+      L(rr(8.5, 8.5, 5.5, 5.5, r), Bt)
     ]
   }
 };

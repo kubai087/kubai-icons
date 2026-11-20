@@ -410,7 +410,15 @@ export const MOTION = {
   eject: { say: '三角向上弹出一下', moves: { 1: { y: [-1, 0] } } },
   italic: { say: '字母一笔写出', moves: { 1: { w: [0, 1] } } },
   'chart-funnel': { say: '数据从上往下逐层流入', moves: { 0: { a: [0.2, 1, 1, 1] }, 1: { a: [0.2, 0.2, 1, 1] }, 2: { a: [0.2, 0.2, 0.2, 1] } } },
-  'chart-radar': { say: '数据从中心向外展开', moves: { 1: { s: [0.3, 1], o: [8, 8.6] } } }
+  'chart-radar': { say: '数据从中心向外展开', moves: { 1: { s: [0.3, 1], o: [8, 8.6] } } },
+  'sticky-note': { say: '便签上两行字依次写出', moves: { 2: { w: [0, 1, 1] }, 3: { w: [0, 0, 1] } } },
+  gauge: { say: '指针从低处扫到高处，停在原位', moves: { 2: { r: [-110, 15, 0], o: [8, 9] } } },
+  eraser: { say: '橡皮来回擦两下', ms: 800, moves: { all: { x: [-0.53, 0.53, -0.53, 0], y: [0.53, -0.53, 0.53, 0] } } },
+  wand: {
+    say: '挥一下魔法棒，星光一闪',
+    moves: { ...same([0, 1], { r: [-8, 5, 0], o: [2.5, 13.5] }), 2: { s: [1, 0.5, 1.15, 1], r: [0, 0, 90, 90], o: [11, 5] } }
+  },
+  shapes: { say: '三个图形依次跳一下', moves: { 0: { y: [-0.75, 0, 0, 0] }, 1: { y: [0, -0.75, 0, 0] }, 2: { y: [0, 0, -0.75, 0] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
