@@ -559,3 +559,11 @@ Object.assign(MOTION, {
   'corner-up-left': { say: '箭头转弯后向左推一下', moves: { 1: { x: [-0.75, 0] } } },
   'badge-verified': { say: '徽章转过一格，对勾重新打上', moves: { 0: { r: 36, o: [8, 8] }, 1: { w: [0, 1] } } }
 });
+
+// Group 7 of the same batch.
+Object.assign(MOTION, {
+  'sticky-notes': { say: '最上面一张便签揭起，又贴回去', moves: same([1, 2], { y: [-0.75, 0], r: [-6, 0], o: [2, 5.5] }) },
+  'cloud-moon': { say: '云飘开，月亮露出来', moves: { 0: { x: [0.5, 0.5], y: [-0.5, -0.5] }, 1: { x: [-0.75, -0.75] } } },
+  'file-diff': { say: '先写加号，再写减号', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  'git-pull-request': { say: '右边的线向上画出，转向主干，箭头随后弹出', moves: { 1: { w: [0, 1, 1] }, 2: { a: [0, 0, 1], s: [0.4, 0.4, 1], o: [8.5, 4] } } }
+});

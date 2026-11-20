@@ -3039,3 +3039,61 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Group 7 of the same batch.
+// Moves a path drawn with absolute M, L, A and Z by (dx, dy): crescent() always centres on (8, 8).
+const shiftPath = (d, dx, dy) => d.replace(/([MLA])([^MLAZ]*)/g, (_, c, a) => {
+  const v = a.trim().split(/[\s,]+/).map(Number);
+  if (c === 'A') return `A${v.slice(0, 5).join(' ')} ${f3(v[5] + dx)} ${f3(v[6] + dy)}`;
+  return c + v.map((x, i) => f3(i % 2 ? x + dy : x + dx)).join(' ');
+});
+// sticky-notes' front note: sticky-note's shape, 8.5 square, at the lower left.
+const NOTE_FRONT = polygon([[2, 5.5], [10.5, 5.5], [10.5, 11], [7.5, 14], [2, 14]], [M, M, 1, 1, M]);
+Object.assign(ICONS, {
+  'sticky-notes': {
+    label: '便签组',
+    key: 'square',
+    layers: [
+      // Two notes: a blue one behind at the upper right, and in front a light one with
+      // sticky-note's folded corner (the 45° fold, its flap clipped in blue), cutting a gap of W
+      // out of the one behind and covering about a third of it, as copy's sheets do.
+      L(rr(5.5, 2, 8.5, 8.5, M)),
+      L(NOTE_FRONT, { ...Bt, gap: W, part: 'front' }),
+      L(NOTE_FRONT, { clip: rr(7.5, 11, 6, 6, [1, 0, 0, 0]), part: 'front' })
+    ]
+  },
+  'cloud-moon': {
+    label: '夜间多云',
+    key: 'wide',
+    layers: [
+      // cloud with moon's crescent in place of the sun: a blue disc of radius 3.75 bitten at the
+      // upper left, so the horns show above the cloud, which covers its lower left.
+      L(shiftPath(crescent(3.75, 6.23, 6.23, 2.79), 3.25, -2.05)),
+      L(pill(1, 8.5, 11.5, 5) + circ(6.25, 8.5, 3.5), { ...Bt, gap: W })
+    ]
+  },
+  'file-diff': {
+    label: '文件对比',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with a blue plus over a minus: lines added and lines taken out.
+      L(SHEET, Bt),
+      L('M8 4.5V8.5M6 6.5H10', { sw: K }),
+      L('M6 11H10', { sw: K })
+    ]
+  },
+  'git-pull-request': {
+    label: '合并请求',
+    key: 'square',
+    layers: [
+      // git-branch's light lines and blue nodes: a trunk between two nodes on the left, and on the
+      // right a line that rises from a node, turns left on a quarter arc and ends in a blue head
+      // (the allowed 45°) pointing at the trunk. Line and head are one element.
+      L('M3.5 3.5V12.5', { sw: 2, ...Bt }),
+      L('M12.5 12.5V6A2 2 0 0 0 10.5 4H8.75', { sw: 2, ...Bt, part: 'arrow' }),
+      L('M9.75 2.75L8.5 4L9.75 5.25', { sw: K, part: 'arrow' }),
+      L(circ(3.5, 3.5, 1.5) + circ(3.5, 12.5, 1.5), { gap: W }),
+      L(circ(12.5, 12.5, 1.5), { gap: W })
+    ]
+  }
+});
