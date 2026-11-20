@@ -2649,3 +2649,118 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// The viewfinder corners shared by focus and the scan icons: light, stroked 2, on the square.
+const CORNERS = ['M3 6.5V5A2 2 0 0 1 5 3H6.5', 'M9.5 3H11A2 2 0 0 1 13 5V6.5', 'M13 9.5V11A2 2 0 0 1 11 13H9.5', 'M6.5 13H5A2 2 0 0 1 3 11V9.5'];
+const viewfinder = () => L(CORNERS.join(''), { sw: 2, ...Bt });
+
+Object.assign(ICONS, {
+  'scan-barcode': {
+    label: '扫描条码',
+    key: 'square',
+    layers: [
+      // focus's light corners round three blue bars of a barcode: the outer two a gap of 1
+      // inside the corners, the middle one shorter so it keeps 2 clear of the corners' ends.
+      viewfinder(),
+      L(rr(5, 5, 1.5, 6, 0.5)),
+      L(rr(7.375, 6, D, 4, 0.5)),
+      L(rr(9.5, 5, 1.5, 6, 0.5))
+    ]
+  },
+  'scan-qr': {
+    label: '扫码',
+    key: 'square',
+    layers: [
+      // focus's light corners round a blue QR code a gap of 1 inside them: three finder squares
+      // (their centres white) and a solid square.
+      viewfinder(),
+      L(rr(5, 5, 2.5, 2.5, 0.75) + rr(8.5, 5, 2.5, 2.5, 0.75) + rr(5, 8.5, 2.5, 2.5, 0.75), { cut: [C(circ(6.25, 6.25, 0.5) + circ(9.75, 6.25, 0.5) + circ(6.25, 9.75, 0.5))] }),
+      L(rr(8.5, 8.5, 2.5, 2.5, 0.75))
+    ]
+  },
+  'scan-text': {
+    label: '识别文字',
+    key: 'square',
+    layers: [
+      // focus's light corners round three blue lines of text, a gap of 1 inside them. One layer
+      // per line.
+      viewfinder(),
+      L(pill(5.75, 5, 4.5, D)),
+      L(pill(5.75, 7.375, 4.5, D)),
+      L(pill(5.75, 9.75, 3, D))
+    ]
+  },
+  remote: {
+    label: '遥控器',
+    key: 'tall',
+    layers: [
+      // phone's light body with a large blue round button near the top and four blue keys in a
+      // square below it.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(circ(8, 6, 2.5)),
+      L([6.75, 9.25].map((x) => circ(x, 10, 0.75) + circ(x, 12.25, 0.75)).join(''))
+    ]
+  },
+  'power-bank': {
+    label: '充电宝',
+    key: 'wide',
+    layers: [
+      // A light body with battery-charging's blue bolt (slopes the bolt needs, GUIDE §1) on the
+      // left and a column of three blue charge lights on the right. One layer per light.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(polygon([[8.25, 3.6], [7.5, 7], [9.5, 7], [4.25, 12.4], [5, 9], [3, 9]], 0.5)),
+      L(circ(12, 10.25, 0.625)),
+      L(circ(12, 8, 0.625)),
+      L(circ(12, 5.75, 0.625))
+    ]
+  },
+  nfc: {
+    label: 'NFC 感应',
+    key: 'square',
+    layers: [
+      // A light card with a blue point and two blue waves going out from it to the right, each
+      // a gap of 1 from the next. One layer per wave.
+      L(rr(2, 2, 12, 12, M), Bt),
+      L(circ(5.4, 8, 1.125)),
+      L('M7.433 5.967A2.875 2.875 0 0 1 7.433 10.033', { sw: K }),
+      L('M9.693 4.765A5.375 5.375 0 0 1 9.693 11.235', { sw: K })
+    ]
+  },
+  antenna: {
+    label: '天线',
+    key: 'square',
+    layers: [
+      // Two blue rods spread in a V (slopes the antenna needs, GUIDE §1) rising from behind a
+      // light domed base, which cuts a gap of W round itself.
+      L('M7 10L4 2.75', { sw: K }),
+      L('M9 10L12 2.75', { sw: K }),
+      L(rr(2, 9, 12, 5, [2.5, 2.5, r, r]), { ...Bt, gap: W })
+    ]
+  },
+  'walkie-talkie': {
+    label: '对讲机',
+    key: 'tall',
+    layers: [
+      // A blue antenna rising from behind a light body, which cuts a gap of W round itself, and
+      // three blue speaker lines 2 in from the sides. One layer per line.
+      L(pill(4.5, 1, 1.5, 5)),
+      L(rr(3, 5, 10, 10, R), { ...Bt, gap: W }),
+      L(pill(5, 7.125, 6, D)),
+      L(pill(5, 9.375, 6, D)),
+      L(pill(5, 11.625, 6, D))
+    ]
+  },
+  'game-console': {
+    label: '游戏机',
+    key: 'portrait',
+    layers: [
+      // A light handheld with a blue screen 2 in from the top and sides, and below it a blue
+      // D-pad and two blue buttons.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(4, 3, 8, 5, 1)),
+      L(pill(4.375, 10.625, 3.25, D) + pill(5.375, 9.625, D, 3.25)),
+      L(circ(9.25, 12.125, 0.75)),
+      L(circ(11.25, 10.375, 0.75))
+    ]
+  }
+});
