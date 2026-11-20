@@ -5,6 +5,7 @@
 //   packages/vue/dist      kubai-icons-vue: one component per icon
 //   packages/static        kubai-icons-static: standalone SVG files and metadata
 //   site/public/data       chunks the docs site loads
+// Each package also carries the two-tone style (icons-duotone/) under a duotone/ path.
 //
 //   node tools/build.mjs [--only core,react,vue,static,site]
 import crypto from 'node:crypto';
@@ -14,6 +15,7 @@ import { build, transform } from 'esbuild';
 import { loadIcons, categories, root, releases, sinceMap, compareVersions } from './registry.mjs';
 import { validate } from './validate.mjs';
 import { renderInner, renderSVG } from '../packages/core/src/render.js';
+import { duoMarkup } from '../packages/core/src/duotone.js';
 
 const args = process.argv.slice(2);
 const opt = (n) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
@@ -61,6 +63,26 @@ const meta = icons.map((ic) => ({
   ...(ic.by ? { by: ic.by } : {}),
   ...(since.has(ic.base ?? ic.name) ? { since: since.get(ic.base ?? ic.name) } : {})
 }));
+// ---------- Two-tone ----------
+// Plain layer data imported from the kubai-duotone skill (tools/duotone-import.mjs). Names
+// follow the layered library where the object is the same, so an icon switches style by its
+// import path; such an icon takes its category and search words from the layered one.
+const DUO_MARKS = ['plus', 'minus', 'check', 'x', 'sparkle', 'off'];
+const duoDir = path.join(root, 'icons-duotone');
+const duoDefs = fs.existsSync(duoDir) ? fs.readdirSync(duoDir).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(fs.readFileSync(path.join(duoDir, f), 'utf8'))) : [];
+const duoNames = new Set(duoDefs.map((d) => d.name));
+const duo = duoDefs.map((d) => {
+  const twin = icons.find((ic) => ic.name === d.name);
+  const cut = d.name.lastIndexOf('-'), mark = d.name.slice(cut + 1), base = d.name.slice(0, cut);
+  const badge = twin?.base ? { base: twin.base, badge: twin.badge } : DUO_MARKS.includes(mark) && duoNames.has(base) ? { base, badge: mark } : {};
+  const category = twin?.category ?? d.category, tags = (twin?.tags ?? d.tags ?? []).filter((t) => !HAN.test(t));
+  if (!categories.some((c) => c.id === category)) throw new Error(`icons-duotone/${d.name}.json: unknown category "${category}"`);
+  return { def: d, markup: duoMarkup(d), meta: { name: d.name, category, tags, ...badge, ...(twin ? {} : { only: true }) } };
+});
+const duoMeta = duo.map((x) => x.meta);
+const duoModule = (x, kit) => `import{duo as i}from'${kit}';export default/*@__PURE__*/i(${JSON.stringify(x.def.name)},${JSON.stringify(x.markup)},${JSON.stringify(x.def.moves)}${x.def.ms ? `,${x.def.ms}` : ''});\n`;
+console.log(`${duo.length} two-tone icons (${duo.filter((x) => x.meta.only).length} only in this style)`);
+
 const version = JSON.parse(fs.readFileSync(path.join(root, 'packages/core/package.json'), 'utf8')).version;
 console.log(`${icons.length} icons (${icons.filter((i) => !i.base).length} bases) rendered in ${Date.now() - t0}ms`);
 
@@ -74,7 +96,7 @@ if (targets.has('core') || targets.has('site')) {
   const min = async (code) => (await transform(code, { minify: true, format: 'esm', target: 'es2020', legalComments: 'none' })).code;
   const read = (f) => fs.readFileSync(f, 'utf8');
   // The runtime and authoring kit, one file each, so every icon shares the same few files.
-  for (const n of ['kit', 'compose', 'icon', 'color', 'motion', 'runtime', 'element']) write(path.join(dist, `${n}.js`), await min(read(path.join(src, `${n}.js`))));
+  for (const n of ['kit', 'compose', 'icon', 'color', 'motion', 'duotone', 'runtime', 'element']) write(path.join(dist, `${n}.js`), await min(read(path.join(src, `${n}.js`))));
   write(path.join(dist, 'api.js'), await min(read(path.join(src, 'index.js'))));
   // Icon and badge definitions, with their kit imports pointed at dist/kit.js.
   const relink = (code, up) => code.replace(/(['"])(?:\.\.\/)+packages\/core\/src\/([a-z]+)\.js\1/g, (_, q, n) => `${q}${'../'.repeat(up)}${n}.js${q}`);
@@ -94,9 +116,16 @@ if (targets.has('core') || targets.has('site')) {
   // after downloading the file before it, so the shared code is merged into one file and each
   // icon into one more. Icon files import the shared code back from the element, already loaded.
   const cdn = { bundle: true, format: 'esm', minify: true, target: 'es2020', legalComments: 'none', logLevel: 'warning' };
-  await build({ ...cdn, outfile: path.join(dist, 'cdn/element.js'), stdin: { resolveDir: src, contents: `export{KubaiIconElement}from'./element.js';export*from'./kit.js';export{withBadge,withSlash}from'./compose.js';export{icon}from'./icon.js';` } });
+  await build({ ...cdn, outfile: path.join(dist, 'cdn/element.js'), stdin: { resolveDir: src, contents: `export{KubaiIconElement}from'./element.js';export*from'./kit.js';export{withBadge,withSlash}from'./compose.js';export{icon}from'./icon.js';export{duo}from'./duotone.js';` } });
   const shared = { name: 'shared-runtime', setup: (b) => b.onResolve({ filter: /^(\.\.\/)+(kit|compose|icon)\.js$/ }, () => ({ path: '../element.js', external: true })) };
   await build({ ...cdn, outdir: path.join(dist, 'cdn/icons'), entryPoints: built.map(({ ic }) => path.join(dist, 'icons', `${ic.name}.js`)), plugins: [shared] });
+  // Two-tone: kubai-icons/duotone, the same API with the two-tone icons.
+  for (const x of duo) write(path.join(dist, 'duotone', 'icons', `${x.def.name}.js`), duoModule(x, '../../duotone.js'));
+  write(path.join(dist, 'duotone', 'index.js'), `export*from'../api.js';\n${duo.map((x) => `export{default as ${pascal(x.def.name)}}from'./icons/${x.def.name}.js';`).join('\n')}\n`);
+  write(path.join(dist, 'duotone', 'dynamic.js'), `// Loads a two-tone icon by name; each icon stays its own chunk.\nconst l={\n${duo.map((x) => `${JSON.stringify(x.def.name)}:()=>import('./icons/${x.def.name}.js'),`).join('\n')}\n};\nexport const names=Object.keys(l);\nexport function loadIcon(n){return Object.hasOwn(l,n)?l[n]().then((m)=>m.default):Promise.reject(new Error('Unknown icon: '+n));}\n`);
+  write(path.join(dist, 'duotone', 'icons.json'), JSON.stringify(duoMeta));
+  const duoShared = { name: 'shared-duotone', setup: (b) => b.onResolve({ filter: /^(\.\.\/)+duotone\.js$/ }, () => ({ path: '../../element.js', external: true })) };
+  await build({ ...cdn, outdir: path.join(dist, 'cdn/duotone/icons'), entryPoints: duo.map((x) => path.join(dist, 'duotone', 'icons', `${x.def.name}.js`)), plugins: [duoShared] });
   write(path.join(dist, 'icons.json'), JSON.stringify(meta));
   write(path.join(dist, 'categories.json'), JSON.stringify(publicCategories));
   const iconType = `import type { KubaiIconData } from './types.js';\n`;
@@ -110,7 +139,10 @@ if (targets.has('core') || targets.has('site')) {
   write(path.join(dist, 'icons', 'index.d.ts'), '');
   // Every icon module has the same type, so one declaration serves them all and installs stay small.
   write(path.join(dist, 'icon-module.d.ts'), `import type { KubaiIconData } from './types.js';\ndeclare const icon: KubaiIconData;\nexport default icon;\n`);
-  console.log(`kubai-icons → packages/core/dist`);
+  write(path.join(dist, 'api.d.ts'), `${iconType}export * from './types.js';\n${fs.readFileSync(path.join(core, 'types/api.d.ts'), 'utf8')}`);
+  write(path.join(dist, 'duotone', 'index.d.ts'), `import type { KubaiIconData } from '../types.js';\nexport * from '../api.js';\n${duo.map((x) => `/** ${x.def.name} (two-tone) */\nexport declare const ${pascal(x.def.name)}: KubaiIconData;`).join('\n')}\n`);
+  write(path.join(dist, 'duotone', 'dynamic.d.ts'), `import type { KubaiIconData } from '../types.js';\nexport type IconName =\n${duo.map((x) => `  | ${JSON.stringify(x.def.name)}`).join('\n')};\nexport declare const names: IconName[];\nexport declare function loadIcon(name: IconName | (string & {})): Promise<KubaiIconData>;\n`);
+  console.log(`kubai-icons → packages/core/dist (and duotone/)`);
 }
 
 // ---------- kubai-icons-react / kubai-icons-vue ----------
@@ -130,20 +162,29 @@ for (const fw of ['react', 'vue']) {
   write(path.join(dist, 'index.js'), `export { createKubaiIcon, KubaiIcon } from './create.js';\nexport { setVariant, VARIANTS } from 'kubai-icons/runtime';\n${lines.join('\n')}\n`);
   write(path.join(dist, 'index.d.ts'), `export * from './create.js';\nexport { setVariant, VARIANTS } from 'kubai-icons/runtime';\nimport type { KubaiIconComponent } from './create.js';\n${icons.map((ic) => { const P = pascal(ic.name); return `/** ${ic.name} */\nexport declare const ${P}: KubaiIconComponent;\nexport declare const ${P}Icon: KubaiIconComponent;`; }).join('\n')}\n`);
   write(path.join(dist, 'dynamic.js'), fs.readFileSync(path.join(pkg, 'dynamic.template.js'), 'utf8'));
-  console.log(`kubai-icons-${fw} → packages/${fw}/dist`);
+  // Two-tone: the same components from kubai-icons-<fw>/duotone.
+  for (const x of duo) write(path.join(dist, 'duotone', 'icons', `${x.def.name}.js`), `${fw === 'react' ? "'use client';\n" : ''}import data from 'kubai-icons/duotone/icons/${x.def.name}';\nimport { createKubaiIcon } from '../../create.js';\nexport default /* @__PURE__ */ createKubaiIcon('${pascal(x.def.name)}', data);\n`);
+  write(path.join(dist, 'duotone', 'index.js'), `export { createKubaiIcon, KubaiIcon } from '../create.js';\n${duo.map((x) => { const P = pascal(x.def.name); return `export { default as ${P}, default as ${P}Icon } from './icons/${x.def.name}.js';`; }).join('\n')}\n`);
+  write(path.join(dist, 'duotone', 'index.d.ts'), `export * from '../create.js';\nimport type { KubaiIconComponent } from '../create.js';\n${duo.map((x) => { const P = pascal(x.def.name); return `/** ${x.def.name} (two-tone) */\nexport declare const ${P}: KubaiIconComponent;\nexport declare const ${P}Icon: KubaiIconComponent;`; }).join('\n')}\n`);
+  write(path.join(dist, 'duotone', 'dynamic.js'), fs.readFileSync(path.join(pkg, 'dynamic.template.js'), 'utf8').replace("'kubai-icons/dynamic'", "'kubai-icons/duotone/dynamic'").replace("'./create.js'", "'../create.js'"));
+  write(path.join(dist, 'duotone', 'dynamic.d.ts'), fs.readFileSync(path.join(pkg, 'src', 'dynamic.d.ts'), 'utf8').replace("'kubai-icons/dynamic'", "'kubai-icons/duotone/dynamic'").replace("'./create.js'", "'../create.js'"));
+  console.log(`kubai-icons-${fw} → packages/${fw}/dist (and duotone/)`);
 }
 
 // ---------- kubai-icons-static ----------
 if (targets.has('static')) {
   const pkg = path.join(root, 'packages/static');
-  for (const d of ['svg', 'svg-soft']) clean(path.join(pkg, d));
+  for (const d of ['svg', 'svg-soft', 'svg-duotone']) clean(path.join(pkg, d));
+  // Two-tone files in the default colours; the API recolours them (?color=).
+  for (const x of duo) write(path.join(pkg, 'svg-duotone', `${x.def.name}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24" fill="none">${duoMarkup(x.def, { colors: { a: '#5A76F2', b: '#BDC8FA' } }).replace(/<g data-l="[^"]*">/g, '<g>').replace(/ pathLength="1"/g, '').replace(/__K__/g, 'd')}</svg>\n`);
+  write(path.join(pkg, 'duotone.json'), JSON.stringify(duoMeta));
   for (const ic of icons) {
     write(path.join(pkg, 'svg', `${ic.name}.svg`), renderSVG(ic, { size: 24 }) + '\n');
     write(path.join(pkg, 'svg-soft', `${ic.name}.svg`), renderSVG(ic, { size: 24, accent: '#6F87B5', variant: 'soft' }) + '\n');
   }
   write(path.join(pkg, 'icons.json'), JSON.stringify(meta));
   write(path.join(pkg, 'categories.json'), JSON.stringify(publicCategories));
-  console.log(`kubai-icons-static → packages/static (svg/, svg-soft/)`);
+  console.log(`kubai-icons-static → packages/static (svg/, svg-soft/, svg-duotone/)`);
 }
 
 // ---------- site data ----------

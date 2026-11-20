@@ -3,6 +3,7 @@
 
 import { EASE, DURATION, PHASE, interp } from './motion.js';
 import { VARIANTS } from './color.js';
+import { animateDuotone } from './duotone.js';
 
 let reduced = false;
 try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* not a browser */ }
@@ -17,6 +18,8 @@ const now = () => (typeof performance !== 'undefined' ? performance.now() : Date
  * Returns { hover(on), state(next), hovered, active, svg, destroy() }.
  */
 export function animate(svg, icon, { state = {} } = {}) {
+  // Two-tone icons carry their motion as poses, played by their own runtime.
+  if (icon.style === 'duotone') return animateDuotone(svg, icon);
   const E = {};
   for (const el of svg.querySelectorAll('[data-n]')) E[el.getAttribute('data-n')] = el;
   // An outlined path is masked by a copy of its own shape; keep the copy in step. A mask

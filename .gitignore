@@ -7,6 +7,8 @@ packages/*/dist/
 packages/core/.gen/
 packages/static/svg/
 packages/static/svg-soft/
+packages/static/svg-duotone/
+packages/static/duotone.json
 packages/static/icons.json
 packages/static/categories.json
 packages/*/LICENSE

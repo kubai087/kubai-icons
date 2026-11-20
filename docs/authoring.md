@@ -123,6 +123,16 @@ details and thin gaps. [`review.md`](review.md) explains each finding and the vi
 checklist that goes with it. A new icon should come out of it with no findings, or with
 each remaining one confirmed on a sheet as intended.
 
+## Two-tone icons
+
+The two-tone style (`kubai-icons/duotone` and the `duotone` paths of the other packages) is drawn with the `kubai-duotone` skill in `styles/duotone/`, not written here by hand. Draw and check an icon there (`styles/duotone/GUIDE.md`, `node styles/duotone/check.mjs --only name`), then import it:
+
+```bash
+node tools/duotone-import.mjs --only name
+```
+
+This writes `icons-duotone/<name>.json`: the icon's layers and hover motion as plain data, which `tools/build.mjs` renders into the packages. Use the layered icon's name when the object is the same, so the two styles switch by import path; the icon then takes its category and search words from the layered one. An icon the layered library doesn't have needs `--category` (and `--tags`). `node tools/duotone-import.mjs --check`, also run by the tests, fails when `icons-duotone/` is out of step with the skill.
+
 ## Release versions
 
 `icons/versions.json` records the release each icon first shipped in. Leave a new icon out of

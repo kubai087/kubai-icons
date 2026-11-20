@@ -2,8 +2,17 @@
 export interface KubaiIconData {
   readonly name: string;
   readonly markup: string;
-  readonly target: (hover: boolean, state: Record<string, unknown>) => Record<string, unknown>;
-  readonly draw: (params: any, elements: Record<string, Element>, instance: object) => void;
+  /** Layered icons: the motion as a target pose and a draw function. */
+  readonly target?: (hover: boolean, state: Record<string, unknown>) => Record<string, unknown>;
+  readonly draw?: (params: any, elements: Record<string, Element>, instance: object) => void;
+  /** 'duotone' for the two-tone style (kubai-icons/duotone); absent for layered icons. */
+  readonly style?: 'duotone';
+  /** The icon's own viewBox when it isn't the layered one (two-tone: '0 0 16 16'). */
+  readonly viewBox?: string;
+  /** Two-tone icons: the hover motion, as poses of named layers. */
+  readonly moves?: Record<string, Record<string, unknown>>;
+  /** Two-tone icons: the hover motion's length in ms, when it isn't worked out from its keyframes. */
+  readonly ms?: number;
   /** True when a click toggles the `active` state, as on the bookmark. */
   readonly tap: boolean;
   /** For badged icons: the badge's semantic colour. */

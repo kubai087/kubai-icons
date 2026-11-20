@@ -50,6 +50,11 @@
 - **变体的动效由角标来做。** 加号转 90°，对勾和斜线重新画一遍，星光缩小后放大再转一下。
 - **自检能识别切口。** 量间距和遮挡时，切口里的部分不算，缺口的边按画出来的样子量。
 
+### 和图标库对接
+
+- **名字和图标库一致。** 物体相同的图标沿用 kubai-icons 图标库的名字，切换风格时只需要改 import 路径：`chat` 改为 `message-square`，`battery` 改为 `battery-full`，`edit` 改为 `pencil`，`location` 改为 `map-pin`，`cart` 改为 `shopping-cart`。
+- **导入图标库。** 用这个 skill 画好并通过自检的图标，用仓库里的 `tools/duotone-import.mjs` 导入 `icons-duotone/`，再由图标库打包成 `kubai-icons/duotone` 等。
+
 ### 自检和工具
 
 - 自检量关键形状、主色占比、颜色、间距、遮挡，以及后来加上的 `size`、`inset`、`motion`、`reach` 四条规则。被裁切的图层按裁切后的范围量关键形状。

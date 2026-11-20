@@ -35,10 +35,12 @@ const styleOf = (o) => Object.entries(o).map(([k, v]) => `${k}:${v}`).join(';');
  * colour, or 'semantic'), title (accessible name), className, id.
  */
 export function toSvg(ic, { size = 24, color, variant, badgeColor, title, className, id = uid(), attrs = {} } = {}) {
-  const style = { ...(VARIANTS[variant] || {}), ...(color ? { color } : {}), ...badgeStyle(ic, badgeColor) };
+  // A two-tone icon has its own two colours; the layered variants and badge ink don't apply.
+  const duo = ic.style === 'duotone';
+  const style = { ...(duo ? {} : VARIANTS[variant] || {}), ...(color ? { color } : {}), ...(duo ? {} : badgeStyle(ic, badgeColor)) };
   const a = {
-    xmlns: 'http://www.w3.org/2000/svg', viewBox: VIEWBOX, width: size, height: size, fill: 'none', overflow: 'visible',
-    class: ['kubai-icon', `kubai-icon-${ic.name}`, className].filter(Boolean).join(' '),
+    xmlns: 'http://www.w3.org/2000/svg', viewBox: ic.viewBox || VIEWBOX, width: size, height: size, fill: 'none', overflow: 'visible',
+    class: ['kubai-icon', duo && 'kubai-duotone', `kubai-icon-${ic.name}`, className].filter(Boolean).join(' '),
     ...(title ? { role: 'img' } : { 'aria-hidden': 'true' }),
     ...(Object.keys(style).length ? { style: styleOf(style) } : {}),
     ...attrs

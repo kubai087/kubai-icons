@@ -18,6 +18,10 @@
     "./runtime": { "types": "./dist/runtime.d.ts", "default": "./dist/runtime.js" },
     "./icons.json": "./dist/icons.json",
     "./categories.json": "./dist/categories.json",
+    "./duotone": { "types": "./dist/duotone/index.d.ts", "default": "./dist/duotone/index.js" },
+    "./duotone/icons/*": { "types": "./dist/icon-module.d.ts", "default": "./dist/duotone/icons/*.js" },
+    "./duotone/dynamic": { "types": "./dist/duotone/dynamic.d.ts", "default": "./dist/duotone/dynamic.js" },
+    "./duotone/icons.json": "./dist/duotone/icons.json",
     "./package.json": "./package.json"
   },
   "files": ["dist", "LICENSE", "README.md"],

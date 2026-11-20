@@ -12,6 +12,9 @@
     ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
     "./icons/*": { "types": "./dist/icon-module.d.ts", "default": "./dist/icons/*.js" },
     "./dynamic": { "types": "./dist/dynamic.d.ts", "default": "./dist/dynamic.js" },
+    "./duotone": { "types": "./dist/duotone/index.d.ts", "default": "./dist/duotone/index.js" },
+    "./duotone/icons/*": { "types": "./dist/icon-module.d.ts", "default": "./dist/duotone/icons/*.js" },
+    "./duotone/dynamic": { "types": "./dist/duotone/dynamic.d.ts", "default": "./dist/duotone/dynamic.js" },
     "./package.json": "./package.json"
   },
   "files": ["dist", "LICENSE", "README.md"],

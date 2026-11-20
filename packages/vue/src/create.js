@@ -50,15 +50,16 @@ function setup(getIcon) {
       ...attrs,
       ref: el,
       xmlns: 'http://www.w3.org/2000/svg',
-      viewBox: VIEWBOX,
+      viewBox: icon.value.viewBox || VIEWBOX,
       width: p.size,
       height: p.size,
       fill: 'none',
       overflow: 'visible',
       role: p.title ? 'img' : undefined,
       'aria-hidden': p.title ? undefined : 'true',
-      class: ['kubai-icon', `kubai-icon-${icon.value.name}`, attrs.class],
-      style: [VARIANTS[p.variant], p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style],
+      class: ['kubai-icon', icon.value.style === 'duotone' && 'kubai-duotone', `kubai-icon-${icon.value.name}`, attrs.class],
+      // Two-tone icons have their own two colours: no layered variant or badge ink.
+      style: icon.value.style === 'duotone' ? [p.color ? { color: p.color } : null, attrs.style] : [VARIANTS[p.variant], p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style],
       innerHTML: html.value
     });
   };

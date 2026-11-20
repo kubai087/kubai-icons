@@ -7,6 +7,7 @@ This repository holds three things under three licences.
 [`LICENSE-ICONS`](LICENSE-ICONS) (MIT) covers:
 
 - `icons/` and `badges/`: every icon and badge definition;
+- `icons-duotone/`: the two-tone icons, imported from the skill's style as plain layer data;
 - `packages/`: `kubai-icons`, `kubai-icons-react`, `kubai-icons-vue` and `kubai-icons-static`, including their built files.
 
 Use, change and redistribute these freely, in commercial work or not. Keep the copyright notice with the source; credit in the products you ship is welcome but not required.

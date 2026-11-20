@@ -1,5 +1,5 @@
 import type { KubaiIconData, KubaiController, KubaiVariant } from './types.js';
-export declare function animate(svg: SVGSVGElement | Element, icon: Pick<KubaiIconData, 'target' | 'draw'>, options?: { state?: Record<string, unknown> }): KubaiController;
+export declare function animate(svg: SVGSVGElement | Element, icon: KubaiIconData, options?: { state?: Record<string, unknown> }): KubaiController;
 export declare function bindTrigger(target: Element, controller: KubaiController, icon: Pick<KubaiIconData, 'tap'>, onToggle?: (active: boolean) => void): () => void;
 export declare function badgeStyle(icon: Pick<KubaiIconData, 'tone'>, badgeColor?: string): Record<string, string>;
 export declare function uid(): string;

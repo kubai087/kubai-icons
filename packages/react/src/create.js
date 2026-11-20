@@ -21,6 +21,8 @@ export const KubaiIcon = forwardRef(function KubaiIcon(
   const toggleRef = useRef(onActiveChange);
   toggleRef.current = onActiveChange;
   const controlled = active !== undefined;
+  // Two-tone icons have their own two colours: no layered variant or badge ink.
+  const duo = icon.style === 'duotone';
 
   useEffect(() => {
     const svg = svgRef.current;
@@ -52,15 +54,15 @@ export const KubaiIcon = forwardRef(function KubaiIcon(
   return createElement('svg', {
     ref: setRef,
     xmlns: 'http://www.w3.org/2000/svg',
-    viewBox: VIEWBOX,
+    viewBox: icon.viewBox || VIEWBOX,
     width: size,
     height: size,
     fill: 'none',
     overflow: 'visible',
     role: title ? 'img' : undefined,
     'aria-hidden': title ? undefined : true,
-    className: ['kubai-icon', `kubai-icon-${icon.name}`, className].filter(Boolean).join(' '),
-    style: { ...VARIANTS[variant], ...(color ? { color } : null), ...badgeStyle(icon, badgeColor), ...style },
+    className: ['kubai-icon', duo && 'kubai-duotone', `kubai-icon-${icon.name}`, className].filter(Boolean).join(' '),
+    style: { ...(duo ? null : VARIANTS[variant]), ...(color ? { color } : null), ...(duo ? null : badgeStyle(icon, badgeColor)), ...style },
     dangerouslySetInnerHTML: inner,
     ...rest
   });

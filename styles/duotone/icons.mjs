@@ -224,7 +224,7 @@ export const ICONS = {
       L('M5.5 9.25a2.5 2.5 0 0 0 5 0', { sw: D })
     ]
   },
-  chat: {
+  'message-square': {
     label: '对话',
     key: 'landscape',
     layers: [
@@ -312,7 +312,7 @@ export const ICONS = {
       L(rr(2, 6, 12, 9, [S, S, R, R]), { ...Bt, gap: W })
     ]
   },
-  battery: {
+  'battery-full': {
     label: '电池',
     key: 'wide',
     layers: [
@@ -435,7 +435,7 @@ export const ICONS = {
       L(polygon([[11, 0.65], [14.5, 4.15], [11, 7.65]], 1), { gap: W, part: 'arrow' })
     ]
   },
-  edit: {
+  'pencil': {
     label: '编辑',
     key: 'square',
     layers: [
@@ -484,7 +484,7 @@ export const ICONS = {
       L(rr(1, 11.5, 14, 2, t))
     ]
   },
-  location: {
+  'map-pin': {
     label: '定位',
     key: 'circle',
     layers: [
@@ -514,7 +514,7 @@ export const ICONS = {
       L(pill(4, 7, 8, 2))
     ]
   },
-  cart: {
+  'shopping-cart': {
     label: '购物车',
     key: 'square',
     layers: [

@@ -9,7 +9,7 @@ export declare function uid(): string;
 export declare function badgeStyle(icon: KubaiIconData, badgeColor?: string): Record<string, string>;
 /** Full SVG markup for one icon instance (server rendering, innerHTML, strings). */
 export declare function toSvg(icon: KubaiIconData, options?: KubaiSvgOptions): string;
-export declare function animate(svg: Element, icon: Pick<KubaiIconData, 'target' | 'draw'>, options?: { state?: Record<string, unknown> }): KubaiController;
+export declare function animate(svg: Element, icon: KubaiIconData, options?: { state?: Record<string, unknown> }): KubaiController;
 export declare function bindTrigger(target: Element, controller: KubaiController, icon: Pick<KubaiIconData, 'tap'>, onToggle?: (active: boolean) => void): () => void;
 /** Creates an animated <svg> element. */
 export declare function createIcon(icon: KubaiIconData, options?: KubaiSvgOptions & { trigger?: KubaiTrigger; active?: boolean }): SVGSVGElement & { kubai?: KubaiController };
