@@ -161,7 +161,8 @@ export function animateDuotone(svg, ic) {
     const run = on ? long : DUO_BACK, t0 = now();
     const tick = (t) => {
       if (stopped) return;
-      const q = Math.min(1, ((typeof t === 'number' ? t : now()) - t0) / run);
+      // A frame can carry a timestamp from just before the motion started; progress never goes below 0.
+      const q = Math.max(0, Math.min(1, ((typeof t === "number" ? t : now()) - t0) / run));
       els.forEach((el, i) => { el.cur = { ...el.cur, ...values(el.p, q, from[i], on) }; paint(el); });
       if (q < 1) frame = raf(tick);
     };
