@@ -2558,3 +2558,143 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: home and tools (group 2). Slim hand tools lie at 45°, as pencil, eraser and wand do:
+// upright they fill only half the square.
+const SQ = Math.SQRT1_2;
+const along = (tt) => [f3(8 + tt * SQ), f3(8 - tt * SQ)]; // a point on the 45° axis through (8, 8)
+Object.assign(ICONS, {
+  hammer: {
+    label: '锤子',
+    key: 'square',
+    layers: [
+      // A light head, its claw on the left a little thinner, and one gap below it a blue handle
+      // on the centre line of the striking block.
+      L(rr(5, 2, 9, 4.5, r) + rr(2, 2.75, 3.5, 3, [1.5, 0, 0, 1.5]), Bt),
+      L(rr(8.25, 7.5, 2.5, 6.5, 1))
+    ]
+  },
+  wrench: {
+    label: '扳手',
+    key: 'square',
+    layers: [
+      // A light handle laid at 45° and a blue open-ended head in front of it, the jaw a slot cut
+      // along the handle's line.
+      L(polygon(AXIS(8, 8, -45, -7.9, 1.5, 2.75), 1.375), Bt),
+      L(circ(...along(4.25), 3), { gap: W, cut: [C(rot(...along(6.5), 4.5, 2.25, -45, 1.125))] })
+    ]
+  },
+  screwdriver: {
+    label: '螺丝刀',
+    key: 'square',
+    layers: [
+      // A thick light handle laid at 45° and, one gap past its end, a thin blue shaft.
+      L(polygon(AXIS(8, 8, -45, -7.75, -0.75, 3.5), 1.75), Bt),
+      L(polygon(AXIS(8, 8, -45, 0.25, 7.8, 1.75), 0.5))
+    ]
+  },
+  ruler: {
+    label: '直尺',
+    key: 'flat',
+    layers: [
+      // A light rule with four blue ticks hanging from its top edge, long and short in turn.
+      L(rr(1, 4, 14, 8, M), Bt),
+      ...[[4.25, 3.75], [6.75, 2.5], [9.25, 3.75], [11.75, 2.5]].map(([x, h]) => L(rr(x - 0.625, 3, D, h + 1, [0, 0, 0.625, 0.625]), { clip: rr(1, 4, 14, 8, M) }))
+    ]
+  },
+  toolbox: {
+    label: '工具箱',
+    key: 'landscape',
+    layers: [
+      // A wide blue handle behind a light box whose lid is cut off by a straight seam; a blue
+      // latch laid over the seam cuts a gap of W round itself.
+      L('M3.5 5.5V3.75A1 1 0 0 1 4.5 2.75H11.5A1 1 0 0 1 12.5 3.75V5.5', { sw: K }),
+      L(rr(1, 5, 14, 3.5, [M, M, 0, 0]), { ...Bt, gap: W }),
+      L(rr(1, 9.5, 14, 4.5, [0, 0, M, M]), Bt),
+      L(rr(6.5, 7, 3, 4, 1), { gap: W })
+    ]
+  },
+  ladder: {
+    label: '梯子',
+    key: 'tall',
+    layers: [
+      // Two light rails and three blue rungs, each one gap from the rails. One layer per rung.
+      L(rr(3, 1, 2, 14, 1) + rr(11, 1, 2, 14, 1), Bt),
+      L(pill(6, 3.25, 4, 1.5)),
+      L(pill(6, 7.25, 4, 1.5)),
+      L(pill(6, 11.25, 4, 1.5))
+    ]
+  },
+  paintbrush: {
+    label: '画笔',
+    key: 'square',
+    layers: [
+      // Laid at 45°: blue bristles with a round tip, and one gap past them a thin light handle.
+      L(polygon(AXIS(8, 8, -45, -7.6, -2.75, 4), [2, 0, 0, 2])),
+      L(polygon(AXIS(8, 8, -45, -1.75, 7.95, 2.5), 1.25), Bt)
+    ]
+  },
+  'paint-roller': {
+    label: '滚刷',
+    key: 'square',
+    layers: [
+      // A light roller, a blue frame bent from its end down to the centre, and a light grip in
+      // front of the frame's end, cutting a gap of W round itself.
+      L('M10 4H12.5A0.75 0.75 0 0 1 13.25 4.75V6.75A1 1 0 0 1 12.25 7.75H9A1 1 0 0 0 8 8.75V11', { sw: K }),
+      L(rr(2, 2, 9.5, 4, r), { ...Bt, gap: W }),
+      L(rr(6.75, 10, 2.5, 4, 1.25), { ...Bt, gap: W })
+    ]
+  },
+  nail: {
+    label: '钉子',
+    key: 'tall',
+    layers: [
+      // A blue head and, one gap below, a light shank ending in a point (slopes: a nail is known
+      // by its point). The point is drawn past the keyline so its rounded tip reaches it.
+      L(rr(3, 1, 10, 2.5, q)),
+      L(polygon([[6.25, 4.5], [9.75, 4.5], [9.75, 11.5], [8, 15.7], [6.25, 11.5]], [0.75, 0.75, 0, 0.5, 0]), Bt)
+    ]
+  },
+  'hard-hat': {
+    label: '安全帽',
+    key: 'wide',
+    layers: [
+      // A light dome with a blue ridge down its middle, and a blue brim one gap below it.
+      L('M2 10.5V8.5A6 6 0 0 1 14 8.5V10.5Z', Bt),
+      L(pill(7.25, 4.5, 1.5, 4)),
+      L(pill(1, 11.5, 14, 2))
+    ]
+  },
+  'tape-measure': {
+    label: '卷尺',
+    key: 'square',
+    layers: [
+      // A light case with a blue hub, and one gap below it the blue tape running out to the
+      // right, ending in a hook that turns up.
+      L(rr(2, 2, 9.5, 9, M), Bt),
+      L(circ(6.75, 6.5, 2.25)),
+      L(poly([{ x: 6, y: 12, c: 0.5 }, { x: 12.5, y: 12, c: 0 }, { x: 12.5, y: 10, c: 0.5 }, { x: 14, y: 10, c: 0.5 }, { x: 14, y: 14, c: 0.75 }, { x: 6, y: 14, c: 0.5 }]))
+    ]
+  },
+  drill: {
+    label: '电钻',
+    key: 'landscape',
+    layers: [
+      // A light body, a blue bit one gap in front of it on its centre line, and a blue grip one
+      // gap below its back half.
+      L(rr(5, 2, 10, 6, M), Bt),
+      L(pill(1, 4.375, 3, D)),
+      L(rr(9.5, 9, 4, 5, [S, S, r, r]))
+    ]
+  },
+  'spirit-level': {
+    label: '水平仪',
+    key: 'flat',
+    layers: [
+      // A light bar, a blue vial in the middle, and a light bubble centred in the vial.
+      L(rr(1, 4, 14, 8, M), Bt),
+      L(pill(4, 6.25, 8, 3.5)),
+      L(circ(8, 8, 1), Bt)
+    ]
+  }
+});

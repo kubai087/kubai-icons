@@ -467,3 +467,23 @@ Object.assign(MOTION, {
   hanger: { say: '衣架挂在钩上晃动', moves: { all: { r: [4, -3, 1.5, 0], o: [8, 3.25] } } },
   toaster: { say: '面包烤好，弹了出来', moves: { 0: { y: [-1.25, -1] } } }
 });
+
+// Batch: home and tools (group 2)
+Object.assign(MOTION, {
+  hammer: { say: '锤子抬起，敲下去', moves: { all: { r: [-6, 3, 0], o: [9.5, 14] } } },
+  wrench: { say: '扳手卡住螺母，拧一下', moves: { all: { r: [-8, 0], o: [12.6, 3.4] } } },
+  screwdriver: { say: '螺丝刀一下下往里推', ms: 700, moves: { all: { x: [0.5, 0, 0.5, 0], y: [-0.5, 0, -0.5, 0] } } },
+  ruler: {
+    say: '刻度从左到右依次画出',
+    moves: Object.fromEntries([1, 2, 3, 4].map((i) => [i, { sy: [0, 1, 1, 1].map((v, k) => (k < i - 1 ? 0 : 1)), o: [8, 4] }]))
+  },
+  toolbox: { say: '工具箱的盖子掀开', moves: same([0, 1], { y: [-0.75, -0.75], r: [-4, -4], o: [1, 8.5] }) },
+  ladder: { say: '一级一级往上爬', moves: { 3: { a: [0.2, 1, 1, 1] }, 2: { a: [0.2, 0.2, 1, 1] }, 1: { a: [0.2, 0.2, 0.2, 1] } } },
+  paintbrush: { say: '画笔来回刷两下', ms: 800, moves: { all: { x: [-0.5, 0.5, -0.5, 0], y: [-0.5, 0.5, -0.5, 0] } } },
+  'paint-roller': { say: '滚刷上下刷一遍', moves: { all: { y: [-0.75, 0.75, 0] } } },
+  nail: { say: '钉子被一下下敲进去', ms: 700, moves: { all: { y: [0.75, 0, 0.75, 0] } } },
+  'hard-hat': { say: '戴上安全帽', moves: { all: { y: [-1, 0.25, 0], o: [8, 13.5] } } },
+  'tape-measure': { say: '卷尺收回去，又拉出来', moves: { 2: { sx: [0.55, 1], o: [6, 13] } } },
+  drill: { say: '开钻，机身微微抖动', ms: 700, moves: { all: { x: [-0.3, 0.3, -0.3, 0.3, 0] } } },
+  'spirit-level': { say: '水平仪一晃，气泡跑开又回到中间', moves: { all: { r: [4, -3, 0] }, 2: { x: [1.75, -1.25, 0] } } }
+});
