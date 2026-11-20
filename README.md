@@ -205,7 +205,7 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 
 <br />
 
-Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 81 examples with their hover motion (eight of them variants with a badge: plus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
+Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 92 examples with their hover motion (eight of them variants with a badge: plus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
 
 It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [latest release](https://github.com/kubai087/kubai-icons/releases/latest) and unzip it into your skills folder:
 
