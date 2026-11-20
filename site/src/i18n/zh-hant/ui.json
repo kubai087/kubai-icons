@@ -240,5 +240,9 @@
  "Layered": "分層",
  "Two-tone": "雙色",
  "Pause animations": "暫停動畫",
- "{count} two-tone": "{count} 個雙色"
+ "{count} two-tone": "{count} 個雙色",
+ "Browse two-tone icons": "瀏覽雙色圖示",
+ "Now in two-tone": "現已提供雙色風格",
+ "Read the guide": "查看指南",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "同一套圖示新增面性畫法：16 網格，淺色主體配主色點綴，懸停時同樣播放動效。"
 }

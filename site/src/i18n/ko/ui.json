@@ -240,5 +240,9 @@
  "Layered": "레이어",
  "Two-tone": "투톤",
  "Pause animations": "애니메이션 일시정지",
- "{count} two-tone": "투톤 {count}개"
+ "{count} two-tone": "투톤 {count}개",
+ "Browse two-tone icons": "투톤 아이콘 둘러보기",
+ "Now in two-tone": "이제 투톤으로도",
+ "Read the guide": "가이드 읽기",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "같은 아이콘을 16 그리드 위의 면 형태로도 그렸습니다. 밝은 본체에 원하는 색으로 포인트를 줍니다. 호버하면 여전히 움직입니다."
 }

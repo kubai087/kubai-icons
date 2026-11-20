@@ -240,5 +240,9 @@
  "Layered": "Слоистый",
  "Two-tone": "Двухцветный",
  "Pause animations": "Приостановить анимацию",
- "{count} two-tone": "{count} двухцветных"
+ "{count} two-tone": "{count} двухцветных",
+ "Browse two-tone icons": "Смотреть двухцветные иконки",
+ "Now in two-tone": "Теперь и в двух цветах",
+ "Read the guide": "Читать руководство",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Те же иконки, нарисованные ещё и сплошными формами на сетке 16: светлое тело и акценты в вашем цвете. Каждая по-прежнему движется при наведении."
 }

@@ -240,5 +240,9 @@
  "Layered": "レイヤー",
  "Two-tone": "2色",
  "Pause animations": "アニメーションを一時停止",
- "{count} two-tone": "2色 {count} 個"
+ "{count} two-tone": "2色 {count} 個",
+ "Browse two-tone icons": "2色アイコンを見る",
+ "Now in two-tone": "2色スタイルが登場",
+ "Read the guide": "ガイドを読む",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "同じアイコンを、16 グリッド上の塗りの形でも描きました。淡い本体にアクセントカラーを添えています。ホバーで動くのはこれまでどおりです。"
 }

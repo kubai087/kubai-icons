@@ -240,5 +240,9 @@
  "Layered": "परतदार",
  "Two-tone": "दो रंग",
  "Pause animations": "एनिमेशन रोकें",
- "{count} two-tone": "{count} दो रंग वाले"
+ "{count} two-tone": "{count} दो रंग वाले",
+ "Browse two-tone icons": "दो रंग वाले आइकन देखें",
+ "Now in two-tone": "अब दो रंगों में भी",
+ "Read the guide": "गाइड पढ़ें",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "वही आइकन, अब 16 ग्रिड पर ठोस आकारों में भी: हल्के रंग का मुख्य भाग और आपके रंग में उभार। हर आइकन होवर पर अब भी हिलता है।"
 }

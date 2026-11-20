@@ -240,5 +240,9 @@
  "Layered": "متعدد الطبقات",
  "Two-tone": "ثنائي اللون",
  "Pause animations": "إيقاف الرسوم المتحركة مؤقتًا",
- "{count} two-tone": "{count} ثنائية اللون"
+ "{count} two-tone": "{count} ثنائية اللون",
+ "Browse two-tone icons": "تصفح الأيقونات ثنائية اللون",
+ "Now in two-tone": "متوفرة الآن بلونين",
+ "Read the guide": "اقرأ الدليل",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "الأيقونات نفسها، مرسومة أيضًا كأشكال مصمتة على شبكة 16: جسم فاتح مع لمسات بلونك. وما زالت كل أيقونة تتحرك عند التمرير."
 }

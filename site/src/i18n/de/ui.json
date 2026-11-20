@@ -240,5 +240,9 @@
  "Layered": "Geschichtet",
  "Two-tone": "Zweifarbig",
  "Pause animations": "Animationen pausieren",
- "{count} two-tone": "{count} zweifarbig"
+ "{count} two-tone": "{count} zweifarbig",
+ "Browse two-tone icons": "Zweifarbige Icons ansehen",
+ "Now in two-tone": "Jetzt auch zweifarbig",
+ "Read the guide": "Anleitung lesen",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Dieselben Icons, auch als gefüllte Formen auf einem 16er-Raster gezeichnet: ein heller Körper mit Akzenten in deiner Farbe. Jedes bewegt sich weiterhin beim Überfahren."
 }

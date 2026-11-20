@@ -240,5 +240,9 @@
  "Layered": "Katmanlı",
  "Two-tone": "Çift renk",
  "Pause animations": "Animasyonları duraklat",
- "{count} two-tone": "{count} çift renkli"
+ "{count} two-tone": "{count} çift renkli",
+ "Browse two-tone icons": "Çift renkli simgelere göz at",
+ "Now in two-tone": "Artık çift renkte",
+ "Read the guide": "Kılavuzu oku",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Aynı simgeler, 16’lık ızgarada dolu şekillerle de çizildi: açık renkli bir gövde ve sizin renginizde vurgular. Her biri üzerine gelince yine hareket eder."
 }

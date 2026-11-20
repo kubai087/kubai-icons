@@ -240,5 +240,9 @@
  "Layered": "En couches",
  "Two-tone": "Bicolore",
  "Pause animations": "Mettre les animations en pause",
- "{count} two-tone": "{count} bicolores"
+ "{count} two-tone": "{count} bicolores",
+ "Browse two-tone icons": "Parcourir les icônes bicolores",
+ "Now in two-tone": "Désormais en bicolore",
+ "Read the guide": "Lire le guide",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Les mêmes icônes, aussi dessinées en formes pleines sur une grille de 16 : un corps clair avec des accents dans votre couleur. Chacune bouge toujours au survol."
 }

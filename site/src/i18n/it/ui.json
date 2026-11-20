@@ -240,5 +240,9 @@
  "Layered": "A livelli",
  "Two-tone": "Bicolore",
  "Pause animations": "Metti in pausa le animazioni",
- "{count} two-tone": "{count} bicolore"
+ "{count} two-tone": "{count} bicolore",
+ "Browse two-tone icons": "Sfoglia le icone bicolori",
+ "Now in two-tone": "Ora anche bicolore",
+ "Read the guide": "Leggi la guida",
+ "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Le stesse icone, disegnate anche come forme piene su una griglia di 16: un corpo chiaro con dettagli nel tuo colore. Ognuna si muove ancora al passaggio del mouse."
 }
