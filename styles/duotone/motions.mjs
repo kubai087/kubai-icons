@@ -442,19 +442,19 @@ Object.assign(MOTION, {
 });
 
 // Batch: transport, travel and sports
-const tilt = (r, o) => ({ r, o });
+const turnAbout = (r, o) => ({ r, o });
 Object.assign(MOTION, {
-  car: { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1], tilt([-3, 1.5, 0], [8, 11.5])) } },
+  car: { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1], turnAbout([-3, 1.5, 0], [8, 11.5])) } },
   'car-front': { say: '车灯闪两下', ms: 700, moves: { 2: { a: [0.2, 1, 0.2, 1] } } },
   bus: { say: '进站停稳，车身在弹簧上颠两下', moves: same([0, 1], { y: [-0.6, 0.3, -0.2, 0] }) },
   truck: { say: '起步时车厢颠一下', moves: { 0: { y: [-0.6, 0.25, 0] }, all: { x: [0.75, 0, 0] } } },
-  ship: { say: '船在浪里左右摇晃', moves: { all: tilt([-5, 4, -2, 0], [8, 13.5]) } },
-  train: { say: '列车在轨道上左右轻晃，车灯闪一下', moves: { ...same([0, 1, 2], tilt([-2, 2, 0], [8, 13.5])), 2: { r: [-2, 2, 0], o: [8, 13.5], a: [0.2, 1, 1] } } },
-  luggage: { say: '拉杆拉出，箱子斜过来准备拖走', moves: { all: tilt([-6, -5], [5.25, 14.25]), 0: { y: [-0.5, -0.5] } } },
+  ship: { say: '船在浪里左右摇晃', moves: { all: turnAbout([-5, 4, -2, 0], [8, 13.5]) } },
+  train: { say: '列车在轨道上左右轻晃，车灯闪一下', moves: { ...same([0, 1, 2], turnAbout([-2, 2, 0], [8, 13.5])), 2: { r: [-2, 2, 0], o: [8, 13.5], a: [0.2, 1, 1] } } },
+  luggage: { say: '拉杆拉出，箱子斜过来准备拖走', moves: { all: turnAbout([-6, -5], [5.25, 14.25]), 0: { y: [-0.5, -0.5] } } },
   passport: { say: '拿起来出示', moves: { all: { y: [-0.6, -0.5], r: [-6, -5] } } },
   parking: { say: 'P 字一笔写出', moves: { 1: { w: [0, 1] } } },
   tent: { say: '门帘向两边掀开', moves: { 1: { sx: [1.4, 1.3], o: [8, 14] } } },
-  anchor: { say: '锚绕顶环摆动，停住', moves: { all: tilt([9, -6, 3, 0], [8, 3]) } },
+  anchor: { say: '锚绕顶环摆动，停住', moves: { all: turnAbout([9, -6, 3, 0], [8, 3]) } },
   lifebuoy: { say: '救生圈抛出去，转着落回', moves: { all: { y: [-1, 0.25, 0], r: [-60, -90, -90] } } }
 });
 
@@ -504,11 +504,11 @@ Object.assign(MOTION, {
   'police-car': { say: '警灯两边交替闪烁', ms: 800, moves: { 2: { a: [0.2, 1, 0.2, 1] }, 3: { a: [1, 0.3, 1, 0.3, 1] } } },
   taxi: { say: '顶灯亮起，向前开动又刹住', moves: { 2: { a: [0.2, 1, 1] }, all: { x: [0.75, -0.25, 0] } } },
   subway: { say: '列车进站，车灯闪一下', moves: { all: { y: [-0.5, 0.25, 0] }, 2: { a: [0.2, 1, 1] } } },
-  tram: { say: '集电杆擦过电线闪一下，车身轻晃', moves: { 0: { a: [0.2, 1, 0.2, 1] }, ...same([1, 2, 3], tilt([-2, 2, -1, 0], [8, 15])) } },
-  sailboat: { say: '帆船在浪里左右摇晃', moves: { all: tilt([-5, 4, -2, 0], [8, 14]) } },
+  tram: { say: '集电杆擦过电线闪一下，车身轻晃', moves: { 0: { a: [0.2, 1, 0.2, 1] }, ...same([1, 2, 3], turnAbout([-2, 2, -1, 0], [8, 15])) } },
+  sailboat: { say: '帆船在浪里左右摇晃', moves: { all: turnAbout([-5, 4, -2, 0], [8, 14]) } },
   helicopter: { say: '旋翼转起来，直升机升起', ms: 800, moves: { 2: { sx: [-1, 1, -1, 1], o: [7, 3.25] }, all: { y: [-0.25, -0.5, -0.75, -0.75] } } },
   'hot-air-balloon': { say: '热气球升起，轻轻浮动', moves: { all: { y: [-0.75, 0, -0.5] } } },
-  'cable-car': { say: '车厢挂在索道上轻轻摆动', moves: same([1, 2, 3], tilt([6, -4, 2, 0], [8, 3.5])) },
+  'cable-car': { say: '车厢挂在索道上轻轻摆动', moves: same([1, 2, 3], turnAbout([6, -4, 2, 0], [8, 3.5])) },
   castle: { say: '城门升起，再落下', moves: { 1: { sy: [0.25, 0.25, 1], o: [8, 9.5] } } },
   pyramid: { say: '日影移动：阴影面一暗一亮', moves: { 1: { a: [0.4, 1] } } },
   museum: {
@@ -528,7 +528,7 @@ Object.assign(MOTION, {
   },
   lantern: { say: '火苗跳动', moves: { 3: { sy: [1.25, 0.9, 1.1, 1], o: [8, 10.75] } } },
   thermos: { say: '拧开杯盖', moves: { 0: { y: [-0.6, -0.5], r: [-6, -5], o: [13, 4] } } },
-  'playing-cards': { say: '把牌摊开', moves: { 1: tilt([-8, -6], [4, 14]), 2: tilt([-8, -6], [4, 14]) } },
+  'playing-cards': { say: '把牌摊开', moves: { 1: turnAbout([-8, -6], [4, 14]), 2: turnAbout([-8, -6], [4, 14]) } },
   badminton: { say: '羽毛球被击起，再落下', moves: { all: { y: [-1, 0.25, 0] } } },
   tractor: { say: '拖拉机颠簸着向前开', moves: { all: { x: [0.5, 0.75, 0], y: [-0.5, 0, 0] } } }
 });
@@ -538,14 +538,14 @@ Object.assign(MOTION, {
   submarine: { say: '潜水艇下潜，又浮上来', moves: { all: { y: [1, -0.5, 0] } } },
   'fire-hydrant': { say: '拧开顶部阀门', moves: { 0: { sx: [-1, 1], o: [8, 2.5] } } },
   'toy-robot': { say: '眨眨眼，天线晃一晃', moves: { 2: { sy: [0.15, 1], o: [8, 9.25] }, 0: { r: [-15, 10, 0], o: [8, 5] } } },
-  'beach-umbrella': { say: '遮阳伞在风里轻轻晃动', moves: same([0, 1], tilt([-6, 4, -2, 0], [8, 8])) },
-  'camper-van': { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1, 2], tilt([-3, 1.5, 0], [8, 11.5])) } },
-  'toll-booth': { say: '栏杆抬起，放行', moves: same([2, 3], tilt([-35, -30], [8.5, 7.5])) }
+  'beach-umbrella': { say: '遮阳伞在风里轻轻晃动', moves: same([0, 1], turnAbout([-6, 4, -2, 0], [8, 8])) },
+  'camper-van': { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1, 2], turnAbout([-3, 1.5, 0], [8, 11.5])) } },
+  'toll-booth': { say: '栏杆抬起，放行', moves: same([2, 3], turnAbout([-35, -30], [8.5, 7.5])) }
 });
 
 // Batch: transport, travel and sports (group 7)
 Object.assign(MOTION, {
-  'fire-truck': { say: '云梯升起', moves: { 3: tilt([-12, -10], [1.5, 4.25]) } },
+  'fire-truck': { say: '云梯升起', moves: { 3: turnAbout([-12, -10], [1.5, 4.25]) } },
   trailer: { say: '被拖着向前走，又停下', moves: { all: { x: [0.75, -0.25, 0] } } },
-  'gas-can': { say: '油桶倾斜，往外倒油', moves: { all: tilt([6, 5], [2, 15]) } }
+  'gas-can': { say: '油桶倾斜，往外倒油', moves: { all: turnAbout([6, 5], [2, 15]) } }
 });
