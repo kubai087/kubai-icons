@@ -717,6 +717,16 @@
 "Flamme",
 "Kerzenlicht"
 ],
+"candy-cane": [
+"Zuckerstange",
+"Weihnachten",
+"Pfefferminz"
+],
+"candy-jar": [
+"Bonbonglas",
+"Glas",
+"Süßigkeiten"
+],
 "candy": [
 "Bonbon",
 "Süßigkeit",
@@ -958,6 +968,11 @@
 "Stemmeisen",
 "Holzbearbeitung",
 "Schnitzen"
+],
+"chocolate-bar": [
+"Schokolade",
+"Tafel Schokolade",
+"Kakao"
 ],
 "circle-alert": [
 "Hinweis im Kreis",
@@ -1208,6 +1223,11 @@
 "Zurück",
 "Abbiegen",
 "Pfeil"
+],
+"cotton-candy": [
+"Zuckerwatte",
+"Jahrmarkt",
+"Kirmes"
 ],
 "cpu": [
 "Prozessor",
@@ -1929,6 +1949,11 @@
 "Gitarre",
 "Akustikgitarre",
 "Saiteninstrument"
+],
+"gumball-machine": [
+"Kaugummiautomat",
+"Kaugummi",
+"Süßigkeitenautomat"
 ],
 "hair-dryer": [
 "Haartrockner",
@@ -3284,6 +3309,11 @@
 "Geodreieck",
 "Gradmesser",
 "Winkel"
+],
+"pudding": [
+"Pudding",
+"Karamellpudding",
+"Flan"
 ],
 "puzzle": [
 "Puzzleteil",

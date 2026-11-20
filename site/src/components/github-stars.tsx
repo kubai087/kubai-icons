@@ -2,7 +2,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { RiGithubLine } from "@remixicon/react";
 import { Star } from "kubai-icons-react";
-import { Button } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { REPO, fetchStars } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
@@ -14,8 +14,6 @@ const FRESH = 5 * 60 * 1000;
 const AT_BUILD = Number(process.env.NEXT_PUBLIC_GITHUB_STARS) || null;
 
 type Reading = { stars: number | null; at: number };
-
-const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
 
 function load(): Reading | null {
   try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch { return null; }
@@ -59,21 +57,23 @@ export function GitHubStars({ className }: { className?: string }) {
 
   const label = stars === null ? "GitHub" : tr("{count} stars on GitHub", "GitHub 星标数：{count}", { count: stars.toLocaleString("en") });
   return (
-    <Button
-      variant="outline"
+    // A plain link styled as a button, so it keeps link semantics.
+    <a
+      href={REPO}
+      target="_blank"
+      rel="noreferrer"
       data-kubai-trigger
       aria-label={label}
       title={label}
-      className={cn("gap-0 px-2 text-muted-foreground tabular-nums", className)}
-      render={<a href={REPO} target="_blank" rel="noreferrer" />}
+      className={cn(buttonVariants({ variant: "outline" }), "gap-0 ps-2 pe-2.5 text-muted-foreground tabular-nums", className)}
     >
       {/* Narrow bars keep the count, which says more than the logo does. */}
       <RiGithubLine className="size-[18px] max-sm:hidden" />
       <span className="inline-flex h-4 items-center gap-1 sm:ms-2 sm:border-s sm:ps-2">
         <Star size={16} color="#F59E0B" trigger="parent" className="size-4" />
         {/* Three digits of room are held even before a count is known. */}
-        <span className="inline-block min-w-[3ch]">{stars === null ? "" : compact.format(stars)}</span>
+        <span className="inline-block min-w-[3ch]">{stars ?? ""}</span>
       </span>
-    </Button>
+    </a>
   );
 }

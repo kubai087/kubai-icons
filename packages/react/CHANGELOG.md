@@ -1,5 +1,16 @@
 # kubai-icons-react
 
+## 0.12.0
+
+### Minor Changes
+
+- [#92](https://github.com/kubai087/kubai-icons/pull/92) [`81ad847`](https://github.com/kubai087/kubai-icons/commit/81ad847446b4b1f688c4a5f7a81200c9eb249748) Thanks [@kubai087](https://github.com/kubai087)! - Add six candy and sweets icons: `candy-cane`, `chocolate-bar`, `gumball-machine`, `candy-jar`, `pudding` and `cotton-candy`.
+
+### Patch Changes
+
+- Updated dependencies [[`81ad847`](https://github.com/kubai087/kubai-icons/commit/81ad847446b4b1f688c4a5f7a81200c9eb249748)]:
+  - kubai-icons@0.12.0
+
 ## 0.11.0
 
 ### Minor Changes

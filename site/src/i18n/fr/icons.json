@@ -794,6 +794,16 @@
 "flamme",
 "lumière"
 ],
+"candy-cane": [
+"Sucre d'orge",
+"canne en sucre",
+"Noël"
+],
+"candy-jar": [
+"Bocal à bonbons",
+"bocal",
+"friandises"
+],
 "candy": [
 "Bonbon",
 "confiserie",
@@ -1063,6 +1073,11 @@
 "ciseau",
 "menuiserie",
 "sculpture"
+],
+"chocolate-bar": [
+"Chocolat",
+"tablette de chocolat",
+"cacao"
 ],
 "circle-alert": [
 "Alerte",
@@ -1341,6 +1356,11 @@
 "retour",
 "virage",
 "direction"
+],
+"cotton-candy": [
+"Barbe à papa",
+"fête foraine",
+"confiserie"
 ],
 "cpu": [
 "Processeur",
@@ -2139,6 +2159,11 @@
 "guitare acoustique",
 "instrument",
 "musique"
+],
+"gumball-machine": [
+"Distributeur de chewing-gums",
+"chewing-gum",
+"distributeur de bonbons"
 ],
 "hair-dryer": [
 "Sèche-cheveux",
@@ -3586,6 +3611,11 @@
 "angle",
 "mesure d’angle",
 "géométrie"
+],
+"pudding": [
+"Crème caramel",
+"flan",
+"pudding"
 ],
 "puzzle": [
 "Puzzle",

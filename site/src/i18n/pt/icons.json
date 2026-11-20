@@ -743,6 +743,16 @@
 "chama",
 "luz de vela"
 ],
+"candy-cane": [
+"Bengala de doce",
+"bengala de natal",
+"natal"
+],
+"candy-jar": [
+"Pote de doces",
+"pote",
+"guloseimas"
+],
 "candy": [
 "Bala",
 "doce",
@@ -982,6 +992,11 @@
 "marcenaria",
 "escultura",
 "ferramenta"
+],
+"chocolate-bar": [
+"Chocolate",
+"barra de chocolate",
+"cacau"
 ],
 "circle-alert": [
 "Alerta",
@@ -1247,6 +1262,11 @@
 "Curva p/ cima e esquerda",
 "retornar",
 "seta em L"
+],
+"cotton-candy": [
+"Algodão-doce",
+"parque de diversões",
+"festa"
 ],
 "cpu": [
 "Processador",
@@ -1975,6 +1995,11 @@
 "Violão",
 "guitarra",
 "instrumento de cordas"
+],
+"gumball-machine": [
+"Máquina de chiclete",
+"chiclete",
+"máquina de bala"
 ],
 "hair-dryer": [
 "Secador de cabelo",
@@ -3277,6 +3302,11 @@
 "Transferidor",
 "ângulo",
 "geometria"
+],
+"pudding": [
+"Pudim",
+"flan",
+"pudim de leite"
 ],
 "puzzle": [
 "Quebra-cabeça",
