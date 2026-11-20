@@ -2387,3 +2387,155 @@ Object.assign(ICONS, {
   'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' }),
   unlink: badge(ICONS.link, 'off', { label: '取消链接' })
 });
+
+// Batch: remaining functional categories
+// The sheet shared by the file types: file-text's light page, with the type printed in blue.
+const SHEET = rr(2, 1, 12, 14, M);
+// The sound waves either side of bell-ring's dome: arcs about the dome's centre (8, 8), one gap
+// out, from 33° to 57° above the level, so they reach the keyline at the top and the side.
+const ringArc = (side) => {
+  const p = (deg) => { const a = (deg * Math.PI) / 180; return `${f3(8 + side * 6.25 * Math.cos(a))} ${f3(8 - 6.25 * Math.sin(a))}`; };
+  return side < 0 ? `M${p(33)}A6.25 6.25 0 0 1 ${p(57)}` : `M${p(57)}A6.25 6.25 0 0 1 ${p(33)}`;
+};
+// A quotation mark centred at x: a disc and, rising from its left side, a tail that curves over
+// to the right (a circular arc), so the two make a 6.
+const quoteTail = (cx) => `M${cx - 0.75} 9.25A3.5 3.5 0 0 1 ${cx + 0.75} 5.25`;
+Object.assign(ICONS, {
+  'external-link': {
+    label: '外部链接',
+    key: 'square',
+    layers: [
+      // A light box and a blue arrow leaving it at 45° from its centre to the upper right. The
+      // head is a right-angled corner whose legs run along the grid (the allowed 45° arrow head);
+      // the arrow cuts a gap of W where it crosses the box, as share's does. The head's side
+      // corners are the small arrow's 0.5, or the head rounds off into a pen. The box is sized so
+      // its corner stays one gap from the head, and the shaft starts at its centre.
+      L(rr(2, 4.48, 9.52, 9.52, R), Bt),
+      L('M6.76 9.24L12 4', { sw: K, gap: W, part: 'arrow' }),
+      L(polygon([[9, 2], [14, 2], [14, 7]], [0.5, 1, 0.5]), { gap: W, part: 'arrow' })
+    ]
+  },
+  ban: {
+    label: '禁止',
+    key: 'circle',
+    layers: [
+      // A light disc struck through by one blue slash at 45° (the cross's slope), as circle-x's
+      // strokes but only the one from the upper left.
+      L(circ(8, 8, 7), Bt),
+      L('M4.75 4.75L11.25 11.25', { sw: K })
+    ]
+  },
+  sort: {
+    label: '排序',
+    key: 'wide',
+    layers: [
+      // menu's light bars getting shorter from top to bottom, and a blue arrow pointing down on
+      // the right, one gap from the longest bar. One layer per bar, so the motion can lay them
+      // out in order.
+      L('M2 3.5H9.75', { sw: 2, ...Bt }),
+      L('M2 8H7.25', { sw: 2, ...Bt }),
+      L('M2 12.5H4.75', { sw: 2, ...Bt }),
+      L('M12.5 3.25V12.75M10.75 11L12.5 12.75L14.25 11', { sw: K })
+    ]
+  },
+  'list-checks': {
+    label: '任务清单',
+    key: 'landscape',
+    layers: [
+      // Two rows of list: a blue check (circle-check's, the allowed 45°) and a light bar one gap
+      // to its right. One layer per check, so the motion can tick them off in turn.
+      L('M1.75 4L3.75 6L7 2.75', { sw: K }),
+      L('M1.75 11.25L3.75 13.25L7 10', { sw: K }),
+      L(pill(8.28, 3.125, 6.72, 2.5) + pill(8.28, 10.375, 6.72, 2.5), Bt)
+    ]
+  },
+  strikethrough: {
+    label: '删除线',
+    key: 'square',
+    layers: [
+      // underline's tile with a blue S built from two circular arcs (half-turns of radius 1.625),
+      // and a line through its middle. Letter and line are one element, so they share a part.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M9.407 5.563A1.625 1.625 0 1 0 8 8A1.625 1.625 0 1 1 6.593 10.438', { sw: K, part: 'glyph' }),
+      L('M4.75 8H11.25', { sw: K, part: 'glyph' })
+    ]
+  },
+  quote: {
+    label: '引用',
+    key: 'square',
+    layers: [
+      // code's tile with a pair of blue quotation marks: each a disc with a tail curving up out
+      // of its left side. Disc and tail are one element (one part); one part per mark.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L(circ(5.75, 9.25, 1.5), { part: 'q0' }),
+      L(quoteTail(5.75), { sw: K, part: 'q0' }),
+      L(circ(10.25, 9.25, 1.5), { part: 'q1' }),
+      L(quoteTail(10.25), { sw: K, part: 'q1' })
+    ]
+  },
+  'bell-ring': {
+    label: '响铃提醒',
+    key: 'square',
+    layers: [
+      // bell with a smaller dome (radius 4.5), so two blue sound waves fit at its upper corners,
+      // one gap out from the dome and concentric with it. Knob and clapper as bell's.
+      L('M3.5 10.5V8a4.5 4.5 0 0 1 9 0V10.5Z' + pill(2.5, 9.75, 11, 1.5), Bt),
+      L(circ(8, 3.75, 1.25) + rr(6.25, 12.25, 3.5, 1.75, [0.5, 0.5, 1.75, 1.75]), { gap: W }),
+      L(ringArc(-1) + ringArc(1), { sw: K })
+    ]
+  },
+  'file-code': {
+    label: '代码文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with code's pair of angle brackets centred on it.
+      L(SHEET, Bt),
+      L('M6.75 6L4.75 8L6.75 10', { sw: K }),
+      L('M9.25 6L11.25 8L9.25 10', { sw: K })
+    ]
+  },
+  'file-image': {
+    label: '图片文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet holding image's picture: a blue hill rising from the bottom edge
+      // (clipped to the sheet) and a sun 2.25 in from the right edge. The hill's top sits well
+      // left of the sun; under it, a sun over a centred hill reads as a head and shoulders.
+      L(SHEET, Bt),
+      L(circ(4.5, 18, 8), { clip: SHEET }),
+      L(circ(10.5, 5.5, 1.25))
+    ]
+  },
+  'file-chart': {
+    label: '报表文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with three blue bars standing on one baseline, a gap of 1 apart; the
+      // middle one is the tallest. One layer per bar, so they can grow in turn.
+      L(SHEET, Bt),
+      L(rr(4.75, 8, 1.5, 4, [0.75, 0.75, 0, 0])),
+      L(rr(7.25, 5, 1.5, 7, [0.75, 0.75, 0, 0])),
+      L(rr(9.75, 6.75, 1.5, 5.25, [0.75, 0.75, 0, 0]))
+    ]
+  },
+  'file-video': {
+    label: '视频文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with play's triangle (width 0.78 of its height), centred by its centroid.
+      L(SHEET, Bt),
+      L(polygon([[6.7, 5.5], [10.6, 8], [6.7, 10.5]], 1))
+    ]
+  },
+  'file-audio': {
+    label: '音频文件',
+    key: 'portrait',
+    layers: [
+      // file-text's sheet with a blue note: a round head, and a stem rising from its right side
+      // that turns right into a short flag. Head and stem are one element.
+      L(SHEET, Bt),
+      L(circ(6.75, 10.25, 1.75), { part: 'note' }),
+      L('M7.75 10.25V5H10.5', { sw: K, part: 'note' })
+    ]
+  }
+});

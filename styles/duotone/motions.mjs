@@ -440,3 +440,34 @@ Object.assign(MOTION, {
   'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') },
   unlink: { say: '斜线重新划过，断开链接', moves: draw('unlink') }
 });
+
+// Batch: remaining functional categories
+Object.assign(MOTION, {
+  'external-link': {
+    say: '箭杆从盒子里画出，画到头箭头弹出',
+    moves: { 1: { w: [0, 1, 1] }, 2: { a: [0, 0, 1], s: [0.4, 0.4, 1], o: [12.75, 3.25] } }
+  },
+  ban: { say: '斜线重新划过', moves: { 1: { w: [0, 1] } } },
+  sort: {
+    say: '箭头向下一推，三行按长短依次排好',
+    moves: { 0: { w: [0, 1, 1, 1] }, 1: { w: [0, 0, 1, 1] }, 2: { w: [0, 0, 0, 1] }, 3: { y: [0.75, 0] } }
+  },
+  'list-checks': { say: '两项依次打上对勾', moves: { 0: { w: [0, 1, 1] }, 1: { w: [0, 0, 1] } } },
+  strikethrough: { say: '先写字母，再一笔划掉', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  quote: {
+    say: '两个引号先后出现',
+    moves: { ...same([1, 2], { s: [0, 1, 1], o: [5.75, 9.25] }), ...same([3, 4], { s: [0, 0, 1], o: [10.25, 9.25] }) }
+  },
+  'bell-ring': {
+    say: '铃铛摇响，两侧的声波闪动',
+    moves: { ...same([0, 1], { r: [7, -6, 4, -2, 0], o: [8, 2.5] }), 2: { a: [0.2, 1, 0.2, 1, 1] } }
+  },
+  'file-code': { say: '两个尖括号向两边张开再合上', moves: { 1: { x: [-0.5, 0] }, 2: { x: [0.5, 0] } } },
+  'file-image': { say: '太阳升起', moves: { 2: { y: [-1.5, -1.25] } } },
+  'file-chart': {
+    say: '三根柱子依次从底部长出',
+    moves: { 1: { sy: [0, 1, 1, 1], o: [5.5, 12] }, 2: { sy: [0, 0, 1, 1], o: [8, 12] }, 3: { sy: [0, 0, 0, 1], o: [10.5, 12] } }
+  },
+  'file-video': { say: '按下播放，三角向前一推', moves: { 1: { x: [1, 0] } } },
+  'file-audio': { say: '音符随节拍跳动', moves: same([1, 2], { y: [-1, 0, -0.75, 0] }) }
+});
