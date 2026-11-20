@@ -2698,3 +2698,111 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: home and tools (group 3)
+const WAREHOUSE = polygon([[8, 2], [15, 5.5], [15, 14], [1, 14], [1, 5.5]], [1.5, 1, R, R, 1]);
+const FLOOR_SHADE = polygon([[5.5, 1], [10.5, 1], [13.8, 6], [2.2, 6]], 1);
+Object.assign(ICONS, {
+  oven: {
+    label: '烤箱',
+    key: 'square',
+    layers: [
+      // A light control band with three blue knobs, cut straight off a light door with a blue
+      // window 2 in from its sides, top and bottom.
+      L(rr(2, 2, 12, 3.5, [R, R, 0, 0]), Bt),
+      L([5.5, 8, 10.5].map((x) => circ(x, 3.75, 0.75)).join('')),
+      L(rr(2, 6.5, 12, 7.5, [0, 0, R, R]), Bt),
+      L(rr(4, 8.5, 8, 3.5, r))
+    ]
+  },
+  wardrobe: {
+    label: '衣柜',
+    key: 'portrait',
+    layers: [
+      // Two light doors cut apart down the middle, each with a blue handle 2 from the cut, and
+      // two blue feet one gap below.
+      L(rr(2, 1, 5.5, 12, [M, 0, 0, M]), Bt),
+      L(pill(4.125, 5.25, D, 3.5)),
+      L(rr(8.5, 1, 5.5, 12, [0, M, M, 0]), Bt),
+      L(pill(10.625, 5.25, D, 3.5)),
+      L(rr(2.5, 14, 2.5, 1, [0, 0, 0.5, 0.5]) + rr(11, 14, 2.5, 1, [0, 0, 0.5, 0.5]))
+    ]
+  },
+  fireplace: {
+    label: '壁炉',
+    key: 'square',
+    layers: [
+      // A light mantel one gap above a light chimney breast; a blue arched opening stands on the
+      // bottom edge, with a light flame (a drop: the point makes it a flame) on the hearth.
+      L(rr(2, 2, 12, 2.5, q), Bt),
+      L(rr(3, 5.5, 10, 8.5, [S, S, M, M]), Bt),
+      L(rr(5.5, 8, 5, 6, [2.5, 2.5, 0, 0]), { clip: rr(3, 5.5, 10, 8.5, [S, S, M, M]) }),
+      L(dropPath(12.5, 1.5, 9.4, 0.5), Bt)
+    ]
+  },
+  hospital: {
+    label: '医院',
+    key: 'square',
+    layers: [
+      // A light building with a blue cross 2 below its top, and a blue door one gap below the
+      // cross, standing on the bottom edge.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L(rr(7, 4, 2, 6, 0.5) + rr(5, 6, 6, 2, 0.5)),
+      L(rr(6.5, 11, 3, 3, [1.5, 1.5, 0, 0]))
+    ]
+  },
+  factory: {
+    label: '工厂',
+    key: 'landscape',
+    layers: [
+      // A light works with a chimney on the left and a saw-tooth roof (slopes: the teeth are how
+      // a factory is known), and a row of three blue windows 2 above the bottom. One layer per
+      // window.
+      L(polygon([[1, 2], [4, 2], [4, 8], [9.5, 5], [9.5, 8], [15, 5], [15, 14], [1, 14]], [1, 1, 0, 0.75, 0, 0.75, R, R]), Bt),
+      L(rr(3, 10, 2, 2, 0.5)),
+      L(rr(7, 10, 2, 2, 0.5)),
+      L(rr(11, 10, 2, 2, 0.5))
+    ]
+  },
+  warehouse: {
+    label: '仓库',
+    key: 'landscape',
+    layers: [
+      // A light shed under a low pitched roof (slopes, as home's roof), and a blue roller door on
+      // the bottom edge with two light slats across it.
+      L(WAREHOUSE, Bt),
+      L(rr(4.5, 8, 7, 6, [1, 1, 0, 0]), { clip: WAREHOUSE }),
+      L(rr(4.5, 9.75, 7, D) + rr(4.5, 12, 7, D), { ...Bt, clip: rr(4.5, 8, 7, 6, [1, 1, 0, 0]) })
+    ]
+  },
+  'floor-lamp': {
+    label: '落地灯',
+    key: 'tall',
+    layers: [
+      // lamp's shade, shallower, high on a long blue pole standing on a blue foot.
+      L(FLOOR_SHADE, Bt),
+      L(body(4, 13.5, 8, 1.5, 0.5, [{ x: 7.25, w: 1.5, h: 6.5, c: 0 }]))
+    ]
+  },
+  soap: {
+    label: '肥皂',
+    key: 'landscape',
+    layers: [
+      // A light bar of soap and two blue bubbles above its right end, one gap from it and from
+      // each other.
+      L(rr(1, 6, 12, 8, M), Bt),
+      L(circ(13.25, 3.75, 1.75)),
+      L(circ(9.25, 3.75, 1.25))
+    ]
+  },
+  doorbell: {
+    label: '门铃',
+    key: 'tall',
+    layers: [
+      // A light plate, a blue speaker slot near the top and a big blue round button below it.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(pill(6, 3.75, 4, D)),
+      L(circ(8, 9.5, 2.75))
+    ]
+  }
+});

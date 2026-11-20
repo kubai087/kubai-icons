@@ -487,3 +487,24 @@ Object.assign(MOTION, {
   drill: { say: '开钻，机身微微抖动', ms: 700, moves: { all: { x: [-0.3, 0.3, -0.3, 0.3, 0] } } },
   'spirit-level': { say: '水平仪一晃，气泡跑开又回到中间', moves: { all: { r: [4, -3, 0] }, 2: { x: [1.75, -1.25, 0] } } }
 });
+
+// Batch: home and tools (group 3)
+Object.assign(MOTION, {
+  oven: { say: '炉门向下打开，又关上', moves: same([2, 3], { sy: [0.45, 0.45, 1], o: [8, 14] }) },
+  wardrobe: { say: '两扇柜门打开，又关上', moves: { ...same([0, 1], { sx: [0.45, 0.45, 1], o: [2, 7] }), ...same([2, 3], { sx: [0.45, 0.45, 1], o: [14, 7] }) } },
+  fireplace: { say: '炉火跳动', ms: 800, moves: { 3: { sx: [0.85, 1.1, 0.9, 1], sy: [1.12, 0.9, 1.06, 1], o: [8, 14] } } },
+  hospital: { say: '十字灯闪亮', ms: 800, moves: { 1: { a: [0.3, 1, 0.3, 1] } } },
+  factory: { say: '开工了，窗户从左到右依次亮起', moves: { 1: { a: [0.2, 1, 1, 1] }, 2: { a: [0.2, 0.2, 1, 1] }, 3: { a: [0.2, 0.2, 0.2, 1] } } },
+  warehouse: { say: '卷帘门卷起，又放下', moves: same([1, 2], { sy: [0.4, 0.4, 1], o: [8, 8] }) },
+  'floor-lamp': {
+    say: '打开落地灯，灯罩亮起来',
+    add: [{ layer: L(ICONS['floor-lamp'].layers[0].d) }],
+    moves: { a0: { ...hidden, a: [1, 0.5, 1] } }
+  },
+  soap: { say: '泡泡往上飘', moves: { 1: { y: [-1, -1] }, 2: { y: [-0.75, -0.75] } } },
+  doorbell: {
+    say: '按下门铃，两侧响起声波',
+    add: [{ layer: L('M1.75 6.5A6 6 0 0 0 1.75 12.5', { sw: D }) }, { layer: L('M14.25 6.5A6 6 0 0 1 14.25 12.5', { sw: D }) }],
+    moves: { 2: { s: [0.82, 1], o: [8, 9.5] }, ...same(['a0', 'a1'], { rest: { a: 0, w: 0 }, a: 1, w: 1 }) }
+  }
+});
