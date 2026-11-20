@@ -467,3 +467,17 @@ Object.assign(MOTION, {
   'ice-pop': { say: '冰棍摇一摇', ms: 800, moves: { all: { r: [6, -5, 3, 0], o: [8, 15] } } },
   cookie: { say: '饼干翻个面，再翻回来', moves: { all: { sx: [-1, 1, 1], o: [8, 8] } } }
 });
+
+Object.assign(MOTION, {
+  tree: { say: '树冠在风中摇摆', ms: 800, moves: { 1: { r: [5, -4, 2, 0], o: [8, 12] } } },
+  'tree-pine': { say: '松树在风中摇摆', ms: 800, moves: { 0: { r: [4, -3, 1.5, 0], o: [8, 12] } } },
+  leaf: { say: '叶子随风摆动', ms: 800, moves: { all: { r: [-8, 6, -3, 0], o: [3, 13] } } },
+  sprout: { say: '新芽长出来，两片叶子张开', moves: { 0: { sy: [0.5, 1], o: [8, 14] }, 1: { s: [0.5, 1], o: [8, 8.5] } } },
+  mountain: { say: '山顶落下积雪', moves: { 1: { sy: [0.3, 1], o: [8, 1.2] } } },
+  planet: { say: '光环绕着行星转动', moves: { ...same([0, 2], { r: [-12, 0], o: [8, 8] }) } },
+  waves: { say: '海浪一层层起伏', ms: 800, moves: { 0: { x: [0.5, -0.5, 0] }, 1: { x: [-0.5, 0.5, 0] }, 2: { x: [0.5, -0.5, 0] } } },
+  flower: { say: '花瓣张开，花朵开放', moves: { 0: { s: [0.6, 1], o: [8, 8] } } },
+  cactus: { say: '仙人掌长高', moves: same([0, 1, 2], { sy: [0.8, 1], o: [8, 11.5] }) },
+  mushroom: { say: '蘑菇从地里冒出来', moves: { all: { sy: [0.7, 1], o: [8, 14] } } },
+  paw: { say: '按下一个爪印', moves: { all: { y: [-1, 0.25, 0] } } }
+});

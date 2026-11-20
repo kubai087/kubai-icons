@@ -2646,3 +2646,141 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// A leaf: eye's outline (two arcs, tips rounded at rf) w long and h wide, centred on (cx, cy)
+// and turned by deg. Turning keeps the arcs circular.
+const lens = (cx, cy, w, h, rf, deg) => {
+  const a = w / 2, b = h / 2, e = ((a - rf) ** 2 - (b - rf) ** 2) / (2 * (b - rf)), R0 = b + e;
+  const k = rf / (R0 - rf), fx = a - rf, t = (deg * Math.PI) / 180, c = Math.cos(t), sn = Math.sin(t);
+  const P = (sx, sy) => { const x = sx * fx * (1 + k), y = sy * e * k; return `${f3(cx + x * c - y * sn)} ${f3(cy + x * sn + y * c)}`; };
+  return `M${P(-1, -1)}A${f3(R0)} ${f3(R0)} 0 0 1 ${P(1, -1)}A${rf} ${rf} 0 0 1 ${P(1, 1)}A${f3(R0)} ${f3(R0)} 0 0 1 ${P(-1, 1)}A${rf} ${rf} 0 0 1 ${P(-1, -1)}Z`;
+};
+// A planet's ring: a capsule outline (half length l, half width b) round (8, 8) turned by deg,
+// split into the half in front of the planet (below) and the half behind it.
+const RING = (() => {
+  const l = 4.8, b = 1.75, t = (-20 * Math.PI) / 180, c = Math.cos(t), sn = Math.sin(t);
+  const P = (x, y) => `${f3(8 + x * c - y * sn)} ${f3(8 + x * sn + y * c)}`;
+  return {
+    front: `M${P(-l - b, 0)}A${b} ${b} 0 0 0 ${P(-l, b)}L${P(l, b)}A${b} ${b} 0 0 0 ${P(l + b, 0)}`,
+    back: `M${P(l + b, 0)}A${b} ${b} 0 0 0 ${P(l, -b)}L${P(-l, -b)}A${b} ${b} 0 0 0 ${P(-l - b, 0)}`
+  };
+})();
+// A row of waves from x 2 to 14 along y: four shallow arcs, alternately up and down.
+const WAVE = (y) => `M2 ${y}A2 2 0 0 1 5 ${y}A2 2 0 0 0 8 ${y}A2 2 0 0 1 11 ${y}A2 2 0 0 0 14 ${y}`;
+// A pine: two tiers that narrow to a point (the slopes), as one outline.
+const PINE = polygon([[8, 0.4], [11.6, 5.5], [10.25, 5.5], [13.6, 11.5], [2.4, 11.5], [5.75, 5.5], [4.4, 5.5]], [1, 0.5, 0, 1, 1, 0, 0.5]);
+// A mountain: one peak (the slopes), its snow the top clipped with round drips.
+const PEAK = polygon([[8, 0.55], [15.8, 14], [0.2, 14]], [1.5, 1, 1]);
+
+Object.assign(ICONS, {
+  tree: {
+    label: '树',
+    key: 'tall',
+    layers: [
+      // A light round crown on a blue trunk; the crown cuts a gap of W round itself.
+      L(rr(7, 8, 2, 7, [0, 0, 1, 1])),
+      L(circ(8, 6, 5), { ...Bt, gap: W })
+    ]
+  },
+  'tree-pine': {
+    label: '松树',
+    key: 'tall',
+    layers: [
+      // Two light tiers that narrow to a point (GUIDE §1: a pine is read by its pointed tiers),
+      // and a blue trunk one gap below.
+      L(PINE, Bt),
+      L(rr(7, 12.5, 2, 2.5, [S, S, 1, 1]))
+    ]
+  },
+  leaf: {
+    label: '叶子',
+    key: 'square',
+    layers: [
+      // A leaf laid at 45°: two arcs whose tips are rounded at 0.75. A blue stalk runs behind it
+      // (the leaf cuts a gap of W round itself), and a blue midrib is drawn on it.
+      L(`M${AP(-7.4).join(' ')}L${AP(-3.5).join(' ')}`, { sw: K }),
+      L(lens(...AP(1.9), 12.8, 6.5, 0.75, -45), { ...Bt, gap: W }),
+      L(`M${AP(-0.6).join(' ')}L${AP(4.4).join(' ')}`, { sw: D })
+    ]
+  },
+  sprout: {
+    label: '新芽',
+    key: 'square',
+    layers: [
+      // A blue stem and two light leaves (two arcs each) opening from its top; the leaves cut a
+      // gap of W round themselves.
+      L('M8 13.25V9.85', { sw: K }),
+      L(lens(4.83, 5.19, 8, 3.5, 0.75, 50) + lens(11.17, 5.19, 8, 3.5, 0.75, -50), { ...Bt, gap: W })
+    ]
+  },
+  mountain: {
+    label: '山',
+    key: 'landscape',
+    layers: [
+      // One peak (GUIDE §1: a mountain is its slopes and point), snow on its top in blue.
+      L(PEAK, Bt),
+      L(PEAK, { clip: DRIPS(6, [8]) })
+    ]
+  },
+  planet: {
+    label: '行星',
+    key: 'wide',
+    layers: [
+      // A light planet with a blue ring (capsule outlines, not ellipses): the back half of the
+      // ring is behind the planet and the front half crosses it, each cutting a gap of W.
+      L(RING.back, { sw: K, part: 'ring' }),
+      L(circ(8, 8, 5.5), { ...Bt, gap: W }),
+      L(RING.front, { sw: K, part: 'ring', gap: W })
+    ]
+  },
+  waves: {
+    label: '海浪',
+    key: 'wide',
+    layers: [
+      // Three rows of waves (shallow arcs, stroke 2), the top one blue.
+      L(WAVE(4.4), { sw: 2 }),
+      L(WAVE(8), { ...Bt, sw: 2 }),
+      L(WAVE(11.6), { ...Bt, sw: 2 })
+    ]
+  },
+  flower: {
+    label: '花',
+    key: 'circle',
+    layers: [
+      // Eight light round petals round a light disc, and a blue centre printed on the disc.
+      L(circ(8, 8, 3.5) + Array.from({ length: 8 }, (_, i) => circ(f3(8 + 4.75 * Math.cos((i * Math.PI) / 4)), f3(8 + 4.75 * Math.sin((i * Math.PI) / 4)), 2.25)).join(''), Bt),
+      L(circ(8, 8, 2.25))
+    ]
+  },
+  cactus: {
+    label: '仙人掌',
+    key: 'portrait',
+    layers: [
+      // A light cactus: a trunk and two arms (strokes 2.5) bent up from it, one element; a blue
+      // pot one gap below.
+      L(pill(6, 1, 4, 10.5), { ...Bt, part: 'cactus' }),
+      L('M3.25 5V7A1.75 1.75 0 0 0 5 8.75H6.5', { ...Bt, sw: 2.5, part: 'cactus' }),
+      L('M12.75 3.5V5.25A1.75 1.75 0 0 1 11 7H9.5', { ...Bt, sw: 2.5, part: 'cactus' }),
+      L(rr(3.5, 12.5, 9, 2.5, 1))
+    ]
+  },
+  mushroom: {
+    label: '蘑菇',
+    key: 'landscape',
+    layers: [
+      // A light domed cap with three blue spots, and a blue stem one gap below it.
+      L(rr(1, 2, 14, 7, [7, 7, r, r]), Bt),
+      L(circ(5, 6.5, 0.875) + circ(8, 5.25, 0.875) + circ(11, 6.5, 0.875)),
+      L(rr(5.5, 10, 5, 4, [S, S, r, r]))
+    ]
+  },
+  paw: {
+    label: '爪印',
+    key: 'square',
+    layers: [
+      // A light pad and four blue toes round its top, each one gap or more from it.
+      L(circ(8, 10.5, 3.5), Bt),
+      L(circ(3.5, 6.5, 1.5) + circ(6, 3.5, 1.5) + circ(10, 3.5, 1.5) + circ(12.5, 6.5, 1.5))
+    ]
+  }
+});
