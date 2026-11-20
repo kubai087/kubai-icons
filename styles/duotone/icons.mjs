@@ -2784,3 +2784,101 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// A cheese wedge: a straight front face under a top face that slopes up to the right.
+const WEDGE = polygon([[1, 7.5], [15, 1.4], [15, 14], [1, 14]], [1, 1, R, R]);
+// A soup bowl: a straight rim and a round bottom, 14 wide.
+const BOWL_SOUP = rr(1, 6, 14, 8, [S, S, 7, 7]);
+// A chocolate bar: four squares above a wrapper, cut apart by straight gaps of W.
+const CHOC = rr(2, 1, 12, 14, M);
+
+Object.assign(ICONS, {
+  'chocolate-bar': {
+    label: '巧克力',
+    key: 'portrait',
+    layers: [
+      // A light bar with four squares cut apart by straight gaps (seams through one outline),
+      // half wrapped in a blue wrapper (the bar clipped).
+      L(CHOC, { ...Bt, cut: [C('M8 0V9', W), C('M0 4.75H16', W), C('M0 9H16', W)] }),
+      L(CHOC, { clip: rr(0, 9.5, 16, 6.5) })
+    ]
+  },
+  cheese: {
+    label: '奶酪',
+    key: 'landscape',
+    layers: [
+      // A wedge (its top face slopes: GUIDE §1, the wedge is what makes it cheese). The top face
+      // is the wedge clipped in blue; two blue holes on the front face.
+      L(WEDGE, Bt),
+      L(WEDGE, { clip: polygon([[0, 7.5], [16, 1.5], [16, 7.5]]) }),
+      L(circ(4.25, 10.75, 1.25) + circ(9.75, 10.75, 1.25))
+    ]
+  },
+  burger: {
+    label: '汉堡',
+    key: 'landscape',
+    layers: [
+      // A light top bun with three blue sesame seeds, a blue patty and a light bottom bun, each
+      // one gap from the next.
+      L(rr(1, 2, 14, 5.5, [5, 5, S, S]), Bt),
+      L(circ(5, 4.75, 0.625) + circ(8, 4.75, 0.625) + circ(11, 4.75, 0.625)),
+      L(pill(1, 8.5, 14, 2.25)),
+      L(rr(1, 11.75, 14, 2.25, [S, S, 1, 1]), Bt)
+    ]
+  },
+
+  fries: {
+    label: '薯条',
+    key: 'square',
+    layers: [
+      // Four blue fries standing in a light box, which cuts a gap of W round itself.
+      L(rr(3, 2.75, 1.75, 6, 0.875)),
+      L(rr(5.75, 2, 1.75, 6, 0.875)),
+      L(rr(8.5, 3, 1.75, 6, 0.875)),
+      L(rr(11.25, 2.25, 1.75, 6, 0.875)),
+      L(rr(2, 7, 12, 7, [S, S, R, R]), { ...Bt, gap: W })
+    ]
+  },
+  popcorn: {
+    label: '爆米花',
+    key: 'square',
+    layers: [
+      // Light popcorn (three circles) heaped behind a light bucket that cuts a gap of W round
+      // itself; two blue stripes on the bucket (the bucket clipped).
+      L(circ(4.5, 5.5, 2.5) + circ(8, 4.5, 2.5) + circ(11.5, 5.5, 2.5), Bt),
+      L(rr(2, 8, 12, 6, [S, S, M, M]), { ...Bt, gap: W }),
+      L(rr(2, 8, 12, 6, [S, S, M, M]), { clip: rr(5, 0, 1.75, 16) + rr(9.25, 0, 1.75, 16) })
+    ]
+  },
+  soup: {
+    label: '汤',
+    key: 'landscape',
+    layers: [
+      // A light bowl with a round bottom and three blue lines of steam one gap above it.
+      L(BOWL_SOUP, Bt),
+      L(pill(4.875, 2, D, 3)),
+      L(pill(7.375, 2, D, 3)),
+      L(pill(9.875, 2, D, 3))
+    ]
+  },
+  noodles: {
+    label: '面条',
+    key: 'landscape',
+    layers: [
+      // soup's bowl with two blue chopsticks standing in it, behind its rim (the bowl cuts a gap of
+      // W round itself).
+      L(pill(8.75, 2, 1.5, 7) + pill(11.75, 2, 1.5, 7)),
+      L(BOWL_SOUP, { ...Bt, gap: W })
+    ]
+  },
+
+  'heart-pulse': {
+    label: '心率',
+    key: 'landscape',
+    layers: [
+      // heart's outline with activity's pulse line across it (its peaks need slopes).
+      L(ICONS.heart.layers[0].d, Bt),
+      L('M3.75 8.25H5.5L6.75 5.75L8.75 10.25L10 8.25H12.25', { sw: K })
+    ]
+  }
+});
