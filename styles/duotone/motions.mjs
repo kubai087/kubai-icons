@@ -530,3 +530,19 @@ Object.assign(MOTION, {
   slideshow: { say: '下一张幻灯片从左向右展开', moves: { 1: { sx: [0, 1], o: [3, 6.75] } } },
   joystick: { say: '摇杆向一侧扳倒', moves: same([0, 1], { r: 15, o: [8, 11] }) }
 });
+
+Object.assign(MOTION, {
+  'music-player': {
+    say: '按下中间键，屏幕亮起',
+    add: [{ layer: L(circ(8, 10, 1.125)) }],
+    moves: { 1: { a: [0.3, 1] }, a0: { ...hidden, a: [1, 0] } }
+  },
+  piano: { say: '按下一个和弦', moves: { 0: { y: [0.4, 0.4] }, 2: { y: [0, 0.4] }, 4: { y: [0.4, 0.4] } } },
+  turntable: { say: '唱臂转到唱片上', moves: { 2: { r: -20, o: [12.625, 5.25] } } },
+  'film-reel': { say: '胶卷盘转一圈', moves: { 1: { r: 360, o: [8, 8] } } },
+  'projector-screen': { say: '拉下幕布', moves: { 1: { sy: 1.13, o: [8, 5] }, 2: { y: 0.75 } } },
+  'flip-phone': { say: '来电：手机振动，屏幕亮起', ms: 800, moves: { all: { r: [-6, 6, -4, 4, 0] }, 2: { a: [0.3, 1, 0.3, 1, 1] } } },
+  'vr-headset': { say: '转头向两边看看', moves: { ...same([1, 2], { x: [0.75, -0.75, 0] }) } },
+  bot: { say: '眨眼，天线晃一晃', moves: { 0: { r: [10, -8, 4, 0], o: [8, 6] }, ...same([2, 3], { sy: [0.1, 1], o: [8, 9.5] }) } },
+  drone: { say: '螺旋桨转起来，机身升起', moves: { all: { y: -0.75 }, ...same([0, 1, 2, 3], { a: [0.4, 1, 0.4, 1] }) } }
+});

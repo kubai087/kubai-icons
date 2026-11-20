@@ -2861,3 +2861,114 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// piano's four white keys: one rounded outline cut straight down by three slits of 1.
+const PIANO = rr(1, 2.5, 14, 11, R);
+const pianoKey = (i) => L(rr(1 + i * 3.75, 2.5, 2.75, 11), { ...Bt, clip: PIANO });
+
+Object.assign(ICONS, {
+  'music-player': {
+    label: '音乐播放器',
+    key: 'tall',
+    layers: [
+      // A light player with a blue screen 2 in from the top and sides and, below it, a blue
+      // click wheel stroked round the light centre button.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(rr(5, 3, 6, 3, 1)),
+      L(circ(8, 10, 2.25), { sw: K })
+    ]
+  },
+  piano: {
+    label: '钢琴',
+    key: 'wide',
+    layers: [
+      // Four light white keys (one outline cut by straight slits) and two blue black keys
+      // hanging from the top edge over the outer slits, each cutting a gap of W round itself.
+      pianoKey(0), pianoKey(1), pianoKey(2), pianoKey(3),
+      L(rr(3, 2.5, 2.5, 6, [0, 0, 1, 1]), { clip: PIANO, gap: W }),
+      L(rr(10.5, 2.5, 2.5, 6, [0, 0, 1, 1]), { clip: PIANO, gap: W })
+    ]
+  },
+  turntable: {
+    label: '唱片机',
+    key: 'landscape',
+    layers: [
+      // A light deck seen from above, a blue platter (its spindle hole white) 2 in from the
+      // left, top and bottom, and a blue tonearm parked a gap of 1 to its right.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(circ(7, 8, 4), { cut: [C(circ(7, 8, 0.75))] }),
+      L('M12.625 4.4V10', { sw: D })
+    ]
+  },
+  'film-reel': {
+    label: '电影胶卷盘',
+    key: 'circle',
+    layers: [
+      // A light reel with five blue windows round a blue hub, the windows 2.75 in from the rim
+      // and a gap of 1 out from the hub.
+      L(circ(8, 8, 7), Bt),
+      L([0, 1, 2, 3, 4].map((i) => { const a = ((-90 + 72 * i) * Math.PI) / 180; return circ(+(8 + 3.75 * Math.cos(a)).toFixed(3), +(8 + 3.75 * Math.sin(a)).toFixed(3), 1.5); }).join('') + circ(8, 8, 1.25))
+    ]
+  },
+  'projector-screen': {
+    label: '投影幕布',
+    key: 'landscape',
+    layers: [
+      // A blue roller housing, a light screen hanging one gap below it (its top corners square,
+      // cut off by the housing's slot) and, one gap below the screen, a blue pull knob on the
+      // centre line.
+      L(rr(1, 2, 14, 2, 0.75)),
+      L(rr(2, 5, 12, 5.75, [0, 0, r, r]), Bt),
+      L(circ(8, 12.875, 1.125))
+    ]
+  },
+  'flip-phone': {
+    label: '翻盖手机',
+    key: 'tall',
+    layers: [
+      // An open flip phone: one light outline cut straight across at the hinge, a blue screen in
+      // the top half and a blue keypad of six keys in the bottom half.
+      L(rr(3, 1, 10, 6.5, [R, R, 0, 0]), Bt),
+      L(rr(3, 8.5, 10, 6.5, [0, 0, R, R]), Bt),
+      L(rr(5, 3, 6, 2.5, 1)),
+      L([5.125, 8, 10.875].map((x) => circ(x, 10.625, 0.625) + circ(x, 12.875, 0.625)).join(''))
+    ]
+  },
+  'vr-headset': {
+    label: 'VR 眼镜',
+    key: 'flat',
+    layers: [
+      // A light visor with a round notch for the nose in its bottom edge and two blue lenses, 2 in
+      // from the sides and top and 2 above the notch.
+      L(rr(1, 4, 14, 8, M), { ...Bt, cut: [C(circ(8, 12, 1.5))] }),
+      L(rr(3, 6, 3.5, 2.5, 1)),
+      L(rr(9.5, 6, 3.5, 2.5, 1))
+    ]
+  },
+  bot: {
+    label: '机器人',
+    key: 'square',
+    layers: [
+      // A blue antenna (a ball on a stem) rising from behind a light head, which cuts a gap of W
+      // round itself, and two blue eyes.
+      L(pill(7.375, 3, D, 3.5) + circ(8, 3, 1), { part: 'antenna' }),
+      L(rr(2, 5, 12, 9, M), { ...Bt, gap: W }),
+      L(circ(5.75, 9.5, 1.125)),
+      L(circ(10.25, 9.5, 1.125))
+    ]
+  },
+  drone: {
+    label: '无人机',
+    key: 'live',
+    layers: [
+      // A drone seen from above: four light rotor rings (stroked 2) at the corners and a blue
+      // body in the middle that overlaps them and cuts a gap of W round itself. One layer per
+      // rotor.
+      L(circ(4, 4, 2), { sw: 2, ...Bt }),
+      L(circ(12, 4, 2), { sw: 2, ...Bt }),
+      L(circ(4, 12, 2), { sw: 2, ...Bt }),
+      L(circ(12, 12, 2), { sw: 2, ...Bt }),
+      L(rr(5.5, 5.5, 5, 5, r), { gap: W })
+    ]
+  }
+});
