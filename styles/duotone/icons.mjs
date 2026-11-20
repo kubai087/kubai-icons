@@ -2806,3 +2806,91 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: home and tools (group 4)
+const BUCKET = polygon([[2, 5.5], [14, 5.5], [12.5, 15], [3.5, 15]], [1, 1, M, M]);
+const HEX = polygon([[4.5, 1.938], [11.5, 1.938], [15, 8], [11.5, 14.062], [4.5, 14.062], [1, 8]], 1);
+const IRON = poly([{ x: 6.5, y: 5.5, c: 1.5 }, { x: 15, y: 5.5, c: r }, { x: 15, y: 10.5, c: S }, { x: 1, y: 10.5, c: 1 }]);
+Object.assign(ICONS, {
+  'building-office': {
+    label: '办公楼',
+    key: 'tall',
+    layers: [
+      // building drawn slim: two columns of blue window bars and a door on the bottom edge. One
+      // layer per row of windows, bottom row first.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(pill(5, 8, 2.5, D) + pill(8.5, 8, 2.5, D)),
+      L(pill(5, 5.5, 2.5, D) + pill(8.5, 5.5, 2.5, D)),
+      L(pill(5, 3, 2.5, D) + pill(8.5, 3, 2.5, D)),
+      L(rr(6.75, 11, 2.5, 4, [1.25, 1.25, 0, 0]), { clip: rr(3, 1, 10, 14, R) })
+    ]
+  },
+  toothbrush: {
+    label: '牙刷',
+    key: 'flat',
+    layers: [
+      // A light handle lying flat, and one gap above its head three blue tufts of bristle.
+      L(pill(1, 9, 14, 3), Bt),
+      L(pill(8.5, 4, 1.5, 4) + pill(11, 4, 1.5, 4) + pill(13.5, 4, 1.5, 4))
+    ]
+  },
+  iron: {
+    label: '熨斗',
+    key: 'landscape',
+    layers: [
+      // A blue handle behind a light body whose nose slopes to a point (the slope is how an iron
+      // is known), and a blue soleplate one gap below.
+      L('M8 6V4.25A1.5 1.5 0 0 1 9.5 2.75H12.5A1.5 1.5 0 0 1 14 4.25V6', { sw: K }),
+      L(IRON, { ...Bt, gap: W }),
+      L(rr(1, 11.5, 14, 2.5, q))
+    ]
+  },
+  'rolling-pin': {
+    label: '擀面杖',
+    key: 'square',
+    layers: [
+      // Laid at 45°: a light barrel and, one gap off each end, a thin blue handle.
+      L(polygon(AXIS(8, 8, -45, -3.75, 3.75, 5), r), Bt),
+      L(polygon(AXIS(8, 8, -45, -8.1, -4.75, 1.75), 0.875) + polygon(AXIS(8, 8, -45, 4.75, 8.1, 1.75), 0.875))
+    ]
+  },
+  spatula: {
+    label: '锅铲',
+    key: 'square',
+    layers: [
+      // Laid at 45°: a blue blade with two slots cut along it, and one gap past it a light handle.
+      L(polygon(AXIS(8, 8, -45, -6.6, -1.5, 5), [r, 1, 1, r]), { cut: [-1.25, 1.25].map((s) => C(polygon(AXIS(8 + s * SQ, 8 + s * SQ, -45, -5.25, -2.75, 1), 0.5))) }),
+      L(polygon(AXIS(8, 8, -45, -0.5, 7.95, 2), 1), Bt)
+    ]
+  },
+  comb: {
+    label: '梳子',
+    key: 'wide',
+    layers: [
+      // A light spine, and one gap below it six blue teeth a gap apart.
+      L(rr(1, 2.5, 14, 4, r), Bt),
+      L([1.75, 4, 6.25, 8.5, 10.75, 13].map((x) => pill(x, 7.5, D, 6)).join(''))
+    ]
+  },
+  'nut-bolt': {
+    label: '螺栓螺母',
+    key: 'landscape',
+    layers: [
+      // Seen end on: a light hexagonal nut (its six slopes are what make it a nut) and the blue
+      // end of the bolt in its middle.
+      L(HEX, Bt),
+      L(circ(8, 8, 3))
+    ]
+  },
+  bucket: {
+    label: '水桶',
+    key: 'portrait',
+    layers: [
+      // A blue handle arching behind a light bucket that tapers to its base (slopes: a straight
+      // bucket reads as a pot), and a blue rim along its top.
+      L('M3.75 6A4.25 4.25 0 0 1 12.25 6', { sw: K }),
+      L(BUCKET, { ...Bt, gap: W }),
+      L(BUCKET, { clip: rr(0, 5.5, 16, 1.75) })
+    ]
+  }
+});

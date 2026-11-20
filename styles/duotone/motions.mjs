@@ -508,3 +508,18 @@ Object.assign(MOTION, {
     moves: { 2: { s: [0.82, 1], o: [8, 9.5] }, ...same(['a0', 'a1'], { rest: { a: 0, w: 0 }, a: 1, w: 1 }) }
   }
 });
+
+// Batch: home and tools (group 4)
+Object.assign(MOTION, {
+  'building-office': {
+    say: '天黑亮灯：窗户从下往上逐层亮起',
+    moves: { 1: { a: [0.2, 1, 1, 1] }, 2: { a: [0.2, 0.2, 1, 1] }, 3: { a: [0.2, 0.2, 0.2, 1] } }
+  },
+  toothbrush: { say: '牙刷来回刷两下', ms: 800, moves: { all: { x: [-0.75, 0.75, -0.75, 0] } } },
+  iron: { say: '熨斗来回熨一下', moves: { all: { x: [-0.75, 0.75, 0] } } },
+  'rolling-pin': { say: '擀面杖来回擀', ms: 800, moves: { all: { x: [0.5, -0.5, 0.5, 0], y: [0.5, -0.5, 0.5, 0] } } },
+  spatula: { say: '锅铲翻一下', moves: { all: { r: [-8, 4, 0], o: [13, 3] } } },
+  comb: { say: '梳子顺着梳过去', moves: { all: { x: [-0.75, 0.75, 0] } } },
+  'nut-bolt': { say: '螺母拧一圈', moves: { 0: { r: 60, o: [8, 8] } } },
+  bucket: { say: '提起水桶，绕提手晃一晃', moves: { all: { r: [8, -6, 3, 0], o: [8, 1.75] } } }
+});
