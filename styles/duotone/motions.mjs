@@ -542,3 +542,10 @@ Object.assign(MOTION, {
   'camper-van': { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1, 2], tilt([-3, 1.5, 0], [8, 11.5])) } },
   'toll-booth': { say: '栏杆抬起，放行', moves: same([2, 3], tilt([-35, -30], [8.5, 7.5])) }
 });
+
+// Batch: transport, travel and sports (group 7)
+Object.assign(MOTION, {
+  'fire-truck': { say: '云梯升起', moves: { 3: tilt([-12, -10], [1.5, 4.25]) } },
+  trailer: { say: '被拖着向前走，又停下', moves: { all: { x: [0.75, -0.25, 0] } } },
+  'gas-can': { say: '油桶倾斜，往外倒油', moves: { all: tilt([6, 5], [2, 15]) } }
+});

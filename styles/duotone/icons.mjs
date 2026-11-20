@@ -3075,3 +3075,46 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: transport, travel and sports (group 7)
+const CAB = rr(11, 2.5, 4, 9, [r, r, r, S]);
+// A jerrycan: its top front corner cut off at 45° (the slope) where the spout comes out.
+const CAN = polygon([[2, 4], [9.25, 4], [12.5, 7.25], [12.5, 15], [2, 15]], [M, 1, 1, M, M]);
+
+Object.assign(ICONS, {
+  'fire-truck': {
+    label: '消防车',
+    key: 'wide',
+    layers: [
+      // A low light body and a tall light cab one gap ahead, the cab's top front in blue as its
+      // window; a blue ladder with white gaps between its rungs one gap above the body, and the
+      // vehicles' blue wheels.
+      L(rr(1, 6, 9, 5.5, r), Bt),
+      L(CAB, Bt),
+      L(CAB, { clip: rr(12.25, 0, 4, 6.5) }),
+      L(rr(1, 2.5, 9, 2.5, 0.75), { cut: [2, 4.625, 7.25].map((x) => C(rr(x, 3.25, 1.75, 1, 0))) }),
+      wheels([4.5, 12.75])
+    ]
+  },
+  trailer: {
+    label: '挂车',
+    key: 'wide',
+    layers: [
+      // A light box on one blue wheel, and a blue towbar one gap in front of it.
+      L(rr(1, 2.5, 10, 9, M), Bt),
+      wheels([6]),
+      L(pill(12, 8.5, 3, K))
+    ]
+  },
+  'gas-can': {
+    label: '油桶',
+    key: 'portrait',
+    layers: [
+      // A blue handle behind a light jerrycan that cuts a gap of W round itself, and a blue spout
+      // one gap off its cut corner.
+      L('M4.25 4.5V1.75H8V4.5', { sw: K }),
+      L(CAN, { ...Bt, gap: W }),
+      L(rot(12.466, 4.034, 2.5, 2, -45, 0.75))
+    ]
+  }
+});
