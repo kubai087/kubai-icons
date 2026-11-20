@@ -519,9 +519,11 @@ export const ICONS = {
     key: 'square',
     layers: [
       // A light basket kept one gap inside the blue handle-and-frame stroke; the wheels hang from
-      // the frame.
+      // the frame. The frame bends round the basket's corner on an arc about the same centre
+      // (8, 7.5), so the gap stays 1 all the way round; the handle turns down with a thin-stroke
+      // corner of 1.
       L(rr(6, 3.5, 8, 6, M), Bt),
-      L('M2.75 2.75H4.25V11.25H13', { sw: K }),
+      L('M2.75 2.75H3.25A1 1 0 0 1 4.25 3.75V7.5A3.75 3.75 0 0 0 8 11.25H13', { sw: K }),
       // The wheels sit symmetrically under the basket (centre x 10).
       L(circ(7.25, 12.75, 1.25) + circ(12.75, 12.75, 1.25))
     ]
