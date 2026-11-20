@@ -2972,3 +2972,88 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+Object.assign(ICONS, {
+  'crt-monitor': {
+    label: 'CRT 显示器',
+    key: 'landscape',
+    layers: [
+      // A deep light set with a blue screen 2 in from its left, top and bottom, two blue dials
+      // in a column to its right, and one gap below the set a blue foot.
+      L(rr(1, 2, 14, 9.75, M), Bt),
+      L(rr(3, 4, 7.5, 5.75, r)),
+      L(circ(12.25, 4.625, 0.625) + circ(12.25, 6.875, 0.625)),
+      L(pill(4.5, 12.75, 7, D))
+    ]
+  },
+  'retro-computer': {
+    label: '复古电脑',
+    key: 'portrait',
+    layers: [
+      // A light all-in-one with a blue screen 2 in from the top and sides, a blue floppy slot
+      // below it at the right, and one gap below the case a blue foot.
+      L(rr(2, 1, 12, 11.5, M), Bt),
+      L(rr(4, 3, 8, 4.5, r)),
+      L(pill(7.75, 9.5, 4.5, D)),
+      L(pill(4, 13.5, 8, 1.5))
+    ]
+  },
+  typewriter: {
+    label: '打字机',
+    key: 'landscape',
+    layers: [
+      // A light sheet standing up behind a blue roller, which cuts a gap of W round itself, and
+      // one gap below the roller a light body with a row of five blue keys.
+      L(rr(4, 2, 8, 6, [1, 1, 0, 0]), Bt),
+      L(pill(2, 6, 12, 2), { gap: W }),
+      L(rr(1, 9, 14, 5, M), Bt),
+      L([3.5, 5.75, 8, 10.25, 12.5].map((x) => circ(x, 11.5, 0.625)).join(''))
+    ]
+  },
+  'music-library': {
+    label: '音乐库',
+    key: 'square',
+    layers: [
+      // Two light album sleeves, the front one cutting a gap of W round itself, and a blue
+      // eighth note on the front one.
+      L(rr(5, 2, 9, 9, M), Bt),
+      L(rr(2, 5, 9, 9, M), { ...Bt, gap: W, part: 'front' }),
+      L(circ(6, 10.75, 1.25) + rr(6, 7, D, 3.75, [0.625, 0, 0, 0]) + pill(6, 7, 3, D), { part: 'front', gap: W })
+    ]
+  },
+  'paper-shredder': {
+    label: '碎纸机',
+    key: 'square',
+    layers: [
+      // A blue page going into a light shredder, which cuts a gap of W round itself, and one
+      // gap below it three blue strips coming out.
+      L(rr(4, 2, 8, 5, [1, 1, 0, 0])),
+      L(rr(2, 5, 12, 5, M), { ...Bt, gap: W }),
+      L('M5 11.625V13.375M8 11.625V13.375M11 11.625V13.375', { sw: D })
+    ]
+  },
+  drum: {
+    label: '鼓',
+    key: 'live',
+    layers: [
+      // A blue drum head and, one gap below it, a light shell; two blue sticks raised above the
+      // head on a slant (the angle is what shows them striking, GUIDE §1), a gap of 1 clear.
+      L('M3.5 1.75L6 4.25', { sw: K }),
+      L('M12.5 1.75L10 4.25', { sw: K }),
+      L(rr(1, 6, 14, 2, t)),
+      L(rr(2, 9, 12, 6, [S, S, M, M]), Bt)
+    ]
+  },
+  jukebox: {
+    label: '点唱机',
+    key: 'portrait',
+    layers: [
+      // A light cabinet with an arched top, a blue record in its arch (the spindle hole white)
+      // and two blue speaker lines below, 2 in from the sides. One layer per line.
+      L(rr(2, 1, 12, 14, [6, 6, M, M]), Bt),
+      L(circ(8, 6.25, 2.5), { cut: [C(circ(8, 6.25, 0.75))] }),
+      L(pill(4, 9.75, 8, D)),
+      L(pill(4, 11.75, 8, D))
+    ]
+  }
+});
