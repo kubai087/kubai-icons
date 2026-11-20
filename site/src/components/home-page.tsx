@@ -14,7 +14,6 @@ import { HeroWall } from "@/components/hero-wall";
 import { HeroBadge } from "@/components/hero-badge";
 import { HeroHeadline } from "@/components/hero-headline";
 import { FeatureCards } from "@/components/feature-cards";
-import { DuotoneBand } from "@/components/duotone-band";
 import { SponsorSlot } from "@/components/sponsor-slot";
 import { duotoneCount, iconCount, moduleBytes } from "@/lib/catalog";
 
@@ -70,7 +69,6 @@ export function HomePage({ locale }: { locale: Locale }) {
         <HeroWall />
       </section>
 
-      <DuotoneBand className="reveal" />
       <FeatureCards className="reveal mt-6" moduleBytes={moduleBytes(MODULE_DEMO)} />
       <SkillPrompt className="reveal mt-6 rounded-panel px-panel py-5" />
     </Container>
