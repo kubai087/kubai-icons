@@ -360,7 +360,12 @@ export const MOTION = {
     say: '雪花左右飘着落下',
     moves: { 1: { x: [0.5, 0], y: [-1.5, 0], a: [0, 1] }, 2: { x: [-0.5, 0], y: [-1.5, 0], a: [0, 1] }, 3: { x: [0.5, 0], y: [-1.5, 0], a: [0, 1] } }
   },
-  backpack: { say: '提起来，绕提手晃一晃', moves: { all: { y: [-0.5, -0.5, -0.5, -0.5], r: [4, -3, 1.5, 0], o: [8, 1.75] } } }
+  backpack: { say: '提起来，绕提手晃一晃', moves: { all: { y: [-0.5, -0.5, -0.5, -0.5], r: [4, -3, 1.5, 0], o: [8, 1.75] } } },
+  'user-round': { say: '抬头', moves: { 1: { y: [-1, -0.75] }, 2: { y: [-0.4, -0.3] } } },
+  images: { say: '两张照片错开', moves: { 0: { x: 0.5, y: -0.5 }, ...same([1, 2, 3], { x: -0.5, y: 0.5 }) } },
+  playlist: { say: '列表逐行写出，播放键向前一推', moves: { 0: { w: [0, 1, 1, 1] }, 1: { w: [0, 0, 1, 1] }, 2: { w: [0, 0, 0, 1] }, 3: { x: [0, 0, 0.5, 0] } } },
+  'id-badge': { say: '工牌挂在夹子上晃一晃', moves: { all: { r: [4, -3, 1.5, 0], o: [8, 1] } } },
+  radio: { say: '喇叭随声音振动', moves: { 2: { s: [0.85, 1.1, 0.9, 1], o: [5, 10] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own

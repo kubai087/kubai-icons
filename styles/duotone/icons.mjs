@@ -1802,6 +1802,65 @@ export const ICONS = {
       L(rr(2, 3.5, 12, 11.5, [5, 5, M, M]), { ...Bt, gap: W }),
       L(rr(4.25, 9.5, 7.5, 3.25, r))
     ]
+  },
+  'user-round': {
+    label: '头像',
+    key: 'circle',
+    layers: [
+      // An avatar: a light disc with a blue head and, one gap below it, blue shoulders clipped to
+      // the disc so they follow its rim.
+      L(circ(8, 8, 7), Bt),
+      L(circ(8, 6.25, 2.5)),
+      L(rr(3, 9.75, 10, 8, [5, 5, 0, 0]), { clip: circ(8, 8, 7) })
+    ]
+  },
+  images: {
+    label: '照片',
+    key: 'landscape',
+    layers: [
+      // Two photos drawn like copy: a blue one behind at the top right, and in front a light one
+      // with image's hill and sun, cutting a gap of W round itself and covering a third of it.
+      L(rr(5.5, 2, 9.5, 8, M)),
+      L(rr(1, 5.5, 10, 8.5, M), { ...Bt, gap: W }),
+      L(circ(4.5, 17.5, 5.5), { clip: rr(1, 5.5, 10, 8.5, M) }),
+      L(circ(7.625, 8.875, 1.125))
+    ]
+  },
+  playlist: {
+    label: '播放列表',
+    key: 'wide',
+    layers: [
+      // menu's light bars, the lower two shortened to make room for play's blue triangle at the
+      // bottom right (its tip drawn past the keyline so the rounded tip lands on it).
+      L('M2 3.5H14', { sw: 2, ...Bt }),
+      L('M2 8H9', { sw: 2, ...Bt }),
+      L('M2 12.5H8.875', { sw: 2, ...Bt }),
+      L(polygon([[10.75, 7.1], [15.6, 10.5], [10.75, 13.9]], 1))
+    ]
+  },
+  'id-badge': {
+    label: '工牌',
+    key: 'portrait',
+    layers: [
+      // A light card hanging from a blue clip that crosses its top edge (as clipboard's), with
+      // a small blue person on it: a head and, one gap below, shoulders.
+      L(rr(2, 3, 12, 12, M), Bt),
+      L(rr(5.5, 1, 5, 3.5, 1), { gap: W }),
+      L(circ(8, 7.75, 1.5)),
+      L(rr(5.25, 10.25, 5.5, 2.5, [2.75, 2.75, 0.75, 0.75]))
+    ]
+  },
+  radio: {
+    label: '收音机',
+    key: 'landscape',
+    layers: [
+      // A blue antenna one gap above a light set with a blue speaker on the left and two blue
+      // tuning lines on the right, each 2 to 2.25 in from the nearby edges.
+      L(pill(11.5, 2, 1.5, 3)),
+      L(rr(1, 6, 14, 8, M), Bt),
+      L(circ(5, 10, 2)),
+      L(pill(9, 8.25, 3.75, D) + pill(9, 10.5, 3.75, D))
+    ]
   }
 };
 
