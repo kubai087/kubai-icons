@@ -2755,3 +2755,157 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: transport, travel and sports (group 4)
+// A lower car for the roof sign and lamp: the cabin is too short for a window.
+const SEDAN = body(1, 7.5, 14, 4, r, [{ x: 3.5, w: 9, h: 2.5, c: S }]);
+// A hot-air balloon's envelope: a circle that narrows to a short throat, its sides running off
+// the circle along tangents (the slopes).
+const BALLOON = (() => {
+  const cx = 8, cy = 6, R0 = 5, yb = 11.5, hw = 1.5;
+  const tan = (sx) => {
+    const px = cx + sx * hw, dx = px - cx, dy = yb - cy, d = Math.hypot(dx, dy), a = Math.atan2(dy, dx) + sx * Math.acos(R0 / d);
+    return [f3(cx + R0 * Math.cos(a)), f3(cy + R0 * Math.sin(a))];
+  };
+  return circ(cx, cy, R0) + polygon([tan(-1), tan(1), [cx + hw, yb], [cx - hw, yb]], [0, 0, 0.75, 0.75]);
+})();
+const HELI = rr(2.5, 5, 7.5, 6, 3);
+const PYRAMID = polygon([[8, 0.95], [15.55, 14], [0.45, 14]], [1, 0.75, 0.75]);
+
+Object.assign(ICONS, {
+  'police-car': {
+    label: '警车',
+    key: 'wide',
+    layers: [
+      // A low light car, the vehicles' blue wheels, and on the roof one gap up a lamp bar of two
+      // halves cut apart by a gap: one blue, one light.
+      L(SEDAN, Bt),
+      wheels([4.5, 11.5], 11.5, 2, 0.75),
+      L(rr(4.5, 2.5, 3, 1.5, [0.75, 0, 0, 0.75])),
+      L(rr(8.5, 2.5, 3, 1.5, [0, 0.75, 0.75, 0]), Bt)
+    ]
+  },
+  taxi: {
+    label: '出租车',
+    key: 'wide',
+    layers: [
+      // police-car's low car and wheels with a blue taxi sign on the roof, one gap up.
+      L(SEDAN, Bt),
+      wheels([4.5, 11.5], 11.5, 2, 0.75),
+      L(rr(5.75, 2.5, 4.5, 1.5, [0.75, 0.75, 0, 0]))
+    ]
+  },
+  subway: {
+    label: '地铁',
+    key: 'portrait',
+    layers: [
+      // A boxy light train front with two blue windows side by side and two blue lamps, each
+      // 2 in from the body's edges, and two blue feet one gap below.
+      L(rr(2, 1, 12, 11.5, M), Bt),
+      L(rr(4, 3, 3.5, 4, 1) + rr(8.5, 3, 3.5, 4, 1)),
+      L(circ(5, 9.5, 1) + circ(11, 9.5, 1)),
+      L(rr(3.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]) + rr(9.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  tram: {
+    label: '有轨电车',
+    key: 'portrait',
+    layers: [
+      // A light tram front with a blue windscreen 2 in from its top and sides, the blue
+      // current collector (a T) one gap above it, and two blue feet one gap below.
+      L(pill(5, 1, 6, 1.5) + rr(7.25, 2, 1.5, 1.5, 0)),
+      L(rr(2, 4.5, 12, 8, M), Bt),
+      L(rr(4, 6.5, 8, 4, 1)),
+      L(rr(3.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]) + rr(9.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  sailboat: {
+    label: '帆船',
+    key: 'square',
+    layers: [
+      // Two light sails either side of a hidden mast, one gap apart, over a blue hull: sails and
+      // hull are known by their slopes.
+      L(polygon([[8.5, 0.39], [14.48, 9.5], [8.5, 9.5]], [0.75, 0.5, 0]) + polygon([[7.5, 3], [7.5, 9.5], [2.6, 9.5]], [0.5, 0, 0.5]), Bt),
+      L(polygon([[1.6, 10.5], [14.4, 10.5], [12, 14], [4, 14]], [0.5, 0.5, 1, 1]))
+    ]
+  },
+  helicopter: {
+    label: '直升机',
+    key: 'wide',
+    layers: [
+      // A light helicopter from the side: a round cabin with a tail boom and fin, the cabin's
+      // front in blue as its window; a blue rotor one gap above and blue skids one gap below.
+      L(HELI + pill(8, 6.75, 7, 2) + rr(13, 5, 2, 3, [1, 1, 0, 0]), Bt),
+      L(HELI, { clip: rr(0, 0, 5.5, 8) }),
+      L(pill(1, 2.5, 11.5, 1.5)),
+      L(pill(2.5, 12, 8, 1.5))
+    ]
+  },
+  'hot-air-balloon': {
+    label: '热气球',
+    key: 'tall',
+    layers: [
+      // A light envelope narrowing to its throat (the slopes) with a blue band down its middle,
+      // and a blue basket one gap below.
+      L(BALLOON, Bt),
+      L(BALLOON, { clip: rr(6.5, 0, 3, 10.25) }),
+      L(rr(6.25, 12.5, 3.5, 2.5, [0.5, 0.5, 1, 1]))
+    ]
+  },
+  'cable-car': {
+    label: '缆车',
+    key: 'square',
+    layers: [
+      // A blue cable rising to the right (the slope) with a blue hanger, and one gap below the
+      // hanger a light cabin with two blue windows 2 in from its sides and bottom.
+      L('M2.625 4.25L13.375 2.625', { sw: D }),
+      L(pill(7.25, 3, K, 3.5)),
+      L(rr(3, 7.5, 10, 6.5, M), Bt),
+      L(rr(5, 9.5, 2.5, 2.5, 0.75) + rr(8.5, 9.5, 2.5, 2.5, 0.75))
+    ]
+  },
+  castle: {
+    label: '城堡',
+    key: 'square',
+    layers: [
+      // A light wall with three merlons on top and a blue arched gate standing on its base.
+      L(polygon([[2, 2], [4.5, 2], [4.5, 4.5], [6.75, 4.5], [6.75, 2], [9.25, 2], [9.25, 4.5], [11.5, 4.5], [11.5, 2], [14, 2], [14, 14], [2, 14]], [0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0.5, 0.5, R, R]), Bt),
+      L(rr(6.5, 9.5, 3, 4.5, [1.5, 1.5, 0, 0]))
+    ]
+  },
+  pyramid: {
+    label: '金字塔',
+    key: 'landscape',
+    layers: [
+      // A light pyramid (the slopes) whose right face is in shade: the outline clipped in blue
+      // right of a line from the top to a point right of centre on the base.
+      L(PYRAMID, Bt),
+      L(PYRAMID, { clip: polygon([[8, 0], [16, 0], [16, 16], [10.5, 16], [10.5, 14]]) })
+    ]
+  },
+  museum: {
+    label: '博物馆',
+    key: 'square',
+    layers: [
+      // A light pediment (the roof's slopes), four blue columns one gap below it, and a light base
+      // one gap below them. One layer per column.
+      L(polygon([[8, 1.82], [14.4, 5.25], [1.6, 5.25]], [1, 0.5, 0.5]), Bt),
+      L(pill(3.25, 6.25, K, 5.25)),
+      L(pill(5.917, 6.25, K, 5.25)),
+      L(pill(8.583, 6.25, K, 5.25)),
+      L(pill(11.25, 6.25, K, 5.25)),
+      L(rr(2, 12.5, 12, 1.5, 0.5), Bt)
+    ]
+  },
+  podium: {
+    label: '领奖台',
+    key: 'landscape',
+    layers: [
+      // One light stepped block: the tallest step in the middle, the second on the left and the
+      // third on the right (three separate blocks read as a bar chart), with a blue 1 on the
+      // middle step.
+      L(polygon([[1, 7], [5.5, 7], [5.5, 2], [10.5, 2], [10.5, 9.5], [15, 9.5], [15, 14], [1, 14]], [1, 0, 1, 1, 0, 1, 1, 1]), Bt),
+      L('M8 4.5V7.75', { sw: D })
+    ]
+  }
+});
