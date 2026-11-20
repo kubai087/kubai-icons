@@ -13,6 +13,8 @@ export const firstChunk = () => `/data/icons/_first.js?v=${index().hashes._first
 
 /** Every icon, badged versions included. */
 export const iconCount = () => index().icons.length;
+/** How many icons the two-tone style has; counted apart, as they are the same objects drawn again. */
+export const duotoneCount = () => index().duotone?.length ?? 0;
 
 /** The gzipped size in bytes of each named icon's ES module, or 0 if it is not built. */
 export const moduleBytes = (names: string[]) =>

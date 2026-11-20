@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { STORY, useHeroBeat } from "@/components/hero-wall";
+import { useIconStyle } from "@/components/browser/prefs";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
@@ -61,14 +62,17 @@ export function HeroHeadline({ className }: { className?: string }) {
     return () => observer.disconnect();
   }, []);
   const beat = useHeroBeat(visible);
+  const [style] = useIconStyle();
   const locale = useLocale();
   const [before, after] = SLOGANS[locale];
   const slot = (
       /* The icons of the wall's story take turns here, each playing as its beat comes. */
       <span aria-hidden className="grid size-[1em] shrink-0 *:[grid-area:1/1]">
-        {STORY.map(({ Icon, color }, i) => (
-          <Icon key={i} size={48} color={color} trigger="none" hover={beat === i} className={cn("size-full transition-opacity duration-300 motion-reduce:transition-none", (beat ?? 0) !== i && "opacity-0")} />
-        ))}
+        {STORY.map(({ Icon, Duo, color }, i) => {
+          // The headline's icon follows the wall's style.
+          const Shown = style === "duotone" ? Duo : Icon;
+          return <Shown key={`${style}${i}`} size={48} color={color} trigger="none" hover={beat === i} className={cn("size-full transition-opacity duration-300 motion-reduce:transition-none", (beat ?? 0) !== i && "opacity-0")} />;
+        })}
       </span>
   );
   if (ONE_LINE.has(locale)) {
