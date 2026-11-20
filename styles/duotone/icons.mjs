@@ -154,6 +154,16 @@ const MAP = polygon([[1, 3.5], [5.667, 2], [10.333, 3.5], [15, 2], [15, 12.5], [
 // A cut gem: a flat table, a girdle at its widest, and a point at the bottom.
 const GEM = polygon([[4.5, 2], [11.5, 2], [15.3, 5.75], [8, 14.6], [0.7, 5.75]], [1, 1, 0.75, 1, 0.75]);
 
+// A funnel chart's outline: wide at the top, narrowing to the bottom.
+const FUNNEL = polygon([[1.4, 2], [14.6, 2], [10.5, 14], [5.5, 14]], [r, r, 1, 1]);
+
+// A radar chart: points along five spokes from (8, cy), the first straight up, at fractions f of
+// radius rad, drawn 5% taller.
+const RADAR = (f, rad, cy = 8.6, sy = 1.05) => f.map((k, i) => {
+  const a = ((-90 + 72 * i) * Math.PI) / 180;
+  return [f3(8 + k * rad * Math.cos(a)), f3(cy + k * rad * Math.sin(a) * sy)];
+});
+
 // A plane seen from above in one light outline: a fuselage, swept wings and a swept tail.
 const PLANE = pill(6.75, 2, 2.5, 12) + polygon([[2, 8.25], [8, 4.5], [14, 8.25], [14, 11.25], [8, 9], [2, 11.25]], [0.75, 0, 0.75, 0.75, 0, 0.75]) +
   polygon([[4.5, 12.25], [8, 10.5], [11.5, 12.25], [11.5, 14], [8, 12.5], [4.5, 14]], [0.5, 0, 0.5, 0.5, 0, 0.5]);
@@ -2170,6 +2180,128 @@ export const ICONS = {
       // a quarter arc round its tip. Separate click lines read as an arrow aimed at the pointer.
       L(polygon([[5.4, 5.4], [15.35, 9.5], [11.1, 11.1], [9.5, 15.35]], [1, 0.75, 0.5, 0.75]), Bt),
       L('M2.6 5.8A3.2 3.2 0 0 1 5.8 2.6', { sw: D })
+    ]
+  },
+  'star-half': {
+    label: '半星评分',
+    key: 'circle',
+    layers: [
+      // star's outline, its left half in blue (clipped from the same outline): half a rating.
+      L(polygon(starPts(8, 8.69, 7.88, 4.07, 1.058), 0.5), Bt),
+      L(polygon(starPts(8, 8.69, 7.88, 4.07, 1.058), 0.5), { clip: rr(0, 0, 8, 16) })
+    ]
+  },
+  'trending-up': {
+    label: '上涨',
+    key: 'square',
+    layers: [
+      // bold's light tile with a blue line that zigzags up at 45° and ends in an arrowhead
+      // corner. The line and its head are separate layers so the head can follow the line.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.25 10L7.25 7L9 8.75L11.75 6', { sw: K }),
+      L('M9.25 6H11.75V8.5', { sw: K })
+    ]
+  },
+  'trending-down': {
+    label: '下跌',
+    key: 'square',
+    layers: [
+      // trending-up turned upside down: the line zigzags down to the arrowhead.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.25 6L7.25 9L9 7.25L11.75 10', { sw: K }),
+      L('M9.25 10H11.75V7.5', { sw: K })
+    ]
+  },
+  'chart-line': {
+    label: '折线图',
+    key: 'square',
+    layers: [
+      // A light tile and a blue line through four points at different slopes (a line chart
+      // needs them; a 45° zigzag would read as trending-up).
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.5 10.75L6.75 7.25L9.25 9.25L11.5 5.25', { sw: K })
+    ]
+  },
+  'chart-area': {
+    label: '面积图',
+    key: 'square',
+    layers: [
+      // Two stacked areas on one baseline, their tops running up and down (slopes): the back one
+      // blue, the front one light, cutting a gap of W along its top.
+      L(polygon([[2, 7.25], [6, 3.75], [9.5, 6.25], [14, 0.15], [14, 14], [2, 14]], [r, 1, 1, 1, r, r])),
+      L(polygon([[2, 10.25], [6, 7.25], [9.5, 9.5], [14, 6], [14, 14], [2, 14]], [r, 1, 1, r, r, r]), { ...Bt, gap: W })
+    ]
+  },
+  activity: {
+    label: '动态',
+    key: 'square',
+    layers: [
+      // A light tile with a blue pulse line: flat, a sharp rise and fall, flat again. The peaks
+      // need slopes; the line keeps 2 in from the tile's edges.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.75 8H6L7 5.25L9 10.75L10 8H11.25', { sw: K })
+    ]
+  },
+  'fast-forward': {
+    label: '快进',
+    key: 'circle',
+    layers: [
+      // Two of play's triangles in a row, one gap apart, centred on the disc.
+      L(circ(8, 8, 7), Bt),
+      L(polygon([[4, 5.25], [7.5, 8], [4, 10.75]], 0.75)),
+      L(polygon([[8.5, 5.25], [12, 8], [8.5, 10.75]], 0.75))
+    ]
+  },
+  rewind: {
+    label: '快退',
+    key: 'circle',
+    layers: [
+      // fast-forward turned round.
+      L(circ(8, 8, 7), Bt),
+      L(polygon([[12, 5.25], [12, 10.75], [8.5, 8]], 0.75)),
+      L(polygon([[7.5, 5.25], [7.5, 10.75], [4, 8]], 0.75))
+    ]
+  },
+  eject: {
+    label: '弹出',
+    key: 'circle',
+    layers: [
+      // A blue triangle pointing up and, one gap below, a blue bar of the same width, centred on
+      // the disc.
+      L(circ(8, 8, 7), Bt),
+      L(polygon([[8, 4.1], [11.25, 8.25], [4.75, 8.25]], 1)),
+      L(rr(4.75, 9.25, 6.5, 1.5, 0.75))
+    ]
+  },
+  italic: {
+    label: '斜体',
+    key: 'square',
+    layers: [
+      // bold's tile with a slanted I: two serifs and a stem leaning right (the slope is what
+      // makes it italic), in one stroke.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M7.25 4.5H10.5M5.5 11.5H8.75M8.875 4.5L7.125 11.5', { sw: K })
+    ]
+  },
+  'chart-funnel': {
+    label: '漏斗图',
+    key: 'square',
+    layers: [
+      // A funnel narrowing downward (the slopes), cut straight into three bands a gap of 1
+      // apart; the middle band is blue. One layer per band, so the motion can fill them in turn.
+      L(FUNNEL, { ...Bt, clip: rr(0, 0, 16, 5.33) }),
+      L(FUNNEL, { clip: rr(0, 6.33, 16, 3.34) }),
+      L(FUNNEL, { ...Bt, clip: rr(0, 10.67, 16, 6) })
+    ]
+  },
+  'chart-radar': {
+    label: '雷达图',
+    key: 'circle',
+    layers: [
+      // A light pentagon (the slopes) and a blue data shape inside it, its corners at different
+      // distances along the pentagon's spokes. Drawn 5% taller to fill the circle, as star.
+      L(polygon(RADAR([1, 1, 1, 1, 1], 7.36), 1), Bt),
+      L(polygon(RADAR([0.62, 0.66, 0.42, 0.56, 0.38], 7.36), 0.5))
     ]
   }
 };

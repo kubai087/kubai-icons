@@ -394,7 +394,23 @@ export const MOTION = {
   'flag-triangle': { say: '旗面迎风飘动', moves: { 1: { sx: [0.8, 1.06, 0.92, 1], sy: [1, 0.94, 1.04, 1], o: [4.5, 5.25] } } },
   'traffic-cone': { say: '锥桶被碰了一下，左右晃动', ms: 800, moves: { all: { r: [-8, 6, -3, 0], o: [8, 15] } } },
   award: { say: '奖章翻过来，再翻回正面', moves: same([1, 2], { sx: [-1, 1, 1], o: [8, 6] }) },
-  'mouse-pointer-click': { say: '按下鼠标，指针一沉，点击处的波纹向外扩开', moves: { 0: { s: [0.88, 1], o: [5.4, 5.4] }, 1: { s: [0.4, 1], a: [0, 1], o: [5.8, 5.8] } } }
+  'mouse-pointer-click': { say: '按下鼠标，指针一沉，点击处的波纹向外扩开', moves: { 0: { s: [0.88, 1], o: [5.4, 5.4] }, 1: { s: [0.4, 1], a: [0, 1], o: [5.8, 5.8] } } },
+  'star-half': {
+    say: '评分涨满一颗星，再回到半颗',
+    add: [{ layer: L(ICONS['star-half'].layers[0].d) }],
+    moves: { a0: { ...hidden, a: [1, 1, 0] } }
+  },
+  'trending-up': { say: '折线向上画出，箭头随后画上', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  'trending-down': { say: '折线向下画出，箭头随后画上', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  'chart-line': { say: '折线从左到右画出', moves: { 1: { w: [0, 1] } } },
+  'chart-area': { say: '两层面积从底部升起', moves: { 0: { sy: [0.5, 1], o: [8, 14] }, 1: { sy: [0.3, 1], o: [8, 14] } } },
+  activity: { say: '脉搏线从左到右画出', moves: { 1: { w: [0, 1] } } },
+  'fast-forward': { say: '两个三角依次向前一推', moves: { 1: { x: [0.75, 0, 0] }, 2: { x: [0, 0.75, 0] } } },
+  rewind: { say: '两个三角依次向后一推', moves: { 1: { x: [-0.75, 0, 0] }, 2: { x: [0, -0.75, 0] } } },
+  eject: { say: '三角向上弹出一下', moves: { 1: { y: [-1, 0] } } },
+  italic: { say: '字母一笔写出', moves: { 1: { w: [0, 1] } } },
+  'chart-funnel': { say: '数据从上往下逐层流入', moves: { 0: { a: [0.2, 1, 1, 1] }, 1: { a: [0.2, 0.2, 1, 1] }, 2: { a: [0.2, 0.2, 0.2, 1] } } },
+  'chart-radar': { say: '数据从中心向外展开', moves: { 1: { s: [0.3, 1], o: [8, 8.6] } } }
 };
 
 // Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
