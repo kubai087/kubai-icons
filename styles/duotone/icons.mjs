@@ -845,6 +845,126 @@ export const ICONS = {
       L(rr(2, 6.5, 12, 8.5, M), { ...Bt, gap: W }),
       L(pill(7.25, 9.25, 1.5, 3))
     ]
+  },
+  menu: {
+    label: '菜单',
+    key: 'wide',
+    layers: [
+      // Three bars of equal length, 2 thick and 2.5 apart; the middle one is blue. Drawn as
+      // strokes, so the motion can draw them on without running past their ends.
+      L('M2 3.5H14', { sw: 2, ...Bt }),
+      L('M2 8H14', { sw: 2 }),
+      L('M2 12.5H14', { sw: 2, ...Bt })
+    ]
+  },
+  grid: {
+    label: '网格',
+    key: 'square',
+    layers: [
+      // Nine light tiles, three by three, a gap of 1 apart; the centre tile is blue.
+      L([0, 1, 2].flatMap((i) => [0, 1, 2].filter((j) => i !== 1 || j !== 1).map((j) => rr(2 + (i * 13) / 3, 2 + (j * 13) / 3, 10 / 3, 10 / 3, 1))).join(''), Bt),
+      L(rr(2 + 13 / 3, 2 + 13 / 3, 10 / 3, 10 / 3, 1))
+    ]
+  },
+  list: {
+    label: '列表',
+    key: 'landscape',
+    layers: [
+      // Three rows: a blue dot and a light bar one gap to its right. One layer per row's bar, so
+      // the motion can lay them out one after another.
+      L([3.25, 8, 12.75].map((y) => circ(2.25, y, 1.25)).join('')),
+      L(pill(4.5, 2, 10.5, 2.5), Bt),
+      L(pill(4.5, 6.75, 10.5, 2.5), Bt),
+      L(pill(4.5, 11.5, 10.5, 2.5), Bt)
+    ]
+  },
+  sun: {
+    label: '太阳',
+    key: 'circle',
+    layers: [
+      // A light disc ringed by eight blue dots, one gap out (dots instead of rays, which would
+      // need slopes). The straight and the diagonal dots are separate layers.
+      L(circ(8, 8, 4.25), Bt),
+      L([0, 90, 180, 270].map((a) => circ(8 + 6.125 * Math.cos((a * Math.PI) / 180), 8 + 6.125 * Math.sin((a * Math.PI) / 180), 0.875)).join('')),
+      L([45, 135, 225, 315].map((a) => circ(8 + 6.125 * Math.cos((a * Math.PI) / 180), 8 + 6.125 * Math.sin((a * Math.PI) / 180), 0.875)).join(''))
+    ]
+  },
+  'rotate-cw': {
+    label: '顺时针旋转',
+    key: 'circle',
+    layers: [
+      // history's arrow turned the other way, without the hands: a light ring open at the upper
+      // right, drawn clockwise from just below the right up to the opening, where the blue head
+      // points on round, down and to the right.
+      L('M13.909 9.042A6 6 0 1 1 12.243 3.757', { ...Bt, sw: 2, part: 'arrow' }),
+      L(polygon([[15.008, 6.522], [9.768, 6.232], [14.718, 1.282]], 1), { part: 'arrow' })
+    ]
+  },
+  'chart-bar': {
+    label: '图表',
+    key: 'square',
+    layers: [
+      // Three bars a gap of 1 apart on one baseline; the tallest, in the middle, is blue. One
+      // layer per bar, so the motion can raise them one after another.
+      L(rr(2, 7.5, 10 / 3, 6.5, 1), Bt),
+      L(rr(2 + 13 / 3, 2, 10 / 3, 12, 1)),
+      L(rr(2 + 26 / 3, 5, 10 / 3, 9, 1), Bt)
+    ]
+  },
+  'chart-pie': {
+    label: '饼图',
+    key: 'circle',
+    layers: [
+      // A light disc with its upper right quarter cut away along two straight seams 1 wide; the
+      // quarter is blue, clipped from the same disc so it keeps its outline exactly.
+      L(circ(8, 8, 7), { ...Bt, cut: [C(rr(7.5, -1, 10, 9.5))] }),
+      L(circ(8, 8, 7), { clip: rr(8.5, 0, 8, 7.5) })
+    ]
+  },
+  filter: {
+    label: '筛选',
+    key: 'circle',
+    layers: [
+      // A funnel needs slopes, so filter uses the other common sign: three lines that get shorter
+      // (8, 5.5 and 3 long), centred on a light disc as in the status marks.
+      L(circ(8, 8, 7), Bt),
+      L('M4.75 5.5H11.25', { sw: K }),
+      L('M6 8H10', { sw: K }),
+      L('M7.25 10.5H8.75', { sw: K })
+    ]
+  },
+  briefcase: {
+    label: '公文包',
+    key: 'landscape',
+    layers: [
+      // A blue handle behind a light case, which cuts a gap of W round itself; a blue clasp
+      // centred on the case, 3 in from its top and bottom.
+      L('M5.75 6V3.75A1 1 0 0 1 6.75 2.75H9.25A1 1 0 0 1 10.25 3.75V6', { sw: K }),
+      L(rr(1, 5.5, 14, 8.5, M), { ...Bt, gap: W }),
+      L(rr(6.5, 8.5, 3, 2.5, 1))
+    ]
+  },
+  keyboard: {
+    label: '键盘',
+    key: 'wide',
+    layers: [
+      // A light keyboard with two rows of four blue keys and a space bar under them; the corner
+      // keys sit 2.25 in from both nearby edges. One layer per row, so the motion can press them
+      // one after another.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L([0, 1, 2, 3].map((k) => circ(4 + (k * 8) / 3, 5.5, 0.75)).join('')),
+      L([0, 1, 2, 3].map((k) => circ(4 + (k * 8) / 3, 8, 0.75)).join('')),
+      L(pill(5.5, 9.875, 5, D))
+    ]
+  },
+  toggle: {
+    label: '切换开关',
+    key: 'flat',
+    layers: [
+      // A light track and a blue knob at its left end, 1 in from the track's top, bottom and end.
+      L(pill(1, 4, 14, 8), Bt),
+      L(circ(5, 8, 3))
+    ]
   }
 };
 
