@@ -10,7 +10,7 @@ import { RiTwitterXLine } from "@remixicon/react";
 import { tile } from "@/components/kit/styles";
 import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
-import { useWallLoop } from "@/lib/wall-motion";
+import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
 
 export type WallFriend = { slug: string; name: string; site: string; host: string; image: string; sponsored?: boolean };
 
@@ -63,8 +63,10 @@ type TileProps = { Icon: (typeof ICONS)[number]; color: string; offset: number; 
 const LoopTile = memo(function LoopTile({ Icon, color, offset, period, running, className, style }: TileProps) {
   const [turn, setTurn] = useState(false);
   const [held, setHeld] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
   useEffect(() => {
-    if (!running || held) return;
+    if (!running || !onScreen || held) return;
     // Turns are read from the page clock, so throttled timers cannot bring tiles into step.
     const phase = () => (performance.now() + period - offset) % period;
     let timer = 0;
@@ -81,9 +83,10 @@ const LoopTile = memo(function LoopTile({ Icon, color, offset, period, running, 
       window.clearTimeout(timer);
       setTurn(false);
     };
-  }, [running, held, offset, period]);
+  }, [running, onScreen, held, offset, period]);
   return (
     <div
+      ref={ref}
       aria-hidden
       // Its own layer, so its repaints while moving leave the frosted name labels alone.
       className={cn(tile(), "rise-in size-full will-change-transform", className)}
