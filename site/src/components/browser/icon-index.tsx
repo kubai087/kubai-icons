@@ -1,6 +1,6 @@
 import { RiArrowRightSLine } from "@remixicon/react";
 import Link from "next/link";
-import { card, quietLink } from "@/components/kit/styles";
+import { quietLink } from "@/components/kit/styles";
 import { allCategories, baseIcons, iconsIn, localNameOf } from "@/lib/catalog";
 import { hasIconPages, localize, pick, type Locale } from "@/lib/i18n";
 import type { IconMeta } from "@/lib/icons";
@@ -38,8 +38,9 @@ export function IconIndex({ locale = "en" }: { locale?: Locale }) {
             <Link
               href={localize(`/icons/category/${c.id}/`, locale)}
               prefetch={false}
-              // Hover keeps the card's fill and lifts it a little; its icons rise in turn, left to right.
-              className={cn(card, "group flex h-full flex-col gap-4 p-4 transition-[border-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-md motion-reduce:hover:translate-y-0")}
+              // A white card with a light border, so its grey icon tiles stand out. Hover lifts it with a
+              // soft shadow, and its icons rise in turn, left to right.
+              className="group flex h-full flex-col gap-4 rounded-card border border-border/60 bg-background p-4 transition-[border-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-sm motion-reduce:hover:translate-y-0"
             >
               <span className="flex items-baseline justify-between gap-3">
                 <span className="min-w-0 text-sm font-semibold">{c.name}</span>
@@ -51,7 +52,7 @@ export function IconIndex({ locale = "en" }: { locale?: Locale }) {
               {/* Phones fit three, so the rest hide there. */}
               <span className="mt-auto grid grid-cols-3 gap-1.5 max-sm:[&>:nth-child(n+4)]:hidden sm:grid-cols-6" aria-hidden>
                 {sample(c.icons).map((i, k) => (
-                  <span key={i.name} style={{ transitionDelay: `${k * 35}ms` }} className="grid aspect-square place-items-center rounded-control bg-background transition-transform duration-200 ease-out group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+                  <span key={i.name} style={{ transitionDelay: `${k * 35}ms` }} className="grid aspect-square place-items-center rounded-control bg-surface transition-transform duration-200 ease-out group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={asset(`/icons/${i.name}/preview.svg`)} alt="" width={24} height={24} loading="lazy" decoding="async" className="size-6" />
                   </span>
