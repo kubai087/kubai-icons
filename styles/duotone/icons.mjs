@@ -5,7 +5,7 @@
 //           portrait, tall, flat or live
 //   layers  drawn in order; the light body first (tone b), then the blue accents and details
 // Read the one closest to a new object before drawing it, and append new icons the same way.
-import { R3, R, M, r, S, q, t, D, K, W, rr, pill, circ, body, poly, polygon, rot, L, C, Bt } from './kit.mjs';
+import { R3, R, M, r, S, q, t, D, K, W, rr, pill, circ, body, poly, polygon, rot, L, C, Bt, badge } from './kit.mjs';
 
 // A pen laid at 45° (the allowed slope for 编辑), nib at the bottom left. The nib's two edges run
 // along the grid, so it fills the box corner exactly. from and to are distances along the pen
@@ -847,3 +847,16 @@ export const ICONS = {
     ]
   }
 };
+
+// Variants (GUIDE.md section 12): the same object with one badge. A mark on the face replaces the
+// object's own detail; a corner mark notches the object; 'off' crosses it out.
+Object.assign(ICONS, {
+  'folder-plus': badge(ICONS.folder, 'plus', { at: [8, 9], drop: [0, 2], label: '新建文件夹' }),
+  'calendar-check': badge(ICONS.calendar, 'check', { at: [8, 9.75], drop: [1], label: '已排期' }),
+  'clipboard-check': badge(ICONS.clipboard, 'check', { at: [8, 9.5], drop: [2, 3], label: '任务完成' }),
+  'user-check': badge(ICONS.user, 'check', { label: '已认证用户' }),
+  'search-sparkle': badge(ICONS.search, 'sparkle', { drop: [2], label: 'AI 搜索' }),
+  'image-sparkle': badge(ICONS.image, 'sparkle', { drop: [2], label: 'AI 生成图片' }),
+  'bell-off': badge(ICONS.bell, 'off', { label: '免打扰' }),
+  'eye-off': badge(ICONS.eye, 'off', { label: '隐藏' })
+});

@@ -5,7 +5,13 @@ Copyright (c) 2026 Kubai087
 This repository (the "Skill") is a method for drawing dynamic icons: the rules in
 PROMPT.md and SKILL.md, the engine in src/engine.js, the example icons in
 src/icons.js, the gallery in index.html and src/app.js, the self-check in
-scripts/, the early versions in history/, and the documentation and images.
+scripts/, the early versions in history/, and the documentation and images. It
+also covers the two-tone style in styles/duotone/, which is released on its own
+as the kubai-duotone skill: its rules in GUIDE.md, SKILL.md and CHANGELOG.md, its
+geometry in kit.mjs, its example icons in icons.mjs, its motion in motion.mjs
+and motions.mjs, and its self-check and export in check.mjs, export.mjs and
+chrome.mjs. In this license, "the rules" means PROMPT.md, SKILL.md and
+styles/duotone/GUIDE.md, SKILL.md and CHANGELOG.md.
 
 The Skill is source-available, not open source. You may use it as set out below.
 All other rights are reserved.
@@ -22,8 +28,8 @@ All other rights are reserved.
    to you. Kubai087 claims no rights in Your Output, and you do not need to
    credit the Skill.
 
-   The example icons that ship in src/icons.js are part of the Skill, not Your
-   Output. You may use them in your own products and projects, animated or
+   The example icons that ship in src/icons.js and styles/duotone/icons.mjs are
+   part of the Skill, not Your Output. You may use them in your own products and projects, animated or
    exported as static files, without credit, but you may not distribute them
    on their own as an icon set, pack or library.
 
@@ -35,9 +41,13 @@ All other rights are reserved.
    project on its own or inside your products, commercial or not, as long as:
 
    (a) the copyright notice at the top of each copied file stays in place; and
-   (b) the project does not include PROMPT.md, SKILL.md, or text copied,
-       adapted or translated from them, and is not offered as a skill, prompt
-       or template for generating icons.
+   (b) the project does not include the rules, or text copied, adapted or
+       translated from them, and is not offered as a skill, prompt or template
+       for generating icons.
+
+   For the two-tone style, you may copy kit.mjs, icons.mjs, motion.mjs,
+   motions.mjs, check.mjs, export.mjs and chrome.mjs from styles/duotone/ the
+   same way, on the same conditions.
 
 4. Private changes
 
@@ -54,8 +64,7 @@ All other rights are reserved.
 6. What you may not do
 
    - Distribute a modified version of the Skill, or any work that copies,
-     adapts or translates PROMPT.md or SKILL.md, except as sections 3 and 5
-     allow.
+     adapts or translates the rules, except as sections 3 and 5 allow.
    - Present the Skill or any part of it under another name or as your own
      work, or remove or change its copyright and license notices.
    - Sell, rent or sublicense the Skill itself, or charge for access to it.

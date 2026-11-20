@@ -159,3 +159,20 @@ export const MOTION = {
   store: { say: '遮阳篷被风吹得一鼓一收', moves: { 0: { sy: [1.35, 0.95, 1.05, 1], o: [8, 2] } } },
   'lock-open': { say: '像挂在钥匙圈上一样转一圈', moves: { all: { sx: [-1, 1] } } }
 };
+
+// Variants (GUIDE.md section 12): the badge does the motion, turning or scaling about its own
+// centre; the object keeps still unless its own motion says the same thing.
+const mark = (name) => { const ls = ICONS[name].layers; return { i: ls.length - 1, o: ls.at(-1).at }; };
+const spin = (name) => { const { i, o } = mark(name); return { [i]: { r: 90, o } }; };
+const draw = (name) => ({ [mark(name).i]: { w: [0, 1] } });
+const twinkle = (name) => { const { i, o } = mark(name); return { [i]: { s: [0.5, 1.15, 1], r: [0, 90, 90], o } }; };
+Object.assign(MOTION, {
+  'folder-plus': { say: '加号转一圈，新建一个', moves: spin('folder-plus') },
+  'calendar-check': { say: '对勾重新打上', moves: draw('calendar-check') },
+  'clipboard-check': { say: '对勾重新打上', moves: draw('clipboard-check') },
+  'user-check': { say: '抬头，对勾重新打上', moves: { ...MOTION.user.moves, ...draw('user-check') } },
+  'search-sparkle': { say: '星光一闪', moves: twinkle('search-sparkle') },
+  'image-sparkle': { say: '星光一闪', moves: twinkle('image-sparkle') },
+  'bell-off': { say: '斜线重新划过', moves: draw('bell-off') },
+  'eye-off': { say: '斜线重新划过', moves: draw('eye-off') }
+});

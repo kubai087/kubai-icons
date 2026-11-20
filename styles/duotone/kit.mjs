@@ -187,3 +187,75 @@ export function render(icon, { size = 16, a = TONES.a, b = TONES.b, id = 'i', mo
   if (k !== 1) out = `<g transform="translate(8 8) scale(${n(k)}) translate(-8 -8)">${out}</g>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}">${defs.length ? `<defs>${defs.join('')}</defs>` : ''}${out}</svg>`;
 }
+
+// Badges (GUIDE.md section 12): one object's variants (add, remove, done, delete, AI, off) keep
+// the object and add one mark. Every mark fits a 4.5 box (the sparkle 6) and uses the K stroke,
+// so a mark reads the same on every icon. Where it goes:
+//   corner  in the bottom-right corner of the icon's key shape, 3 in from both edges (the mark's
+//           reach), so it never sticks out of the key shape; top: the top-right corner, where
+//           the sparkle (AI) goes by default. A corner mark clears a round notch of radius 4 out
+//           of the object (its reach 3 plus the gap W), so no slivers are left between its arms.
+//   [x, y]  centred on that point of the object's face, in the primary with no gap, in place of
+//           the object's own detail (drop it)
+// 'off' is a 45° slash from the top left to the bottom right across the key shape, with a W gap.
+// Positions are given as seen; on a square icon (drawn small, then scaled by FIT) they are
+// converted, so the mark lands in the same place and keeps its size.
+const H = 2.25, NOTCH = 4;
+const sparkle = (T = 3, f = 0.5, rho = 1.75) => {
+  // Four tips rounded at f, joined by concave arcs of radius rho tangent to the tip circles.
+  const a = T - f, c = (a + Math.sqrt(2 * (rho + f) ** 2 - a * a)) / 2;
+  const tips = [[0, -a], [a, 0], [0, a], [-a, 0]], arcs = [[c, -c], [c, c], [-c, c], [-c, -c]];
+  const touch = ([tx, ty], [ax, ay]) => { const l = Math.hypot(ax - tx, ay - ty); return [tx + (f * (ax - tx)) / l, ty + (f * (ay - ty)) / l]; };
+  const p = (pt) => `${n(pt[0])} ${n(pt[1])}`;
+  let d = `M${p(touch(tips[0], arcs[3]))}`;
+  tips.forEach((tp, i) => { d += `A${f} ${f} 0 0 1 ${p(touch(tp, arcs[i]))}A${rho} ${rho} 0 0 0 ${p(touch(tips[(i + 1) % 4], arcs[i]))}`; });
+  return { d: d + 'Z', fill: true, slot: 'top' };
+};
+export const MARKS = {
+  plus: { d: `M0 ${-H}V${H}M${-H} 0H${H}` },
+  minus: { d: `M${-H} 0H${H}` },
+  check: { d: `M${-H} 0L-0.75 1.5L${H} -1.5` },
+  x: { d: 'M-1.75 -1.75L1.75 1.75M1.75 -1.75L-1.75 1.75' },
+  sparkle: sparkle()
+};
+// Moves and scales a path written about (0, 0); handles M, L, H, V, A and Z with absolute values.
+function place(d, cx, cy, k) {
+  const out = [];
+  for (const [, cmd, args] of d.matchAll(/([MLHVAZ])([^MLHVAZ]*)/g)) {
+    const v = args.trim() ? args.trim().split(/[\s,]+/).map(Number) : [];
+    if (cmd === 'H') out.push(`H${n(cx + v[0] / k)}`);
+    else if (cmd === 'V') out.push(`V${n(cy + v[0] / k)}`);
+    else if (cmd === 'A') out.push(`A${n(v[0] / k)} ${n(v[1] / k)} ${v[2]} ${v[3]} ${v[4]} ${n(cx + v[5] / k)} ${n(cy + v[6] / k)}`);
+    else if (cmd === 'Z') out.push('Z');
+    else out.push(cmd + v.map((x, i) => n(i % 2 ? cy + x / k : cx + x / k)).join(' '));
+  }
+  return out.join('');
+}
+/**
+ * A variant of an icon: the same object with one badge. mark is a MARKS name or 'off'.
+ *   at     'corner', 'top' or [x, y] on the object's face; default 'corner' ('top' for sparkle)
+ *   drop   indexes of the object's layers to leave out (the detail the mark replaces, or a part
+ *          the notch would leave as a sliver)
+ *   label  the variant's Chinese name
+ */
+export function badge(icon, mark, { at, drop = [], label } = {}) {
+  const k = FIT[icon.key] || 1, inv = (v) => 8 + (v - 8) / k;
+  let layers = icon.layers.filter((_, i) => !drop.includes(i));
+  const [x0, y0, x1, y1] = keyBox(icon.key), reach = 3;
+  if (mark === 'off') {
+    const h = Math.min(x1 - x0, y1 - y0) / 2 - K / 2, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    const [a, b, c, d] = [inv(cx - h), inv(cy - h), inv(cx + h), inv(cy + h)];
+    layers.push({ d: `M${n(a)} ${n(b)}L${n(c)} ${n(d)}`, sw: K, gap: W, part: 'badge', badge: 'off', at: [n(inv(cx)), n(inv(cy))] });
+  } else {
+    const SLOTS = { corner: [x1 - reach, y1 - reach], top: [x1 - reach, y0 + reach] };
+    const m = MARKS[mark], where = at ?? m.slot ?? 'corner', slot = SLOTS[where];
+    const [cx, cy] = slot ?? where;
+    if (slot) {
+      const notch = C(circ(n(inv(cx)), n(inv(cy)), n(NOTCH / k)));
+      layers = layers.map((l) => ({ ...l, cut: [...(l.cut || []), notch] }));
+    }
+    // at: the mark's centre as drawn, for motions that turn or scale it about itself.
+    layers.push({ d: place(m.d, inv(cx), inv(cy), k), ...(m.fill ? {} : { sw: K }), part: 'badge', badge: mark, at: [n(inv(cx)), n(inv(cy))] });
+  }
+  return { ...icon, label: label ?? icon.label, layers };
+}

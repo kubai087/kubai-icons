@@ -64,7 +64,7 @@ const data = checked.map((n) => ({
   k: FIT[ICONS[n].key] || 1,
   svg: svg(n, 160),
   probe: 'data:image/svg+xml;base64,' + Buffer.from(svg(n, 160, { a: '#ff0000', b: '#0000ff' })).toString('base64'),
-  els: ICONS[n].layers.flatMap((l, li) => l.d.split(/(?=M)/).filter((d) => d.trim()).map((d) => ({ d, li, sw: l.sw || 0, tone: l.tone || 'a', gap: l.gap || 0, part: l.part || null, clip: !!l.clip })))
+  els: ICONS[n].layers.flatMap((l, li) => l.d.split(/(?=M)/).filter((d) => d.trim()).map((d) => ({ d, li, sw: l.sw || 0, tone: l.tone || 'a', gap: l.gap || 0, part: l.part || null, clip: !!l.clip, cut: (l.cut || []).map((c) => ({ d: c.d, sw: c.sw || 0 })) })))
 }));
 const measured = evaluate(`<!doctype html><body>${data.map((d, i) => `<div data-i="${i}">${d.svg}</div>`).join('')}
 <svg id="geo" viewBox="0 0 16 16" width="160" height="160"></svg><pre id="out"></pre><script>
@@ -95,8 +95,21 @@ data.forEach((icon, n) => {
     if (e.sw) { p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#000'); p.setAttribute('stroke-width', e.sw); }
     geo.appendChild(p); const L = p.getTotalLength(), pts = [];
     for (let i = 0; i < 200; i++) pts.push(p.getPointAtLength((L * i) / 200));
-    return { ...e, p, pts }; });
-  const inside = (a, pt) => { const q = geo.createSVGPoint(); q.x = pt.x; q.y = pt.y; return a.sw ? a.p.isPointInStroke(q) : a.p.isPointInFill(q); };
+    // Shapes knocked out of the layer (cut): what falls in them isn't drawn.
+    const cuts = e.cut.map((c) => { const q = document.createElementNS(NS, 'path'); q.setAttribute('d', c.d);
+      if (c.sw) { q.setAttribute('fill', 'none'); q.setAttribute('stroke', '#000'); q.setAttribute('stroke-width', c.sw); }
+      geo.appendChild(q); return { p: q, sw: c.sw }; });
+    return { ...e, p, pts, cuts }; });
+  const hit = (a, q) => (a.sw ? a.p.isPointInStroke(q) : a.p.isPointInFill(q));
+  const inside = (a, pt) => { const q = geo.createSVGPoint(); q.x = pt.x; q.y = pt.y; return hit(a, q) && !a.cuts.some((c) => hit(c, q)); };
+  // Drop the outline that falls in a cut, and add the cut's own edge where it bites into the
+  // layer (a badge's notch), so gaps are measured to what is drawn.
+  for (const e of els) if (e.cuts.length) {
+    const at = (x, y) => { const q = geo.createSVGPoint(); q.x = x; q.y = y; return q; };
+    const edge = e.cuts.filter((c) => !c.sw).flatMap((c) => { const L = c.p.getTotalLength(); return Array.from({ length: 200 }, (_, i) => c.p.getPointAtLength((L * i) / 200)); })
+      .filter((pt) => hit(e, at(pt.x, pt.y)));
+    e.pts = [...e.pts.filter((pt) => !e.cuts.some((c) => hit(c, at(pt.x, pt.y)))), ...edge];
+  }
   // Per pair of layers (B drawn after A, so B is in front). Pieces of one layer, blue details
   // next to blue details, and layers of one part are left out.
   const pairs = {};
@@ -126,7 +139,7 @@ data.forEach((icon, n) => {
   }
   const gaps = Object.values(pairs).filter((p) => p.over === 'partial' || (p.over === 'none' && p.d < 2))
     .map((p) => [p.la, p.lb, p.over === 'partial' ? (p.gapB ? 'masked' : 'overlap') : +p.d.toFixed(2)]);
-  els.forEach((e) => e.p.remove());
+  els.forEach((e) => { e.p.remove(); e.cuts.forEach((c) => c.p.remove()); });
   res[n].gaps = gaps;
 });
 // How much of the ink is primary (red in the probe) against secondary (blue).
