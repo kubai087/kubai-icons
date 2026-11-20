@@ -440,3 +440,48 @@ Object.assign(MOTION, {
   'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') },
   unlink: { say: '斜线重新划过，断开链接', moves: draw('unlink') }
 });
+
+// Batch: devices and media
+Object.assign(MOTION, {
+  monitor: {
+    say: '开机，屏幕从一条线展开亮起',
+    add: [{ layer: L(rr(3, 4, 10, 4.5, 1)) }],
+    moves: { a0: { ...hidden, a: 1, sy: [0.05, 1.08, 1], o: [8, 6.25] } }
+  },
+  desktop: {
+    say: '开机，屏幕从一条线展开亮起',
+    add: [{ layer: L(rr(3, 4, 5, 3.5, 1)) }],
+    moves: { a0: { ...hidden, a: 1, sy: [0.05, 1.08, 1], o: [5.5, 5.75] } }
+  },
+  smartphone: { say: '一条新通知从顶部滑入', moves: { 1: { y: [-1.5, 0], a: [0, 1] } } },
+  watch: {
+    say: '活动圆环画满一圈',
+    add: [{ layer: L('M6.25 8A1.75 1.75 0 0 1 8 6.25', { sw: D }) }],
+    moves: { a0: { rest: { a: 0, w: 0 }, a: 1, w: [0, 1] } }
+  },
+  gamepad: {
+    say: '按下按键，手柄振动',
+    ms: 700,
+    moves: { all: { x: [-0.4, 0.4, -0.3, 0.3, 0] }, 3: { s: [0.7, 0.7, 1, 1, 1], o: [11.875, 5.625] } }
+  },
+  bluetooth: {
+    say: '配对中，两侧亮起信号点',
+    add: [{ layer: L(circ(1.25, 8, 0.75)) }, { layer: L(circ(14.75, 8, 0.75)) }],
+    moves: same(['a0', 'a1'], { ...hidden, a: [1, 0.3, 1] })
+  },
+  cpu: { say: '通电运算，核心闪烁', moves: { 2: { a: [0.2, 1, 0.2, 1] } } },
+  'hard-drive': {
+    say: '磁盘转起来，指示灯闪烁',
+    ms: 800,
+    moves: { all: { x: [-0.25, 0.25, -0.25, 0.25, 0] }, 2: { a: [0.2, 1, 0.2, 1, 1] }, 3: { a: [1, 0.2, 1, 0.2, 1] } }
+  },
+  'sd-card': { say: '向下插进卡槽', moves: { all: { y: [0.75, 0] } } },
+  'sim-card': { say: '从卡托中弹出，抬起', moves: { all: { y: [-0.75, -0.75], r: [-6, -6], o: [8, 15] } } },
+  webcam: { say: '镜头左右环视一圈', moves: { 1: { x: [-1, 1, 0] } } },
+  signal: {
+    // Blue copies of the two light bars fade in, lower one first.
+    say: '信号一格一格变满',
+    add: [{ layer: { ...L(rr(8.5, 5, 2.25, 9, 1)) } }, { layer: { ...L(rr(11.75, 2, 2.25, 12, 1)) } }],
+    moves: { a0: { ...hidden, a: [0, 1, 1] }, a1: { ...hidden, a: [0, 0, 1] } }
+  }
+});

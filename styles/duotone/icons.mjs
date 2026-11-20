@@ -2387,3 +2387,137 @@ Object.assign(ICONS, {
   'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' }),
   unlink: badge(ICONS.link, 'off', { label: '取消链接' })
 });
+
+// Batch: devices and media
+Object.assign(ICONS, {
+  monitor: {
+    label: '显示器',
+    key: 'landscape',
+    layers: [
+      // laptop's light lid as a free-standing screen, and one gap below it a blue stand: a neck
+      // on the centre line rising from a flat foot.
+      L(rr(1, 2, 14, 8.5, M), Bt),
+      L(body(4.5, 12.5, 7, 1.5, 0.5, [{ x: 7, w: 2, h: 1, c: 0 }]))
+    ]
+  },
+  desktop: {
+    label: '台式电脑',
+    key: 'landscape',
+    layers: [
+      // monitor, narrower, on its own stand, and one gap to its right a blue tower.
+      L(rr(1, 2, 9, 7.5, M), Bt),
+      L(body(3, 12.5, 5, 1.5, 0.5, [{ x: 4.75, w: 1.5, h: 2, c: 0 }])),
+      L(rr(11, 2, 4, 12, r))
+    ]
+  },
+  smartphone: {
+    label: '智能手机',
+    key: 'tall',
+    layers: [
+      // phone's light body with a blue notification card 2 in from the sides and the home bar
+      // at the bottom.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(rr(5, 4, 6, 3.5, 1)),
+      L(pill(6, 11.75, 4, D))
+    ]
+  },
+  watch: {
+    label: '智能手表',
+    key: 'tall',
+    layers: [
+      // A blue strap running behind a light face that cuts a gap of W round itself, and on the
+      // face a blue activity ring three quarters closed.
+      L(rr(5, 1, 6, 14, 1)),
+      L(rr(3, 3.5, 10, 9, M), { ...Bt, gap: W }),
+      L('M8 6.25A1.75 1.75 0 1 1 6.25 8', { sw: D })
+    ]
+  },
+  gamepad: {
+    label: '游戏手柄',
+    key: 'wide',
+    layers: [
+      // A light controller in one outline (a wide capsule with two round grips below it), a blue D-pad on the left and
+      // two blue buttons on the right, each 2.125 in from the nearby edges.
+      L('M5 2.5H11A4 4 0 0 1 14.109 9.018A3 3 0 1 1 8.5 10.5H7.5A3 3 0 1 1 1.891 9.018A4 4 0 0 1 5 2.5Z', Bt),
+      L(pill(3.125, 5.875, 3.75, D) + pill(4.375, 4.625, D, 3.75)),
+      L(circ(10.125, 7.375, 1)),
+      L(circ(11.875, 5.625, 1))
+    ]
+  },
+  bluetooth: {
+    label: '蓝牙',
+    key: 'tall',
+    layers: [
+      // A light capsule with the blue Bluetooth rune on it. The rune's slanted strokes are what
+      // makes it the Bluetooth mark (GUIDE §1, slopes the object needs).
+      L(pill(3, 1, 10, 14), Bt),
+      L('M5.5 5.75L10.5 10.25L8 12.5V3.5L10.5 5.75L5.5 10.25', { sw: K })
+    ]
+  },
+  cpu: {
+    label: '处理器',
+    key: 'square',
+    layers: [
+      // Three blue pins on each side running under a light chip, which cuts a gap of W round
+      // itself, and a blue core 2.25 in from the chip's edges.
+      L([5.75, 8, 10.25].map((c) => rr(c - 0.625, 2, D, 2.25, [0.625, 0.625, 0, 0]) + rr(c - 0.625, 11.75, D, 2.25, [0, 0, 0.625, 0.625]) +
+        rr(2, c - 0.625, 2.25, D, [0.625, 0, 0, 0.625]) + rr(11.75, c - 0.625, 2.25, D, [0, 0.625, 0.625, 0])).join('')),
+      L(rr(4.25, 4.25, 7.5, 7.5, M), { ...Bt, gap: W }),
+      L(rr(6.5, 6.5, 3, 3, 1))
+    ]
+  },
+  'hard-drive': {
+    label: '硬盘',
+    key: 'wide',
+    layers: [
+      // A light drive with a blue slot and two blue activity lights along its lower front, each
+      // 2.375 in from the nearby edges. One layer per light.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(pill(3.375, 9.875, 4, D)),
+      L(circ(9.75, 10.5, 0.625)),
+      L(circ(12, 10.5, 0.625))
+    ]
+  },
+  'sd-card': {
+    label: '存储卡',
+    key: 'tall',
+    layers: [
+      // A light card with its top right corner cut off at 45°: the clipped corner is what makes
+      // it a memory card (GUIDE §1). Three blue contacts below the top edge.
+      L(polygon([[3, 1], [10.5, 1], [13, 3.5], [13, 15], [3, 15]], [M, 1, 1, M, M]), Bt),
+      L([5, 7.25, 9.5].map((x) => pill(x, 4, D, 3)).join(''))
+    ]
+  },
+  'sim-card': {
+    label: 'SIM 卡',
+    key: 'portrait',
+    layers: [
+      // A light card with its top right corner cut off at 45° (GUIDE §1), and a blue chip whose
+      // contact pads are split by white slits: one across, one down the lower half.
+      L(polygon([[2, 1], [10, 1], [14, 5], [14, 15], [2, 15]], [M, 1, 1, M, M]), Bt),
+      L(rr(4.5, 7, 7, 5.5, r), { cut: [C(rr(4, 9.25, 8, 1) + rr(7.5, 10, 1, 3))] })
+    ]
+  },
+  webcam: {
+    label: '摄像头',
+    key: 'portrait',
+    layers: [
+      // A light round head with camera's blue lens ring at its centre, and one gap below it a
+      // blue foot.
+      L(circ(8, 6.75, 5.75), Bt),
+      L(circ(8, 6.75, 2.5), { cut: [C(circ(8, 6.75, 1.125))] }),
+      L(rr(4.5, 13.5, 7, 1.5, 0.5))
+    ]
+  },
+  signal: {
+    label: '信号',
+    key: 'square',
+    layers: [
+      // Four bars a gap of 1 apart, rising to the right; the first two are blue (signal strength).
+      L(rr(2, 11, 2.25, 3, 1)),
+      L(rr(5.25, 8, 2.25, 6, 1)),
+      L(rr(8.5, 5, 2.25, 9, 1), Bt),
+      L(rr(11.75, 2, 2.25, 12, 1), Bt)
+    ]
+  }
+});
