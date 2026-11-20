@@ -3057,3 +3057,52 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// An aperture's six blades: a hexagonal opening of radius 3 and, from each corner, the slit
+// between two blades running on along the next edge out past the rim.
+const APERTURE = (() => {
+  const V = Array.from({ length: 6 }, (_, k) => { const a = ((-90 + 60 * k) * Math.PI) / 180; return [8 + 3 * Math.cos(a), 8 + 3 * Math.sin(a)]; });
+  const slits = V.map((v, k) => { const u = V[(k + 5) % 6], dx = v[0] - u[0], dy = v[1] - u[1], l = Math.hypot(dx, dy);
+    return `M${f3(v[0])} ${f3(v[1])}L${f3(v[0] + (dx * 7) / l)} ${f3(v[1] + (dy * 7) / l)}`; }).join('');
+  return { hex: polygon(V.map(([x, y]) => [f3(x), f3(y)]), 0.75), slits };
+})();
+
+Object.assign(ICONS, {
+  aperture: {
+    label: '光圈',
+    key: 'circle',
+    layers: [
+      // A light iris split into six blades by white slits, round a blue hexagonal opening. The
+      // blades' straight edges at 60° to each other are what make it an aperture (GUIDE §1).
+      // The opening is printed on the iris, so the two layers are one part.
+      L(circ(8, 8, 7), { ...Bt, cut: [C(APERTURE.slits, W)], part: 'iris' }),
+      L(APERTURE.hex, { part: 'iris' })
+    ]
+  },
+  'ethernet-port': {
+    label: '网口',
+    key: 'square',
+    layers: [
+      // A light socket with its latch tab on top (as camera's body) and four blue contacts in a
+      // row, 2 in from the sides and top. One layer per contact.
+      L(body(2, 4, 12, 10, M, [{ x: 5, w: 6, h: 2, c: r }]), Bt),
+      L(pill(4, 6, D, 3)),
+      L(pill(6.25, 6, D, 3)),
+      L(pill(8.5, 6, D, 3)),
+      L(pill(10.75, 6, D, 3))
+    ]
+  },
+  'camera-retro': {
+    label: '复古相机',
+    key: 'square',
+    layers: [
+      // A light film camera with a small shutter button on top, a blue leather band across it
+      // (clipped to the body) and a light lens over the band, cutting a gap of W round itself,
+      // with a blue glass at its centre.
+      L(body(2, 4, 12, 10, R, [{ x: 3.5, w: 3, h: 2, c: 1 }]), Bt),
+      L(rr(2, 7, 12, 4), { clip: body(2, 4, 12, 10, R, [{ x: 3.5, w: 3, h: 2, c: 1 }]) }),
+      L(circ(8, 9, 3.25), { ...Bt, gap: W }),
+      L(circ(8, 9, 1.5))
+    ]
+  }
+});
