@@ -7,7 +7,9 @@ import { KubaiIcon } from "kubai-icons-react";
 import type { KubaiIconData } from "kubai-icons";
 import { loadIcon, loadIndex, peekIcon, type IconMeta } from "@/lib/icons";
 import { tile } from "@/components/kit/styles";
+import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
+import { useWallLoop } from "@/lib/wall-motion";
 
 /** Time in the hover pose, and how much loop each tile adds, in milliseconds (as the home page wall). */
 const HOLD = 1400;
@@ -43,8 +45,9 @@ const LoopTile = memo(function LoopTile({ name, icon, color, offset, period, run
 
 export function DuotoneWall({ color = "#5A76F2", onlyBases = true }: { color?: string; onlyBases?: boolean }) {
   const [icons, setIcons] = useState<{ meta: IconMeta; icon: KubaiIconData }[] | null>(null);
-  const [running, setRunning] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  // The loop runs only while the wall is on screen, unless paused or with reduced motion.
+  const running = useWallLoop(ref);
   useEffect(() => {
     let live = true;
     loadIndex().then(async (index) => {
@@ -54,20 +57,17 @@ export function DuotoneWall({ color = "#5A76F2", onlyBases = true }: { color?: s
     }).catch(() => { /* the page reads without it */ });
     return () => { live = false; };
   }, [onlyBases]);
-  // The loop runs only while the wall is on screen, and not at all with reduced motion.
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !ref.current) return;
-    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting));
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
   const n = icons?.length ?? 0, period = Math.max(1, n) * PER_TILE, stride = strideFor(n);
   return (
-    <div ref={ref} className="not-prose my-6 grid grid-cols-[repeat(auto-fill,minmax(56px,1fr))] gap-2">
-      {(icons ?? []).map(({ meta, icon }, i) => (
-        <LoopTile key={meta.name} name={meta.name} icon={icon} color={color} offset={((i * stride) % n) * PER_TILE} period={period} running={running} />
-      ))}
-      {!icons && Array.from({ length: 24 }, (_, i) => <div key={i} className={cn(tile({ interactive: false }), "aspect-square")} />)}
+    <div className="not-prose my-6">
+      {/* Above the wall, so it is found before the motion. */}
+      <div className="mb-2 flex justify-end"><WallPause /></div>
+      <div ref={ref} className="grid grid-cols-[repeat(auto-fill,minmax(56px,1fr))] gap-2">
+        {(icons ?? []).map(({ meta, icon }, i) => (
+          <LoopTile key={meta.name} name={meta.name} icon={icon} color={color} offset={((i * stride) % n) * PER_TILE} period={period} running={running} />
+        ))}
+        {!icons && Array.from({ length: 24 }, (_, i) => <div key={i} className={cn(tile({ interactive: false }), "aspect-square")} />)}
+      </div>
     </div>
   );
 }

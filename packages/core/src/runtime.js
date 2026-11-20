@@ -5,8 +5,11 @@ import { EASE, DURATION, PHASE, interp } from './motion.js';
 import { VARIANTS } from './color.js';
 import { animateDuotone } from './duotone.js';
 
-let reduced = false;
-try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* not a browser */ }
+// The query is kept and its `matches` read on each motion, so a change to the setting takes
+// effect at once, without a reload.
+let motionQuery = null;
+try { motionQuery = matchMedia('(prefers-reduced-motion: reduce)'); } catch { /* not a browser */ }
+const reduced = () => Boolean(motionQuery && motionQuery.matches);
 
 const raf = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (fn) => setTimeout(() => fn(Date.now()), 16);
 const caf = typeof cancelAnimationFrame === 'function' ? cancelAnimationFrame : clearTimeout;
@@ -63,7 +66,7 @@ export function animate(svg, icon, { state = {} } = {}) {
   const go = (instant) => {
     const to = icon.target(on, s);
     caf(frame);
-    if (instant || reduced) { cur = to; paint(); lift(false); return; }
+    if (instant || reduced()) { cur = to; paint(); lift(false); return; }
     const from = cur, t0 = now();
     lift(true);
     const tick = (t) => {

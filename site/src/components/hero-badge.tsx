@@ -7,13 +7,15 @@ import { cn } from "@/lib/utils";
 import { useLocalize, useTr } from "@/lib/use-locale";
 
 /** The line above the home page headline: the size of the set, and a way to the skill. */
-export function HeroBadge({ count }: { count: number }) {
+export function HeroBadge({ count, duotone = 0 }: { count: number; duotone?: number }) {
   const tr = useTr();
   const loc = useLocalize();
   return (
     <Link href={loc("/skill/")} className={cn("group tap relative inline-flex h-8 items-center gap-2 rounded-pill pe-1.5 ps-2.5 text-caption font-medium whitespace-nowrap transition-[filter] hover:brightness-[.98] dark:hover:brightness-[1.2]", raised)}>
       <Sparkles size={16} color="#8B5CF6" trigger="parent" />
       <span className="tabular-nums">{tr("{count} icons", "{count} 个图标", { count: count.toLocaleString("en") })}</span>
+      {/* The two-tone icons draw the same objects again, so they are counted on their own. */}
+      {duotone > 0 && <span className="tabular-nums text-muted-foreground max-sm:hidden">· {tr("{count} two-tone", "{count} 个双色", { count: duotone.toLocaleString("en") })}</span>}
       <span aria-hidden className="h-3 w-px bg-border" />
       <span className="text-muted-foreground transition-colors group-hover:text-foreground">
         <span className="max-[399px]:hidden">{tr("Now with an agent skill", "现已提供 Agent Skill")}</span>

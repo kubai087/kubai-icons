@@ -1,5 +1,16 @@
 # kubai-icons-vue
 
+## 0.13.0
+
+### Minor Changes
+
+- [#96](https://github.com/kubai087/kubai-icons/pull/96) [`1f989ba`](https://github.com/kubai087/kubai-icons/commit/1f989bad7417e10cc22e58483264ca4b14ae864f) Thanks [@kubai087](https://github.com/kubai087)! - Add the two-tone style: 92 solid icons on a 16 grid, a light body with accents in the brand colour, each with a hover motion that acts out what it means. Import them from a `duotone` path with the same names and props as the layered icons, so switching style is one import: `kubai-icons/duotone`, `kubai-icons-react/duotone`, `kubai-icons-vue/duotone`, and `svg-duotone/` in `kubai-icons-static`. The primary follows `color`; the light tone is the primary at 40% over white, or `--kd-b`.
+
+### Patch Changes
+
+- Updated dependencies [[`1f989ba`](https://github.com/kubai087/kubai-icons/commit/1f989bad7417e10cc22e58483264ca4b14ae864f)]:
+  - kubai-icons@0.13.0
+
 ## 0.12.0
 
 ### Minor Changes

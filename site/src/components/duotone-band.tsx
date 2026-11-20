@@ -16,8 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/kit/segmented";
 import { panel, tile } from "@/components/kit/styles";
+import { WallPause } from "@/components/kit/wall-pause";
 import { hasIconPages } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { useWallLoop } from "@/lib/wall-motion";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
 
 /** Fifteen objects both styles draw, each as [layered, two-tone], mixed so neighbours differ. */
@@ -74,15 +76,8 @@ export function DuotoneBand({ className }: { className?: string }) {
   const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<Style>("duotone");
-  const [running, setRunning] = useState(false);
-
-  // The loop runs only while the icons are on screen, and not at all with reduced motion.
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches || !ref.current) return;
-    const observer = new IntersectionObserver(([entry]) => setRunning(entry.isIntersecting));
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  // The loop runs only while the icons are on screen, unless paused or with reduced motion.
+  const running = useWallLoop(ref);
 
   return (
     <section aria-labelledby="duotone-band" className={cn(panel, "grid gap-8 p-5 sm:p-8 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:gap-14 lg:p-10", className)}>
@@ -99,12 +94,15 @@ export function DuotoneBand({ className }: { className?: string }) {
             )}
           </p>
         </div>
-        <Segmented
-          value={style}
-          onChange={setStyle}
-          label={tr("Style", "风格")}
-          options={[{ value: "layered", label: tr("Layered", "分层") }, { value: "duotone", label: tr("Two-tone", "双色") }]}
-        />
+        <div className="flex items-center gap-2">
+          <Segmented
+            value={style}
+            onChange={setStyle}
+            label={tr("Style", "风格")}
+            options={[{ value: "layered", label: tr("Layered", "分层") }, { value: "duotone", label: tr("Two-tone", "双色") }]}
+          />
+          <WallPause />
+        </div>
         <div className="flex flex-wrap gap-3">
           <Button size="lg" nativeButton={false} render={<Link href={loc("/icons/?style=duotone")} />}>
             {tr("Browse two-tone icons", "浏览双色图标")}

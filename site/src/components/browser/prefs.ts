@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, useSyncExternalStore } from "react";
 import type { IconStyle } from "@/lib/icons";
 
 export type Badge = "mono" | "semantic";
@@ -32,3 +32,25 @@ export function usePrefs() {
     });
   return [prefs, update] as const;
 }
+
+// The icon style, shared live by every part of a page that shows it (the home page wall, its
+// headline) and remembered with the other preferences, so the icon browser opens in it too.
+const styleListeners = new Set<() => void>();
+let styleNow: IconStyle | null = null;
+const readStyle = (): IconStyle => {
+  if (styleNow) return styleNow;
+  try { styleNow = JSON.parse(localStorage.getItem(KEY) || "null")?.style === "duotone" ? "duotone" : "layered"; } catch { styleNow = "layered"; }
+  return styleNow;
+};
+const onStyle = (listener: () => void) => { styleListeners.add(listener); return () => { styleListeners.delete(listener); }; };
+/** The chosen icon style and a setter; on the server, and before hydration, the layered style. */
+export function useIconStyle() {
+  const style = useSyncExternalStore(onStyle, readStyle, () => "layered" as IconStyle);
+  const set = (next: IconStyle) => {
+    styleNow = next;
+    try { localStorage.setItem(KEY, JSON.stringify({ ...JSON.parse(localStorage.getItem(KEY) || "{}"), style: next })); } catch { /* the page still follows it */ }
+    styleListeners.forEach((l) => l());
+  };
+  return [style, set] as const;
+}
+
