@@ -2387,3 +2387,148 @@ Object.assign(ICONS, {
   'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' }),
   unlink: badge(ICONS.link, 'off', { label: '取消链接' })
 });
+
+// Batch: transport, travel and sports
+// Vehicles seen from the side share one build: a light body, blue wheels in front of it that cut
+// a gap of W round themselves, each with a white hub hole.
+const wheels = (xs, cy = 11.25, rad = 2.25, hub = 0.875) => L(xs.map((x) => circ(x, cy, rad)).join(''), { gap: W, cut: xs.map((x) => C(circ(x, cy, hub))) });
+// A tent: one triangle, its points drawn past the keyline so the rounded outline lands on it.
+const TENT = polygon([[8, 0.95], [15.55, 14], [0.45, 14]], [1, 0.75, 0.75]);
+// A ship's hull: flat deck, sides that slope in to a narrower keel.
+const HULL = polygon([[0.6, 8], [15.4, 8], [12.75, 13.5], [3.25, 13.5]], [0.75, 0.75, 1, 1]);
+// A lifebuoy: a thick light ring.
+const BUOY = { d: circ(8, 8, 7), cut: [C(circ(8, 8, 3.5))] };
+
+Object.assign(ICONS, {
+  car: {
+    label: '汽车',
+    key: 'wide',
+    layers: [
+      // A car from the side: a light body with a cabin on top, a blue window printed on the cabin
+      // (1.25 in from its sides and top), and the vehicles' blue wheels.
+      L(body(1, 6.5, 14, 5, r, [{ x: 4.25, w: 7.5, h: 4, c: M }]), Bt),
+      L(rr(5.5, 3.75, 5, 2.25, 0.75)),
+      wheels([4.5, 11.5])
+    ]
+  },
+  'car-front': {
+    label: '汽车正面',
+    key: 'wide',
+    layers: [
+      // A car from the front: a light body with a cabin, a blue windscreen, two blue headlights
+      // 1.25 in from the body's edges, and two blue tyres one gap below.
+      L(body(1, 6.5, 14, 4.5, r, [{ x: 3, w: 10, h: 4, c: M }]), Bt),
+      L(rr(4.5, 4, 7, 2.5, [1, 1, 0.5, 0.5])),
+      L(circ(3.25, 8.75, 1) + circ(12.75, 8.75, 1)),
+      L(rr(2.5, 12, 3, 1.5, [0, 0, 0.75, 0.75]) + rr(10.5, 12, 3, 1.5, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  bus: {
+    label: '公交车',
+    key: 'wide',
+    layers: [
+      // A bus from the side: a long light box with a row of three blue windows, 2 in from its
+      // top and ends, and the vehicles' blue wheels.
+      L(rr(1, 2.5, 14, 9, M), Bt),
+      L([3, 6.75, 10.5].map((x) => rr(x, 4.5, 2.5, 2.5, 0.75)).join('')),
+      wheels([4.5, 11.5])
+    ]
+  },
+  truck: {
+    label: '货车',
+    key: 'wide',
+    layers: [
+      // A tall light cargo box and, one gap ahead of it, a lower light cab whose top front corner
+      // is its blue window (the cab clipped). The vehicles' blue wheels, one under each.
+      L(rr(1, 2.5, 9, 9, M), Bt),
+      L(rr(11, 5, 4, 6.5, [S, r, r, S]), Bt),
+      L(rr(11, 5, 4, 6.5, [S, r, r, S]), { clip: rr(12.25, 0, 4, 7.75) }),
+      wheels([4.5, 12.75])
+    ]
+  },
+  ship: {
+    label: '轮船',
+    key: 'wide',
+    layers: [
+      // A light hull whose sides slope in to the keel (the slopes: a boxy hull reads as a tray),
+      // three blue portholes on it, and one gap above it a blue cabin with a funnel.
+      L(HULL, Bt),
+      L([5.5, 8, 10.5].map((x) => circ(x, 10.75, 0.75)).join('')),
+      L(body(4, 4.75, 8, 2.25, t, [{ x: 8.5, w: 2, h: 2.25, c: 0.5 }]))
+    ]
+  },
+  train: {
+    label: '火车',
+    key: 'portrait',
+    layers: [
+      // A train from the front: a light body with a round nose, a blue windscreen and two blue
+      // lamps, each 2 in from the body's edges, standing one gap above a blue rail.
+      L(rr(2, 1, 12, 11.5, [4, 4, M, M]), Bt),
+      L(rr(4, 3, 8, 4, 1.25)),
+      L(circ(5, 9.5, 1) + circ(11, 9.5, 1)),
+      L(rr(2, 13.5, 12, 1.5, 0.5))
+    ]
+  },
+  luggage: {
+    label: '行李箱',
+    key: 'tall',
+    layers: [
+      // An upright suitcase: a blue pull handle behind a light case that cuts a gap of W round
+      // itself, two blue straps 2 in from its edges, and two blue wheels one gap below.
+      L('M6 4.75V1.75H10V4.75', { sw: K }),
+      L(rr(3, 4, 10, 8.5, M), { ...Bt, gap: W }),
+      L(pill(5, 6, D, 4.5) + pill(9.75, 6, D, 4.5)),
+      L(circ(5.25, 14.25, 0.75) + circ(10.75, 14.25, 0.75))
+    ]
+  },
+  passport: {
+    label: '护照',
+    key: 'portrait',
+    layers: [
+      // A light booklet with a blue globe on its cover (globe's meridian and equator cut in white)
+      // and one blue line below it.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(circ(8, 6.5, 3), { cut: [C('M8 3.75A1.25 2.75 0 0 1 8 9.25A1.25 2.75 0 0 1 8 3.75Z', 0.75), C('M5 6.5H11', 0.75)] }),
+      L(pill(5.5, 11.5, 5, D))
+    ]
+  },
+  parking: {
+    label: '停车场',
+    key: 'square',
+    layers: [
+      // The parking sign: a light tile with a blue P in the K stroke (as the text-format family).
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6.25 11.5V4.5H8.75A2 2 0 0 1 8.75 8.5H6.25', { sw: K })
+    ]
+  },
+  tent: {
+    label: '帐篷',
+    key: 'landscape',
+    layers: [
+      // A light tent (the slopes: a tent is a triangle) with a blue door standing on its base.
+      L(TENT, Bt),
+      L(polygon([[8, 7.5], [10.25, 14], [5.75, 14]], [0.5, 0, 0]))
+    ]
+  },
+  anchor: {
+    label: '锚',
+    key: 'portrait',
+    layers: [
+      // A light shank and arms (the arms an arc in the light stroke 2), a blue ring one gap above,
+      // and a blue stock across the shank that cuts a gap of W round itself.
+      L(rr(7, 6, 2, 8), { ...Bt, part: 'anchor' }),
+      L('M3 9A5 5 0 0 0 13 9', { ...Bt, sw: 2, part: 'anchor' }),
+      L(circ(8, 3, 2), { cut: [C(circ(8, 3, 0.875))] }),
+      L(pill(4.25, 6, 7.5, 2), { gap: W })
+    ]
+  },
+  lifebuoy: {
+    label: '救生圈',
+    key: 'circle',
+    layers: [
+      // A thick light ring with four blue bands: the ring clipped in blue across its axes.
+      L(BUOY.d, { ...Bt, cut: BUOY.cut }),
+      L(BUOY.d, { cut: BUOY.cut, clip: rr(6.25, 0, 3.5, 16) + rr(0, 6.25, 16, 3.5) })
+    ]
+  }
+});

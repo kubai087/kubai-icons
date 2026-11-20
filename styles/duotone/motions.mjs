@@ -440,3 +440,20 @@ Object.assign(MOTION, {
   'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') },
   unlink: { say: '斜线重新划过，断开链接', moves: draw('unlink') }
 });
+
+// Batch: transport, travel and sports
+const tilt = (r, o) => ({ r, o });
+Object.assign(MOTION, {
+  car: { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1], tilt([-3, 1.5, 0], [8, 11.5])) } },
+  'car-front': { say: '车灯闪两下', ms: 700, moves: { 2: { a: [0.2, 1, 0.2, 1] } } },
+  bus: { say: '进站停稳，车身在弹簧上颠两下', moves: same([0, 1], { y: [-0.6, 0.3, -0.2, 0] }) },
+  truck: { say: '起步时车厢颠一下', moves: { 0: { y: [-0.6, 0.25, 0] }, all: { x: [0.75, 0, 0] } } },
+  ship: { say: '船在浪里左右摇晃', moves: { all: tilt([-5, 4, -2, 0], [8, 13.5]) } },
+  train: { say: '列车在轨道上左右轻晃，车灯闪一下', moves: { ...same([0, 1, 2], tilt([-2, 2, 0], [8, 13.5])), 2: { r: [-2, 2, 0], o: [8, 13.5], a: [0.2, 1, 1] } } },
+  luggage: { say: '拉杆拉出，箱子斜过来准备拖走', moves: { all: tilt([-6, -5], [5.25, 14.25]), 0: { y: [-0.5, -0.5] } } },
+  passport: { say: '拿起来出示', moves: { all: { y: [-0.6, -0.5], r: [-6, -5] } } },
+  parking: { say: 'P 字一笔写出', moves: { 1: { w: [0, 1] } } },
+  tent: { say: '门帘向两边掀开', moves: { 1: { sx: [1.4, 1.3], o: [8, 14] } } },
+  anchor: { say: '锚绕顶环摆动，停住', moves: { all: tilt([9, -6, 3, 0], [8, 3]) } },
+  lifebuoy: { say: '救生圈抛出去，转着落回', moves: { all: { y: [-1, 0.25, 0], r: [-60, -90, -90] } } }
+});
