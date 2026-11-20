@@ -17,7 +17,7 @@ Use, change and redistribute these freely, in commercial work or not. Keep the c
 
 ## The skill: Kubai Icons License
 
-[`LICENSE`](LICENSE) (source-available) covers the skill: `SKILL.md`, `PROMPT.md`, `src/`, `index.html`, `scripts/`, `history/`, and the README media in `assets/`. You may install and run the skill for any work, and the icons you draw with it are yours; see the licence for the rest.
+[`LICENSE`](LICENSE) (source-available) covers the skill: `SKILL.md`, `PROMPT.md`, `src/`, `index.html`, `scripts/`, `history/`, the two-tone style in `styles/duotone/` (also released on its own as the `kubai-duotone` skill, under the same licence), and the README media in `assets/`. You may install and run the skill for any work, and the icons you draw with it are yours; see the licence for the rest.
 
 ## Names and logos
 
