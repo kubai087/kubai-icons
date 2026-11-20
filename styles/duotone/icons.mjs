@@ -3209,6 +3209,147 @@ Object.assign(ICONS, {
       L('M13 9.5V11A2 2 0 0 1 11 13H9.5', { sw: 2, ...Bt }),
       L('M6.5 13H5A2 2 0 0 1 3 11V9.5', { sw: 2, ...Bt }),
       L(circ(8, 8, 2.25))
+// Batch: transport, travel and sports
+// Vehicles seen from the side share one build: a light body, blue wheels in front of it that cut
+// a gap of W round themselves, each with a white hub hole.
+const wheels = (xs, cy = 11.25, rad = 2.25, hub = 0.875) => L(xs.map((x) => circ(x, cy, rad)).join(''), { gap: W, cut: xs.map((x) => C(circ(x, cy, hub))) });
+// A tent: one triangle, its points drawn past the keyline so the rounded outline lands on it.
+const TENT = polygon([[8, 0.95], [15.55, 14], [0.45, 14]], [1, 0.75, 0.75]);
+// A ship's hull: flat deck, sides that slope in to a narrower keel.
+const HULL = polygon([[0.6, 8], [15.4, 8], [12.75, 13.5], [3.25, 13.5]], [0.75, 0.75, 1, 1]);
+// A lifebuoy: a thick light ring.
+const BUOY = { d: circ(8, 8, 7), cut: [C(circ(8, 8, 3.5))] };
+
+Object.assign(ICONS, {
+  car: {
+    label: '汽车',
+    key: 'wide',
+    layers: [
+      // A car from the side: a light body with a cabin on top, a blue window printed on the cabin
+      // (1.25 in from its sides and top), and the vehicles' blue wheels.
+      L(body(1, 6.5, 14, 5, r, [{ x: 4.25, w: 7.5, h: 4, c: M }]), Bt),
+      L(rr(5.5, 3.75, 5, 2.25, 0.75)),
+      wheels([4.5, 11.5])
+    ]
+  },
+  'car-front': {
+    label: '汽车正面',
+    key: 'wide',
+    layers: [
+      // A car from the front: a light body with a cabin, a blue windscreen, two blue headlights
+      // 1.25 in from the body's edges, and two blue tyres one gap below.
+      L(body(1, 6.5, 14, 4.5, r, [{ x: 3, w: 10, h: 4, c: M }]), Bt),
+      L(rr(4.5, 4, 7, 2.5, [1, 1, 0.5, 0.5])),
+      L(circ(3.25, 8.75, 1) + circ(12.75, 8.75, 1)),
+      L(rr(2.5, 12, 3, 1.5, [0, 0, 0.75, 0.75]) + rr(10.5, 12, 3, 1.5, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  bus: {
+    label: '公交车',
+    key: 'wide',
+    layers: [
+      // A bus from the side: a long light box with a row of three blue windows, 2 in from its
+      // top and ends, and the vehicles' blue wheels.
+      L(rr(1, 2.5, 14, 9, M), Bt),
+      L([3, 6.75, 10.5].map((x) => rr(x, 4.5, 2.5, 2.5, 0.75)).join('')),
+      wheels([4.5, 11.5])
+    ]
+  },
+  truck: {
+    label: '货车',
+    key: 'wide',
+    layers: [
+      // A tall light cargo box and, one gap ahead of it, a lower light cab whose top front corner
+      // is its blue window (the cab clipped). The vehicles' blue wheels, one under each.
+      L(rr(1, 2.5, 9, 9, M), Bt),
+      L(rr(11, 5, 4, 6.5, [S, r, r, S]), Bt),
+      L(rr(11, 5, 4, 6.5, [S, r, r, S]), { clip: rr(12.25, 0, 4, 7.75) }),
+      wheels([4.5, 12.75])
+    ]
+  },
+  ship: {
+    label: '轮船',
+    key: 'wide',
+    layers: [
+      // A light hull whose sides slope in to the keel (the slopes: a boxy hull reads as a tray),
+      // three blue portholes on it, and one gap above it a blue cabin with a funnel.
+      L(HULL, Bt),
+      L([5.5, 8, 10.5].map((x) => circ(x, 10.75, 0.75)).join('')),
+      L(body(4, 4.75, 8, 2.25, t, [{ x: 8.5, w: 2, h: 2.25, c: 0.5 }]))
+    ]
+  },
+  train: {
+    label: '火车',
+    key: 'portrait',
+    layers: [
+      // A train from the front: a light body with a round nose, a blue windscreen and two blue
+      // lamps, each 2 in from the body's edges, standing one gap above a blue rail.
+      L(rr(2, 1, 12, 11.5, [4, 4, M, M]), Bt),
+      L(rr(4, 3, 8, 4, 1.25)),
+      L(circ(5, 9.5, 1) + circ(11, 9.5, 1)),
+      L(rr(2, 13.5, 12, 1.5, 0.5))
+    ]
+  },
+  luggage: {
+    label: '行李箱',
+    key: 'tall',
+    layers: [
+      // An upright suitcase: a blue pull handle behind a light case that cuts a gap of W round
+      // itself, two blue straps 2 in from its edges, and two blue wheels one gap below.
+      L('M6 4.75V1.75H10V4.75', { sw: K }),
+      L(rr(3, 4, 10, 8.5, M), { ...Bt, gap: W }),
+      L(pill(5, 6, D, 4.5) + pill(9.75, 6, D, 4.5)),
+      L(circ(5.25, 14.25, 0.75) + circ(10.75, 14.25, 0.75))
+    ]
+  },
+  passport: {
+    label: '护照',
+    key: 'portrait',
+    layers: [
+      // A light booklet with a blue globe on its cover (globe's meridian and equator cut in white)
+      // and one blue line below it.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(circ(8, 6.5, 3), { cut: [C('M8 3.75A1.25 2.75 0 0 1 8 9.25A1.25 2.75 0 0 1 8 3.75Z', 0.75), C('M5 6.5H11', 0.75)] }),
+      L(pill(5.5, 11.5, 5, D))
+    ]
+  },
+  parking: {
+    label: '停车场',
+    key: 'square',
+    layers: [
+      // The parking sign: a light tile with a blue P in the K stroke (as the text-format family).
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M6.25 11.5V4.5H8.75A2 2 0 0 1 8.75 8.5H6.25', { sw: K })
+    ]
+  },
+  tent: {
+    label: '帐篷',
+    key: 'landscape',
+    layers: [
+      // A light tent (the slopes: a tent is a triangle) with a blue door standing on its base.
+      L(TENT, Bt),
+      L(polygon([[8, 7.5], [10.25, 14], [5.75, 14]], [0.5, 0, 0]))
+    ]
+  },
+  anchor: {
+    label: '锚',
+    key: 'portrait',
+    layers: [
+      // A light shank and arms (the arms an arc in the light stroke 2), a blue ring one gap above,
+      // and a blue stock across the shank that cuts a gap of W round itself.
+      L(rr(7, 6, 2, 8), { ...Bt, part: 'anchor' }),
+      L('M3 9A5 5 0 0 0 13 9', { ...Bt, sw: 2, part: 'anchor' }),
+      L(circ(8, 3, 2), { cut: [C(circ(8, 3, 0.875))] }),
+      L(pill(4.25, 6, 7.5, 2), { gap: W })
+    ]
+  },
+  lifebuoy: {
+    label: '救生圈',
+    key: 'circle',
+    layers: [
+      // A thick light ring with four blue bands: the ring clipped in blue across its axes.
+      L(BUOY.d, { ...Bt, cut: BUOY.cut }),
+      L(BUOY.d, { cut: BUOY.cut, clip: rr(6.25, 0, 3.5, 16) + rr(0, 6.25, 16, 3.5) })
     ]
   }
 });
@@ -3532,6 +3673,116 @@ Object.assign(ICONS, {
       L(circ(4, 12, 2), { sw: 2, ...Bt }),
       L(circ(12, 12, 2), { sw: 2, ...Bt }),
       L(rr(5.5, 5.5, 5, 5, r), { gap: W })
+// Batch: transport, travel and sports (group 2)
+// A regular pentagon of circumradius R round (cx, cy), one point at deg (-90 is straight up).
+const pent = (cx, cy, R, deg = -90, c = 0.5) => polygon(Array.from({ length: 5 }, (_, i) => {
+  const a = ((deg + 72 * i) * Math.PI) / 180;
+  return [f3(cx + R * Math.cos(a)), f3(cy + R * Math.sin(a))];
+}), c);
+const BALL = circ(8, 8, 7);
+// A boot's light upper: a tall shaft at the back and a round toe.
+const SHOE = body(1, 7, 14, 4, [0, 3, 0, 0], [{ x: 1, w: 6.5, h: 4.5, c: r }]);
+
+Object.assign(ICONS, {
+  basketball: {
+    label: '篮球',
+    key: 'circle',
+    layers: [
+      // A light ball with blue seams clipped to it: a cross and a curve on each side.
+      L(BALL, Bt),
+      L('M8 1V15M1 8H15M3.5 2.6A6.75 6.75 0 0 1 3.5 13.4M12.5 2.6A6.75 6.75 0 0 0 12.5 13.4', { sw: D, clip: BALL })
+    ]
+  },
+  'soccer-ball': {
+    label: '足球',
+    key: 'circle',
+    layers: [
+      // A light ball with a blue pentagon in the middle (the slopes: the ball is known by its
+      // pentagons) and five more beyond its points, cut off by the ball's edge.
+      L(BALL, Bt),
+      L(pent(8, 8, 2.75) + [0, 1, 2, 3, 4].map((i) => {
+        const a = ((-90 + 72 * i) * Math.PI) / 180;
+        return pent(f3(8 + 7 * Math.cos(a)), f3(8 + 7 * Math.sin(a)), 2.75, 90 + 72 * i);
+      }).join(''), { clip: BALL })
+    ]
+  },
+  'tennis-ball': {
+    label: '网球',
+    key: 'circle',
+    layers: [
+      // A light ball with its two blue seams: curves bowing in from the left and right.
+      L(BALL, Bt),
+      L('M2 3.25A6.5 6.5 0 0 1 2 12.75M14 3.25A6.5 6.5 0 0 0 14 12.75', { sw: K, clip: BALL })
+    ]
+  },
+  dumbbell: {
+    label: '哑铃',
+    key: 'flat',
+    layers: [
+      // A blue bar behind two light weights, each a tall plate with a shorter one outside it;
+      // the weights cut a gap of W round themselves.
+      L(pill(3, 7, 10, 2)),
+      L(rr(3, 4, 2.5, 8, 1.25) + rr(1, 5.5, 2.5, 5, 1) + rr(10.5, 4, 2.5, 8, 1.25) + rr(12.5, 5.5, 2.5, 5, 1), { ...Bt, gap: W })
+    ]
+  },
+  medal: {
+    label: '奖牌',
+    key: 'tall',
+    layers: [
+      // A blue ribbon in a V (the slopes: the two straps meet under the medal) behind a light
+      // medal that cuts a gap of W round itself, with a blue star on it.
+      L(polygon([[3.25, 1], [6.5, 1], [8, 5], [9.5, 1], [12.75, 1], [10, 8.5], [6, 8.5]], [0.75, 0.75, 0.5, 0.75, 0.75, 0, 0])),
+      L(circ(8, 10, 5), { ...Bt, gap: W }),
+      L(polygon(starPts(8, 10.2, 2.6, 1.15), 0.5))
+    ]
+  },
+  target: {
+    label: '靶心',
+    key: 'circle',
+    layers: [
+      // A light target with a blue ring and a blue bull's-eye.
+      L(BALL, Bt),
+      L(circ(8, 8, 5), { cut: [C(circ(8, 8, 3.75))] }),
+      L(circ(8, 8, 1.75))
+    ]
+  },
+  'golf-flag': {
+    label: '高尔夫',
+    key: 'portrait',
+    layers: [
+      // flag-triangle's blue pole and light pennant, the pole standing one gap above a light hole.
+      L(pill(4, 1, K, 11.5)),
+      L(polygon([[6.5, 1], [15.43, 4.75], [6.5, 8.5]], [S, 0.75, S]), Bt),
+      L(pill(2, 13.5, 7, 1.5), Bt)
+    ]
+  },
+  dice: {
+    label: '骰子',
+    key: 'square',
+    layers: [
+      // A light die showing five: blue pips 2 in from its edges.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L([[5, 5], [11, 5], [8, 8], [5, 11], [11, 11]].map(([x, y]) => circ(x, y, 1)).join(''))
+    ]
+  },
+  skateboard: {
+    label: '滑板',
+    key: 'flat',
+    layers: [
+      // A long light deck and, one gap below, two blue wheels with white hubs.
+      L(pill(1, 4, 14, 3), Bt),
+      L(circ(4.5, 10, 2) + circ(11.5, 10, 2), { cut: [C(circ(4.5, 10, 0.75)), C(circ(11.5, 10, 0.75))] })
+    ]
+  },
+  'hiking-boot': {
+    label: '登山靴',
+    key: 'wide',
+    layers: [
+      // A boot from the side: a light upper with a tall shaft at the back and a round toe, two
+      // blue laces across the shaft (2 in from its sides and top), and a blue sole one gap below.
+      L(SHOE, Bt),
+      L(pill(3, 4.5, 2.5, D) + pill(3, 7, 2.5, D)),
+      L(rr(1, 12, 14, 1.5, 0.5))
     ]
   }
 });
@@ -3617,6 +3868,111 @@ Object.assign(ICONS, {
       L(circ(8, 6.25, 2.5), { cut: [C(circ(8, 6.25, 0.75))] }),
       L(pill(4, 9.75, 8, D)),
       L(pill(4, 11.75, 8, D))
+// Batch: transport, travel and sports (group 3)
+// A fuel pump's light body, and its blue hose: a bracket on the right, one gap from the body.
+const PUMP = rr(2, 1, 8, 14, [M, M, S, S]);
+const HOSE = L('M11.75 4.75H12.25A1 1 0 0 1 13.25 5.75V11.75A1 1 0 0 1 12.25 12.75H11.75', { sw: K });
+// A road running away from the viewer: it narrows toward the top (the slopes).
+const ROAD = polygon([[6, 1], [10, 1], [14.4, 15], [1.6, 15]], [0.5, 0.5, 0.75, 0.75]);
+const TOWER = polygon([[5.75, 6], [10.25, 6], [13.17, 15], [2.83, 15]], [0, 0, 0.5, 0.5]) + rr(4, 5, 8, 1.5, 0.5);
+
+Object.assign(ICONS, {
+  fuel: {
+    label: '加油机',
+    key: 'portrait',
+    layers: [
+      // A light fuel pump with a blue screen 2 in from its top and sides, and the blue hose.
+      L(PUMP, Bt),
+      L(rr(4, 3, 4, 3.5, 1)),
+      HOSE
+    ]
+  },
+  'ev-charger': {
+    label: '充电桩',
+    key: 'portrait',
+    layers: [
+      // fuel's pump and hose with battery-charging's blue bolt on its face (the slopes).
+      L(PUMP, Bt),
+      L(polygon([[6.9, 3.25], [6.4, 7], [8, 7], [5.1, 12.75], [5.6, 9], [4, 9]], 0.5)),
+      HOSE
+    ]
+  },
+  'steering-wheel': {
+    label: '方向盘',
+    key: 'circle',
+    layers: [
+      // A light rim with two spokes across and one down, all one body, and a blue hub: the spokes clipped
+      // across their middle.
+      // The rim's inner circle runs the other way, so it is a hole the spokes fill in.
+      L(circ(8, 8, 7) + 'M3.25 8A4.75 4.75 0 1 0 12.75 8A4.75 4.75 0 1 0 3.25 8Z' + rr(2, 6.5, 12, 3, 0) + rr(6.75, 8, 2.5, 6, 0), Bt),
+      L(rr(2, 6.5, 12, 3, 0), { clip: pill(5, 6.5, 6, 3) })
+    ]
+  },
+  'traffic-light': {
+    label: '红绿灯',
+    key: 'tall',
+    layers: [
+      // A light housing with three blue lamps down its middle, one layer each.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(circ(8, 4.25, 1.75)),
+      L(circ(8, 8, 1.75)),
+      L(circ(8, 11.75, 1.75))
+    ]
+  },
+  signpost: {
+    label: '路标',
+    key: 'portrait',
+    layers: [
+      // A blue post behind two light boards that cut a gap of W round themselves, one pointing
+      // right and one left: each pointed end needs slopes.
+      L(pill(7.25, 2, K, 13)),
+      L(polygon([[4.25, 1], [12, 1], [14.3, 2.75], [12, 4.5], [4.25, 4.5]], [0.75, 0, 0.5, 0, 0.75]), { ...Bt, gap: W }),
+      L(polygon([[4, 5.5], [11.75, 5.5], [11.75, 9], [4, 9], [1.7, 7.25]], [0, 0.75, 0.75, 0, 0.5]), { ...Bt, gap: W })
+    ]
+  },
+  route: {
+    label: '路线',
+    key: 'square',
+    layers: [
+      // A light winding path (the light stroke 2) and, in front of its ends, a blue start and a
+      // blue end with white centres, cutting a gap of W round themselves.
+      L('M4 12H10A2 2 0 0 0 10 8H6A2 2 0 0 1 6 4H12', { ...Bt, sw: 2 }),
+      L(circ(4, 12, 2), { gap: W, cut: [C(circ(4, 12, 0.75))] }),
+      L(circ(12, 4, 2), { gap: W, cut: [C(circ(12, 4, 0.75))] })
+    ]
+  },
+  road: {
+    label: '道路',
+    key: 'portrait',
+    layers: [
+      // A light road narrowing into the distance (the slopes) with three blue centre dashes,
+      // one layer each.
+      L(ROAD, Bt),
+      L(pill(7.375, 3.2, D, 2.4)),
+      L(pill(7.375, 7, D, 2.5)),
+      L(pill(7.375, 11, D, 2.5))
+    ]
+  },
+  lighthouse: {
+    label: '灯塔',
+    key: 'tall',
+    layers: [
+      // A blue lantern with a round top, one gap above a light tower: a gallery wider than its top,
+      // then the tower widening to its base (the slopes), with a blue band printed across it.
+      L(rr(5.75, 1, 4.5, 3, [2.25, 2.25, 0.5, 0.5])),
+      L(TOWER, Bt),
+      L(TOWER, { clip: rr(0, 9.5, 16, 2.25) })
+    ]
+  },
+  binoculars: {
+    label: '双筒望远镜',
+    key: 'landscape',
+    layers: [
+      // Two light barrels joined by a bridge, a blue lens low in each (1.25 in from the sides and
+      // bottom), and blue eyepieces one gap above.
+      L(rr(1, 5, 6, 9, M) + rr(9, 5, 6, 9, M) + rr(6, 7, 4, 3, 0), Bt),
+      L(circ(4, 11, 1.75) + circ(12, 11, 1.75)),
+      L(rr(2.5, 2, 3, 2, [0.75, 0.75, 0, 0]) + rr(10.5, 2, 3, 2, [0.75, 0.75, 0, 0]))
     ]
   }
 });
@@ -3666,6 +4022,365 @@ Object.assign(ICONS, {
       L(rr(2, 7, 12, 4), { clip: body(2, 4, 12, 10, R, [{ x: 3.5, w: 3, h: 2, c: 1 }]) }),
       L(circ(8, 9, 3.25), { ...Bt, gap: W }),
       L(circ(8, 9, 1.5))
+// Batch: transport, travel and sports (group 4)
+// A lower car for the roof sign and lamp: the cabin is too short for a window.
+const SEDAN = body(1, 7.5, 14, 4, r, [{ x: 3.5, w: 9, h: 2.5, c: S }]);
+// A hot-air balloon's envelope: a circle that narrows to a short throat, its sides running off
+// the circle along tangents (the slopes).
+const BALLOON = (() => {
+  const cx = 8, cy = 6, R0 = 5, yb = 11.5, hw = 1.5;
+  const tan = (sx) => {
+    const px = cx + sx * hw, dx = px - cx, dy = yb - cy, d = Math.hypot(dx, dy), a = Math.atan2(dy, dx) + sx * Math.acos(R0 / d);
+    return [f3(cx + R0 * Math.cos(a)), f3(cy + R0 * Math.sin(a))];
+  };
+  return circ(cx, cy, R0) + polygon([tan(-1), tan(1), [cx + hw, yb], [cx - hw, yb]], [0, 0, 0.75, 0.75]);
+})();
+const HELI = rr(2.5, 5, 7.5, 6, 3);
+const PYRAMID = polygon([[8, 0.95], [15.55, 14], [0.45, 14]], [1, 0.75, 0.75]);
+
+Object.assign(ICONS, {
+  'police-car': {
+    label: '警车',
+    key: 'wide',
+    layers: [
+      // A low light car, the vehicles' blue wheels, and on the roof one gap up a lamp bar of two
+      // halves cut apart by a gap: one blue, one light.
+      L(SEDAN, Bt),
+      wheels([4.5, 11.5], 11.5, 2, 0.75),
+      L(rr(4.5, 2.5, 3, 1.5, [0.75, 0, 0, 0.75])),
+      L(rr(8.5, 2.5, 3, 1.5, [0, 0.75, 0.75, 0]), Bt)
+    ]
+  },
+  taxi: {
+    label: '出租车',
+    key: 'wide',
+    layers: [
+      // police-car's low car and wheels with a blue taxi sign on the roof, one gap up.
+      L(SEDAN, Bt),
+      wheels([4.5, 11.5], 11.5, 2, 0.75),
+      L(rr(5.75, 2.5, 4.5, 1.5, [0.75, 0.75, 0, 0]))
+    ]
+  },
+  subway: {
+    label: '地铁',
+    key: 'portrait',
+    layers: [
+      // A boxy light train front with two blue windows side by side and two blue lamps, each
+      // 2 in from the body's edges, and two blue feet one gap below.
+      L(rr(2, 1, 12, 11.5, M), Bt),
+      L(rr(4, 3, 3.5, 4, 1) + rr(8.5, 3, 3.5, 4, 1)),
+      L(circ(5, 9.5, 1) + circ(11, 9.5, 1)),
+      L(rr(3.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]) + rr(9.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  tram: {
+    label: '有轨电车',
+    key: 'portrait',
+    layers: [
+      // A light tram front with a blue windscreen 2 in from its top and sides, the blue
+      // current collector (a T) one gap above it, and two blue feet one gap below.
+      L(pill(5, 1, 6, 1.5) + rr(7.25, 2, 1.5, 1.5, 0)),
+      L(rr(2, 4.5, 12, 8, M), Bt),
+      L(rr(4, 6.5, 8, 4, 1)),
+      L(rr(3.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]) + rr(9.5, 13.5, 3, 1.5, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  sailboat: {
+    label: '帆船',
+    key: 'square',
+    layers: [
+      // Two light sails either side of a hidden mast, one gap apart, over a blue hull: sails and
+      // hull are known by their slopes.
+      L(polygon([[8.5, 0.39], [14.48, 9.5], [8.5, 9.5]], [0.75, 0.5, 0]) + polygon([[7.5, 3], [7.5, 9.5], [2.6, 9.5]], [0.5, 0, 0.5]), Bt),
+      L(polygon([[1.6, 10.5], [14.4, 10.5], [12, 14], [4, 14]], [0.5, 0.5, 1, 1]))
+    ]
+  },
+  helicopter: {
+    label: '直升机',
+    key: 'wide',
+    layers: [
+      // A light helicopter from the side: a round cabin with a tail boom and fin, the cabin's
+      // front in blue as its window; a blue rotor one gap above and blue skids one gap below.
+      L(HELI + pill(8, 6.75, 7, 2) + rr(13, 5, 2, 3, [1, 1, 0, 0]), Bt),
+      L(HELI, { clip: rr(0, 0, 5.5, 8) }),
+      L(pill(1, 2.5, 11.5, 1.5)),
+      L(pill(2.5, 12, 8, 1.5))
+    ]
+  },
+  'hot-air-balloon': {
+    label: '热气球',
+    key: 'tall',
+    layers: [
+      // A light envelope narrowing to its throat (the slopes) with a blue band down its middle,
+      // and a blue basket one gap below.
+      L(BALLOON, Bt),
+      L(BALLOON, { clip: rr(6.5, 0, 3, 10.25) }),
+      L(rr(6.25, 12.5, 3.5, 2.5, [0.5, 0.5, 1, 1]))
+    ]
+  },
+  'cable-car': {
+    label: '缆车',
+    key: 'square',
+    layers: [
+      // A blue cable rising to the right (the slope) with a blue hanger, and one gap below the
+      // hanger a light cabin with two blue windows 2 in from its sides and bottom.
+      L('M2.625 4.25L13.375 2.625', { sw: D }),
+      L(pill(7.25, 3, K, 3.5)),
+      L(rr(3, 7.5, 10, 6.5, M), Bt),
+      L(rr(5, 9.5, 2.5, 2.5, 0.75) + rr(8.5, 9.5, 2.5, 2.5, 0.75))
+    ]
+  },
+  castle: {
+    label: '城堡',
+    key: 'square',
+    layers: [
+      // A light wall with three merlons on top and a blue arched gate standing on its base.
+      L(polygon([[2, 2], [4.5, 2], [4.5, 4.5], [6.75, 4.5], [6.75, 2], [9.25, 2], [9.25, 4.5], [11.5, 4.5], [11.5, 2], [14, 2], [14, 14], [2, 14]], [0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0.5, 0.5, R, R]), Bt),
+      L(rr(6.5, 9.5, 3, 4.5, [1.5, 1.5, 0, 0]))
+    ]
+  },
+  pyramid: {
+    label: '金字塔',
+    key: 'landscape',
+    layers: [
+      // A light pyramid (the slopes) whose right face is in shade: the outline clipped in blue
+      // right of a line from the top to a point right of centre on the base.
+      L(PYRAMID, Bt),
+      L(PYRAMID, { clip: polygon([[8, 0], [16, 0], [16, 16], [10.5, 16], [10.5, 14]]) })
+    ]
+  },
+  museum: {
+    label: '博物馆',
+    key: 'square',
+    layers: [
+      // A light pediment (the roof's slopes), four blue columns one gap below it, and a light base
+      // one gap below them. One layer per column.
+      L(polygon([[8, 1.82], [14.4, 5.25], [1.6, 5.25]], [1, 0.5, 0.5]), Bt),
+      L(pill(3.25, 6.25, K, 5.25)),
+      L(pill(5.917, 6.25, K, 5.25)),
+      L(pill(8.583, 6.25, K, 5.25)),
+      L(pill(11.25, 6.25, K, 5.25)),
+      L(rr(2, 12.5, 12, 1.5, 0.5), Bt)
+    ]
+  },
+  podium: {
+    label: '领奖台',
+    key: 'landscape',
+    layers: [
+      // One light stepped block: the tallest step in the middle, the second on the left and the
+      // third on the right (three separate blocks read as a bar chart), with a blue 1 on the
+      // middle step.
+      L(polygon([[1, 7], [5.5, 7], [5.5, 2], [10.5, 2], [10.5, 9.5], [15, 9.5], [15, 14], [1, 14]], [1, 0, 1, 1, 0, 1, 1, 1]), Bt),
+      L('M8 4.5V7.75', { sw: D })
+    ]
+  }
+});
+
+// Batch: transport, travel and sports (group 5)
+const TRACTOR = rr(1.5, 2.5, 6, 7.5, [M, M, 0, 0]) + rr(7.5, 6, 7.5, 4, [0, r, r, 0]);
+const SKIRT = polygon([[1.5, 1], [14.5, 1], [10, 10], [6, 10]], [1, 1, 0.5, 0.5]);
+
+Object.assign(ICONS, {
+  igloo: {
+    label: '冰屋',
+    key: 'landscape',
+    layers: [
+      // A light dome with one blue seam between its blocks and a blue arched door on its base.
+      L(rr(1, 2, 14, 12, [7, 7, 0.5, 0.5]), Bt),
+      L(pill(4, 6.25, 8, D)),
+      L(rr(5.5, 9, 5, 5, [2.5, 2.5, 0, 0]))
+    ]
+  },
+  'street-lamp': {
+    label: '路灯',
+    key: 'portrait',
+    layers: [
+      // A blue post bending over at the top on a blue foot, and a light lamp head hung at its end,
+      // in front of it with a gap of W.
+      L('M5 14V4.25A2.5 2.5 0 0 1 7.5 1.75H11', { sw: K, part: 'post' }),
+      L(rr(2, 13.5, 6, 1.5, [0.75, 0.75, 0, 0]), { part: 'post' }),
+      L(rr(8.5, 1, 5.5, 4.5, [2, 2, 1, 1]), { ...Bt, gap: W })
+    ]
+  },
+  lantern: {
+    label: '营地灯',
+    key: 'tall',
+    layers: [
+      // A blue cap with a loop on top, one gap above a light glass with a blue flame in it (the
+      // drop's point), and a blue foot one gap below.
+      L('M6.75 3.5V3A1.25 1.25 0 0 1 9.25 3V3.5', { sw: K, part: 'cap' }),
+      L(rr(4.5, 2.75, 7, 1.5, [0.75, 0.75, 0, 0]), { part: 'cap' }),
+      L(rr(4, 5.25, 8, 7, r), Bt),
+      L(dropPath(9.13, 1.25, 6.59, 0.5)),
+      L(rr(3, 13.25, 10, 1.75, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  thermos: {
+    label: '保温杯',
+    key: 'tall',
+    layers: [
+      // A blue cup lid wider than the flask, one gap above a light flask with a blue band printed
+      // across it.
+      L(rr(3, 1, 10, 3, [1, 1, 0.75, 0.75])),
+      L(rr(4, 5, 8, 10, M), Bt),
+      L(rr(4, 5, 8, 10, M), { clip: rr(0, 10, 16, 1.75) })
+    ]
+  },
+  'playing-cards': {
+    label: '扑克牌',
+    key: 'square',
+    layers: [
+      // A blue card behind a light card offset down and left, which cuts a gap of W round itself
+      // and carries a blue diamond (the slopes: the suit is known by its points).
+      L(rr(6, 2, 8, 10, M)),
+      L(rr(2, 4, 8, 10, M), { ...Bt, gap: W }),
+      L(polygon([[6, 6.5], [8, 9], [6, 11.5], [4, 9]], 0.5))
+    ]
+  },
+
+
+  badminton: {
+    label: '羽毛球',
+    key: 'portrait',
+    layers: [
+      // A shuttlecock: a light skirt narrowing to the base (the slopes) with a blue band printed
+      // across it, and a blue round-bottomed cork one gap below.
+      L(SKIRT, Bt),
+      L(SKIRT, { clip: rr(0, 4, 16, 1.75) }),
+      L(rr(5.5, 11, 5, 4, [0.75, 0.75, 2.5, 2.5]))
+    ]
+  },
+
+  tractor: {
+    label: '拖拉机',
+    key: 'wide',
+    layers: [
+      // A light tractor: a tall cab with a blue window 1.5 in from its top and sides, and a low
+      // bonnet in front; a big blue rear wheel and a small front one, cutting a gap of W round
+      // themselves.
+      L(TRACTOR, Bt),
+      L(rr(3, 4, 3, 2.5, 0.75)),
+      L(circ(4.5, 10, 3.5) + circ(13, 11.5, 2), { gap: W, cut: [C(circ(4.5, 10, 1.25)), C(circ(13, 11.5, 0.75))] })
+    ]
+  }
+});
+
+// Batch: transport, travel and sports (group 6)
+const SUB = pill(1, 7, 14, 6.5) + rr(5.75, 2.5, 4.5, 5, [r, r, 0, 0]);
+const CANOPY = 'M2.804 8A0.75 0.75 0 0 1 2.062 7.143A6 6 0 0 1 13.938 7.143A0.75 0.75 0 0 1 13.196 8Z';
+const VAN = rr(1, 2.5, 14, 9, [M, 4, r, r]);
+const ARM = pill(7.5, 6.5, 7.5, 2);
+
+Object.assign(ICONS, {
+  submarine: {
+    label: '潜水艇',
+    key: 'wide',
+    layers: [
+      // A light hull with a tower on top whose top is blue (the hatch, the hull clipped), and
+      // three blue portholes, the outer two concentric with the hull's round ends.
+      L(SUB, Bt),
+      L(SUB, { clip: rr(0, 0, 16, 4) }),
+      L(circ(4.25, 10.25, 0.875) + circ(8, 10.25, 0.875) + circ(11.75, 10.25, 0.875))
+    ]
+  },
+  'fire-hydrant': {
+    label: '消防栓',
+    key: 'portrait',
+    layers: [
+      // A blue domed cap one gap above a light barrel on a wider foot, a blue outlet on each side
+      // one gap from it, and a blue nut on its front.
+      L(rr(5, 1, 6, 3, [3, 3, 0, 0])),
+      L(rr(5, 5, 6, 8.5, [S, S, 0, 0]) + rr(3.5, 13, 9, 2, [0.75, 0.75, 0.5, 0.5]), Bt),
+      L(rr(2, 7.5, 2, 3, [1, 0, 0, 1]) + rr(12, 7.5, 2, 3, [0, 1, 1, 0])),
+      L(circ(8, 9, 1.25))
+    ]
+  },
+  'toy-robot': {
+    label: '铁皮机器人',
+    key: 'square',
+    layers: [
+      // A blue antenna one gap above a light head with two blue eyes, 2 in from its top and sides.
+      L(circ(8, 3.25, 1.25) + rr(7.375, 4, 1.25, 1, 0)),
+      L(rr(2, 6, 12, 8, R), Bt),
+      L(circ(5.25, 9.25, 1.25) + circ(10.75, 9.25, 1.25))
+    ]
+  },
+  'beach-umbrella': {
+    label: '遮阳伞',
+    key: 'square',
+    layers: [
+      // umbrella's light canopy with a blue panel down its middle, and a straight blue pole one
+      // gap below it (umbrella's handle ends in a hook).
+      L(CANOPY, Bt),
+      L(CANOPY, { clip: rr(6.5, 0, 3, 16) }),
+      L(pill(7.25, 9, K, 5))
+    ]
+  },
+  'camper-van': {
+    label: '房车',
+    key: 'wide',
+    layers: [
+      // A light van with a round front, its front top in blue as the windscreen (the van clipped),
+      // a blue side window 2 in from its top and back, and the vehicles' blue wheels.
+      L(VAN, Bt),
+      L(VAN, { clip: rr(11.25, 0, 5, 6.5) }),
+      L(rr(3, 4.5, 5.5, 2.5, 0.75)),
+      wheels([4.5, 11.5])
+    ]
+  },
+  'toll-booth': {
+    label: '收费站',
+    key: 'landscape',
+    layers: [
+      // A light booth with a blue window, and one gap from it a light barrier arm with two blue
+      // stripes (the arm clipped).
+      L(rr(1, 2, 5.5, 12, M), Bt),
+      L(rr(2.5, 3.5, 2.5, 3, 0.75)),
+      L(ARM, Bt),
+      L(ARM, { clip: rr(9.5, 0, 1.75, 16) + rr(12.5, 0, 1.75, 16) })
+    ]
+  }
+});
+
+// Batch: transport, travel and sports (group 7)
+const CAB = rr(11, 2.5, 4, 9, [r, r, r, S]);
+// A jerrycan: its top front corner cut off at 45° (the slope) where the spout comes out.
+const CAN = polygon([[2, 4], [9.25, 4], [12.5, 7.25], [12.5, 15], [2, 15]], [M, 1, 1, M, M]);
+
+Object.assign(ICONS, {
+  'fire-truck': {
+    label: '消防车',
+    key: 'wide',
+    layers: [
+      // A low light body and a tall light cab one gap ahead, the cab's top front in blue as its
+      // window; a blue ladder with white gaps between its rungs one gap above the body, and the
+      // vehicles' blue wheels.
+      L(rr(1, 6, 9, 5.5, r), Bt),
+      L(CAB, Bt),
+      L(CAB, { clip: rr(12.25, 0, 4, 6.5) }),
+      L(rr(1, 2.5, 9, 2.5, 0.75), { cut: [2, 4.625, 7.25].map((x) => C(rr(x, 3.25, 1.75, 1, 0))) }),
+      wheels([4.5, 12.75])
+    ]
+  },
+  trailer: {
+    label: '挂车',
+    key: 'wide',
+    layers: [
+      // A light box on one blue wheel, and a blue towbar one gap in front of it.
+      L(rr(1, 2.5, 10, 9, M), Bt),
+      wheels([6]),
+      L(pill(12, 8.5, 3, K))
+    ]
+  },
+  'gas-can': {
+    label: '油桶',
+    key: 'portrait',
+    layers: [
+      // A blue handle behind a light jerrycan that cuts a gap of W round itself, and a blue spout
+      // one gap off its cut corner.
+      L('M4.25 4.5V1.75H8V4.5', { sw: K }),
+      L(CAN, { ...Bt, gap: W }),
+      L(rot(12.466, 4.034, 2.5, 2, -45, 0.75))
     ]
   }
 });
