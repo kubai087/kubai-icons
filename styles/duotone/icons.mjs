@@ -2662,3 +2662,98 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Group 3 of the same batch.
+// The square arrows: code's tile with arrow-up-down's blue arrow (a K shaft and a 45° head),
+// turned to each side. ARROW_IN gives the stroke for a direction: up, right, down or left.
+const ARROW_IN = {
+  up: 'M8 11.25V4.75M5.25 7.5L8 4.75L10.75 7.5',
+  right: 'M4.75 8H11.25M8.5 5.25L11.25 8L8.5 10.75',
+  down: 'M8 4.75V11.25M5.25 8.5L8 11.25L10.75 8.5',
+  left: 'M11.25 8H4.75M7.5 5.25L4.75 8L7.5 10.75'
+};
+const squareArrow = (dir, label) => ({ label, key: 'square', layers: [L(rr(2, 2, 12, 12, R), Bt), L(ARROW_IN[dir], { sw: K })] });
+// sync's two arrows: rotate-cw's light ring split into two arcs about (8, 8), each with its
+// blue head at the clockwise end; the second is the first turned half round.
+const SYNC_HEAD = [[15.008, 6.522], [9.768, 6.232], [14.718, 1.282]];
+const half = (pts) => pts.map(([x, y]) => [f3(16 - x), f3(16 - y)]);
+// layers' outlines: a diamond whose sides rise 2.75 over 7 (the stack's slope), and V-shaped
+// bands under it that run parallel to its lower sides, each a gap of 1 below the last.
+const LAYER_RISE = 2.75, LAYER_GAP = f3(1 / Math.cos(Math.atan2(2.75, 7)));
+const layerBand = (a, th) => polygon([[1, a], [8, a + LAYER_RISE], [15, a], [15, a + th], [8, a + LAYER_RISE + th], [1, a + th]], [0.75, 1, 0.75, 0.75, 1, 0.75]);
+Object.assign(ICONS, {
+  'square-arrow-up': squareArrow('up', '方形向上箭头'),
+  'square-arrow-right': squareArrow('right', '方形向右箭头'),
+  'square-arrow-down': squareArrow('down', '方形向下箭头'),
+  'square-arrow-left': squareArrow('left', '方形向左箭头'),
+  sync: {
+    label: '同步',
+    key: 'circle',
+    layers: [
+      // Two light arcs of rotate-cw's ring, each running 130° clockwise to its blue head (the
+      // same head as rotate-cw's), one arrow over the top and one under the bottom. Each arc
+      // starts one gap clear of the other arrow's head.
+      L('M2.023 7.477A6 6 0 0 1 12.243 3.757', { ...Bt, sw: 2, part: 'a0' }),
+      L(polygon(SYNC_HEAD, 1), { part: 'a0' }),
+      L('M13.977 8.523A6 6 0 0 1 3.757 12.243', { ...Bt, sw: 2, part: 'a1' }),
+      L(polygon(half(SYNC_HEAD), 1), { part: 'a1' })
+    ]
+  },
+  'cloud-fog': {
+    label: '雾',
+    key: 'landscape',
+    layers: [
+      // cloud-rain's cloud, and one gap below it two blue bands of mist set off from each other,
+      // reaching the left and the right edge in turn.
+      L(pill(1, 4, 14, 5) + circ(8.5, 5, 3), Bt),
+      L(pill(1, 10, 10.5, K)),
+      L(pill(4.5, 12.5, 10.5, K))
+    ]
+  },
+  sunrise: {
+    label: '日出',
+    key: 'square',
+    layers: [
+      // Half of sun on a light horizon (a bar 2 thick) a gap of 1 below it, with two of sun's
+      // dots one gap out; above it a blue arrow (arrow-up-down's) points up. The horizon cuts a gap round itself
+      // for the motion, where the sun comes up from behind it.
+      L('M4.75 11A3.25 3.25 0 0 1 11.25 11Z', Bt),
+      L(circ(4.376, 7.376, 0.875) + circ(11.624, 7.376, 0.875)),
+      L(pill(2, 12, 12, 2), { ...Bt, gap: W }),
+      L('M8 6V2.75M6 4.75L8 2.75L10 4.75', { sw: K })
+    ]
+  },
+  sunset: {
+    label: '日落',
+    key: 'square',
+    layers: [
+      // sunrise with the arrow pointing down, towards the horizon.
+      L('M4.75 11A3.25 3.25 0 0 1 11.25 11Z', Bt),
+      L(circ(4.376, 7.376, 0.875) + circ(11.624, 7.376, 0.875)),
+      L(pill(2, 12, 12, 2), { ...Bt, gap: W }),
+      L('M8 2.75V6M6 4L8 6L10 4', { sw: K })
+    ]
+  },
+  layers: {
+    label: '图层',
+    key: 'landscape',
+    layers: [
+      // A stack seen from above: a light diamond on top and two V-shaped bands under it, the
+      // first blue, the second light, each one gap below the last. A layer has no shape without
+      // its slanted sides, so they are the slopes this object needs (GUIDE.md §1).
+      L(polygon([[8, 1.9], [15, 1.9 + LAYER_RISE], [8, 1.9 + 2 * LAYER_RISE], [1, 1.9 + LAYER_RISE]], [1.25, 1, 1.25, 1]), Bt),
+      L(layerBand(f3(1.9 + LAYER_RISE + LAYER_GAP), 2.25)),
+      L(layerBand(f3(1.9 + LAYER_RISE + 2 * LAYER_GAP + 2.25), 2.25), Bt)
+    ]
+  },
+  ghost: {
+    label: '幽灵',
+    key: 'square',
+    layers: [
+      // A light dome whose hem is receipt's three scallops (half circles of radius 2), and two
+      // blue eyes.
+      L(rr(2, 2, 12, 10, [6, 6, 0, 0]) + [4, 8, 12].map((x) => circ(x, 12, 2)).join(''), Bt),
+      L(pill(5.875, 5.5, D, 2.5) + pill(8.875, 5.5, D, 2.5))
+    ]
+  }
+});
