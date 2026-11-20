@@ -2506,3 +2506,143 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// A pizza slice: a triangle (the slopes) pointing down, its crust the top clipped in blue.
+const SLICE = polygon([[1.1, 2], [14.9, 2], [8, 15.4]], [r, r, 1]);
+// A cake 6 tall, its frosting the top clipped by a band with three round drips.
+const CAKE = rr(2, 8, 12, 6, M);
+// A band from the top of the canvas down to y, whose lower edge bulges into round drips of
+// radius 1 centred at xs: one outline, so it clips in one piece.
+const DRIPS = (y, xs) => `M0 0H16V${y}` + [...xs].sort((a, b) => b - a).map((x) => `H${x + 1}A1 1 0 0 1 ${x - 1} ${y}`).join('') + 'H0Z';
+const FROSTING = DRIPS(10, [4.5, 8, 11.5]);
+// A bottle: a neck standing on the body, with a seam corner where it meets the cap's gap.
+const BOTTLE = body(3, 7, 10, 8, R, [{ x: 5.5, w: 5, h: 2.5, c: S }]);
+// A milk carton: a gable top (two slopes) on a straight body.
+const CARTON = polygon([[5.5, 3.5], [10.5, 3.5], [13, 7], [13, 15], [3, 15], [3, 7]], [1, 1, 1, M, M, 1]);
+// A wine glass's bowl: straight sides and a round bottom.
+const BOWL = rr(3, 1, 10, 8, [S, S, 5, 5]);
+// An ice pop: a round top and a straight body; its coating is the top clipped with three drips.
+const POP = rr(3, 1, 10, 9.5, [5, 5, M, M]);
+const COATING = DRIPS(5.5, [5, 8, 11]);
+// A mug handle on the right, a loop of stroke K whose rows are y0 and y1.
+const HANDLE = (x0, y0, y1) => `M${x0} ${y0}H11.75A1.5 1.5 0 0 1 13.25 ${y0 + 1.5}V${y1 - 1.5}A1.5 1.5 0 0 1 11.75 ${y1}H${x0}`;
+Object.assign(ICONS, {
+  mug: {
+    label: '马克杯',
+    key: 'square',
+    layers: [
+      // A blue handle behind a light mug, which cuts a gap of W round itself.
+      L(HANDLE(9.5, 5, 10.5), { sw: K }),
+      L(rr(2, 2, 8.5, 12, [S, S, M, M]), { ...Bt, gap: W })
+    ]
+  },
+  coffee: {
+    label: '咖啡',
+    key: 'square',
+    layers: [
+      // mug's handle and a shorter cup, with two blue lines of steam one gap above it.
+      L(HANDLE(9.5, 7.75, 11.75), { sw: K }),
+      L(rr(2, 6, 8.5, 8, [S, S, M, M]), { ...Bt, gap: W }),
+      L(pill(4.125, 2, D, 3)),
+      L(pill(7.125, 2, D, 3))
+    ]
+  },
+  'cup-soda': {
+    label: '汽水',
+    key: 'tall',
+    layers: [
+      // A blue straw runs behind a blue lid (which cuts a gap of W round itself); the light cup is
+      // one gap below the lid.
+      L('M8.75 5.5V2.75A1 1 0 0 1 9.75 1.75H11.25', { sw: K }),
+      L(rr(3, 4.5, 10, 1.75, 0.75), { gap: W }),
+      L(rr(4, 7.25, 8, 7.75, [S, S, M, M]), Bt)
+    ]
+  },
+  wine: {
+    label: '红酒',
+    key: 'tall',
+    layers: [
+      // A light glass: the bowl, and one gap below it the stem on its foot. The wine is the lower
+      // half of the bowl clipped in blue.
+      L(BOWL, Bt),
+      L(BOWL, { clip: rr(0, 5, 16, 11) }),
+      L(body(4.5, 13.5, 7, 1.5, 0.5, [{ x: 7.25, w: 1.5, h: 3.5, c: 0.5 }]), Bt)
+    ]
+  },
+  beer: {
+    label: '啤酒',
+    key: 'square',
+    layers: [
+      // A beer mug: one light outline of glass and a head of foam (two circles over its top), a
+      // blue handle behind it, and two blue ribs on the glass.
+      L(HANDLE(9.5, 7.25, 11.75), { sw: K }),
+      L(rr(2, 5.5, 8.5, 8.5, [0, 0, M, M]) + pill(2, 4.25, 8.5, 2.5) + circ(4.25, 4.25, 2.25) + circ(8.5, 4.75, 2), { ...Bt, gap: W }),
+      L(pill(4.125, 8, D, 4) + pill(7.125, 8, D, 4))
+    ]
+  },
+  milk: {
+    label: '牛奶',
+    key: 'tall',
+    layers: [
+      // A carton with a gable top (two slopes: the carton's shape is the gable), a blue cap one
+      // gap above it, and a blue drop on its face.
+      L(rr(5.5, 1, 5, 1.5, 0.5)),
+      L(CARTON, Bt),
+      L(dropPath(11.25, 1.75, 7.6, 0.5))
+    ]
+  },
+  bottle: {
+    label: '水瓶',
+    key: 'tall',
+    layers: [
+      // A blue cap one gap above a light bottle with a neck, and a blue label band round it (the
+      // bottle clipped).
+      L(rr(5.5, 1, 5, 2.5, 1)),
+      L(BOTTLE, Bt),
+      L(BOTTLE, { clip: rr(0, 9.75, 16, 2.75) })
+    ]
+  },
+  pizza: {
+    label: '披萨',
+    key: 'square',
+    layers: [
+      // A slice: a triangle pointing down (the slopes and the point are the slice), its crust
+      // the top clipped in blue, and one blue slice of pepperoni.
+      L(SLICE, Bt),
+      L(SLICE, { clip: rr(0, 0, 16, 4.5) }),
+      L(circ(8, 8, 1.25))
+    ]
+  },
+  cake: {
+    label: '蛋糕',
+    key: 'square',
+    layers: [
+      // A light cake with blue frosting dripping over its top (the cake clipped), a light candle
+      // one gap above it, and a blue flame (a drop: its point is the flame) one gap above that.
+      L(CAKE, Bt),
+      L(CAKE, { clip: FROSTING }),
+      L(rr(7.25, 5, 1.5, 2, 0.5), Bt),
+      L(dropPath(3, 1, 1.55, 0.5))
+    ]
+  },
+  'ice-pop': {
+    label: '冰棍',
+    key: 'tall',
+    layers: [
+      // A light ice pop with a blue coating dripping over its round top (the pop clipped), and a
+      // blue stick one gap below it.
+      L(POP, Bt),
+      L(POP, { clip: COATING }),
+      L(rr(7, 11.5, 2, 3.5, [S, S, 1, 1]))
+    ]
+  },
+  cookie: {
+    label: '饼干',
+    key: 'circle',
+    layers: [
+      // A light cookie with a round bite out of its upper right, and four blue chips.
+      L(circ(8, 8, 7), { ...Bt, cut: [C(circ(14, 2, 3))] }),
+      L([[5, 6], [8.5, 8.5], [5.5, 11], [10.5, 11.5]].map(([x, y]) => circ(x, y, 0.75)).join(''))
+    ]
+  }
+});
