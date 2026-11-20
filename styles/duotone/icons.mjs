@@ -2909,3 +2909,92 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: transport, travel and sports (group 5)
+const TRACTOR = rr(1.5, 2.5, 6, 7.5, [M, M, 0, 0]) + rr(7.5, 6, 7.5, 4, [0, r, r, 0]);
+const SKIRT = polygon([[2.5, 1], [13.5, 1], [10, 10], [6, 10]], [1, 1, 0.5, 0.5]);
+
+Object.assign(ICONS, {
+  igloo: {
+    label: '冰屋',
+    key: 'landscape',
+    layers: [
+      // A light dome with one blue seam between its blocks and a blue arched door on its base.
+      L(rr(1, 2, 14, 12, [7, 7, 0.5, 0.5]), Bt),
+      L(pill(4, 6.25, 8, D)),
+      L(rr(5.5, 9, 5, 5, [2.5, 2.5, 0, 0]))
+    ]
+  },
+  'street-lamp': {
+    label: '路灯',
+    key: 'portrait',
+    layers: [
+      // A blue post bending over at the top on a blue foot, and a light lamp head hung at its end,
+      // in front of it with a gap of W.
+      L('M5 14V4.25A2.5 2.5 0 0 1 7.5 1.75H11', { sw: K, part: 'post' }),
+      L(rr(2, 13.5, 6, 1.5, [0.75, 0.75, 0, 0]), { part: 'post' }),
+      L(rr(9.25, 1, 4.75, 3.25, [1.5, 1.5, 1, 1]), { ...Bt, gap: W })
+    ]
+  },
+  lantern: {
+    label: '营地灯',
+    key: 'tall',
+    layers: [
+      // A blue cap with a loop on top, one gap above a light glass with a blue flame in it (the
+      // drop's point), and a blue foot one gap below.
+      L('M6.75 3A1.25 1.25 0 0 1 9.25 3', { sw: K, part: 'cap' }),
+      L(rr(4.5, 2.75, 7, 1.5, [0.75, 0.75, 0, 0]), { part: 'cap' }),
+      L(rr(4, 5.25, 8, 7, r), Bt),
+      L(dropPath(9.25, 1.5, 6.75, 0.5)),
+      L(rr(3, 13.25, 10, 1.75, [0, 0, 0.75, 0.75]))
+    ]
+  },
+  thermos: {
+    label: '保温杯',
+    key: 'tall',
+    layers: [
+      // A blue cup lid wider than the flask, one gap above a light flask with a blue band printed
+      // across it.
+      L(rr(3, 1, 10, 3, [1, 1, 0.75, 0.75])),
+      L(rr(4, 5, 8, 10, M), Bt),
+      L(rr(4, 5, 8, 10, M), { clip: rr(0, 10, 16, 1.75) })
+    ]
+  },
+  'playing-cards': {
+    label: '扑克牌',
+    key: 'square',
+    layers: [
+      // A blue card behind a light card offset down and left, which cuts a gap of W round itself
+      // and carries a blue diamond (the slopes: the suit is known by its points).
+      L(rr(6, 2, 8, 10, M)),
+      L(rr(2, 4, 8, 10, M), { ...Bt, gap: W }),
+      L(polygon([[6, 6.5], [8, 9], [6, 11.5], [4, 9]], 0.5))
+    ]
+  },
+
+
+  badminton: {
+    label: '羽毛球',
+    key: 'portrait',
+    layers: [
+      // A shuttlecock: a light skirt narrowing to the base (the slopes) with a blue band printed
+      // across it, and a blue round-bottomed cork one gap below.
+      L(SKIRT, Bt),
+      L(SKIRT, { clip: rr(0, 4, 16, 1.75) }),
+      L(rr(5.5, 11, 5, 4, [0.75, 0.75, 2.5, 2.5]))
+    ]
+  },
+
+  tractor: {
+    label: '拖拉机',
+    key: 'wide',
+    layers: [
+      // A light tractor: a tall cab with a blue window 1.5 in from its top and sides, and a low
+      // bonnet in front; a big blue rear wheel and a small front one, cutting a gap of W round
+      // themselves.
+      L(TRACTOR, Bt),
+      L(rr(3, 4, 3, 2.5, 0.75)),
+      L(circ(4.5, 10, 3.5) + circ(13, 11.5, 2), { gap: W, cut: [C(circ(4.5, 10, 1.25)), C(circ(13, 11.5, 0.75))] })
+    ]
+  }
+});

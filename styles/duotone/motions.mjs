@@ -517,3 +517,18 @@ Object.assign(MOTION, {
   },
   podium: { say: '冠军的台阶上写出 1', moves: { 1: { w: [0, 1] } } }
 });
+
+// Batch: transport, travel and sports (group 5)
+Object.assign(MOTION, {
+  igloo: { say: '屋里亮灯：门洞一暗一亮', moves: { 2: { a: [0.3, 1, 0.3, 1] } } },
+  'street-lamp': {
+    say: '路灯闪了一下，亮起来',
+    add: [{ layer: L(rr(9.25, 1, 4.75, 3.25, [1.5, 1.5, 1, 1])) }],
+    moves: { a0: { rest: { a: 0 }, a: [1, 0.4, 1] } }
+  },
+  lantern: { say: '火苗跳动', moves: { 3: { sy: [1.25, 0.9, 1.1, 1], o: [8, 10.75] } } },
+  thermos: { say: '拧开杯盖', moves: { 0: { y: [-0.6, -0.5], r: [-6, -5], o: [13, 4] } } },
+  'playing-cards': { say: '把牌摊开', moves: { 1: tilt([-8, -6], [4, 14]), 2: tilt([-8, -6], [4, 14]) } },
+  badminton: { say: '羽毛球被击起，再落下', moves: { all: { y: [-1, 0.25, 0] } } },
+  tractor: { say: '拖拉机颠簸着向前开', moves: { all: { x: [0.5, 0.75, 0], y: [-0.5, 0, 0] } } }
+});
