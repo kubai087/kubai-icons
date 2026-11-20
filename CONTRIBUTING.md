@@ -98,7 +98,7 @@ CI runs both, builds every package and the website, and renders contact sheets. 
 
 ## Releasing
 
-For maintainers.
+For maintainers. How to version a change and write its release notes is in [docs/releasing.md](docs/releasing.md).
 
 ### Packages
 
