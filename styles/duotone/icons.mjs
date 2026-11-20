@@ -185,6 +185,13 @@ const CONE = polygon([[6.75, 1], [9.25, 1], [12.75, 12], [3.25, 12]], [1, 1, S, 
 // An hourglass's glass: two bulbs that taper to a waist.
 const GLASS = polygon([[3.5, 3.5], [12.5, 3.5], [9.25, 8], [12.5, 12.5], [3.5, 12.5], [6.75, 8]], [1, 1, 1.5, 1, 1, 1.5]);
 
+// --- Devices and media ---------------------------------------------------------------------
+
+// A right-angled arrow head pointing right (or left) with its tip at (tx, cy), half-height 2.5;
+// the tip is drawn 0.41 past tx so the rounded tip lands on it (as history's head).
+const headR = (tx, cy) => polygon([[tx - 2.09, cy - 2.5], [tx + 0.41, cy], [tx - 2.09, cy + 2.5]], [0.5, 1, 0.5]);
+const headL = (tx, cy) => polygon([[tx + 2.09, cy + 2.5], [tx - 0.41, cy], [tx + 2.09, cy - 2.5]], [0.5, 1, 0.5]);
+
 export const ICONS = {
   folder: {
     label: '文件夹',
@@ -2518,6 +2525,127 @@ Object.assign(ICONS, {
       L(rr(5.25, 8, 2.25, 6, 1)),
       L(rr(8.5, 5, 2.25, 9, 1), Bt),
       L(rr(11.75, 2, 2.25, 12, 1), Bt)
+    ]
+  }
+});
+
+Object.assign(ICONS, {
+  volume: {
+    label: '音量',
+    key: 'wide',
+    layers: [
+      // A light speaker: a box and a cone that flares out from it. The cone's slanted sides are
+      // what makes it a speaker (GUIDE §1). Three blue sound waves round the cone's mouth, each a
+      // gap of 1 from the next.
+      L(polygon([[1, 5.5], [3.25, 5.5], [6.75, 2.5], [6.75, 13.5], [3.25, 10.5], [1, 10.5]], [1, 0, 1, 1, 0, 1]), Bt),
+      L('M8.518 6.232A2.5 2.5 0 0 1 8.518 9.768', { sw: K }),
+      L('M10.466 4.654A5 5 0 0 1 10.466 11.346', { sw: K }),
+      L('M12.66 3.383A7.5 7.5 0 0 1 12.66 12.617', { sw: K })
+    ]
+  },
+  repeat: {
+    label: '循环播放',
+    key: 'square',
+    layers: [
+      // A light loop in two halves, each ending in a blue arrow head (top running right, bottom
+      // running left); each half starts a gap of 1 past the other's head. The four layers are
+      // one loop, so they share a part.
+      L('M3 8.61V6.3A2.5 2.5 0 0 1 5.5 3.8H12', { sw: 2, ...Bt, part: 'loop' }),
+      L(headR(14, 3.8), { part: 'loop' }),
+      L('M13 7.39V9.7A2.5 2.5 0 0 1 10.5 12.2H4', { sw: 2, ...Bt, part: 'loop' }),
+      L(headL(2, 12.2), { part: 'loop' })
+    ]
+  },
+  shuffle: {
+    label: '随机播放',
+    key: 'square',
+    layers: [
+      // Two light paths that cross on 45° slopes (the crossing is what reads as shuffle, GUIDE
+      // §1), each ending in a blue head pointing right; the rising one is in front and cuts a
+      // gap of W round itself.
+      L('M3 3.8H3.5L11.9 12.2H12.5', { sw: 2, ...Bt, part: 'down' }),
+      L(headR(14, 12.2), { part: 'down' }),
+      L('M3 12.2H3.5L11.9 3.8H12.5', { sw: 2, ...Bt, part: 'up', gap: W }),
+      L(headR(14, 3.8), { part: 'up', gap: W })
+    ]
+  },
+  film: {
+    label: '胶片',
+    key: 'landscape',
+    layers: [
+      // One rounded strip cut straight across twice: blue perforated edges (the sprocket holes
+      // white) and a light frame between them.
+      L(rr(1, 2, 14, 2.5), { clip: rr(1, 2, 14, 12, R3), cut: [C([4.25, 6.75, 9.25, 11.75].map((x) => rr(x - 0.625, 2.625, D, D, 0.25)).join(''))] }),
+      L(rr(1, 5.5, 14, 5), { ...Bt, clip: rr(1, 2, 14, 12, R3) }),
+      L(rr(1, 11.5, 14, 2.5), { clip: rr(1, 2, 14, 12, R3), cut: [C([4.25, 6.75, 9.25, 11.75].map((x) => rr(x - 0.625, 12.125, D, D, 0.25)).join(''))] })
+    ]
+  },
+  clapperboard: {
+    label: '场记板',
+    key: 'landscape',
+    layers: [
+      // A light slate and, one gap above it, the blue clapper with white stripes on a 45° slant
+      // (the slanted stripes are what makes it a clapper, GUIDE §1).
+      L(rr(1, 6, 14, 8, M), Bt),
+      L(rr(1, 2, 14, 3, [1, 1, 0.5, 0.5]), { cut: [C([4, 7.5, 11].map((x) => rot(x, 3.5, 1, 5, 45)).join(''))] })
+    ]
+  },
+  vinyl: {
+    label: '黑胶唱片',
+    key: 'circle',
+    layers: [
+      // A light record with a blue label (its spindle hole white) and two short blue groove
+      // sheens on opposite sides, 2 in from the rim.
+      L(circ(8, 8, 7), Bt),
+      L(circ(8, 8, 2.25), { cut: [C(circ(8, 8, 0.75))] }),
+      L('M3.75 8A4.25 4.25 0 0 1 8 3.75M12.25 8A4.25 4.25 0 0 1 8 12.25', { sw: D })
+    ]
+  },
+  equalizer: {
+    label: '均衡器',
+    key: 'square',
+    layers: [
+      // Three light fader tracks with a blue knob on each at a different level; each knob cuts
+      // a gap of W round itself. One layer per knob.
+      L('M4 3V13M8 3V13M12 3V13', { sw: 2, ...Bt }),
+      L(rr(2, 8, 4, 2.5, 1), { gap: W }),
+      L(rr(6, 3, 4, 2.5, 1), { gap: W }),
+      L(rr(10, 6.5, 4, 2.5, 1), { gap: W })
+    ]
+  },
+  cast: {
+    label: '投屏',
+    key: 'landscape',
+    layers: [
+      // A light screen with the cast mark in its lower left corner: a blue quarter disc and a
+      // blue wave round it, both clipped to the screen and cutting a gap of W out of it.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(circ(1, 14, 3.5), { clip: rr(1, 2, 14, 12, R3), gap: W }),
+      L('M1 8.75A5.25 5.25 0 0 1 6.25 14', { sw: K, clip: rr(1, 2, 14, 12, R3), gap: W })
+    ]
+  },
+  live: {
+    label: '直播',
+    key: 'wide',
+    layers: [
+      // A blue point sending waves both ways: blue inner arcs and light outer arcs (the light
+      // ones stroked 2), each a gap of 1 from the next.
+      L('M3.908 3.612A6 6 0 0 0 3.908 12.388M12.092 3.612A6 6 0 0 1 12.092 12.388', { sw: 2, ...Bt }),
+      L('M5.702 5.702A3.25 3.25 0 0 0 5.702 10.298M10.298 5.702A3.25 3.25 0 0 1 10.298 10.298', { sw: K }),
+      L(circ(8, 8, 1.5))
+    ]
+  },
+  focus: {
+    label: '对焦',
+    key: 'square',
+    layers: [
+      // Four light viewfinder corners (stroked 2) round a blue subject at the centre. One layer
+      // per corner, so the motion can close them in.
+      L('M3 6.5V5A2 2 0 0 1 5 3H6.5', { sw: 2, ...Bt }),
+      L('M9.5 3H11A2 2 0 0 1 13 5V6.5', { sw: 2, ...Bt }),
+      L('M13 9.5V11A2 2 0 0 1 11 13H9.5', { sw: 2, ...Bt }),
+      L('M6.5 13H5A2 2 0 0 1 3 11V9.5', { sw: 2, ...Bt }),
+      L(circ(8, 8, 2.25))
     ]
   }
 });

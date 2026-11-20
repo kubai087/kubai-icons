@@ -485,3 +485,24 @@ Object.assign(MOTION, {
     moves: { a0: { ...hidden, a: [0, 1, 1] }, a1: { ...hidden, a: [0, 0, 1] } }
   }
 });
+
+Object.assign(MOTION, {
+  volume: { say: '音量调大，声波一圈圈向外传出', moves: { 1: { w: [0, 1, 1, 1] }, 2: { w: [0, 0, 1, 1] }, 3: { w: [0, 0, 0, 1] } } },
+  repeat: { say: '循环转过半圈', moves: { all: { r: 180, o: [8, 8] } } },
+  shuffle: { say: '两条路线上下交换', moves: { all: { sy: -1, o: [8, 8] } } },
+  film: { say: '放映中，画面闪动', moves: { 1: { a: [0.3, 1, 0.3, 1] } } },
+  clapperboard: { say: '打板：板条掀起再拍下', moves: { 1: { r: [-7, 0], o: [1, 5] } } },
+  vinyl: { say: '唱片转一圈', moves: { 2: { r: 360, o: [8, 8] } } },
+  equalizer: { say: '推子各自滑到新的位置', moves: { 1: { y: -3 }, 2: { y: 4 }, 3: { y: -2.5 } } },
+  cast: { say: '投屏信号从角落向外亮起', moves: { 1: { a: [0.2, 1, 1] }, 2: { a: [0.2, 0.2, 1] } } },
+  live: {
+    // A blue copy of the light outer arcs fades in over them.
+    say: '开始直播，信号向外发出，外圈亮起',
+    add: [{ layer: { ...ICONS.live.layers[0], tone: 'a' } }],
+    moves: { 1: { s: [1.15, 1], o: [8, 8] }, a0: { ...hidden, a: [0, 1] } }
+  },
+  focus: {
+    say: '取景框向中间收紧，锁定对焦',
+    moves: { 0: { x: 0.75, y: 0.75 }, 1: { x: -0.75, y: 0.75 }, 2: { x: -0.75, y: -0.75 }, 3: { x: 0.75, y: -0.75 } }
+  }
+});
