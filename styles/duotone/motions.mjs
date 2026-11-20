@@ -440,3 +440,30 @@ Object.assign(MOTION, {
   'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') },
   unlink: { say: '斜线重新划过，断开链接', moves: draw('unlink') }
 });
+
+// Batch: home and tools
+Object.assign(MOTION, {
+  door: { say: '门推开，又关上', moves: { all: { sx: [0.5, 0.5, 1], o: [3, 8] } } },
+  bed: { say: '枕头拍一拍，压扁又鼓起来', moves: { 1: { sy: [0.6, 1.1, 1], o: [6.75, 6.75] } } },
+  sofa: { say: '坐下去，坐垫一沉', moves: { 1: { sy: [0.82, 1], o: [8, 13.5] } } },
+  chair: { say: '椅子往后一翘，再落回地面', moves: { all: { r: [4, 0], o: [11.25, 15] } } },
+  lamp: {
+    say: '打开台灯，灯罩亮起来',
+    add: [{ layer: L(ICONS.lamp.layers[0].d) }],
+    moves: { a0: { ...hidden, a: [1, 0.5, 1] } }
+  },
+  fridge: { say: '冷藏室的门打开，又关上', moves: same([2, 3], { sx: [0.45, 0.45, 1], o: [13, 11] }) },
+  'washing-machine': { say: '脱水时机身快速抖动', ms: 700, moves: { all: { x: [-0.4, 0.4, -0.4, 0.4, 0] } } },
+  microwave: { say: '加热时炉内的灯一明一暗', ms: 900, moves: { 1: { a: [0.45, 1, 0.45, 1] } } },
+  bath: {
+    say: '放满热水，水面冒出气泡',
+    add: [{ layer: L(circ(10, 4.25, 1)) }, { layer: L(circ(12.75, 3, 0.75)) }],
+    moves: { a0: { ...hidden, a: [1, 1], y: [-0.5, -0.5] }, a1: { ...hidden, a: [0, 1], y: [0, -0.5] } }
+  },
+  'light-switch': { say: '拨动开关，打开', moves: { 2: { y: [-4, -4] } } },
+  plant: { say: '盆栽的叶子随风摆动', moves: same([0, 1, 2], { r: [6, -4, 2, 0], o: [8, 11] }) },
+  'cooking-pot': { say: '水开了，锅盖被蒸汽顶起几下', ms: 800, moves: { 1: { y: [-1, 0, -0.75, 0] } } },
+  candle: { say: '烛火随风摇曳', ms: 800, moves: { 0: { sx: [0.85, 1.1, 0.9, 1], sy: [1.1, 0.9, 1.06, 1], o: [8, 5.75] } } },
+  hanger: { say: '衣架挂在钩上晃动', moves: { all: { r: [4, -3, 1.5, 0], o: [8, 3.25] } } },
+  toaster: { say: '面包烤好，弹了出来', moves: { 0: { y: [-1.25, -1] } } }
+});

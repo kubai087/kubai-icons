@@ -2387,3 +2387,174 @@ Object.assign(ICONS, {
   'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' }),
   unlink: badge(ICONS.link, 'off', { label: '取消链接' })
 });
+
+// Batch: home and tools
+// Rooms, furniture, appliances and hand tools. Objects that need slopes or points (GUIDE.md §1)
+// say why where they're drawn.
+const LAMP_SHADE = polygon([[4.5, 1], [11.5, 1], [14.46, 8], [1.54, 8]], 1);
+Object.assign(ICONS, {
+  door: {
+    label: '门',
+    key: 'tall',
+    layers: [
+      // A light door panel and a blue round knob, 2 in from the edge on the opening side.
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(circ(9.75, 8.5, 1.25))
+    ]
+  },
+  bed: {
+    label: '床',
+    key: 'landscape',
+    layers: [
+      // Seen from the side: a blue headboard on the left, a light mattress whose foot stands on
+      // one leg, and a blue pillow one gap above the mattress and one gap from the headboard.
+      L(rr(1, 2, 2.5, 12, 1)),
+      L(pill(4.5, 4.75, 4.5, 2)),
+      L(poly([{ x: 4.5, y: 7.75, c: r }, { x: 15, y: 7.75, c: r }, { x: 15, y: 14, c: 0.5 }, { x: 13, y: 14, c: 0.5 }, { x: 13, y: 12, c: 0 }, { x: 4.5, y: 12, c: r }]), Bt)
+    ]
+  },
+  sofa: {
+    label: '沙发',
+    key: 'wide',
+    layers: [
+      // A light back and seat cushion; two blue arms stand in front of the back and cut a gap of
+      // W out of it, one gap from the seat on either side.
+      L(rr(2.5, 2.5, 11, 5.5, M), Bt),
+      L(rr(4.5, 9, 7, 4.5, r), Bt),
+      L(rr(1, 6, 2.5, 7.5, 1) + rr(12.5, 6, 2.5, 7.5, 1), { gap: W })
+    ]
+  },
+  chair: {
+    label: '椅子',
+    key: 'tall',
+    layers: [
+      // A light back, and one gap below it a blue seat with its two legs in one piece.
+      L(rr(4, 1, 8, 7, M), Bt),
+      L(polygon([[3, 9], [13, 9], [13, 11], [12, 11], [12, 15], [10.5, 15], [10.5, 11], [5.5, 11], [5.5, 15], [4, 15], [4, 11], [3, 11]], [t, t, 0.5, 0, 0.75, 0.75, 0, 0, 0.75, 0.75, 0, 0.5]))
+    ]
+  },
+  lamp: {
+    label: '台灯',
+    key: 'portrait',
+    layers: [
+      // The shade narrows to the top (two slopes: a straight-sided shade reads as a sign on a
+      // post), light; one gap below it a blue stem standing on a blue base.
+      L(LAMP_SHADE, Bt),
+      L(body(4, 13, 8, 2, t, [{ x: 7.25, w: 1.5, h: 4, c: 0 }]))
+    ]
+  },
+  fridge: {
+    label: '冰箱',
+    key: 'tall',
+    layers: [
+      // One light cabinet cut straight across into a freezer door and a fridge door, each with a
+      // blue handle 2 in from the left edge.
+      L(rr(3, 1, 10, 6, [R, R, 0, 0]), Bt),
+      L(pill(4.5, 2.5, D, 3)),
+      L(rr(3, 8, 10, 7, [0, 0, R, R]), Bt),
+      L(pill(4.5, 9.5, D, 4))
+    ]
+  },
+  'washing-machine': {
+    label: '洗衣机',
+    key: 'square',
+    layers: [
+      // A light cabinet, a blue control line and dial along the top, and a blue drum door round
+      // a light glass.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L(pill(4.5, 4.5, 3, D)),
+      L(circ(10.875, 5.125, 1.125)),
+      L(circ(8, 10, 2.75)),
+      L(circ(8, 10, 1.5), Bt)
+    ]
+  },
+  microwave: {
+    label: '微波炉',
+    key: 'wide',
+    layers: [
+      // A light oven, a blue window 2 in from the top, bottom and left, and a column of three
+      // blue buttons on the right.
+      L(rr(1, 2.5, 14, 11, R), Bt),
+      L(rr(3, 4.5, 7, 7, r)),
+      L([5, 8, 11].map((y) => circ(12.5, y, 0.75)).join(''))
+    ]
+  },
+  bath: {
+    label: '浴缸',
+    key: 'landscape',
+    layers: [
+      // A light tub with square rim corners and round bottom corners, a blue tap one gap above
+      // its left end, and two blue feet one gap below.
+      L(rr(1, 6.5, 14, 5.5, [1, 1, R, R]), Bt),
+      L('M3 4.75V4.25A1.5 1.5 0 0 1 6 4.25V4.5', { sw: K }),
+      L(rr(2.75, 13, 2.5, 1, [0, 0, 0.5, 0.5]) + rr(10.75, 13, 2.5, 1, [0, 0, 0.5, 0.5]))
+    ]
+  },
+  'light-switch': {
+    label: '墙壁开关',
+    key: 'tall',
+    layers: [
+      // A light wall plate, a blue rocker, and a light knob 1 in from the rocker's bottom and
+      // sides (switched off).
+      L(rr(3, 1, 10, 14, R), Bt),
+      L(rr(5.5, 3.5, 5, 9, r)),
+      L(circ(8, 10, 1.5), Bt)
+    ]
+  },
+  plant: {
+    label: '盆栽',
+    key: 'portrait',
+    layers: [
+      // A blue stem and two blue leaves (squares with two opposite corners rounded right off), one
+      // gap from the stem; a light pot with a rim stands in front of the stem.
+      L(pill(7.25, 4, 1.5, 7)),
+      L(rr(2, 4.25, 4.25, 4.25, [0.5, 4.25, 0.5, 4.25])),
+      L(rr(9.75, 1, 4.25, 4.25, [4.25, 0.5, 4.25, 0.5])),
+      L(rr(3.5, 9.5, 9, 2, t) + rr(4.5, 11, 7, 4, [0, 0, r, r]), { ...Bt, gap: W })
+    ]
+  },
+  'cooking-pot': {
+    label: '汤锅',
+    key: 'landscape',
+    layers: [
+      // A blue lid with a knob one gap above a light pot; the side handles are one blue bar
+      // behind the pot, showing at each side past its gap.
+      L(pill(1, 7.5, 14, 1.75)),
+      L(body(3, 3.5, 10, 1.5, 0.5, [{ x: 6.5, w: 3, h: 1.5, c: 0.5 }])),
+      L(rr(3.5, 6, 9, 8, [S, S, R, R]), { ...Bt, gap: W })
+    ]
+  },
+  candle: {
+    label: '蜡烛',
+    key: 'tall',
+    layers: [
+      // A blue flame (a drop: its point is what makes it a flame), a light candle one gap below
+      // it, and a blue dish one gap below the candle.
+      L(dropPath(4, 1.75, 0.55, 0.5)),
+      L(rr(5, 6.75, 6, 5.75, r), Bt),
+      L(pill(3, 13.5, 10, 1.5))
+    ]
+  },
+  hanger: {
+    label: '衣架',
+    key: 'wide',
+    layers: [
+      // A light triangle drawn as a light stroke (as link's half-rings), hung from a blue hook;
+      // the shoulders are the slopes a hanger is known by.
+      L('M8 7L14 12.5H2Z', { sw: 2, ...Bt, part: 'hanger' }),
+      L('M6.25 5A1.75 1.75 0 1 1 8 6.75V7', { sw: K, part: 'hanger' })
+    ]
+  },
+  toaster: {
+    label: '烤面包机',
+    key: 'landscape',
+    layers: [
+      // Two blue slices of bread stand in the slots, behind a light toaster that cuts a gap of W
+      // round itself; a blue lever slot on the right of the front (a line across the middle
+      // made a face with the slices as ears).
+      L(rr(3.5, 2, 3.5, 5, [1, 1, 0, 0]) + rr(9, 2, 3.5, 5, [1, 1, 0, 0])),
+      L(rr(1, 5.5, 14, 8.5, M), { ...Bt, gap: W }),
+      L(pill(11.25, 8, D, 3.5))
+    ]
+  }
+});
