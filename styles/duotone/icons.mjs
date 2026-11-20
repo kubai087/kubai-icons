@@ -1065,6 +1065,138 @@ export const ICONS = {
       L(rr(1, 2, 14, 12, R3), { ...Bt, cut: [C(rr(-1, -1, 7, 18))] }),
       L(rr(1, 2, 14, 12, R3), { clip: rr(-1, -1, 6, 18) })
     ]
+  },
+  undo: {
+    label: '撤销',
+    key: 'square',
+    layers: [
+      // rotate-ccw's ring and head as a U-turn: a light band (stroke 2) runs from the tail at the
+      // bottom round the right and back along the top, where the blue head points left. Drawn
+      // from the tail, so the motion can draw it on toward the head. The head's base corners
+      // sit 1.25 out, so its rounded top still reaches the keyline.
+      L('M5 13H8.625A4.375 4.375 0 0 0 8.625 4.25H5.5', { ...Bt, sw: 2, part: 'arrow' }),
+      L(polygon([[5.5, 0.75], [5.5, 7.75], [1.59, 4.25]], 1), { part: 'arrow' })
+    ]
+  },
+  redo: {
+    label: '重做',
+    key: 'square',
+    layers: [
+      // undo mirrored.
+      L('M11 13H7.375A4.375 4.375 0 0 1 7.375 4.25H10.5', { ...Bt, sw: 2, part: 'arrow' }),
+      L(polygon([[10.5, 0.75], [14.41, 4.25], [10.5, 7.75]], 1), { part: 'arrow' })
+    ]
+  },
+  'arrow-left-right': {
+    label: '左右互换',
+    key: 'circle',
+    layers: [
+      // The status-mark family: a light disc and two blue arrows drawn with the K stroke, right
+      // above and left below, their heads the allowed 45° and a gap of 1 apart.
+      L(circ(8, 8, 7), Bt),
+      L('M5 6H11M9.5 4.5L11 6L9.5 7.5', { sw: K }),
+      L('M11 10H5M6.5 8.5L5 10L6.5 11.5', { sw: K })
+    ]
+  },
+  'arrow-up-down': {
+    label: '上下排序',
+    key: 'circle',
+    layers: [
+      // arrow-left-right turned a quarter: up on the left, down on the right.
+      L(circ(8, 8, 7), Bt),
+      L('M6 11V5M4.5 6.5L6 5L7.5 6.5', { sw: K }),
+      L('M10 5V11M8.5 9.5L10 11L11.5 9.5', { sw: K })
+    ]
+  },
+  'align-left': {
+    label: '左对齐',
+    key: 'wide',
+    layers: [
+      // menu's three bars with a short blue one in the middle, flush left. Drawn from the side
+      // they are aligned to, so the motion writes them on from there.
+      L('M2 3.5H14', { sw: 2, ...Bt }),
+      L('M2 8H9', { sw: 2 }),
+      L('M2 12.5H14', { sw: 2, ...Bt })
+    ]
+  },
+  'align-center': {
+    label: '居中对齐',
+    key: 'wide',
+    layers: [
+      L('M2 3.5H14', { sw: 2, ...Bt }),
+      L('M4.5 8H11.5', { sw: 2 }),
+      L('M2 12.5H14', { sw: 2, ...Bt })
+    ]
+  },
+  'align-right': {
+    label: '右对齐',
+    key: 'wide',
+    layers: [
+      L('M14 3.5H2', { sw: 2, ...Bt }),
+      L('M14 8H7', { sw: 2 }),
+      L('M14 12.5H2', { sw: 2, ...Bt })
+    ]
+  },
+  table: {
+    label: '表格',
+    key: 'landscape',
+    layers: [
+      // One sheet cut by straight seams 1 wide: a blue header row on top, then two light rows of
+      // two cells. Every piece is taken from the same outline, so it keeps the sheet's corners.
+      L(rr(1, 2, 14, 12, R3), { clip: rr(-1, -1, 18, 6) }),
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(-1, 6, 18, 3.5), cut: [C(rr(7.5, -1, 1, 18))] }),
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(-1, 10.5, 18, 7), cut: [C(rr(7.5, -1, 1, 18))] })
+    ]
+  },
+  'message-circle': {
+    label: '消息',
+    key: 'circle',
+    layers: [
+      // A round bubble whose lower left quarter is square, the corner that says speech (as
+      // message-square's), with three blue dots a gap of 1 apart. One layer per dot, so the
+      // motion can make them hop one after another.
+      L('M1 8A7 7 0 1 1 8 15H1Z', Bt),
+      L(circ(5, 8, 1)),
+      L(circ(8, 8, 1)),
+      L(circ(11, 8, 1))
+    ]
+  },
+  'messages-square': {
+    label: '对话',
+    key: 'landscape',
+    layers: [
+      // Two bubbles facing each other, drawn like copy: the blue one behind at the top right,
+      // its square corner at the bottom right; the light one in front at the bottom left, its
+      // square corner at the bottom left, cutting a gap of W out of the other and covering about
+      // a third of it. Two blue lines on the front bubble, one layer each.
+      L(rr(5, 2, 10, 8, [M, M, 0, M])),
+      L(rr(1, 6, 10, 8, [M, M, M, 0]), { ...Bt, gap: W }),
+      L(pill(3.25, 8.25, 5, D)),
+      L(pill(3.25, 10.5, 3, D))
+    ]
+  },
+  'app-window': {
+    label: '应用窗口',
+    key: 'landscape',
+    layers: [
+      // A light window whose title bar is blue, clipped from the window so it keeps its top
+      // corners and meets the page with no seam; two blue lines of content on the page.
+      L(rr(1, 2, 14, 12, R3), Bt),
+      L(rr(1, 2, 14, 12, R3), { clip: rr(-1, -1, 18, 6.5) }),
+      L(pill(3.25, 8, 7, D)),
+      L(pill(3.25, 10.5, 4.5, D))
+    ]
+  },
+  columns: {
+    label: '分栏',
+    key: 'landscape',
+    layers: [
+      // One page cut into three columns 4 wide by two straight seams 1 wide (as sidebar); the
+      // middle column is blue.
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(-1, -1, 6, 18) }),
+      L(rr(1, 2, 14, 12, R3), { clip: rr(6, -1, 4, 18) }),
+      L(rr(1, 2, 14, 12, R3), { ...Bt, clip: rr(11, -1, 6, 18) })
+    ]
   }
 };
 
