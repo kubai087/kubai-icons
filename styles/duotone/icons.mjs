@@ -2998,3 +2998,80 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Batch: transport, travel and sports (group 6)
+const SUB = pill(1, 7, 14, 6.5) + rr(5.75, 2.5, 4.5, 5, [r, r, 0, 0]);
+const CANOPY = 'M2.804 8A0.75 0.75 0 0 1 2.062 7.143A6 6 0 0 1 13.938 7.143A0.75 0.75 0 0 1 13.196 8Z';
+const VAN = rr(1, 2.5, 14, 9, [M, 4, r, r]);
+const ARM = pill(7.5, 6.5, 7.5, 2);
+
+Object.assign(ICONS, {
+  submarine: {
+    label: '潜水艇',
+    key: 'wide',
+    layers: [
+      // A light hull with a tower on top whose top is blue (the hatch, the hull clipped), and
+      // three blue portholes, the outer two concentric with the hull's round ends.
+      L(SUB, Bt),
+      L(SUB, { clip: rr(0, 0, 16, 4) }),
+      L(circ(4.25, 10.25, 0.875) + circ(8, 10.25, 0.875) + circ(11.75, 10.25, 0.875))
+    ]
+  },
+  'fire-hydrant': {
+    label: '消防栓',
+    key: 'portrait',
+    layers: [
+      // A blue domed cap one gap above a light barrel on a wider foot, a blue outlet on each side
+      // one gap from it, and a blue nut on its front.
+      L(rr(5, 1, 6, 3, [3, 3, 0, 0])),
+      L(rr(5, 5, 6, 8.5, [S, S, 0, 0]) + rr(3.5, 13, 9, 2, [0.75, 0.75, 0.5, 0.5]), Bt),
+      L(rr(2, 7.5, 2, 3, [1, 0, 0, 1]) + rr(12, 7.5, 2, 3, [0, 1, 1, 0])),
+      L(circ(8, 9, 1.25))
+    ]
+  },
+  'toy-robot': {
+    label: '机器人',
+    key: 'square',
+    layers: [
+      // A blue antenna one gap above a light head with two blue eyes, 2 in from its top and sides.
+      L(circ(8, 3.25, 1.25) + rr(7.375, 4, 1.25, 1, 0)),
+      L(rr(2, 6, 12, 8, R), Bt),
+      L(circ(5.25, 9.25, 1.25) + circ(10.75, 9.25, 1.25))
+    ]
+  },
+  'beach-umbrella': {
+    label: '遮阳伞',
+    key: 'square',
+    layers: [
+      // umbrella's light canopy with a blue panel down its middle, and a straight blue pole one
+      // gap below it (umbrella's handle ends in a hook).
+      L(CANOPY, Bt),
+      L(CANOPY, { clip: rr(6.5, 0, 3, 16) }),
+      L(pill(7.25, 9, K, 5))
+    ]
+  },
+  'camper-van': {
+    label: '房车',
+    key: 'wide',
+    layers: [
+      // A light van with a round front, its front top in blue as the windscreen (the van clipped),
+      // a blue side window 2 in from its top and back, and the vehicles' blue wheels.
+      L(VAN, Bt),
+      L(VAN, { clip: rr(11.25, 0, 5, 6.5) }),
+      L(rr(3, 4.5, 5.5, 2.5, 0.75)),
+      wheels([4.5, 11.5])
+    ]
+  },
+  'toll-booth': {
+    label: '收费站',
+    key: 'landscape',
+    layers: [
+      // A light booth with a blue window, and one gap from it a light barrier arm with two blue
+      // stripes (the arm clipped).
+      L(rr(1, 2, 5.5, 12, M), Bt),
+      L(rr(2.5, 3.5, 2.5, 3, 0.75)),
+      L(ARM, Bt),
+      L(ARM, { clip: rr(9.5, 0, 1.75, 16) + rr(12.5, 0, 1.75, 16) })
+    ]
+  }
+});

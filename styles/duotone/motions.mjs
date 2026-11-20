@@ -532,3 +532,13 @@ Object.assign(MOTION, {
   badminton: { say: '羽毛球被击起，再落下', moves: { all: { y: [-1, 0.25, 0] } } },
   tractor: { say: '拖拉机颠簸着向前开', moves: { all: { x: [0.5, 0.75, 0], y: [-0.5, 0, 0] } } }
 });
+
+// Batch: transport, travel and sports (group 6)
+Object.assign(MOTION, {
+  submarine: { say: '潜水艇下潜，又浮上来', moves: { all: { y: [1, -0.5, 0] } } },
+  'fire-hydrant': { say: '拧开顶部阀门', moves: { 0: { sx: [-1, 1], o: [8, 2.5] } } },
+  'toy-robot': { say: '眨眨眼，天线晃一晃', moves: { 2: { sy: [0.15, 1], o: [8, 9.25] }, 0: { r: [-15, 10, 0], o: [8, 5] } } },
+  'beach-umbrella': { say: '遮阳伞在风里轻轻晃动', moves: same([0, 1], tilt([-6, 4, -2, 0], [8, 8])) },
+  'camper-van': { say: '向前开动又刹住，车身前后晃一下', moves: { all: { x: [1, -0.25, 0] }, ...same([0, 1, 2], tilt([-3, 1.5, 0], [8, 11.5])) } },
+  'toll-booth': { say: '栏杆抬起，放行', moves: same([2, 3], tilt([-35, -30], [8.5, 7.5])) }
+});
