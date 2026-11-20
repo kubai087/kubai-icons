@@ -68,7 +68,8 @@ export function animate(svg, icon, { state = {} } = {}) {
     lift(true);
     const tick = (t) => {
       if (stopped) return;
-      const k = Math.min(1, ((typeof t === 'number' ? t : now()) - t0) / DURATION);
+      // A frame's timestamp can be a little earlier than t0, which is read when hover changes.
+      const k = Math.min(1, Math.max(0, ((typeof t === 'number' ? t : now()) - t0) / DURATION));
       const e = EASE(k);
       cur = interp(from, to, e);
       paint({ out: !on, e });

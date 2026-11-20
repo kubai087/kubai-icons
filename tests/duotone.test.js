@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -7,7 +7,7 @@ import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { createSSRApp, h } from 'vue';
 import { renderToString as vueToString } from 'vue/server-renderer';
-import { createIcon, toSvg, Folder as folder, Mail as mail, Lightbulb as bulb, BellOff as bellOff } from 'kubai-icons/duotone';
+import { createIcon, toSvg, Folder as folder, Mail as mail, Lightbulb as bulb, BellOff as bellOff, Mic as mic, Trash as trash, Music as music, Bell as bell } from 'kubai-icons/duotone';
 import { Folder as layeredFolder } from 'kubai-icons';
 import { loadIcon, names } from 'kubai-icons/duotone/dynamic';
 import { Folder as ReactFolder, SearchSparkle } from 'kubai-icons-react/duotone';
@@ -67,6 +67,35 @@ describe('kubai-icons/duotone', () => {
     expect(sheet.querySelector('[data-l="0"]').getAttribute('transform')).toContain('translate(8 3.5)');
     sheet.kubai.hover(false, true);
     expect(sheet.querySelector('[data-l="0"]').getAttribute('transform')).toContain('translate(8 8)');
+  });
+
+  it('never writes NaN when a frame is stamped before the motion starts', () => {
+    // requestAnimationFrame can pass a timestamp a little earlier than the performance.now()
+    // read when hover changed. That first frame must hold the start pose, not index before
+    // the first keyframe.
+    const frames = [];
+    vi.stubGlobal('requestAnimationFrame', (fn) => frames.push(fn));
+    vi.stubGlobal('cancelAnimationFrame', () => {});
+    const clock = vi.spyOn(performance, 'now').mockReturnValue(1000);
+    const attrs = (svg) => [...svg.querySelectorAll('[data-l]')].flatMap((el) => ['transform', 'opacity', 'stroke-dasharray'].map((a) => el.getAttribute(a) || ''));
+    try {
+      for (const ic of [folder, mic, trash, music, bell]) {
+        const svg = createIcon(ic);
+        for (const on of [true, false]) {
+          frames.length = 0;
+          svg.kubai.hover(on);
+          frames.shift()(990);
+          const written = attrs(svg);
+          expect(written.some((v) => v.includes('translate'))).toBe(true);
+          expect(written.filter((v) => v.includes('NaN'))).toEqual([]);
+          frames.shift()(5000);
+          expect(attrs(svg).filter((v) => v.includes('NaN'))).toEqual([]);
+        }
+      }
+    } finally {
+      clock.mockRestore();
+      vi.unstubAllGlobals();
+    }
   });
 
   it('loads icons by name', async () => {
