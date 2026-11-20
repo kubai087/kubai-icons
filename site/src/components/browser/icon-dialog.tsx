@@ -35,7 +35,7 @@ export function IconDialog({ meta: current, related: currentRelated, onClose, ..
       <DialogContent initialFocus={content} className="max-h-[calc(100dvh-2rem)] gap-0 rounded-panel p-0 sm:max-w-3xl" closeClassName="top-3 end-3 size-8">
         {/* Only the content scrolls, so the close button stays in reach. */}
         <div ref={content} tabIndex={-1} className="max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-[inherit] outline-none">
-          {meta && <IconDetail meta={meta} related={related} title={DialogTitle} description={DialogDescription} footer={<IconPageLink meta={meta} />} {...rest} />}
+          {meta && <IconDetail meta={meta} related={related} title={DialogTitle} description={DialogDescription} footer={meta.style === "duotone" ? undefined : <IconPageLink meta={meta} />} {...rest} />}
         </div>
       </DialogContent>
     </Dialog>

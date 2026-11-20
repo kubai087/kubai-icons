@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Prose, Title, Code } from "@/components/docs/prose";
 import { REPO } from "@/lib/site";
 
-export const metadata = pageMeta({ title: "Agent skill for drawing icons", path: "/skill/", description: "An agent skill that draws new animated icons in the style of the Kubai Icons library, in Claude Code, Codex and other coding agents." });
+export const metadata = pageMeta({ title: "Agent skill for drawing icons", path: "/skill/", description: "An agent skill that draws new icons in the styles of the Kubai Icons library, layered and animated or solid two-tone, in Claude Code, Codex and other coding agents." });
 
 export default function Page() {
   return (
@@ -14,6 +14,9 @@ export default function Page() {
       <div className="my-5 space-y-5">
           <h2>Overview</h2>
           <p>The skill reads a product&apos;s code or feature list, assigns an everyday object and a hover action to each feature, and draws the icons. Each icon is checked at 24 and 28 pixels against a written specification that covers canvas, layers, outlines, light, color, marks and motion.</p>
+          <h2>Two styles</h2>
+          <p>The skill draws in two styles. Layered icons have back and front pieces, outside outlines and the hover motion the object itself would make. Two-tone icons are solid shapes on a 16 grid, with a light body and accents in your brand color, for interface icons at 16 to 48 pixels. Tell the agent which style you want; it asks when it can&apos;t tell.</p>
+          <p>The <Link href="/docs/guides/duotone/">two-tone icons</Link> in the library were drawn with it, and the browser shows them under <Link href="/icons/?style=duotone">Two-tone</Link>.</p>
           <h2>Install</h2>
           <p>The skill is a folder of instructions and scripts, so any coding agent that can read files and run commands can use it, including <a href="https://claude.com/claude-code">Claude Code</a> and <a href="https://developers.openai.com/codex">Codex</a>. We recommend Claude, which the skill was developed and tested with. Its self-check also needs Node 18 or later and Chrome.</p>
           <p>Paste the following into your agent:</p>
@@ -24,6 +27,7 @@ clone ${REPO} into your skills folder as kubai-icons
 if it's already there, pull the latest version instead),
 make sure SKILL.md exists in that folder, and tell me when it's ready.`} />
       <div className="my-5 space-y-5">
+          <p>This installs both styles. For the two-tone style on its own, download <code>kubai-duotone</code> from the <a href={`${REPO}/releases/latest`}>latest release</a> and unzip it into the same skills folder.</p>
           <h2>Use</h2>
           <p>Once the skill is installed, ask your agent to draw icons for your project, for example: &quot;Use the Kubai Icons skill to draw icons for the features in this repository.&quot; An agent without skill support can read <code>SKILL.md</code> from the cloned folder and follow it.</p>
           <h2>Share your icons</h2>

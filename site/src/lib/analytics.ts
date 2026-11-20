@@ -35,6 +35,7 @@ export type EventName =
   | "search"
   | "search_empty"
   | "filter_category"
+  | "switch_style"
   | "install_copy"
   | "request_icon"
   | "icon_submit"

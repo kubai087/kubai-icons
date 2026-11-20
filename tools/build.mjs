@@ -214,17 +214,21 @@ if (targets.has('site')) {
     write(file, `${list.map((ic, i) => `import i${i} from ${JSON.stringify(path.join(core, 'dist', 'icons', `${ic.name}.js`))};`).join('\n')}\nexport default [${list.map((_, i) => `i${i}`).join(',')}];\n`);
     entries.push({ in: file, out: chunk });
   }
+  // The two-tone icons, few enough for one chunk, loaded when the browser switches style.
+  const duoFile = path.join(tmp, '_duotone.js');
+  write(duoFile, `${duo.map((x, i) => `import i${i} from ${JSON.stringify(path.join(core, 'dist', 'duotone', 'icons', `${x.def.name}.js`))};`).join('\n')}\nexport default [${duo.map((_, i) => `i${i}`).join(',')}];\n`);
+  entries.push({ in: duoFile, out: '_duotone' });
   await build({ entryPoints: entries, outdir: path.join(out, 'icons'), bundle: true, format: 'esm', minify: true, target: 'es2020', legalComments: 'none', logLevel: 'warning' });
   clean(path.join(core, '.gen'));
   // The index the site searches. It is revalidated on every visit and carries a hash of each
   // module, which lets the modules themselves be cached indefinitely.
-  const hashes = Object.fromEntries([...chunks.keys()].map((chunk) => [chunk, crypto.createHash('sha256').update(fs.readFileSync(path.join(out, 'icons', `${chunk}.js`))).digest('hex').slice(0, 10)]));
+  const hashes = Object.fromEntries([...chunks.keys(), '_duotone'].map((chunk) => [chunk, crypto.createHash('sha256').update(fs.readFileSync(path.join(out, 'icons', `${chunk}.js`))).digest('hex').slice(0, 10)]));
   // The site marks the icons of the latest release that added any, and those not released
   // yet, as new. The first release added every icon, so it marks none.
   const added = Object.keys(releases).sort(compareVersions);
   const fresh = added.length > 1 ? added[added.length - 1] : null;
   const siteMeta = meta.map((m) => (!m.since || m.since === fresh ? { ...m, new: true } : m));
-  write(path.join(out, 'index.json'), JSON.stringify({ version, count: icons.length, bases: icons.filter((i) => !i.base).length, categories, hashes, first: firstScreens.map((ic) => ic.name), icons: siteMeta }));
+  write(path.join(out, 'index.json'), JSON.stringify({ version, count: icons.length, bases: icons.filter((i) => !i.base).length, categories, hashes, first: firstScreens.map((ic) => ic.name), icons: siteMeta, duotone: duoMeta }));
   // The markup behind /api/icon/<name>.svg, in one file per first two letters, so a
   // request reads only a small part of the set.
   const shards = new Map();
@@ -317,6 +321,17 @@ With no build step:
 
 Each file includes a margin for the drop shadow, so a 28px image matches a live icon at 24px. For another color: \`${SITE}/api/icon/folder.svg?color=EC4899\`.
 
+## Two-tone style
+
+${duo.length} icons also come in a two-tone style: solid shapes on a 16 grid, a light body with accents in the brand colour, each with a hover motion. Import them from the \`duotone\` path of any package; names and props are the same, so switching style is one import:
+
+\`\`\`tsx
+import { Folder, BellOff } from "kubai-icons-react/duotone";
+<Folder size={24} color="#5A76F2" />
+\`\`\`
+
+Also \`kubai-icons-vue/duotone\`, \`kubai-icons/duotone\`, \`<kubai-icon name="folder" icon-style="duotone">\` and \`kubai-icons-static/svg-duotone/<name>.svg\`. The light tone is the primary at 40% over white; set \`--kd-b\` for another. Two-tone names: ${duo.map((x) => x.def.name).join(', ')}.
+
 ## Updating
 
 New icons come out in new releases. Icons marked "since" a version need at least that version installed: \`npm install kubai-icons-react@latest\` (or the package you use).
@@ -328,6 +343,7 @@ New icons come out in new releases. Icons marked "since" a version need at least
 - [Vue](${SITE}/docs/vue/)
 - [JavaScript and web component](${SITE}/docs/javascript/)
 - [Static SVG](${SITE}/docs/static/)
+- [Two-tone style](${SITE}/docs/guides/duotone/): the solid two-tone icons and how to switch to them
 - [Customize](${SITE}/docs/customize/): color, variants, badges and triggers
 - [Accessibility](${SITE}/docs/accessibility/)
 - [Performance](${SITE}/docs/performance/)

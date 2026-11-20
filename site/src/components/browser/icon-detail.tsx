@@ -118,7 +118,15 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
   const cat = categories.find((c) => c.id === meta.category);
   const catName = cat ? tr(cat.en, cat.zh ?? cat.en) : undefined;
   const facets = locale === "en" ? FACETS : [{ key: "local" as const, label: languageOf(locale).name, zh: languageOf(locale).name }, ...FACETS];
+  const duo = meta.style === "duotone";
   const snippets = useMemo(() => {
+    // A two-tone icon has the same name and props, from the duotone path of each package.
+    if (duo) return {
+      react: `import { ${P} } from "kubai-icons-react/duotone";\n\n<${P} size={24} color="${color}" />`,
+      vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue/duotone";\n</script>\n\n<template>\n  <${P} :size="24" color="${color}" />\n</template>`,
+      html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" icon-style="duotone" size="24" color="${color}"></kubai-icon>`,
+      js: `import { createIcon, ${P} } from "kubai-icons/duotone";\n\ndocument.body.append(createIcon(${P}, { size: 24, color: "${color}" }));`,
+    };
     const soft = (variant === "soft" ? ' variant="soft"' : "") + (mainBc ? ' badgeColor="semantic"' : "");
     return {
       react: `import { ${P} } from "kubai-icons-react";\n\n<${P} size={24} color="${color}"${soft} />`,
@@ -126,8 +134,8 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
       html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" size="24" color="${color}"${variant === "soft" ? ' variant="soft"' : ""}${mainBc ? ' badge-color="semantic"' : ""}></kubai-icon>`,
       js: `import { createIcon, ${P} } from "kubai-icons";\n\ndocument.body.append(createIcon(${P}, { size: 24, color: "${color}"${variant === "soft" ? ', variant: "soft"' : ""}${mainBc ? ', badgeColor: "semantic"' : ""} }));`,
     };
-  }, [meta, P, color, variant, mainBc]);
-  const source = `${REPO}/blob/master/icons/${meta.base ?? meta.name}.js`;
+  }, [meta, P, color, variant, mainBc, duo]);
+  const source = duo ? `${REPO}/blob/master/icons-duotone/${meta.name}.json` : `${REPO}/blob/master/icons/${meta.base ?? meta.name}.js`;
 
   const svgText = () => (icon ? resolvedSvg(icon, { color, variant, badgeColor: mainBc, size: 96 }) : "");
   // The button shows a tick for a moment after a copy or a download. A copy also plays the
@@ -243,9 +251,12 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           <Button size="xl" variant="outline" onClick={actions.svg}><DoneIcon done={done === "svg"} icon={RiDownloadLine} />SVG</Button>
           <Button size="xl" variant="outline" onClick={actions.png}><DoneIcon done={done === "png"} icon={RiDownloadLine} />PNG</Button>
           <span className="sr-only" aria-live="polite">{done === "copy" ? tr("Copied", "已复制") : done ? tr("Downloaded", "已下载") : ""}</span>
-          <Button size="icon-xl" variant="outline" onClick={() => toggleSaved({ name: meta.name, color, variant, badge: mainBc })} aria-pressed={saved} aria-label={tr("Save to collection", "加入收藏夹")} title={saved ? tr("Remove from collection", "移出收藏夹") : tr("Save to collection", "加入收藏夹")}>
-            {saved ? <RiBookmarkFill /> : <RiBookmarkLine />}
-          </Button>
+          {/* Collections hold layered icons. */}
+          {!duo && (
+            <Button size="icon-xl" variant="outline" onClick={() => toggleSaved({ name: meta.name, color, variant, badge: mainBc })} aria-pressed={saved} aria-label={tr("Save to collection", "加入收藏夹")} title={saved ? tr("Remove from collection", "移出收藏夹") : tr("Save to collection", "加入收藏夹")}>
+              {saved ? <RiBookmarkFill /> : <RiBookmarkLine />}
+            </Button>
+          )}
           <Button size="icon-xl" variant="outline" render={<a href={source} target="_blank" rel="noreferrer" />} aria-label={tr("View source on GitHub", "在 GitHub 上查看源码")} title={tr("View source on GitHub", "在 GitHub 上查看源码")}>
             <RiGithubLine />
           </Button>
@@ -255,7 +266,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           <section className="space-y-3">
             <div className="flex items-center justify-between gap-2">
               <Label>{tr("Badges", "角标")}</Label>
-              <Segmented
+              {!duo && <Segmented
                 value={badge}
                 onChange={onBadge}
                 label={tr("Badge color", "角标颜色")}
@@ -263,7 +274,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
                   { value: "mono", label: tr("Mono", "单色") },
                   { value: "semantic", label: tr("Color", "彩色") },
                 ]}
-              />
+              />}
             </div>
             <div className="relative isolate flex flex-wrap gap-2">
               <Glide still selector="[aria-current=true]" className="rounded-card bg-surface-hover ring-1 ring-foreground/20" />

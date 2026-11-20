@@ -79,6 +79,15 @@ export const GUIDES: LearnPage[] = [
     description: "Copy or download Kubai Icons as SVG or PNG for Figma, Sketch, Keynote and native apps, in any color, and keep a set in one ZIP.",
     zhDescription: "把 Kubai Icons 复制或下载为任意颜色的 SVG 或 PNG，用于 Figma、Sketch、Keynote 和原生应用，也可以把一组图标打包为 ZIP。",
   },
+  {
+    href: "/docs/guides/duotone/",
+    label: "Two-tone style",
+    zh: "双色风格",
+    title: "Two-tone icons: the solid style",
+    zhTitle: "双色面性图标",
+    description: "Solid two-tone icons on a 16 grid, with a light body, accents in your brand color and a hover motion. Same names and props as the layered icons, so switching style is one import.",
+    zhDescription: "16 网格的实心双色图标：浅色主体加品牌色点缀，悬停时有动效。名字和参数与分层图标相同，切换风格只需要改一行 import。",
+  },
 ];
 
 export const COMPARISONS: LearnPage[] = [

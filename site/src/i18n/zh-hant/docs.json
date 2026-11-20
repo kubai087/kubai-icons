@@ -37,7 +37,6 @@
  "Add one script tag to load the component from a CDN. It downloads each icon file the first time that icon is used.": "加入一個 script 標籤，從 CDN 載入此元件。每個圖示檔案會在第一次使用該圖示時下載。",
  "Agent skill for drawing icons": "用於繪製圖示的 Agent Skill",
  "All of an icon's colors are calculated from one accent color. By default, the accent is <0>currentColor</0>, so you can change it by setting the CSS <1>color</1> property on the icon or on any ancestor:": "圖示的所有顏色都由同一個主色計算而來。主色預設為 <0>currentColor</0>，因此可在圖示或任何上層元素上設定 CSS 的 <1>color</1> 屬性來變更：",
- "An agent skill that draws new animated icons in the style of the Kubai Icons library, in Claude Code, Codex and other coding agents.": "可在 Claude Code、Codex 和其他程式開發 Agent 中，依 Kubai Icons 圖示庫的風格繪製新動態圖示的 Agent Skill。",
  "An icon has a mid-tone back piece with a drop shadow, and usually a lighter front piece with a soft highlight along its top edge. White content, such as a symbol or lines, can sit between the two. An icon with no front piece has white content large enough to form a second layer. The top corners of the front piece are rounded separately, which exposes the back piece at the corners.": "圖示有一個帶陰影的中間色調底層，通常還有一個較淺的前層，上緣有柔和的高光。符號或線條等白色內容可位於兩層之間。沒有前層的圖示，其白色內容會大到足以形成第二層。前層的上方兩個圓角單獨設定，使底層在轉角處露出。",
  "Animated React icons": "React 動態圖示",
  "Animated Vue 3 icons": "Vue 3 動態圖示",
@@ -225,5 +224,10 @@
  "Updating": "更新",
  "New icons come out in new releases. To use them, update the package your project installs:": "新圖示隨新版本發布。要使用新圖示，請更新專案安裝的套件：",
  "CDN links that use <0>@0</0>, such as <1>kubai-icons@0</1>, load the latest 0.x release, so they get new icons without any change. The CDN can take a while to switch to a new release.": "使用 <0>@0</0> 的 CDN 連結（例如 <1>kubai-icons@0</1>）會載入最新的 0.x 版本，不用改程式碼就能用上新圖示。新版本發布後，CDN 可能需要一段時間才會切換過去。",
- "In the <0>icon browser</0>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.": "在<0>圖示瀏覽器</0>中，「新」分類列出最新版本加入的圖示，每個新圖示的詳細面板會註明需要哪個版本。"
+ "In the <0>icon browser</0>, the New category lists the icons added in the latest release, and the panel of each new icon shows the release it needs.": "在<0>圖示瀏覽器</0>中，「新」分類列出最新版本加入的圖示，每個新圖示的詳細面板會註明需要哪個版本。",
+ "An agent skill that draws new icons in the styles of the Kubai Icons library, layered and animated or solid two-tone, in Claude Code, Codex and other coding agents.": "一個智慧代理 Skill，可在 Claude Code、Codex 和其他程式設計代理中，按 Kubai Icons 圖示庫的風格繪製新圖示：分層動態圖示，或實心雙色圖示。",
+ "The <0>two-tone icons</0> in the library were drawn with it, and the browser shows them under <1>Two-tone</1>.": "圖示庫裡的<0>雙色圖示</0>就是用它繪製的，在圖示庫裡選擇<1>雙色</1>就能看到。",
+ "The skill draws in two styles. Layered icons have back and front pieces, outside outlines and the hover motion the object itself would make. Two-tone icons are solid shapes on a 16 grid, with a light body and accents in your brand color, for interface icons at 16 to 48 pixels. Tell the agent which style you want; it asks when it can't tell.": "Skill 可以繪製兩種風格。分層圖示由後片和前片組成，有外描邊，懸停時做物體本身會做的動作。雙色圖示是 16 網格的實心圖形，淺色主體加品牌色點綴，適合介面裡 16 到 48 像素的功能圖示。告訴代理你要哪種風格；它判斷不出來時會先問你。",
+ "This installs both styles. For the two-tone style on its own, download <0>kubai-duotone</0> from the <1>latest release</1> and unzip it into the same skills folder.": "這樣會同時安裝兩種風格。只要雙色風格的話，從<1>最新版本</1>下載 <0>kubai-duotone</0>，解壓縮到同一個 Skills 資料夾即可。",
+ "Two styles": "兩種風格"
 }

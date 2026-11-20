@@ -1,22 +1,23 @@
 // <kubai-icon name="folder"></kubai-icon>: a custom element that loads each icon module on
 // demand from the same place as this script, so a page can use any icon from a CDN with
 // one script tag. Attributes: name, size, color, variant, badge-color, trigger ('hover' | 'parent' |
-// 'none'), label.
+// 'none'), label, and icon-style="duotone" for the two-tone style.
 import { toSvg } from './icon.js';
 import { animate, bindTrigger } from './runtime.js';
 
 const cache = new Map();
-const load = (name) => {
+const load = (name, style) => {
   if (!/^[a-z0-9-]+$/.test(name)) return Promise.reject(new Error(`Bad icon name: ${name}`));
-  if (!cache.has(name)) cache.set(name, import(new URL(`./icons/${name}.js`, import.meta.url).href).then((m) => m.default, (e) => { cache.delete(name); throw e; }));
-  return cache.get(name);
+  const dir = style === 'duotone' ? './duotone/icons' : './icons', key = `${dir}/${name}`;
+  if (!cache.has(key)) cache.set(key, import(new URL(`${key}.js`, import.meta.url).href).then((m) => m.default, (e) => { cache.delete(key); throw e; }));
+  return cache.get(key);
 };
 
 // Importing this module during server rendering is harmless: nothing registers there.
 const Base = typeof HTMLElement === 'undefined' ? class {} : HTMLElement;
 
 export class KubaiIconElement extends Base {
-  static observedAttributes = ['name', 'size', 'color', 'variant', 'badge-color', 'trigger', 'label'];
+  static observedAttributes = ['name', 'size', 'color', 'variant', 'badge-color', 'trigger', 'label', 'icon-style'];
   connectedCallback() { this.render(); }
   disconnectedCallback() { this.token = null; this.unbind(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
@@ -30,7 +31,7 @@ export class KubaiIconElement extends Base {
     this.style.width = this.style.height = `${size}px`;
     this.style.lineHeight = '0';
     let ic = null;
-    if (name) { try { ic = await load(name); } catch { /* an unknown name renders nothing */ } }
+    if (name) { try { ic = await load(name, this.getAttribute('icon-style')); } catch { /* an unknown name renders nothing */ } }
     if (token !== this.token) return;
     this.unbind();
     if (!ic) { this.textContent = ''; return; }

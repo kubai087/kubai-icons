@@ -14,7 +14,7 @@ import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
 import { chip, navItem, tile as tileStyle } from "@/components/kit/styles";
 import { SetsEntry } from "@/learn/sets-entry";
-import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta } from "@/lib/icons";
+import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta, type IconStyle } from "@/lib/icons";
 import { track } from "@/lib/analytics";
 import { markIconSeen, markNewSetSeen, useNewSetSeen } from "@/lib/seen-new";
 import { agentPrompt, asset, requestUrl } from "@/lib/site";
@@ -25,12 +25,13 @@ import { IconDialog } from "./icon-dialog";
 import { MIXED, MIXED_FILL, SWATCHES, mixedColor, usePrefs } from "./prefs";
 
 const readUrl = () => {
-  if (typeof window === "undefined") return { q: "", cat: "", icon: "" };
+  if (typeof window === "undefined") return { q: "", cat: "", icon: "", style: "" };
   const p = new URLSearchParams(window.location.search);
-  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "" };
+  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "", style: p.get("style") ?? "" };
 };
-const writeUrl = (s: { q: string; cat: string; icon: string }) => {
+const writeUrl = (s: { q: string; cat: string; icon: string; style: IconStyle }) => {
   const p = new URLSearchParams();
+  if (s.style === "duotone") p.set("style", "duotone");
   if (s.q) p.set("q", s.q);
   if (s.cat) p.set("category", s.cat);
   if (s.icon) p.set("icon", s.icon);
@@ -51,7 +52,8 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
   const locale = useLocale();
   const [index, setIndex] = useState<IconIndex | null>(null);
   const keywords = useSyncExternalStore(onKeywords, () => peekKeywords(locale), noKeywords);
-  const list = useMemo(() => (index ? prepare(index.icons, keywords ?? {}, locale) : []), [index, keywords, locale]);
+  const [styleKey, setStyleKey] = useState<IconStyle>("layered");
+  const list = useMemo(() => (index ? prepare(styleKey === "duotone" ? index.duotone : index.icons, keywords ?? {}, locale) : []), [index, keywords, locale, styleKey]);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
   const [open, setOpen] = useState<IconMeta | null>(null);
@@ -64,6 +66,9 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
   // Only a slider drag lets the grid trail the size; a saved size applies at once.
   const [sizing, setSizing] = useState(false);
   const [prefs, setPrefs] = usePrefs();
+  // The two-tone style shows its own, smaller set; collections and the layered variants stay
+  // with the layered icons.
+  const duo = prefs.style === "duotone";
   const query = useDeferredValue(q);
   const input = useRef<HTMLInputElement>(null);
   const bar = useRef<HTMLDivElement>(null);
@@ -78,11 +83,18 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
       else loadKeywordsLater(locale);
       setQ(u.q);
       setCat(u.cat);
-      if (u.icon) setOpen(ix.icons.find((i) => i.name === u.icon) ?? null);
+      if (u.style === "duotone") setPrefs({ style: "duotone" });
+      if (u.icon) setOpen((u.style === "duotone" ? ix.duotone : ix.icons).find((i) => i.name === u.icon) ?? null);
     }, () => setFailed(true));
   }, []);
   useEffect(load, [load]);
-  useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "" }); }, [q, cat, open, index]);
+  useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "", style: prefs.style }); }, [q, cat, open, index, prefs.style]);
+  // The list follows the saved style once it is read; a switch closes an open icon of the other style.
+  useEffect(() => {
+    setStyleKey(prefs.style);
+    setOpen((o) => (o && (o.style ?? "layered") !== prefs.style ? null : o));
+  }, [prefs.style]);
+  const styleCats = useMemo(() => (duo && index ? cats.filter((c) => index.duotone.some((i) => i.category === c.id)) : cats), [duo, index, cats]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey))) && document.activeElement?.tagName !== "INPUT") {
@@ -94,7 +106,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const newSet = useMemo(() => list.filter((i) => i.new).map((i) => i.name).join(","), [list]);
+  const newSet = useMemo(() => list.filter((i) => i.new && !i.style).map((i) => i.name).join(","), [list]);
   const hasNew = newSet !== "";
   const newSeen = useNewSetSeen(newSet);
   // Opening the New category, or an icon in it, retires its mark.
@@ -171,14 +183,14 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           <button type="button" aria-current={!cat} onClick={() => pickCat("")} className={navItem({ active: !cat })}>
             <span className="truncate">{tr("All", "全部")}</span>
           </button>
-          {hasNew && (
+          {hasNew && !duo && (
             <button type="button" aria-current={cat === NEW_CAT} onClick={() => pickCat(NEW_CAT)} className={navItem({ active: cat === NEW_CAT })}>
               <span className="truncate">{tr("New", "新增")}</span>
               {!newSeen && <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />}
             </button>
           )}
-          <SetsEntry as="nav" />
-          {cats.map((c) => (
+          {!duo && <SetsEntry as="nav" />}
+          {styleCats.map((c) => (
             <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} onClick={(e) => filterTo(e, c.id)} className={navItem({ active: cat === c.id })}>
               <span className="truncate">{tr(c.en, c.zh ?? c.en)}</span>
             </a>
@@ -220,14 +232,24 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               hexLabel={tr("Hex color", "十六进制颜色")}
             />
             <Segmented
-              value={prefs.variant}
-              onChange={(variant) => setPrefs({ variant })}
-              label={tr("Variant", "样式")}
-              options={[{ value: "color", label: tr("Color", "彩色") }, { value: "soft", label: tr("Soft", "柔和") }]}
+              value={prefs.style}
+              onChange={(style) => { setRefiltered(true); setSelecting(false); if (style === "duotone" && cat === NEW_CAT) setCat(""); setPrefs({ style }); track("switch_style", { style }); }}
+              label={tr("Style", "风格")}
+              options={[{ value: "layered", label: tr("Layered", "分层") }, { value: "duotone", label: tr("Two-tone", "双色") }]}
             />
-            <Button className="max-lg:ms-auto" variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
-              {selecting ? tr("Done", "完成") : tr("Select", "多选")}
-            </Button>
+            {!duo && (
+              <Segmented
+                value={prefs.variant}
+                onChange={(variant) => setPrefs({ variant })}
+                label={tr("Variant", "样式")}
+                options={[{ value: "color", label: tr("Color", "彩色") }, { value: "soft", label: tr("Soft", "柔和") }]}
+              />
+            )}
+            {!duo && (
+              <Button className="max-lg:ms-auto" variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
+                {selecting ? tr("Done", "完成") : tr("Select", "多选")}
+              </Button>
+            )}
             <SizeControl
               className="w-full lg:ms-auto lg:w-auto"
               label={tr("Icon size", "尺寸")}
@@ -243,9 +265,9 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           <div className="relative isolate -mx-gutter mb-3 flex gap-0.5 overflow-x-auto px-gutter pb-0.5 lg:hidden">
             <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
             <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
-            {hasNew && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
-            <SetsEntry as="chip" />
-            {cats.map((c) => (
+            {hasNew && !duo && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
+            {!duo && <SetsEntry as="chip" />}
+            {styleCats.map((c) => (
               <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
             ))}
 
@@ -277,7 +299,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               </div>
             </div>
           ) : (
-            <IconGrid icons={results} tile={tile} size={gridSize} color={prefs.color} variant={prefs.variant} selecting={selecting} hits={hits} animateChanges={refiltered} restScroll={restScroll} onOpen={openIcon} />
+            <IconGrid icons={results} tile={tile} size={gridSize} color={prefs.color} variant={prefs.variant} selecting={selecting && !duo} hits={hits} animateChanges={refiltered} restScroll={restScroll} onOpen={openIcon} />
           )}
         </div>
       </div>

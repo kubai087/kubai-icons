@@ -34,8 +34,18 @@ export function resolvedSvg(icon: KubaiIconData, { color, variant, badgeColor, s
   const shadow = svg.querySelector('filter[id^="sh-"]');
   const flood = shadow?.querySelector("feFlood");
   if (shadow && flood) shadow.innerHTML = portableShadow(flood.getAttribute("flood-color")!, Number(flood.getAttribute("flood-opacity")));
-  const side = 31 + pad * 2;
-  svg.setAttribute("viewBox", `${15.5 - side / 2} ${12.5 - side / 2} ${side} ${side}`);
+  if (icon.style === "duotone") {
+    // The 16 grid, padded in proportion to the layered canvas; motion tags aren't needed in a file.
+    const p = (pad * 16) / 31;
+    svg.setAttribute("viewBox", `${-p} ${-p} ${16 + 2 * p} ${16 + 2 * p}`);
+    // Parts that only show on hover are hidden at rest; a file leaves them out.
+    for (const el of svg.querySelectorAll('[data-l][opacity="0"]')) el.remove();
+    for (const el of svg.querySelectorAll("[data-l]")) el.removeAttribute("data-l");
+    for (const el of svg.querySelectorAll("[pathLength]")) el.removeAttribute("pathLength");
+  } else {
+    const side = 31 + pad * 2;
+    svg.setAttribute("viewBox", `${15.5 - side / 2} ${12.5 - side / 2} ${side} ${side}`);
+  }
   const text = svg.outerHTML;
   host.remove();
   return text;
