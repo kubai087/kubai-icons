@@ -42,7 +42,8 @@ export function screenshot(html, file, { width, height, scale = 1 }) {
 export function evaluate(html) {
   return withPage(html, (page, profile) => {
     const dom = execFileSync(findChrome(), ['--headless=new', '--disable-gpu', `--user-data-dir=${profile}`,
-      '--virtual-time-budget=5000', '--dump-dom', 'file://' + page], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 120000 });
+      // A full set of several hundred icons writes a page of many megabytes, and takes longer to measure.
+      '--virtual-time-budget=30000', '--dump-dom', 'file://' + page], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 600000, maxBuffer: 512 * 1024 * 1024 });
     const m = dom.match(/<pre id="out">([\s\S]*?)<\/pre>/);
     if (!m) throw new Error('The measuring page wrote no result.');
     return JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));

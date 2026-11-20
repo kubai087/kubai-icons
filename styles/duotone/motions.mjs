@@ -535,6 +535,8 @@ Object.assign(MOTION, {
 // Batch: home and tools (group 6)
 Object.assign(MOTION, {
   'window-frame': { say: '窗户向两边推开，又关上', moves: { 0: { sx: [0.45, 0.45, 1], o: [2.5, 7] }, 1: { sx: [0.45, 0.45, 1], o: [13.5, 7] } } }
+});
+
 // Batch: devices and media
 Object.assign(MOTION, {
   monitor: {
@@ -659,6 +661,8 @@ Object.assign(MOTION, {
   aperture: { say: '叶片转动，光圈收小', moves: { 0: { r: 30, o: [8, 8] }, 1: { r: 30, s: 0.6, o: [8, 8] } } },
   'ethernet-port': { say: '接通网络，触点依次亮起', moves: { 1: { a: [0.2, 1, 1, 1, 1] }, 2: { a: [0.2, 0.2, 1, 1, 1] }, 3: { a: [0.2, 0.2, 0.2, 1, 1] }, 4: { a: [0.2, 0.2, 0.2, 0.2, 1] } } },
   'camera-retro': { say: '按下快门：镜头一收一放', moves: { 3: { s: [0.4, 1], o: [8, 9] } } }
+});
+
 // Batch: transport, travel and sports
 const turnAbout = (r, o) => ({ r, o });
 Object.assign(MOTION, {
@@ -766,6 +770,8 @@ Object.assign(MOTION, {
   'fire-truck': { say: '云梯升起', moves: { 3: turnAbout([-12, -10], [1.5, 4.25]) } },
   trailer: { say: '被拖着向前走，又停下', moves: { all: { x: [0.75, -0.25, 0] } } },
   'gas-can': { say: '油桶倾斜，往外倒油', moves: { all: turnAbout([6, 5], [2, 15]) } }
+});
+
 // Batch: food, nature, health and science
 // polygon isn't in the import list at the top; a namespace import of our own keeps this batch
 // apart from the other batches' edits.
@@ -853,6 +859,8 @@ Object.assign(MOTION, {
   'baby-bottle': { say: '摇匀奶瓶', ms: 800, moves: { all: { r: [-10, 8, -4, 0], o: [8, 8] } } },
   'bunsen-burner': { say: '点燃，火焰跳动', ms: 800, moves: { 0: { sx: [0.75, 1.1, 0.9, 1], sy: [1.15, 0.9, 1.05, 1], o: [8, 7.25] } } },
   bread: { say: '把黄油抹开', moves: { 1: { sx: [1.5, 1.4], sy: [0.8, 0.85], o: [8, 9.25] } } }
+});
+
 // Batch: remaining functional categories
 Object.assign(MOTION, {
   'external-link': {
