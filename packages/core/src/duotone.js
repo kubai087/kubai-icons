@@ -98,7 +98,8 @@ const restOf = (p) => ({ ...REST, ...(p.rest || {}) });
 function track(from, v, q, ease) {
   const pts = [from, ...(Array.isArray(v) ? v : [v])], m = pts.length - 1;
   if (m === 1) return from + (pts[1] - from) * ease(q);
-  const kq = Math.min(m - 1e-9, q * m), i = Math.floor(kq), t = kq - i;
+  // q below 0 would index before the first keyframe and give NaN.
+  const kq = Math.min(m - 1e-9, Math.max(0, q * m)), i = Math.floor(kq), t = kq - i;
   return pts[i] + (pts[i + 1] - pts[i]) * (i === m - 1 ? ease(t) : inOut(t));
 }
 const count = (p) => Math.max(1, ...KEYS.filter((k) => Array.isArray(p[k])).map((k) => p[k].length));
@@ -134,8 +135,9 @@ export function duoPose(ic, t) {
 
 let reduced = false;
 try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* not a browser */ }
-const raf = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (fn) => setTimeout(() => fn(Date.now()), 16);
-const caf = typeof cancelAnimationFrame === 'function' ? cancelAnimationFrame : clearTimeout;
+// Looked up on each call, so a page or test that replaces them later is followed.
+const raf = (fn) => (typeof requestAnimationFrame === 'function' ? requestAnimationFrame(fn) : setTimeout(() => fn(Date.now()), 16));
+const caf = (id) => (typeof cancelAnimationFrame === 'function' ? cancelAnimationFrame(id) : clearTimeout(id));
 const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 
 /** Attaches the hover motion to a rendered two-tone <svg>; the same controller as animate(). */
@@ -161,8 +163,8 @@ export function animateDuotone(svg, ic) {
     const run = on ? long : DUO_BACK, t0 = now();
     const tick = (t) => {
       if (stopped) return;
-      // A frame can carry a timestamp from just before the motion started; progress never goes below 0.
-      const q = Math.max(0, Math.min(1, ((typeof t === "number" ? t : now()) - t0) / run));
+      // A frame's timestamp can be a little earlier than t0, which is read when hover changes.
+      const q = Math.min(1, Math.max(0, ((typeof t === 'number' ? t : now()) - t0) / run));
       els.forEach((el, i) => { el.cur = { ...el.cur, ...values(el.p, q, from[i], on) }; paint(el); });
       if (q < 1) frame = raf(tick);
     };
