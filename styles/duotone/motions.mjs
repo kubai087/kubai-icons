@@ -440,3 +440,16 @@ Object.assign(MOTION, {
   'zoom-out': { say: '减号重新划过，缩小', moves: draw('zoom-out') },
   unlink: { say: '斜线重新划过，断开链接', moves: draw('unlink') }
 });
+
+// Batch: food, nature, health and science
+Object.assign(MOTION, {
+  pill: { say: '胶囊两半拉开，再合上', moves: { 0: { x: [-0.5, 0], y: [0.5, 0] }, 1: { x: [0.5, 0], y: [-0.5, 0] } } },
+  pills: { say: '拧开瓶盖，盖子转着抬起', moves: { 0: { y: [-0.5, -0.75, -0.75], sx: [-1, 1, 1], o: [8, 2.5] } } },
+  'first-aid': { say: '提起急救箱，绕提手晃一晃', moves: { all: { y: [-0.75, -0.75, -0.75, -0.75], r: [4, -3, 1.5, 0], o: [8, 2] } } },
+  'hospital-cross': { say: '中间的十字先写竖，再写横', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
+  bandage: { say: '创可贴落下，贴平', moves: { all: { y: [-0.75, 0.2, 0], r: [-10, 0, 0] } } },
+  syringe: { say: '推动活塞，再松开', moves: { 0: { x: [-0.7, 0], y: [0.7, 0] } } },
+  beaker: { say: '倒入液体，液面升起', moves: { 1: { sy: [0.4, 1], o: [8, 14] } } },
+  flask: { say: '摇晃烧瓶，混合液体', ms: 800, moves: { all: { r: [-8, 6, -3, 0], o: [8, 14] } } },
+  'test-tube': { say: '摇晃试管，混合液体', ms: 800, moves: { all: { r: [-10, 8, -4, 0], o: [8, 8] } } }
+});

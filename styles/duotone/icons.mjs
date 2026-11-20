@@ -2387,3 +2387,122 @@ Object.assign(ICONS, {
   'zoom-out': badge(ICONS.search, 'minus', { at: [6.75, 6.75], drop: [2], label: '缩小' }),
   unlink: badge(ICONS.link, 'off', { label: '取消链接' })
 });
+
+// Batch: food, nature, health and science
+// Helpers for this batch. AP is a point at distance t along, and s across, a line through (8, 8)
+// at -45° (up and to the right); PLUS is a plus sign len across with arms th thick.
+const AP = (t, s = 0) => [f3(8 + (t + s) * Math.SQRT1_2), f3(8 + (s - t) * Math.SQRT1_2)];
+const PLUS = (cx, cy, len, th) => {
+  const a = len / 2, b = th / 2;
+  return [[-b, -a], [b, -a], [b, -b], [a, -b], [a, b], [b, b], [b, a], [-b, a], [-b, b], [-a, b], [-a, -b], [-b, -b]].map(([x, y]) => [cx + x, cy + y]);
+};
+const PLUS_R = (c) => [c, c, 0, c, c, 0, c, c, 0, c, c, 0];
+// A pill (capsule) at -45°, 5 wide, split across its middle by a gap of 1.
+const CAPSULE = { lo: polygon(AXIS(8, 8, -45, -7.45, -0.5, 5), [2.5, 0, 0, 2.5]), hi: polygon(AXIS(8, 8, -45, 0.5, 7.45, 5), [0, 2.5, 2.5, 0]) };
+// A sticking plaster at -45°, 6 wide, with round ends.
+const BAND = polygon(AXIS(8, 8, -45, -7.243, 7.243, 6), 3);
+// A syringe at -45°: barrel, needle at the lower left, plunger rod and thumb plate at the upper right.
+const BARREL = polygon(AXIS(8, 8, -45, -4.5, 2.25, 5), r);
+const NEEDLE = polygon(AXIS(8, 8, -45, -8.22, -4.4, D), D / 2);
+// A test tube at -45°: round bottom at the lower left, a rim one gap past its open end.
+const TUBE = polygon(AXIS(8, 8, -45, -7.55, 3.25, 4.5), [2.25, S, S, 2.25]);
+// A conical flask: a neck that widens with two slopes to a flat base.
+const FLASK = polygon([[6, 2], [10, 2], [10, 5.75], [14, 11.75], [14, 14], [2, 14], [2, 11.75], [6, 5.75]], [1, 1, r, r, r, r, r, r]);
+// A beaker: a rim wider than the glass by 1 on each side, straight sides, round bottom corners.
+const BEAKER = polygon([[2, 2], [14, 2], [14, 3.5], [13, 3.5], [13, 14], [3, 14], [3, 3.5], [2, 3.5]], [0.5, 0.5, 0.5, 0, R, R, 0, 0.5]);
+
+Object.assign(ICONS, {
+  pill: {
+    label: '胶囊',
+    key: 'square',
+    layers: [
+      // A capsule laid at 45°: a blue half and a light half, cut straight across by a gap of 1.
+      L(CAPSULE.lo),
+      L(CAPSULE.hi, Bt)
+    ]
+  },
+  pills: {
+    label: '药瓶',
+    key: 'tall',
+    layers: [
+      // A blue cap one gap above a light bottle, and a blue cross on the bottle's face.
+      L(rr(4, 1, 8, 3, 1.25)),
+      L(rr(3, 5, 10, 10, R), Bt),
+      L(polygon(PLUS(8, 10, 4.5, 1.75), PLUS_R(0.75)))
+    ]
+  },
+  'first-aid': {
+    label: '急救箱',
+    key: 'landscape',
+    layers: [
+      // briefcase's handle and case, with a blue cross centred on the case instead of a clasp.
+      L('M5.75 6V3.75A1 1 0 0 1 6.75 2.75H9.25A1 1 0 0 1 10.25 3.75V6', { sw: K }),
+      L(rr(1, 5.5, 14, 8.5, M), { ...Bt, gap: W }),
+      L(polygon(PLUS(8, 9.75, 4.5, 1.75), PLUS_R(0.75)))
+    ]
+  },
+  'hospital-cross': {
+    label: '医疗',
+    key: 'square',
+    layers: [
+      // A large light cross with arms 4.5 wide, and a small blue cross drawn on its centre.
+      L(polygon(PLUS(8, 8, 12, 4.5), PLUS_R(r)), Bt),
+      L('M8 6V10', { sw: K }),
+      L('M6 8H10', { sw: K })
+    ]
+  },
+  bandage: {
+    label: '创可贴',
+    key: 'square',
+    layers: [
+      // A light plaster laid at 45° with round ends; its middle pad is the plaster clipped in
+      // blue, with four white holes.
+      L(BAND, Bt),
+      L(BAND, { clip: polygon(AXIS(8, 8, -45, -2.5, 2.5, 8)), cut: [C([[-1, -1.25], [-1, 1.25], [1, -1.25], [1, 1.25]].map(([a, b]) => circ(...AP(a, b), 0.625)).join(''))] })
+    ]
+  },
+  syringe: {
+    label: '注射器',
+    key: 'square',
+    layers: [
+      // A syringe laid at 45°. A blue plunger rod runs into the light barrel, which cuts a gap of
+      // W round itself; the thumb plate is on its end. The medicine is the lower end of the barrel
+      // clipped in blue, and the needle continues it.
+      L(polygon(AXIS(8, 8, -45, 1, 4.9, 1.5), 0) + polygon(AXIS(8, 8, -45, 4.75, 6.25, 5), 0.5)),
+      L(BARREL, { ...Bt, gap: W }),
+      L(BARREL + NEEDLE, { clip: polygon(AXIS(8, 8, -45, -9, -2.5, 9)) })
+    ]
+  },
+  beaker: {
+    label: '烧杯',
+    key: 'square',
+    layers: [
+      // A light beaker with a rim, blue liquid in its lower half (the glass clipped), and one blue
+      // tick on the glass above it.
+      L(BEAKER, Bt),
+      L(BEAKER, { clip: rr(0, 9, 16, 7) }),
+      L(pill(5, 5.625, 3, D))
+    ]
+  },
+  flask: {
+    label: '烧瓶',
+    key: 'square',
+    layers: [
+      // A conical flask: the neck widens to the base with two slopes (GUIDE §1: the cone is what
+      // makes it a flask). Blue liquid fills the bottom (the flask clipped).
+      L(FLASK, Bt),
+      L(FLASK, { clip: rr(0, 10, 16, 6) })
+    ]
+  },
+  'test-tube': {
+    label: '试管',
+    key: 'square',
+    layers: [
+      // A light test tube laid at 45°, round at the bottom; blue liquid in its lower end (the tube
+      // clipped), and a blue rim one gap past its open end.
+      L(TUBE, Bt),
+      L(TUBE, { clip: polygon(AXIS(8, 8, -45, -9, -2.5, 9)) }),
+      L(polygon(AXIS(8, 8, -45, 4.25, 5.75, 6), 0.5))
+    ]
+  }
+});
