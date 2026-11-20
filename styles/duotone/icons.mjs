@@ -2764,3 +2764,100 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+Object.assign(ICONS, {
+  'phone-vibrate': {
+    label: '振动',
+    key: 'live',
+    layers: [
+      // phone a little narrower, with a blue vibration line one gap out on each side.
+      L(rr(3.5, 1, 9, 14, M), Bt),
+      L(pill(6.5, 3, 3, D) + pill(5.5, 11.75, 5, D)),
+      L('M1.75 5V11', { sw: K }),
+      L('M14.25 5V11', { sw: K })
+    ]
+  },
+  'tablet-smartphone': {
+    label: '多设备',
+    key: 'landscape',
+    layers: [
+      // A light tablet and, in front of its lower right corner, a blue phone that cuts a gap of
+      // W round itself.
+      L(rr(1, 2, 11, 9, M), Bt),
+      L(rr(9.5, 5, 5.5, 9, r), { gap: W })
+    ]
+  },
+  'e-reader': {
+    label: '电子书阅读器',
+    key: 'portrait',
+    layers: [
+      // A light reader with a blue screen 2 in from every edge, showing three light lines of
+      // text. One layer per line.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(4, 3, 8, 10, 1)),
+      L(pill(6, 5, 4, D), Bt),
+      L(pill(6, 7.375, 4, D), Bt),
+      L(pill(6, 9.75, 2.5, D), Bt)
+    ]
+  },
+  'server-rack': {
+    label: '服务器机柜',
+    key: 'portrait',
+    layers: [
+      // A light cabinet holding three blue units, a gap of 1 apart and 2.25 in from the sides,
+      // top and bottom, each with a light status light as far in from its end as from its top
+      // and bottom. One layer per unit.
+      L(rr(2, 1, 12, 14, M), Bt),
+      L(rr(4.25, 3.25, 7.5, 2.5, 1)),
+      L(rr(4.25, 6.75, 7.5, 2.5, 1)),
+      L(rr(4.25, 10.25, 7.5, 2.5, 1)),
+      L(circ(10.5, 4.5, 0.625) + circ(10.5, 8, 0.625) + circ(10.5, 11.5, 0.625), Bt)
+    ]
+  },
+  'memory-stick': {
+    label: '内存条',
+    key: 'flat',
+    layers: [
+      // A light board with its key notch in the bottom edge and three blue chips, 2 in from the
+      // edges. One layer per chip.
+      L(rr(1, 4, 14, 8, M), { ...Bt, cut: [C(rr(9.5, 11, 1, 2))] }),
+      L(rr(3, 6, 2.5, 4, 0.75)),
+      L(rr(6.75, 6, 2.5, 4, 0.75)),
+      L(rr(10.5, 6, 2.5, 4, 0.75))
+    ]
+  },
+  polaroid: {
+    label: '拍立得',
+    key: 'square',
+    layers: [
+      // A light instant camera with camera's blue lens ring, and a blue print coming out of the
+      // slot at the bottom, cutting a gap of W round itself (as printer's sheet).
+      L(rr(2, 2, 12, 9.5, M), Bt),
+      L(circ(8, 6, 2.5), { cut: [C(circ(8, 6, 1.25))] }),
+      L(rr(4, 9.5, 8, 4.5, [0, 0, r, r]), { gap: W })
+    ]
+  },
+  slideshow: {
+    label: '幻灯片',
+    key: 'landscape',
+    layers: [
+      // A light screen with a blue slide 2 in from its edges, and one gap below it the page
+      // markers: the current page a blue bar, the other two light dots, a gap of 1 apart.
+      L(rr(1, 2, 14, 9.5, M), Bt),
+      L(rr(3, 4, 10, 5.5, 1)),
+      L(pill(4, 12.5, 3, 1.5)),
+      L(circ(8.75, 13.25, 0.75) + circ(11.25, 13.25, 0.75), Bt)
+    ]
+  },
+  joystick: {
+    label: '摇杆',
+    key: 'portrait',
+    layers: [
+      // A blue ball on a blue stick rising from behind a light base, which cuts a gap of W round
+      // itself.
+      L(pill(7.25, 4, 1.5, 8), { part: 'stick' }),
+      L(circ(8, 3.75, 2.75), { part: 'stick' }),
+      L(rr(2, 10, 12, 5, [2, 2, r, r]), { ...Bt, gap: W })
+    ]
+  }
+});
