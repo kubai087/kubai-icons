@@ -543,3 +543,19 @@ Object.assign(MOTION, {
   landmark: { say: '立柱从左到右依次亮起', moves: { 1: { a: [0.3, 1] } } },
   angry: { say: '气得直摇头', ms: 700, moves: { all: { x: [-0.6, 0.6, -0.6, 0.6, 0] } } }
 });
+
+// Group 6 of the same batch.
+Object.assign(MOTION, {
+  file: { say: '折角展开，又折回去', moves: { 1: { s: [0, 1], o: [14, 1] } } },
+  'folder-open': {
+    say: '从打开的文件夹里抽出一张纸',
+    add: [{ layer: L(rr(4.5, 5, 6.5, 6.5, 1), { ...Bt, gap: W }), at: 1 }],
+    moves: { a0: { rest: { a: 0 }, a: 1, y: [-2.25, -2] } }
+  },
+  reply: { say: '回复箭头向左推一下', moves: same([1, 2], { x: [-0.75, 0] }) },
+  rainbow: { say: '彩虹从左到右一道道画出', moves: { 0: { w: [0, 1, 1] }, 1: { w: [0, 0, 1] } } },
+  workflow: { say: '从第一步连到第二步，第二步随后出现', moves: { 1: { w: [0, 1, 1] }, 2: { s: [0, 0, 1], o: [11.5, 11.5] } } },
+  'corner-down-right': { say: '箭头转弯后向右推一下', moves: { 1: { x: [0.75, 0] } } },
+  'corner-up-left': { say: '箭头转弯后向左推一下', moves: { 1: { x: [-0.75, 0] } } },
+  'badge-verified': { say: '徽章转过一格，对勾重新打上', moves: { 0: { r: 36, o: [8, 8] }, 1: { w: [0, 1] } } }
+});

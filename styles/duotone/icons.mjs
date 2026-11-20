@@ -2942,3 +2942,100 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// Group 6 of the same batch.
+// file's page: file-text's sheet with its upper right corner cut along a 45° fold, as sticky-note's.
+const PAGE = polygon([[2, 1], [10, 1], [14, 5], [14, 15], [2, 15]], [M, 1, 1, M, M]);
+// badge-verified's rosette: a disc ringed by twelve round scallops whose outer edge is the keyline.
+const ROSETTE = circ(8, 8, 5.5) + Array.from({ length: 12 }, (_, i) => {
+  const a = ((i * 30) * Math.PI) / 180;
+  return circ(f3(8 + 5.75 * Math.cos(a)), f3(8 + 5.75 * Math.sin(a)), 1.25);
+}).join('');
+// folder-open's front cover: level along the top, its right side slanting in towards the bottom
+// as the cover falls open. The top right corner sits past the live area so its rounded end lands on it.
+const COVER = polygon([[1, 7.5], [15.85, 7.5], [13, 14], [1, 14]], [1, 1.5, 2, R]);
+Object.assign(ICONS, {
+  file: {
+    label: '文档',
+    key: 'portrait',
+    layers: [
+      // A blank page with its upper right corner folded down: the fold is a 45° cut (the page's
+      // dog-ear is the one thing a blank page is known by), and the flap is the page clipped in
+      // blue below and left of the fold, as sticky-note's.
+      L(PAGE, Bt),
+      L(PAGE, { clip: rr(10, -1, 6, 6, [0, 0, 0, 1]) })
+    ]
+  },
+  'folder-open': {
+    label: '打开的文件夹',
+    key: 'landscape',
+    layers: [
+      // folder fallen open: the back with its tab stands up in blue, and the light front cover
+      // lies in front of it, cutting a gap of W, its right side slanting in as it opens. The
+      // cover's slanted side is what tells an open folder from a closed one.
+      L(body(1, 4, 12.5, 10, R, [{ x: 1, w: 6, h: 2, c: r }])),
+      L(COVER, { ...Bt, gap: W })
+    ]
+  },
+  reply: {
+    label: '回复',
+    key: 'landscape',
+    layers: [
+      // message-square's bubble with a blue reply arrow centred on it: a stroke that comes up and
+      // turns left on a quarter arc, ending in a 45° head. Shaft and head are one element.
+      L(rr(1, 2, 14, 12, [R3, R3, R3, 0]), Bt),
+      L('M11 11.25V9.5A2.5 2.5 0 0 0 8.5 7H5.5', { sw: K, part: 'arrow' }),
+      L('M7 5L5 7L7 9', { sw: K, part: 'arrow' })
+    ]
+  },
+  rainbow: {
+    label: '彩虹',
+    key: 'flat',
+    layers: [
+      // Two bands arching over a common centre a gap of 1 apart: the outer one light, the inner
+      // one blue. Drawn from left to right, so the motion can paint them across the sky.
+      L('M2 11A6 6 0 0 1 14 11', { sw: 2, ...Bt }),
+      L('M5 11A3 3 0 0 1 11 11', { sw: 2 })
+    ]
+  },
+  workflow: {
+    label: '工作流',
+    key: 'square',
+    layers: [
+      // Two steps: a blue box at the upper left and a light one at the lower right, joined by a
+      // blue line that leaves the first, turns on a quarter arc and stops a gap of 1 short of the second.
+      L(rr(2, 2, 5, 5, r)),
+      L('M4.5 8.625V9.5A2 2 0 0 0 6.5 11.5H7.375', { sw: D }),
+      L(rr(9, 9, 5, 5, r), Bt)
+    ]
+  },
+  'corner-down-right': {
+    label: '向右下转弯',
+    key: 'square',
+    layers: [
+      // code's tile with a blue arrow that runs down, turns on a quarter arc and points right
+      // (the allowed 45° head), as wide as it is tall and evenly inset from the tile's edges.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M4.8125 4.8125V7.5625A2 2 0 0 0 6.8125 9.5625H11.1875M9.5625 7.9375L11.1875 9.5625L9.5625 11.1875', { sw: K })
+    ]
+  },
+  'corner-up-left': {
+    label: '向左上转弯',
+    key: 'square',
+    layers: [
+      // corner-down-right turned half round: up, then left.
+      L(rr(2, 2, 12, 12, R), Bt),
+      L('M11.1875 11.1875V8.4375A2 2 0 0 0 9.1875 6.4375H4.8125M6.4375 8.0625L4.8125 6.4375L6.4375 4.8125', { sw: K })
+    ]
+  },
+  'badge-verified': {
+    label: '认证徽章',
+    key: 'circle',
+    layers: [
+      // A light rosette (a disc with twelve round scallops, all circles) and a blue check, smaller
+      // than circle-check's so it clears the scallops evenly.
+      L(ROSETTE, Bt),
+      L('M6 8L7.25 9.25L10 6.5', { sw: K })
+    ]
+  }
+});
