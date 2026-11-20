@@ -2986,3 +2986,128 @@ Object.assign(ICONS, {
     ]
   }
 });
+
+// A birdhouse: home's outline (a 45° roof), its roof clipped in blue.
+const NEST = polygon([[8, 1.38], [14, 7.38], [14, 14], [2, 14], [2, 7.38]], [1.5, 1, M, M, 1]);
+// A volcano: a cone with a flat top (the slopes), its lava the top clipped with two drips.
+const VOLCANO = polygon([[5.5, 5.5], [10.5, 5.5], [15.8, 14], [0.2, 14]], 1);
+// A martini glass's bowl: wide at the top, narrowing to a point at the stem (the slopes).
+const MARTINI = polygon([[1.4, 2], [14.6, 2], [8, 9.75]], [0.5, 0.5, 1]);
+// A muffin's paper case: narrower at the bottom (the slopes are the case).
+const CASE = polygon([[3, 8.5], [13, 8.5], [11.75, 14], [4.25, 14]], [S, S, r, r]);
+
+Object.assign(ICONS, {
+  'wind-turbine': {
+    label: '风力发电机',
+    key: 'square',
+    layers: [
+      // Three light blades 120° apart round a blue hub that cuts a gap of W round itself, and a
+      // blue tower one gap below the hub, between the two lower blades.
+      L([-90, 30, 150].map((a) => polygon(AXIS(8, 8.75, a, -1.125, 6.75, 2.25), 1.125)).join(''), Bt),
+      L(circ(8, 8.75, 1.5), { gap: W }),
+      L(rr(7.125, 11.25, 1.75, 2.75, [0.5, 0.5, 0, 0]))
+    ]
+  },
+  beehive: {
+    label: '蜂箱',
+    key: 'square',
+    layers: [
+      // A light domed hive cut into three tiers by straight gaps, and a blue door standing on its
+      // bottom edge.
+      L(rr(2, 2, 12, 12, [6, 6, M, M]), { ...Bt, cut: [C('M0 5.75H16', W), C('M0 9.5H16', W)] }),
+      L(rr(6.5, 11, 3, 3, [1.5, 1.5, 0, 0]))
+    ]
+  },
+  birdhouse: {
+    label: '鸟屋',
+    key: 'square',
+    layers: [
+      // home's outline with its roof in blue (the house clipped) and a round blue hole.
+      L(NEST, Bt),
+      L(NEST, { clip: rr(0, 0, 16, 6.25) }),
+      L(circ(8, 9.75, 1.75))
+    ]
+  },
+  volcano: {
+    label: '火山',
+    key: 'landscape',
+    layers: [
+      // A light cone with a flat top (GUIDE §1: the slopes are the volcano), blue lava running
+      // over its top (it clipped with two drips), and a blue blob of lava one gap above.
+      L(VOLCANO, Bt),
+      L(VOLCANO, { clip: DRIPS(7.25, [6.75, 9.25]) }),
+      L(circ(8, 3.25, 1.25))
+    ]
+  },
+  utensils: {
+    label: '餐具',
+    key: 'portrait',
+    layers: [
+      // A light fork (its tines cut apart by two straight gaps) and a blue knife with a round
+      // tip, side by side.
+      L(rr(2, 1, 5, 6.5, [1, 1, 2.5, 2.5]) + pill(3.625, 6, 1.75, 9), { ...Bt, cut: [C('M3.667 0V4.5', W), C('M5.333 0V4.5', W)] }),
+      L(rr(9.5, 1, 4.5, 8.5, [4.5, S, 0, 0]) + pill(11.5, 7.5, 2.5, 7.5))
+    ]
+  },
+  cocktail: {
+    label: '鸡尾酒',
+    key: 'square',
+    layers: [
+      // A light martini glass (GUIDE §1: the bowl narrows to a point), the drink in its lower
+      // part clipped in blue, and a light stem on its foot one gap below.
+      L(MARTINI, Bt),
+      L(MARTINI, { clip: rr(0, 4.75, 16, 12) }),
+      L(body(4, 12.5, 8, 1.5, 0.5, [{ x: 7.25, w: 1.5, h: 2.35, c: 0.5 }]), Bt)
+    ]
+  },
+  muffin: {
+    label: '玛芬',
+    key: 'square',
+    layers: [
+      // A light domed top one gap above a blue paper case (narrower at the bottom), whose pleats
+      // are straight gaps.
+      L(rr(2, 2, 12, 5.5, [5.5, 5.5, S, S]), Bt),
+      L(CASE, { cut: [C('M6.5 8V15', W), C('M9.5 8V15', W)] })
+    ]
+  },
+  'chef-hat': {
+    label: '厨师帽',
+    key: 'square',
+    layers: [
+      // A light puffed top (three circles over a body) and a blue band one gap below.
+      L(circ(4.75, 6.25, 2.75) + circ(8, 4.75, 2.75) + circ(11.25, 6.25, 2.75) + rr(4, 6, 8, 4, [0, 0, S, S]), Bt),
+      L(rr(4, 11, 8, 3, 1))
+    ]
+  },
+  'baby-bottle': {
+    label: '奶瓶',
+    key: 'tall',
+    layers: [
+      // A blue teat on its collar, one gap above a light bottle with two blue measure lines.
+      L(body(4, 4.5, 8, 2, 0.75, [{ x: 6, w: 4, h: 3.5, c: 2 }])),
+      L(rr(3, 7.5, 10, 7.5, [S, S, M, M]), Bt),
+      L(pill(5, 9.5, 2.5, D) + pill(5, 11.75, 2.5, D))
+    ]
+  },
+  'bunsen-burner': {
+    label: '本生灯',
+    key: 'tall',
+    layers: [
+      // A blue flame (a drop: its point is the flame) over a light burner tube on a light base,
+      // each one gap from the next.
+      L(dropPath(5, 2.25, 0.6, 0.5)),
+      L(rr(6.75, 8.25, 2.5, 4, [S, S, 0.5, 0.5]), Bt),
+      L(rr(3, 13.25, 10, 1.75, 0.75), Bt)
+    ]
+  },
+  bread: {
+    label: '面包',
+    key: 'landscape',
+    layers: [
+      // A light slice of toast in one outline (two round lobes over a body) with a blue pat of
+      // butter on it.
+      L('M2 11.5V7.95A3.5 3.5 0 1 1 8 5.5A3.5 3.5 0 1 1 14 7.95V11.5A2.5 2.5 0 0 1 11.5 14H4.5A2.5 2.5 0 0 1 2 11.5Z', Bt),
+      L(rr(6, 7.5, 4, 3.5, 1))
+    ]
+  }
+});

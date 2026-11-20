@@ -511,3 +511,21 @@ Object.assign(MOTION, {
   pi: { say: '先写横，再写两竖', moves: { 1: { w: [0, 1, 1] }, 2: { w: [0, 0, 1] } } },
   sigma: { say: '求和符号一笔写出', moves: { 1: { w: [0, 1] } } }
 });
+
+Object.assign(MOTION, {
+  'wind-turbine': { say: '风吹动叶片转一圈', moves: same([0, 1], { r: 120, o: [8, 8.75] }) },
+  beehive: {
+    say: '一只蜜蜂从门口飞出来',
+    add: [{ layer: L(circ(8, 12.5, 1)) }],
+    moves: { a0: { ...hidden, x: [2.5, 4], y: [-4, -7.5], a: [1, 1] } }
+  },
+  birdhouse: { say: '鸟屋挂在枝上晃一晃', ms: 800, moves: { all: { r: [4, -3, 1.5, 0], o: [8, 1.5] } } },
+  volcano: { say: '火山喷出熔岩', moves: { 2: { y: [-1, 0], a: [0, 1] }, 1: { sy: [0.85, 1], o: [8, 5.5] } } },
+  utensils: { say: '刀叉碰一下', moves: { 0: { r: [6, 0], o: [4.5, 15] }, 1: { r: [-6, 0], o: [12.75, 15] } } },
+  cocktail: { say: '举杯碰一下', moves: { all: { r: [-7, 4, 0], o: [8, 14] } } },
+  muffin: { say: '玛芬烤好，顶部鼓起来', moves: { 0: { sy: [0.8, 1.06, 1], o: [8, 7.5] } } },
+  'chef-hat': { say: '摘下帽子致意', moves: { all: { y: [-1, -0.75], r: [-8, -6], o: [8, 14] } } },
+  'baby-bottle': { say: '摇匀奶瓶', ms: 800, moves: { all: { r: [-10, 8, -4, 0], o: [8, 8] } } },
+  'bunsen-burner': { say: '点燃，火焰跳动', ms: 800, moves: { 0: { sx: [0.75, 1.1, 0.9, 1], sy: [1.15, 0.9, 1.05, 1], o: [8, 7.25] } } },
+  bread: { say: '把黄油抹开', moves: { 1: { sx: [1.5, 1.4], sy: [0.8, 0.85], o: [8, 9.25] } } }
+});
