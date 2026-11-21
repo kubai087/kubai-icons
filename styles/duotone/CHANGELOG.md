@@ -2,6 +2,12 @@
 
 本文件记录双色面性风格的历次修改。每条写明问题、改法和对应的 `GUIDE.md` 章节，遇到同类问题时可直接查阅。
 
+## 未发布
+
+### 脚本
+
+- **悬停动效的第一帧不再出现 NaN。** 问题：浏览器给出的帧时间可能略早于悬停开始时记下的时间，第一帧算出的进度是负数，带关键帧的动作会把 NaN 写进 `transform` 和 `opacity`，控制台报错，部件闪一下。改法：`motion.mjs` 把进度限制在 0 到 1 之间，与图标库 `kubai-icons/duotone` 的运行代码一致。（第 11 节）
+
 ## 2.0.0（2026-11-20）
 
 首个独立版本，随 Kubai Icons Skill 2.0 发布。此前该风格位于 kubai-icons skill 的 `styles/duotone/`，现作为 `kubai-duotone` skill 单独发布。本版共有 502 个范例，均已导入图标库，可从 `kubai-icons/duotone` 等路径引用。
