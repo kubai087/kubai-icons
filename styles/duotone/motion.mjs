@@ -128,7 +128,8 @@ export function animate(svg, spec) {
       if (reduced) { els.forEach((el, i) => { el.cur = { ...el.cur, ...values(el.p, 1, from[i], on) }; paint(el); }); return; }
       const run = on ? long : BACK, t0 = performance.now();
       const tick = (t) => {
-        const q = Math.min(1, (t - t0) / run);
+        // A frame's timestamp can be a little earlier than t0, which is read when hover changes.
+        const q = Math.min(1, Math.max(0, (t - t0) / run));
         els.forEach((el, i) => { el.cur = { ...el.cur, ...values(el.p, q, from[i], on) }; paint(el); });
         if (q < 1) frame = raf(tick);
       };
