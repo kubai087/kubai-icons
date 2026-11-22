@@ -975,5 +975,17 @@
     "cotton-candy",
     "gumball-machine",
     "pudding"
+  ],
+  "0.14.0": [
+    "action-camera",
+    "brick-phone",
+    "cd-player",
+    "fitness-band",
+    "foldable-phone",
+    "graphics-card",
+    "handheld-console",
+    "pda",
+    "ring-light",
+    "vhs-tape"
   ]
 }
