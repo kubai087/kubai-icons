@@ -17,6 +17,11 @@
 "instrumento musical",
 "gaita"
 ],
+"action-camera": [
+"Câmera de ação",
+"câmera esportiva",
+"câmera de capacete"
+],
 "activity": [
 "Atividade",
 "pulso",
@@ -587,6 +592,11 @@
 "pão de forma",
 "padaria"
 ],
+"brick-phone": [
+"Tijolão",
+"celular antigo",
+"celular com antena"
+],
 "brick-wall": [
 "Firewall",
 "muro de tijolos",
@@ -819,6 +829,11 @@
 "monitoramento",
 "CFTV",
 "vigilância"
+],
+"cd-player": [
+"Discman",
+"CD player portátil",
+"tocador de CD"
 ],
 "ceiling-fan": [
 "Ventilador de teto",
@@ -1733,6 +1748,11 @@
 "peixinho",
 "frutos do mar"
 ],
+"fitness-band": [
+"Pulseira fitness",
+"pulseira inteligente",
+"monitor de atividade"
+],
 "flag-triangle": [
 "Bandeirola",
 "flâmula",
@@ -1785,6 +1805,11 @@
 "mira",
 "enquadramento",
 "visor"
+],
+"foldable-phone": [
+"Celular dobrável",
+"smartphone dobrável",
+"tela dobrável"
 ],
 "folder-open": [
 "Pasta aberta",
@@ -1980,6 +2005,11 @@
 "uvas",
 "fruta"
 ],
+"graphics-card": [
+"Placa de vídeo",
+"placa gráfica",
+"GPU"
+],
 "grid": [
 "Grade",
 "grid",
@@ -2038,6 +2068,11 @@
 "Bolsa",
 "bolsa de mão",
 "carteira"
+],
+"handheld-console": [
+"Console portátil",
+"videogame portátil",
+"PC gamer portátil"
 ],
 "hanger": [
 "Cabide",
@@ -3008,6 +3043,11 @@
 "pet",
 "animal de estimação"
 ],
+"pda": [
+"PDA",
+"palmtop",
+"agenda eletrônica"
+],
 "pen-tool": [
 "Caneta vetorial",
 "bézier",
@@ -3414,6 +3454,11 @@
 "Tigela de arroz",
 "arroz",
 "refeição"
+],
+"ring-light": [
+"Ring light",
+"luz de anel",
+"iluminação para selfie"
 ],
 "ring": [
 "Anel",
@@ -4628,6 +4673,11 @@
 "Variável",
 "parâmetro",
 "x"
+],
+"vhs-tape": [
+"Fita VHS",
+"fita de vídeo",
+"videocassete"
 ],
 "video-call": [
 "Videochamada",

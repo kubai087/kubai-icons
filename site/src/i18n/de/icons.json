@@ -17,6 +17,11 @@
 "Handharmonika",
 "Musikinstrument"
 ],
+"action-camera": [
+"Actioncam",
+"Action-Kamera",
+"Helmkamera"
+],
 "activity": [
 "Aktivität",
 "Puls",
@@ -563,6 +568,11 @@
 "Laib",
 "Toast"
 ],
+"brick-phone": [
+"Knochen-Handy",
+"Mobiltelefon",
+"altes Handy"
+],
 "brick-wall": [
 "Ziegelmauer",
 "Firewall",
@@ -792,6 +802,11 @@
 "Überwachungskamera",
 "Videoüberwachung",
 "Sicherheitskamera"
+],
+"cd-player": [
+"Discman",
+"tragbarer CD-Player",
+"CD-Player"
 ],
 "ceiling-fan": [
 "Deckenventilator",
@@ -1677,6 +1692,11 @@
 "Goldfisch",
 "Meerestier"
 ],
+"fitness-band": [
+"Fitnessarmband",
+"Fitness-Tracker",
+"Aktivitätstracker"
+],
 "flag-triangle": [
 "Wimpel",
 "Dreiecksfahne",
@@ -1731,6 +1751,11 @@
 "Fokussieren",
 "Sucher",
 "Ziel"
+],
+"foldable-phone": [
+"Faltbares Smartphone",
+"Foldable",
+"Faltdisplay"
 ],
 "folder-open": [
 "Geöffneter Ordner",
@@ -1933,6 +1958,11 @@
 "Trauben",
 "Obst"
 ],
+"graphics-card": [
+"Grafikkarte",
+"GPU",
+"Videokarte"
+],
 "grid": [
 "Raster",
 "Gitter",
@@ -1993,6 +2023,11 @@
 "Handtasche",
 "Damentasche",
 "Tasche"
+],
+"handheld-console": [
+"Handheld-Konsole",
+"Handheld",
+"Gaming-Handheld"
 ],
 "hanger": [
 "Kleiderbügel",
@@ -2995,6 +3030,11 @@
 "Haustier",
 "Tatze"
 ],
+"pda": [
+"PDA",
+"Taschencomputer",
+"Organizer"
+],
 "pen-tool": [
 "Zeichenstift",
 "Federwerkzeug",
@@ -3418,6 +3458,11 @@
 "Reisschale",
 "Reis",
 "Schüssel"
+],
+"ring-light": [
+"Ringlicht",
+"Ringleuchte",
+"Selfie-Licht"
 ],
 "ring": [
 "Ring",
@@ -4680,6 +4725,11 @@
 "Parameter",
 "Platzhalter",
 "x"
+],
+"vhs-tape": [
+"VHS-Kassette",
+"Videokassette",
+"Videoband"
 ],
 "video-call": [
 "Videoanruf",
