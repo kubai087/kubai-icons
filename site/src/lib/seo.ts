@@ -31,8 +31,25 @@ export function pageMeta({ title, description, path, fullTitle }: { title?: stri
   };
 }
 
-/** "arrow-left-right" as readers would write it: "Arrow left right". */
+/** Name parts written in capitals or with their own spelling. */
+const SPELLED: Record<string, string> = {
+  "3d": "3D", atm: "ATM", ccw: "CCW", cctv: "CCTV", cd: "CD", cpu: "CPU", crt: "CRT", cw: "CW", dna: "DNA",
+  ev: "EV", hdmi: "HDMI", id: "ID", nfc: "NFC", pda: "PDA", pos: "POS", qr: "QR", rss: "RSS", sd: "SD",
+  sim: "SIM", tv: "TV", ufo: "UFO", usb: "USB", "usb-c": "USB-C", vhs: "VHS", vr: "VR", wifi: "Wi-Fi",
+};
+
+/** Pairs that keep their hyphen, since that is how they are written. */
+const HYPHENATED = new Set(["usb-c", "e-reader", "x-ray", "yo-yo"]);
+
+/** "arrow-left-right" as readers would write it: "Arrow left right"; "usb-c-port" becomes "USB-C port". */
 export const iconLabel = (name: string) => {
-  const words = name.replace(/-/g, " ");
-  return words[0].toUpperCase() + words.slice(1);
+  const parts = name.split("-");
+  const words: string[] = [];
+  for (let i = 0; i < parts.length; i++) {
+    const pair = `${parts[i]}-${parts[i + 1]}`;
+    const word = HYPHENATED.has(pair) ? (i++, pair) : parts[i];
+    words.push(SPELLED[word] ?? word);
+  }
+  const label = words.join(" ");
+  return label[0].toUpperCase() + label.slice(1);
 };
