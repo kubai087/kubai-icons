@@ -175,6 +175,12 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
   const trailingSize = useDeferredValue(prefs.size);
   const gridSize = sizing ? trailingSize : prefs.size;
   const tile = 64 + gridSize * 1.5;
+  // Rendered in the panel on wide screens and beside the category chips on narrow ones.
+  const selectButton = (className: string) => (
+    <Button className={className} variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
+      {selecting ? tr("Done", "完成") : tr("Select", "多选")}
+    </Button>
+  );
   return (
     <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
       <aside className="hidden lg:block">
@@ -245,11 +251,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
                 options={[{ value: "color", label: tr("Color", "彩色") }, { value: "soft", label: tr("Soft", "柔和") }]}
               />
             )}
-            {!duo && (
-              <Button className="max-lg:ms-auto" variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
-                {selecting ? tr("Done", "完成") : tr("Select", "多选")}
-              </Button>
-            )}
+            {!duo && selectButton("max-lg:hidden")}
             <SizeControl
               className="w-full lg:ms-auto lg:w-auto"
               label={tr("Icon size", "尺寸")}
@@ -262,15 +264,18 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               onChange={(size) => { setSizing(true); setPrefs({ size }); }}
             />
           </div>
-          <div className="relative isolate -mx-gutter mb-3 flex gap-0.5 overflow-x-auto px-gutter pb-0.5 lg:hidden">
-            <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
-            <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
-            {hasNew && !duo && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
-            {!duo && <SetsEntry as="chip" />}
-            {styleCats.map((c) => (
-              <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
-            ))}
-
+          {/* On narrow screens Select sits at the end of the category row, where it stays in place while the chips scroll. */}
+          <div className="-mx-gutter mb-3 flex items-center lg:hidden">
+            <div className={cn("relative isolate flex min-w-0 flex-1 gap-0.5 overflow-x-auto ps-gutter pb-0.5", duo ? "pe-gutter" : "pe-3 [mask-image:linear-gradient(to_left,transparent,black_1.25rem)] rtl:[mask-image:linear-gradient(to_right,transparent,black_1.25rem)]")}>
+              <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
+              <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
+              {hasNew && !duo && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
+              {!duo && <SetsEntry as="chip" />}
+              {styleCats.map((c) => (
+                <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
+              ))}
+            </div>
+            {!duo && selectButton("ms-1 me-gutter shrink-0")}
           </div>
           </div>
         </div>
