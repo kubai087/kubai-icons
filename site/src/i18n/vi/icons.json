@@ -965,5 +965,11 @@
 "monorail":["Tàu một ray","monorail","tàu trên cao"],
 "claw-machine":["Máy gắp thú","gắp gấu bông","giải thưởng"],
 "jetpack":["Ba lô phản lực","jetpack","bay"],
-"plasma-ball":["Quả cầu plasma","đèn plasma","tia sét"]
+"plasma-ball":["Quả cầu plasma","đèn plasma","tia sét"],
+"zap":["Tia chớp","sét","năng lượng","nhanh"],
+"clouds":["Nhiều mây","mây","trời âm u"],
+"cloud-sun-rain":["Mưa rào","mưa","nắng mưa"],
+"cloud-moon-rain":["Mưa rào ban đêm","mưa","đêm"],
+"windsock":["Ống gió","hướng gió","sân bay"],
+"snowman":["Người tuyết","mùa đông","tuyết"]
 }

@@ -964,4 +964,10 @@
 "monorail":["Monorraíl","tren elevado","tren"],
 "claw-machine":["Máquina de gancho","grúa de peluches","premio"],
 "jetpack":["Mochila propulsora","jetpack","volar"],
-"plasma-ball":["Bola de plasma","lámpara de plasma","rayos"]}
+"plasma-ball":["Bola de plasma","lámpara de plasma","rayos"],
+"zap":["Rayo","relámpago","energía","rápido"],
+"clouds":["Nublado","nubes","cielo cubierto"],
+"cloud-sun-rain":["Chubascos","lluvia","sol y lluvia"],
+"cloud-moon-rain":["Chubascos nocturnos","lluvia","noche"],
+"windsock":["Manga de viento","dirección del viento","aeródromo"],
+"snowman":["Muñeco de nieve","invierno","nieve"]}

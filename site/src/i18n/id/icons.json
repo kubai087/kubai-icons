@@ -964,4 +964,10 @@
 "monorail":["Monorel","kereta layang","kereta"],
 "claw-machine":["Mesin capit","boneka","hadiah"],
 "jetpack":["Jetpack","ransel roket","terbang"],
-"plasma-ball":["Bola plasma","lampu plasma","petir"]}
+"plasma-ball":["Bola plasma","lampu plasma","petir"],
+"zap":["Petir","kilat","energi","cepat"],
+"clouds":["Mendung","awan","berawan"],
+"cloud-sun-rain":["Hujan lokal","hujan","cerah berawan"],
+"cloud-moon-rain":["Hujan malam","hujan","malam"],
+"windsock":["Kantong angin","arah angin","bandara"],
+"snowman":["Manusia salju","musim dingin","salju"]}

@@ -964,4 +964,10 @@
 "monorail":["Monoray","tek raylı tren","tren"],
 "claw-machine":["Pençe makinesi","oyuncak yakalama","ödül"],
 "jetpack":["Jet sırt çantası","jetpack","uçmak"],
-"plasma-ball":["Plazma küresi","plazma lambası","şimşek"]}
+"plasma-ball":["Plazma küresi","plazma lambası","şimşek"],
+"zap":["Şimşek","yıldırım","enerji","hızlı"],
+"clouds":["Kapalı hava","bulutlar","bulutlu"],
+"cloud-sun-rain":["Sağanak","yağmur","güneş ve yağmur"],
+"cloud-moon-rain":["Gece sağanağı","yağmur","gece"],
+"windsock":["Rüzgar tulumu","rüzgar yönü","havaalanı"],
+"snowman":["Kardan adam","kış","kar"]}

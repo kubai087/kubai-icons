@@ -5725,5 +5725,36 @@
 "Boule plasma",
 "lampe plasma",
 "éclairs"
+],
+"zap": [
+"Éclair",
+"foudre",
+"énergie",
+"rapide"
+],
+"clouds": [
+"Couvert",
+"nuages",
+"nuageux"
+],
+"cloud-sun-rain": [
+"Averses",
+"pluie",
+"soleil et pluie"
+],
+"cloud-moon-rain": [
+"Averses nocturnes",
+"pluie",
+"nuit"
+],
+"windsock": [
+"Manche à air",
+"direction du vent",
+"aérodrome"
+],
+"snowman": [
+"Bonhomme de neige",
+"hiver",
+"neige"
 ]
 }

@@ -5223,5 +5223,36 @@
 "Bola de plasma",
 "lâmpada de plasma",
 "raios"
+],
+"zap": [
+"Raio",
+"relâmpago",
+"energia",
+"rápido"
+],
+"clouds": [
+"Nublado",
+"nuvens",
+"encoberto"
+],
+"cloud-sun-rain": [
+"Pancadas de chuva",
+"chuva",
+"sol e chuva"
+],
+"cloud-moon-rain": [
+"Pancadas noturnas",
+"chuva",
+"noite"
+],
+"windsock": [
+"Biruta",
+"direção do vento",
+"aeródromo"
+],
+"snowman": [
+"Boneco de neve",
+"inverno",
+"neve"
 ]
 }
