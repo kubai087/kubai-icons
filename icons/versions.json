@@ -987,5 +987,13 @@
     "pda",
     "ring-light",
     "vhs-tape"
+  ],
+  "0.15.0": [
+    "cloud-moon-rain",
+    "cloud-sun-rain",
+    "clouds",
+    "snowman",
+    "windsock",
+    "zap"
   ]
 }

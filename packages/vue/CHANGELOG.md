@@ -1,5 +1,16 @@
 # kubai-icons-vue
 
+## 0.15.0
+
+### Minor Changes
+
+- Add six weather icons: `zap`, `clouds`, `cloud-sun-rain`, `cloud-moon-rain`, `windsock` and `snowman`, plus `zap-off`. ([#138](https://github.com/kubai087/kubai-icons/pull/138))
+
+### Patch Changes
+
+- Updated dependencies:
+  - kubai-icons@0.15.0
+
 ## 0.14.0
 
 ### Minor Changes
