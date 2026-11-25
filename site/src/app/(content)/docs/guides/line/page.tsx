@@ -11,7 +11,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Besides the layered and two-tone icons, the library comes in a line style: rounded strokes on a 24 grid, a stroke width you choose from 0.5 to 3, four variants, and a hover motion that acts out what each icon means. It suits interface icons that sit next to text, at 16 to 32 pixels.">
+      <Title lead="Besides the layered and two-tone icons, the library comes in a line style: rounded strokes on a 24 grid, a stroke width you choose from 0.25 to 3, four variants, and a hover motion that acts out what each icon means. It suits interface icons that sit next to text, at 16 to 32 pixels.">
         {page.title}
       </Title>
       <LineWall />
@@ -36,7 +36,7 @@ import { Lock, Camera } from "kubai-icons-react/line";
       </table>
       <p>Most line icons have a layered icon of the same name; a few exist only in this style. The full list is in <code>kubai-icons/line/icons.json</code>, where those few carry <code>only: true</code>.</p>
       <h2>Stroke width</h2>
-      <p><code>strokeWidth</code> takes any width from 0.5 to 3 in steps of 0.25, and defaults to 2. Match it to the weight of the text beside the icon: 1.5 for light text, 2 for regular, 2.25 for medium and 2.5 for bold. In Vue write <code>:stroke-width</code>, and on the web component <code>stroke-width</code>.</p>
+      <p><code>strokeWidth</code> takes any width above 0, and defaults to 2; the browser on this site offers 0.25 to 3. Match it to the weight of the text beside the icon: 1.5 for light text, 2 for regular, 2.25 for medium and 2.5 for bold. In Vue write <code>:stroke-width</code>, and on the web component <code>stroke-width</code>.</p>
       <p>At 24 pixels and a width of 2, every edge falls on whole pixels. Outlines are placed by their outer edge, so an icon keeps its size at every width, and its small details move to keep their spacing. Widths from 1.5 to 2.5 are checked icon by icon; the rest are drawn from the nearest checked width.</p>
       <h2>Variants</h2>
       <table>

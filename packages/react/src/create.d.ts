@@ -8,7 +8,7 @@ export interface KubaiIconProps extends Omit<SVGProps<SVGSVGElement>, 'ref' | 'c
   color?: string;
   /** 'color' (default) or 'soft': lifted fills, deeper outlines, deep marks. Line icons (kubai-icons-react/line): 'outline' (default), 'line-duo', 'fill' or 'solid-tint'. */
   variant?: 'color' | 'soft' | 'outline' | 'line-duo' | 'fill' | 'solid-tint';
-  /** Line icons only: the stroke width, 0.5 to 3 in steps of 0.25. Default 2. */
+  /** Line icons only: the stroke width, any width above 0. Default 2. */
   strokeWidth?: number;
   /** Ink of the corner badge: any CSS colour, or 'semantic' for its own colour (green add, red remove …). Default: black and white. */
   badgeColor?: string | 'semantic';

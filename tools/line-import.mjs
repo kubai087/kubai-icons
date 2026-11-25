@@ -9,7 +9,7 @@
 //
 // A line icon's geometry depends on its stroke (outlines are placed by their outer edge, details
 // move with the weight), so each file keeps the layers at three strokes (GEO); the runtime draws
-// any stroke from 0.5 to 3 with the nearest of them (packages/core/src/line.js). For each stroke
+// any stroke above 0 with the nearest of them (packages/core/src/line.js). For each stroke
 // it keeps what the four variants need: the outline layers (marked lit: light in line-duo, and
 // tint: filled in solid-tint), the fill layers, the extra closed shapes the tint uses, and the
 // areas that only read as enclosed. Category and search words come from the layered icon of the

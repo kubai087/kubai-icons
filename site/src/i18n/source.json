@@ -210,7 +210,7 @@
   "The globe shakes and the snow swirls.",
   "The icons could not be loaded.",
   "The library already has an icon with this name.",
-  "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.",
+  "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.",
   "The shared icons could not be added",
   "These icons are already in your collection",
   "This file is not a valid SVG.",

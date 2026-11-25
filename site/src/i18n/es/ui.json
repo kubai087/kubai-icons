@@ -250,5 +250,5 @@
  "Solid": "Sólido",
  "Solid tint": "Sólido tintado",
  "Stroke width": "Grosor del trazo",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Los mismos iconos, también dibujados con líneas redondeadas en una cuadrícula de 24: cualquier grosor de trazo de 0,5 a 3, en línea, línea bicolor, sólido y sólido tintado. Todos siguen moviéndose al pasar el cursor."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Los mismos iconos, también dibujados con líneas redondeadas en una cuadrícula de 24: cualquier grosor de trazo de 0,25 a 3, en línea, línea bicolor, sólido y sólido tintado. Todos siguen moviéndose al pasar el cursor."
 }

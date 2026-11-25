@@ -376,7 +376,7 @@ Also \`kubai-icons-vue/duotone\`, \`kubai-icons/duotone\`, \`<kubai-icon name="f
 
 ## Line style
 
-${lineIcons.length} icons also come in a line style after SF Symbols: rounded strokes on a 24 grid whose width follows the text weight (\`strokeWidth\` 0.5 to 3, default 2), in four variants (\`outline\`, \`line-duo\`, \`fill\`, \`solid-tint\`), each with a hover motion. Import them from the \`line\` path of any package:
+${lineIcons.length} icons also come in a line style after SF Symbols: rounded strokes on a 24 grid whose width follows the text weight (\`strokeWidth\` any width above 0, default 2), in four variants (\`outline\`, \`line-duo\`, \`fill\`, \`solid-tint\`), each with a hover motion. Import them from the \`line\` path of any package:
 
 \`\`\`tsx
 import { Lock, Camera } from "kubai-icons-react/line";

@@ -55,11 +55,14 @@ describe('kubai-icons/line', () => {
     expect(differ).toEqual([]);
   });
 
-  it('draws any stroke in range with the nearest kept geometry', () => {
-    expect(lineStroke(0.1)).toBe(LINE_STROKE.min);
-    expect(lineStroke(9)).toBe(LINE_STROKE.max);
-    expect(lineStroke(1.8)).toBe(1.75);
-    expect(lineStroke('x')).toBe(2);
+  it('draws any stroke above 0 with the nearest kept geometry', () => {
+    // no range or step is imposed: the site's slider keeps to LINE_STROKE, the code does not
+    expect(lineStroke(0.1)).toBe(0.1);
+    expect(lineStroke(9)).toBe(9);
+    expect(lineStroke(1.8)).toBe(1.8);
+    expect(lineStroke('x')).toBe(LINE_STROKE.regular);
+    expect(lineStroke(0)).toBe(LINE_STROKE.regular);
+    expect(lineStroke(-1)).toBe(LINE_STROKE.regular);
     const d = def('lock');
     const at = (s) => lineMarkup(d, { s });
     // 1.25 uses the 1.5 geometry at width 1.25; 2.75 the 2.5 geometry

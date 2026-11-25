@@ -99,8 +99,8 @@ export function StyleBand({ className }: { className?: string }) {
           <h2 id="style-band" className="font-heading text-title font-semibold text-balance">{tr("Now in line style", "现已提供线性风格")}</h2>
           <p className="max-w-md text-body text-muted-foreground text-pretty">
             {tr(
-              "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.",
-              "同一套图标新增线性画法：24 网格，粗细可在 0.5 到 3 之间调整，提供线性、线性双色、面性和面性填充四种变体，悬停时同样播放动效。"
+              "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.",
+              "同一套图标新增线性画法：24 网格，粗细可在 0.25 到 3 之间调整，提供线性、线性双色、面性和面性填充四种变体，悬停时同样播放动效。"
             )}
           </p>
         </div>

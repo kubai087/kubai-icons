@@ -9,5 +9,5 @@ export const LINE_VARIANTS: { value: LineVariant; en: string; zh: string }[] = [
   { value: "solid-tint", en: "Solid tint", zh: "面性填充" },
 ];
 /** The stroke range the browser offers, and the common widths marked on it. */
-export const LINE_STROKE = { min: 0.5, max: 3, step: 0.25, regular: 2 };
+export const LINE_STROKE = { min: 0.25, max: 3, step: 0.25, regular: 2 };
 export const LINE_STROKES = [1.5, 2, 2.25, 2.5];

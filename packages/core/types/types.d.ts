@@ -33,7 +33,7 @@ export interface KubaiSvgOptions {
   color?: string;
   /** 'color' (default) or 'soft', the clear look with lifted fills and deep marks. Line icons: 'outline' (default), 'line-duo', 'fill' or 'solid-tint'. */
   variant?: KubaiVariant | KubaiLineVariant;
-  /** Line icons only: the stroke width, 0.5 to 3 in steps of 0.25. Default 2. */
+  /** Line icons only: the stroke width, any width above 0. Default 2. */
   strokeWidth?: number;
   /** Ink of the corner badge: any CSS colour, or 'semantic'. Default: black and white. */
   badgeColor?: string;

@@ -11,7 +11,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="除分层和双色图标外，图标库还提供线性图标：24 网格上的圆角描边，粗细可在 0.5 到 3 之间选择，有四种变体，悬停时播放表现图标含义的动效。适用于和文字并排的界面图标，常用尺寸为 16–32 像素。">
+      <Title lead="除分层和双色图标外，图标库还提供线性图标：24 网格上的圆角描边，粗细可在 0.25 到 3 之间选择，有四种变体，悬停时播放表现图标含义的动效。适用于和文字并排的界面图标，常用尺寸为 16–32 像素。">
         {page.zhTitle}
       </Title>
       <LineWall />
@@ -36,7 +36,7 @@ import { Lock, Camera } from "kubai-icons-react/line";
       </table>
       <p>大部分线性图标都有同名的分层图标，少数只在线性风格中提供。完整列表见 <code>kubai-icons/line/icons.json</code>，其中只有线性版的图标带有 <code>only: true</code>。</p>
       <h2>粗细</h2>
-      <p><code>strokeWidth</code> 可取 0.5 到 3 之间的任意值，步长 0.25，默认为 2。建议与旁边文字的字重对应：细体用 1.5，常规用 2，中等用 2.25，粗体用 2.5。在 Vue 中写作 <code>:stroke-width</code>，在 Web Component 上写作 <code>stroke-width</code>。</p>
+      <p><code>strokeWidth</code> 可取大于 0 的任意值，默认为 2；本站的图标浏览器提供 0.25 到 3。建议与旁边文字的字重对应：细体用 1.5，常规用 2，中等用 2.25，粗体用 2.5。在 Vue 中写作 <code>:stroke-width</code>，在 Web Component 上写作 <code>stroke-width</code>。</p>
       <p>在 24 像素、粗细为 2 时，所有边缘都落在整像素上。外轮廓按外边缘定位，所以图标在任何粗细下都保持同样的尺寸，内部细节会随粗细调整位置以保持间距。1.5 到 2.5 之间的粗细逐个图标检查过，其他粗细使用最接近的已检查几何绘制。</p>
       <h2>变体</h2>
       <table>

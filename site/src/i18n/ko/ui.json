@@ -250,5 +250,5 @@
  "Solid": "솔리드",
  "Solid tint": "솔리드 틴트",
  "Stroke width": "선 굵기",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "같은 아이콘을 24 그리드의 둥근 선으로도 그렸습니다. 선 굵기는 0.5부터 3까지 고를 수 있고 라인, 라인 투톤, 솔리드, 솔리드 틴트 네 가지로 제공됩니다. 모두 호버하면 그대로 움직입니다."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "같은 아이콘을 24 그리드의 둥근 선으로도 그렸습니다. 선 굵기는 0.25부터 3까지 고를 수 있고 라인, 라인 투톤, 솔리드, 솔리드 틴트 네 가지로 제공됩니다. 모두 호버하면 그대로 움직입니다."
 }

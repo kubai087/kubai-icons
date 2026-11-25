@@ -94,8 +94,8 @@ export const GUIDES: LearnPage[] = [
     zh: "线性风格",
     title: "Line icons: stroke width and four variants",
     zhTitle: "线性图标：粗细与四种变体",
-    description: "Line icons on a 24 grid with a stroke width from 0.5 to 3, in four variants from outline to solid tint, each with a hover motion. Switch from the layered icons with one import.",
-    zhDescription: "24 网格的线性图标，粗细可在 0.5 到 3 之间调整，提供从线性到面性填充的四种变体，悬停时播放动效。从分层图标切换只需修改一行 import。",
+    description: "Line icons on a 24 grid with a stroke width from 0.25 to 3, in four variants from outline to solid tint, each with a hover motion. Switch from the layered icons with one import.",
+    zhDescription: "24 网格的线性图标，粗细可在 0.25 到 3 之间调整，提供从线性到面性填充的四种变体，悬停时播放动效。从分层图标切换只需修改一行 import。",
   },
 ];
 

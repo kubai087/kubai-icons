@@ -250,5 +250,5 @@
  "Solid": "Plein",
  "Solid tint": "Plein teinté",
  "Stroke width": "Épaisseur du trait",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Les mêmes icônes, aussi dessinées en traits arrondis sur une grille de 24 : toute épaisseur de 0,5 à 3, en trait, trait bicolore, plein et plein teinté. Chacune s’anime toujours au survol."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Les mêmes icônes, aussi dessinées en traits arrondis sur une grille de 24 : toute épaisseur de 0,25 à 3, en trait, trait bicolore, plein et plein teinté. Chacune s’anime toujours au survol."
 }

@@ -250,5 +250,5 @@
  "Solid": "ठोस",
  "Solid tint": "हल्के रंग से भरा",
  "Stroke width": "स्ट्रोक की मोटाई",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "वही आइकन, अब 24 ग्रिड पर गोल किनारों वाली लाइनों में भी: 0.5 से 3 तक कोई भी स्ट्रोक मोटाई, लाइन, दो रंग वाली लाइन, ठोस और हल्के रंग से भरे रूप में। हर आइकन होवर पर अब भी हिलता है।"
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "वही आइकन, अब 24 ग्रिड पर गोल किनारों वाली लाइनों में भी: 0.25 से 3 तक कोई भी स्ट्रोक मोटाई, लाइन, दो रंग वाली लाइन, ठोस और हल्के रंग से भरे रूप में। हर आइकन होवर पर अब भी हिलता है।"
 }

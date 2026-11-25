@@ -2,7 +2,7 @@
 // demand from the same place as this script, so a page can use any icon from a CDN with
 // one script tag. Attributes: name, size, color, variant, badge-color, trigger ('hover' | 'parent' |
 // 'none'), label, and icon-style="duotone" for the two-tone style or icon-style="line" for the line
-// style, which also takes stroke-width (0.5 to 3) and variant outline | line-duo | fill | solid-tint.
+// style, which also takes stroke-width (any width above 0) and variant outline | line-duo | fill | solid-tint.
 import { toSvg } from './icon.js';
 import { animate, bindTrigger } from './runtime.js';
 

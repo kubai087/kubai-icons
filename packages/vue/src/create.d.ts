@@ -7,7 +7,7 @@ export interface KubaiIconProps {
   /** Layered: 'color' | 'soft'. Line icons (kubai-icons-vue/line): 'outline' (default), 'line-duo', 'fill' or 'solid-tint'. */
   variant?: 'color' | 'soft' | 'outline' | 'line-duo' | 'fill' | 'solid-tint';
   badgeColor?: string;
-  /** Line icons only: the stroke width, 0.5 to 3 in steps of 0.25. Default 2. */
+  /** Line icons only: the stroke width, any width above 0. Default 2. */
   strokeWidth?: number | string;
   trigger?: 'hover' | 'parent' | 'none';
   hover?: boolean;

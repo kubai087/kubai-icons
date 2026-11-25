@@ -1,7 +1,7 @@
 // The line style (线性): line icons on a 24 grid after SF Symbols, drawn with the kubai-line
 // skill and imported into icons-line/ as layer data (tools/line-import.mjs). A line icon's
 // geometry depends on its stroke, so each icon keeps its layers at strokes 1.5, 2 and 2.5; this
-// file draws any stroke from 0.5 to 3 with the nearest of them, in one of four variants:
+// file draws any stroke above 0 with the nearest of them, in one of four variants:
 //   outline     线性      lines in one colour
 //   line-duo    线性双色  inner and key parts in a light tone, under the dark lines
 //   fill        面性      closed shapes filled, details knocked out
@@ -14,8 +14,9 @@ import { attach } from './line-motion.js';
 
 export const LINE_VIEWBOX = '0 0 24 24';
 export const LINE_VARIANTS = ['outline', 'line-duo', 'fill', 'solid-tint'];
-/** The stroke widths a line icon may take, and the regular one. */
-export const LINE_STROKE = { min: 0.5, max: 3, step: 0.25, regular: 2 };
+/** The stroke widths the line style is drawn for (and the site offers), and the regular one. Any
+ * width above 0 is drawn: lineStroke does not hold it to this range. */
+export const LINE_STROKE = { min: 0.25, max: 3, step: 0.25, regular: 2 };
 
 const n = (v) => +(+v).toFixed(3);
 const gapOf = (s) => n(0.5 * s + 0.75);
@@ -23,12 +24,10 @@ const BG = 'var(--kl-bg, #FFFFFF)';
 const LIGHT = `var(--kl-light, color-mix(in srgb, currentColor 42%, ${BG}))`;
 const FILL = `var(--kl-fill, color-mix(in srgb, currentColor 20%, ${BG}))`;
 
-/** The stroke width to draw, snapped to the step and kept in range. */
+/** The stroke width to draw: any width above 0 as given; anything else draws the regular one. */
 export function lineStroke(s) {
   const v = Number(s);
-  if (!Number.isFinite(v)) return LINE_STROKE.regular;
-  const c = Math.min(LINE_STROKE.max, Math.max(LINE_STROKE.min, v));
-  return n(Math.round(c / LINE_STROKE.step) * LINE_STROKE.step);
+  return Number.isFinite(v) && v > 0 ? n(v) : LINE_STROKE.regular;
 }
 /** The variant to draw: one of LINE_VARIANTS, else outline. */
 export const lineVariant = (v) => (LINE_VARIANTS.includes(v) ? v : 'outline');

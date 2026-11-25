@@ -34,7 +34,7 @@ const styleOf = (o) => Object.entries(o).map(([k, v]) => `${k}:${v}`).join(';');
  * Full SVG markup for one instance. Options: size (px), color (any CSS colour; defaults to
  * currentColor), variant ('color' | 'soft'; defaults to what the page sets, else 'color'), badgeColor (ink for the corner badge: any CSS
  * colour, or 'semantic'), title (accessible name), className, id. Line icons also take
- * strokeWidth (0.5 to 3, default 2) and read variant as 'outline' | 'line-duo' | 'fill' |
+ * strokeWidth (any width above 0, default 2) and read variant as 'outline' | 'line-duo' | 'fill' |
  * 'solid-tint'.
  */
 export function toSvg(ic, { size = 24, color, variant, badgeColor, strokeWidth, title, className, id = uid(), attrs = {} } = {}) {

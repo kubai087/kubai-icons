@@ -250,5 +250,5 @@
  "Solid": "塗り",
  "Solid tint": "塗り・淡色",
  "Stroke width": "線の太さ",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "同じアイコンを、24グリッドの丸みのある線でも描きました。線の太さは0.5〜3で自由に選べ、線、線・2色、塗り、塗り・淡色の4種類があります。どれもホバーで動きます。"
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "同じアイコンを、24グリッドの丸みのある線でも描きました。線の太さは0.25〜3で自由に選べ、線、線・2色、塗り、塗り・淡色の4種類があります。どれもホバーで動きます。"
 }

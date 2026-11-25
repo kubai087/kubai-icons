@@ -250,5 +250,5 @@
  "Solid": "Flächig",
  "Solid tint": "Flächig getönt",
  "Stroke width": "Strichstärke",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Dieselben Icons, auch in abgerundeten Linien auf einem 24er-Raster: jede Strichstärke von 0,5 bis 3, als Linie, Linie zweifarbig, flächig und flächig getönt. Jedes bewegt sich weiterhin beim Hover."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Dieselben Icons, auch in abgerundeten Linien auf einem 24er-Raster: jede Strichstärke von 0,25 bis 3, als Linie, Linie zweifarbig, flächig und flächig getönt. Jedes bewegt sich weiterhin beim Hover."
 }

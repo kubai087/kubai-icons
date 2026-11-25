@@ -250,5 +250,5 @@
  "Solid": "Đặc",
  "Solid tint": "Đặc tô nhạt",
  "Stroke width": "Độ dày nét",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Vẫn là bộ biểu tượng đó, nay còn được vẽ bằng nét bo tròn trên lưới 24: độ dày nét bất kỳ từ 0,5 đến 3, với các kiểu nét, nét hai màu, đặc và đặc tô nhạt. Mỗi biểu tượng vẫn chuyển động khi rê chuột."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Vẫn là bộ biểu tượng đó, nay còn được vẽ bằng nét bo tròn trên lưới 24: độ dày nét bất kỳ từ 0,25 đến 3, với các kiểu nét, nét hai màu, đặc và đặc tô nhạt. Mỗi biểu tượng vẫn chuyển động khi rê chuột."
 }
