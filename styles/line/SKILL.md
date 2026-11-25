@@ -54,6 +54,7 @@ node export.mjs --variant line-duo --color #5A76F2 --out 目标目录
 ## 环境
 
 - Node 18 及以上，以及 Chrome。可用环境变量 `CHROME` 指定浏览器路径。
+- 自检和预览页用 esbuild 打包页面脚本，运行前先在工作目录安装：`npm install esbuild`。
 - 所有检查在无头模式下运行，不打开可见窗口，也不影响用户正在使用的浏览器。
 
 ---
