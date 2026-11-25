@@ -4,6 +4,7 @@ import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, use
 import { preload, preloadModule } from "react-dom";
 import { RiFileCopyLine, RiSearchLine } from "@remixicon/react";
 import { Search } from "kubai-icons-react";
+import { Search as SearchDuo } from "kubai-icons-react/duotone";
 import { copyText } from "@/components/copy-button";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -342,8 +343,15 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
             </div>
           ) : index && results.length === 0 ? (
             <div className={"flex flex-col items-center px-4 py-20 text-center"} data-kubai-trigger>
+              {/* drawn in the style being browsed, at its current line variant and stroke */}
               <div className={cn(tileStyle({ interactive: false }), "size-20")}>
-                <Search size={40} color="#5393FF" trigger="parent" />
+                {prefs.style === "line" ? (
+                  <LineIcon name="search" size={40} color="#5393FF" variant={lineSettings.variant} s={lineSettings.s} />
+                ) : prefs.style === "duotone" ? (
+                  <SearchDuo size={40} color="#5393FF" trigger="parent" />
+                ) : (
+                  <Search size={40} color="#5393FF" trigger="parent" />
+                )}
               </div>
               <h2 className="mt-5 max-w-full truncate text-subheading font-semibold">
                 {query.trim() ? tr("No icons for “{query}”", "未找到与“{query}”相关的图标", { query: query.trim() }) : tr("No icons here yet", "暂无图标")}
