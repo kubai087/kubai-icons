@@ -1,14 +1,15 @@
 // <kubai-icon name="folder"></kubai-icon>: a custom element that loads each icon module on
 // demand from the same place as this script, so a page can use any icon from a CDN with
 // one script tag. Attributes: name, size, color, variant, badge-color, trigger ('hover' | 'parent' |
-// 'none'), label, and icon-style="duotone" for the two-tone style.
+// 'none'), label, and icon-style="duotone" for the two-tone style or icon-style="line" for the line
+// style, which also takes stroke-width (0.5 to 3) and variant outline | line-duo | fill | solid-tint.
 import { toSvg } from './icon.js';
 import { animate, bindTrigger } from './runtime.js';
 
 const cache = new Map();
 const load = (name, style) => {
   if (!/^[a-z0-9-]+$/.test(name)) return Promise.reject(new Error(`Bad icon name: ${name}`));
-  const dir = style === 'duotone' ? './duotone/icons' : './icons', key = `${dir}/${name}`;
+  const dir = style === 'duotone' ? './duotone/icons' : style === 'line' ? './line/icons' : './icons', key = `${dir}/${name}`;
   if (!cache.has(key)) cache.set(key, import(new URL(`${key}.js`, import.meta.url).href).then((m) => m.default, (e) => { cache.delete(key); throw e; }));
   return cache.get(key);
 };
@@ -17,7 +18,7 @@ const load = (name, style) => {
 const Base = typeof HTMLElement === 'undefined' ? class {} : HTMLElement;
 
 export class KubaiIconElement extends Base {
-  static observedAttributes = ['name', 'size', 'color', 'variant', 'badge-color', 'trigger', 'label', 'icon-style'];
+  static observedAttributes = ['name', 'size', 'color', 'variant', 'badge-color', 'trigger', 'label', 'icon-style', 'stroke-width'];
   connectedCallback() { this.render(); }
   disconnectedCallback() { this.token = null; this.unbind(); }
   attributeChangedCallback() { if (this.isConnected) this.render(); }
@@ -35,10 +36,11 @@ export class KubaiIconElement extends Base {
     if (token !== this.token) return;
     this.unbind();
     if (!ic) { this.textContent = ''; return; }
-    this.innerHTML = toSvg(ic, { size, color: this.getAttribute('color') || undefined, variant: this.getAttribute('variant') || undefined, badgeColor: this.getAttribute('badge-color') || undefined, title: this.getAttribute('label') || undefined });
+    const variant = this.getAttribute('variant') || undefined, sw = this.getAttribute('stroke-width');
+    this.innerHTML = toSvg(ic, { size, color: this.getAttribute('color') || undefined, variant, badgeColor: this.getAttribute('badge-color') || undefined, strokeWidth: sw ? Number(sw) : undefined, title: this.getAttribute('label') || undefined });
     const trigger = this.getAttribute('trigger') || 'hover';
     if (trigger === 'none') return;
-    const ctl = animate(this.firstElementChild, ic);
+    const ctl = animate(this.firstElementChild, ic, { variant });
     const host = trigger === 'parent' ? (this.closest('[data-kubai-trigger]') || this.parentElement || this) : this;
     const unbind = bindTrigger(host, ctl, ic);
     this.cleanup = () => { unbind(); ctl.destroy(); };

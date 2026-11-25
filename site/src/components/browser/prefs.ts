@@ -19,7 +19,7 @@ export function usePrefs() {
   useLayoutEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "null");
-      if (saved) setPrefs((p) => ({ ...p, color: saved.color ?? p.color, variant: saved.variant ?? p.variant, badge: saved.badge ?? p.badge, size: saved.size ?? p.size, style: saved.style === "duotone" ? "duotone" : p.style }));
+      if (saved) setPrefs((p) => ({ ...p, color: saved.color ?? p.color, variant: saved.variant ?? p.variant, badge: saved.badge ?? p.badge, size: saved.size ?? p.size, style: saved.style === "duotone" || saved.style === "line" ? saved.style : p.style }));
     } catch {
       // Storage may be blocked; defaults are fine.
     }
@@ -33,14 +33,23 @@ export function usePrefs() {
   return [prefs, update] as const;
 }
 
+/** The icon styles, in the order of every style switch. */
+export const STYLE_OPTIONS = [
+  { value: "layered", en: "Layered", zh: "分层" },
+  { value: "duotone", en: "Two-tone", zh: "双色" },
+  { value: "line", en: "Line", zh: "线性" },
+] as const;
+
 // The icon style, shared live by every part of a page that shows it (the home page wall, its
 // headline) and remembered with the other preferences, so the icon browser opens in it too.
 const styleListeners = new Set<() => void>();
 let styleNow: IconStyle | null = null;
 const readStyle = (): IconStyle => {
   if (styleNow) return styleNow;
-  try { styleNow = JSON.parse(localStorage.getItem(KEY) || "null")?.style === "duotone" ? "duotone" : "layered"; } catch { styleNow = "layered"; }
-  return styleNow;
+  let next: IconStyle = "layered";
+  try { const s = JSON.parse(localStorage.getItem(KEY) || "null")?.style; if (s === "duotone" || s === "line") next = s; } catch { /* storage may be blocked */ }
+  styleNow = next;
+  return next;
 };
 const onStyle = (listener: () => void) => { styleListeners.add(listener); return () => { styleListeners.delete(listener); }; };
 /** The chosen icon style and a setter; on the server, and before hydration, the layered style. */

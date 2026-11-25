@@ -6,6 +6,8 @@
 //                                             metadata fields at the top of the frontmatter
 //   dist/kubai-duotone-v<version>.zip         the two-tone style on its own (styles/duotone/
 //   dist/kubai-duotone-v<version>-platform.zip  with the LICENSE), versioned by its own SKILL.md
+//   dist/kubai-line-v<version>.zip            the line style on its own (styles/line/ with the
+//   dist/kubai-line-v<version>-platform.zip     LICENSE), versioned by its own SKILL.md
 //
 //   node scripts/pack.mjs [--ref HEAD] [--out dist]
 //
@@ -69,3 +71,5 @@ function pack(name, dir, files, extra = {}) {
 pack('kubai-icons', '', FILES);
 // The two-tone style as its own skill: the folder as it is in the repository, plus the license.
 pack('kubai-duotone', 'styles/duotone', ['SKILL.md', 'GUIDE.md', 'CHANGELOG.md', 'kit.mjs', 'icons.mjs', 'motion.mjs', 'motions.mjs', 'check.mjs', 'export.mjs', 'chrome.mjs'], { LICENSE: 'LICENSE' });
+// The line style as its own skill, the same way.
+pack('kubai-line', 'styles/line', ['SKILL.md', 'GUIDE.md', 'CHANGELOG.md', 'CATALOG.md', 'kit.mjs', 'smooth.mjs', 'parts.mjs', 'icons.mjs', 'set', 'catalog.mjs', 'catalog-md.mjs', 'motion.mjs', 'check.mjs', 'optical.mjs', 'pixel.mjs', 'sliver.mjs', 'ends.mjs', 'sheet.mjs', 'frames.html', 'frames.mjs', 'preview.mjs', 'export.mjs', 'chrome.mjs', 'build.mjs', 'page.html', 'page.css', 'page.mjs'], { LICENSE: 'LICENSE' });

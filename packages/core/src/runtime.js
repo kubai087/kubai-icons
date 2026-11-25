@@ -4,6 +4,7 @@
 import { EASE, DURATION, PHASE, interp } from './motion.js';
 import { VARIANTS } from './color.js';
 import { animateDuotone } from './duotone.js';
+import { animateLine } from './line.js';
 
 // The query is kept and its `matches` read on each motion, so a change to the setting takes
 // effect at once, without a reload.
@@ -20,9 +21,11 @@ const now = () => (typeof performance !== 'undefined' ? performance.now() : Date
  * `icon` needs target(hover, state) and draw(p, E).
  * Returns { hover(on), state(next), hovered, active, svg, destroy() }.
  */
-export function animate(svg, icon, { state = {} } = {}) {
+export function animate(svg, icon, { state = {}, variant } = {}) {
   // Two-tone icons carry their motion as poses, played by their own runtime.
   if (icon.style === 'duotone') return animateDuotone(svg, icon);
+  // Line icons play their spring motion; the variant decides how the draw effect shows.
+  if (icon.style === 'line') return animateLine(svg, icon, { variant });
   const E = {};
   for (const el of svg.querySelectorAll('[data-n]')) E[el.getAttribute('data-n')] = el;
   // An outlined path is masked by a copy of its own shape; keep the copy in step. A mask
@@ -127,6 +130,7 @@ export function bindTrigger(target, ctl, icon, onToggle) {
   return off;
 }
 export { badgeStyle, uid } from './icon.js';
+export { lineIconMarkup, lineStill, LINE_VARIANTS, LINE_STROKE } from './line.js';
 export { VARIANTS };
 
 /** Sets the variant for every icon inside `root` that does not choose its own. */

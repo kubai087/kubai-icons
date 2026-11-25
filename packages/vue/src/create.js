@@ -1,7 +1,7 @@
 // Vue 3 binding. Markup renders on the server and the client identically; motion is
 // attached after mount.
 import { defineComponent, h, onMounted, onBeforeUnmount, watch, computed, ref } from 'vue';
-import { animate, bindTrigger, badgeStyle, uid, VARIANTS } from 'kubai-icons/runtime';
+import { animate, bindTrigger, badgeStyle, lineIconMarkup, uid, VARIANTS } from 'kubai-icons/runtime';
 
 const VIEWBOX = '0 -3 31 31';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -11,6 +11,7 @@ const props = {
   color: String,
   variant: String,
   badgeColor: String,
+  strokeWidth: [Number, String],
   trigger: { type: String, default: 'hover' },
   hover: { type: Boolean, default: undefined },
   active: { type: Boolean, default: undefined },
@@ -25,13 +26,15 @@ function setup(getIcon) {
     const el = ref(null);
     let ctl = null, unbind = null;
     const icon = computed(() => getIcon(p));
-    const html = computed(() => (p.title ? `<title>${esc(p.title)}</title>` : '') + icon.value.markup.replace(/__K__/g, id));
+    // Line icons draw their markup from the stroke width and variant.
+    const markup = computed(() => (icon.value.style === 'line' ? lineIconMarkup(icon.value, { strokeWidth: p.strokeWidth == null ? undefined : Number(p.strokeWidth), variant: p.variant }) : icon.value.markup));
+    const html = computed(() => (p.title ? `<title>${esc(p.title)}</title>` : '') + markup.value.replace(/__K__/g, id));
     const attach = () => {
       unbind?.(); ctl?.destroy();
       const svg = el.value;
       if (!svg) return;
       const start = p.active !== undefined ? p.active : p.defaultActive;
-      ctl = animate(svg, icon.value, { state: start ? { active: true } : {} });
+      ctl = animate(svg, icon.value, { state: start ? { active: true } : {}, variant: p.variant });
       if (p.hover !== undefined) ctl.hover(p.hover, true);
       if (p.trigger !== 'none') {
         const host = p.trigger === 'parent' ? (svg.closest('[data-kubai-trigger]') || svg.parentElement || svg) : svg;
@@ -57,9 +60,9 @@ function setup(getIcon) {
       overflow: 'visible',
       role: p.title ? 'img' : undefined,
       'aria-hidden': p.title ? undefined : 'true',
-      class: ['kubai-icon', icon.value.style === 'duotone' && 'kubai-duotone', `kubai-icon-${icon.value.name}`, attrs.class],
+      class: ['kubai-icon', icon.value.style === 'duotone' && 'kubai-duotone', icon.value.style === 'line' && 'kubai-line', `kubai-icon-${icon.value.name}`, attrs.class],
       // Two-tone icons have their own two colours: no layered variant or badge ink.
-      style: icon.value.style === 'duotone' ? [p.color ? { color: p.color } : null, attrs.style] : [VARIANTS[p.variant], p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style],
+      style: icon.value.style === 'duotone' || icon.value.style === 'line' ? [p.color ? { color: p.color } : null, attrs.style] : [VARIANTS[p.variant], p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style],
       innerHTML: html.value
     });
   };

@@ -15,6 +15,9 @@
     "./duotone": { "types": "./dist/duotone/index.d.ts", "default": "./dist/duotone/index.js" },
     "./duotone/icons/*": { "types": "./dist/icon-module.d.ts", "default": "./dist/duotone/icons/*.js" },
     "./duotone/dynamic": { "types": "./dist/duotone/dynamic.d.ts", "default": "./dist/duotone/dynamic.js" },
+    "./line": { "types": "./dist/line/index.d.ts", "default": "./dist/line/index.js" },
+    "./line/icons/*": { "types": "./dist/icon-module.d.ts", "default": "./dist/line/icons/*.js" },
+    "./line/dynamic": { "types": "./dist/line/dynamic.d.ts", "default": "./dist/line/dynamic.js" },
     "./package.json": "./package.json"
   },
   "files": ["dist", "LICENSE", "README.md"],

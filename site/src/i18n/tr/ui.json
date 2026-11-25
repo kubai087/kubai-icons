@@ -241,7 +241,14 @@
  "Two-tone": "Çift renk",
  "Pause animations": "Animasyonları duraklat",
  "Browse two-tone icons": "Çift renkli simgelere göz at",
- "Now in two-tone": "Artık çift renkte",
  "Read the guide": "Kılavuzu oku",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Aynı simgeler, 16’lık ızgarada dolu şekillerle de çizildi: açık renkli bir gövde ve sizin renginizde vurgular. Her biri üzerine gelince yine hareket eder."
+ "Browse line icons": "Çizgi simgelere göz at",
+ "Common stroke widths": "Yaygın çizgi kalınlıkları",
+ "Line": "Çizgi",
+ "Line two-tone": "Çift renk çizgi",
+ "Now in line style": "Artık çizgi stilinde",
+ "Solid": "Dolgu",
+ "Solid tint": "Renkli dolgu",
+ "Stroke width": "Çizgi kalınlığı",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Aynı simgeler, 24’lük ızgarada yuvarlak çizgilerle de çizildi: 0,5 ile 3 arasında her çizgi kalınlığı; çizgi, çift renk çizgi, dolgu ve renkli dolgu olarak. Her biri üzerine gelince yine hareket eder."
 }

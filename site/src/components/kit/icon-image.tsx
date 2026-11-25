@@ -70,12 +70,6 @@ const recall = (key: string) => {
 const keyOf = (icon: KubaiIconData, { color, variant = "color", badgeColor }: IconLook, pose: Pose, px: number) =>
   // A two-tone icon shares its name with the layered one, so the style is part of the key.
   `${icon.style === "duotone" ? "duotone:" : ""}${icon.name}|${color}|${variant}|${badgeColor}|${pose}|${px}`;
-/** True when two bitmap keys show the same icon, pose and size in different colours. */
-const recoloured = (a: string | null, b: string) => {
-  if (!a || a === b) return false;
-  const x = a.split("|"), y = b.split("|");
-  return x[0] === y[0] && x[4] === y[4] && x[5] === y[5];
-};
 const canvas2d = (c: HTMLCanvasElement) => c.getContext("2d", { willReadFrequently: true })!;
 
 // Below 2x an outline is about one pixel wide and comes out uneven along curves, so the icon
@@ -142,14 +136,6 @@ function schedule() {
   if (!pumping) { pumping = true; requestAnimationFrame(pump); }
 }
 
-// Icons that arrive while the page is loading appear at once. Once the visitor has done
-// something, such as scrolling, an icon that had to wait for its bitmap fades in.
-let interacted = false;
-if (typeof window !== "undefined") {
-  const mark = () => { interacted = true; };
-  for (const type of ["wheel", "touchmove", "keydown", "pointerdown"]) window.addEventListener(type, mark, { capture: true, once: true, passive: true });
-}
-
 const dpr = () => (typeof window === "undefined" ? 2 : Math.min(3, Math.max(1, window.devicePixelRatio || 1)));
 
 /** Starts making a bitmap ahead of use, e.g. the detail preview while its tile is hovered. */
@@ -166,31 +152,25 @@ export function IconImage({ icon, size, raster = size, pose = "rest", ...look }:
   const ref = useRef<HTMLCanvasElement>(null);
   const px = Math.round((SIDE * raster * dpr()) / 31);
   const key = keyOf(icon, look, pose, px);
+  // Icons appear at once when their bitmap is ready, and a new colour shows at once: no fades.
   const [shown, setShown] = useState<string | null>(null);
-  // Fades in only when the icon had to wait for its bitmap.
-  const [fade, setFade] = useState(false);
-  const drawn = useRef<string | null>(null);
   // Draws the bitmap for `key` as soon as it exists; until then the previous drawing (or
   // the placeholder) stays.
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const paint = (bmp: Bitmap | null, waited: boolean) => {
+    const paint = (bmp: Bitmap | null) => {
       if (!bmp) return;
       if (el.width !== px) { el.width = el.height = px; }
       const g = canvas2d(el);
       g.clearRect(0, 0, px, px);
       g.drawImage(bmp, 0, 0);
-      if (recoloured(drawn.current, key) && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        el.animate({ opacity: [0.5, 1] }, { duration: 200, easing: "ease-out" });
-      }
-      drawn.current = key;
-      setShown((prev) => { if (waited && prev === null && interacted) setFade(true); return key; });
+      setShown(key);
     };
     const cached = recall(key);
-    if (cached) { paint(cached, false); return; }
+    if (cached) { paint(cached); return; }
     let alive = true;
-    const job: Job = { el, key, run: () => makeBitmap(icon, look, pose, px), done: (b) => { if (alive) paint(b, true); } };
+    const job: Job = { el, key, run: () => makeBitmap(icon, look, pose, px), done: (b) => { if (alive) paint(b); } };
     jobs.add(job);
     schedule();
     return () => { alive = false; jobs.delete(job); };
@@ -207,7 +187,7 @@ export function IconImage({ icon, size, raster = size, pose = "rest", ...look }:
       <canvas
         ref={ref}
         aria-hidden
-        className={cn("pointer-events-none absolute", shown ? "visible" : "invisible", fade && "swap-in")}
+        className={cn("pointer-events-none absolute", shown ? "visible" : "invisible")}
         style={{ left: inset, top: inset, width: side, height: side }}
       />
     </span>

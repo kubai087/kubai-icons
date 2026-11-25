@@ -16,21 +16,25 @@ export type IconMeta = {
   since?: string;
   /** Added in the latest release that added icons, or not released yet. */
   new?: boolean;
-  /** The two-tone style (kubai-icons/duotone); absent for the layered icons. */
-  style?: "duotone";
-  /** A two-tone icon the layered style doesn't have. */
+  /** The two-tone style (kubai-icons/duotone) or the line style (kubai-icons/line); absent for the layered icons. */
+  style?: "duotone" | "line";
+  /** A two-tone or line icon the layered style doesn't have. */
   only?: boolean;
 };
-export type IconStyle = "layered" | "duotone";
+export type IconStyle = "layered" | "duotone" | "line";
 export type Category = { id: string; en: string; zh?: string };
-export type IconIndex = { version: string; count: number; bases: number; categories: Category[]; hashes: Record<string, string>; first: string[]; icons: IconMeta[]; duotone: IconMeta[] };
+export type IconIndex = { version: string; count: number; bases: number; categories: Category[]; hashes: Record<string, string>; first: string[]; icons: IconMeta[]; duotone: IconMeta[]; line: IconMeta[] };
 
 let indexPromise: Promise<IconIndex> | null = null;
 export function loadIndex(): Promise<IconIndex> {
   indexPromise ??= fetch(asset("/data/index.json")).then((r) => {
     if (!r.ok) throw new Error(`index.json: ${r.status}`);
     return r.json();
-  }).then((index: IconIndex) => ({ ...index, duotone: (index.duotone ?? []).map((m) => ({ ...m, style: "duotone" as const })) })).catch((e) => {
+  }).then((index: IconIndex) => ({
+    ...index,
+    duotone: (index.duotone ?? []).map((m) => ({ ...m, style: "duotone" as const })),
+    line: (index.line ?? []).map((m) => ({ ...m, style: "line" as const })),
+  })).catch((e) => {
     indexPromise = null;
     throw e;
   });
@@ -39,8 +43,8 @@ export function loadIndex(): Promise<IconIndex> {
 
 const loaded = new Map<string, KubaiIconData>();
 const pending = new Map<string, Promise<void>>();
-/** Where an icon's data is kept: a two-tone icon shares its name with the layered one. */
-export const iconKey = (m: { name: string; style?: string }) => (m.style === "duotone" ? `duotone:${m.name}` : m.name);
+/** Where an icon's data is kept: two-tone and line icons share their names with the layered ones. */
+export const iconKey = (m: { name: string; style?: string }) => (m.style && m.style !== "layered" ? `${m.style}:${m.name}` : m.name);
 export const peekIcon = (name: string, style?: IconStyle) => loaded.get(iconKey({ name, style }));
 function loadChunk(chunk: string, hash: string): Promise<void> {
   if (!pending.has(chunk)) {
@@ -66,6 +70,7 @@ let firstScreens: Set<string> | null = null;
 export function loadIcon(meta: IconMeta): Promise<void> {
   return loadIndex().then(({ first, hashes }) => {
     if (meta.style === "duotone") return loadChunk("_duotone", hashes._duotone);
+    if (meta.style === "line") return loadChunk("_line", hashes._line);
     firstScreens ??= new Set(first);
     const chunk = firstScreens.has(meta.name) ? "_first" : meta.base ? `${meta.category}.badged` : meta.category;
     return loadChunk(chunk, hashes[chunk]);

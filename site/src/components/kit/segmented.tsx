@@ -6,11 +6,13 @@ import { raised, well } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
 
 /** A one-of-several switch: Color/Soft, sizes, badge colours. */
-export function Segmented<V extends string>({ value, options, onChange, label }: {
+export function Segmented<V extends string>({ value, options, onChange, label, dense = false }: {
   value: V;
   options: { value: V; label: ReactNode; title?: string }[];
   onChange: (v: V) => void;
   label?: string;
+  /** Narrower items, for icon labels. */
+  dense?: boolean;
 }) {
   return (
     <div className={cn("relative isolate w-fit rounded-lg p-[3px]", well)}>
@@ -20,7 +22,7 @@ export function Segmented<V extends string>({ value, options, onChange, label }:
             key={o.value}
             value={o.value}
             title={o.title}
-            className="tap relative h-[26px] min-w-0 rounded-md! text-muted-foreground group-data-[spacing=0]/toggle-group:px-3 hover:bg-transparent aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs aria-pressed:in-[[data-glide]]:bg-transparent! aria-pressed:in-[[data-glide]]:shadow-none!"
+            className={cn("tap relative h-[26px] min-w-0 rounded-md! text-muted-foreground", dense ? "group-data-[spacing=0]/toggle-group:px-2" : "group-data-[spacing=0]/toggle-group:px-3", " hover:bg-transparent aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs aria-pressed:in-[[data-glide]]:bg-transparent! aria-pressed:in-[[data-glide]]:shadow-none!")}
           >
             {o.label}
           </ToggleGroupItem>

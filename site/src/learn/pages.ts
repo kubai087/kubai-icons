@@ -88,6 +88,15 @@ export const GUIDES: LearnPage[] = [
     description: "Solid two-tone icons on a 16 grid, with a light body, accents in your brand color and a hover motion. Same names and props as the layered icons, so switching style is one import.",
     zhDescription: "16 网格的实心双色图标：浅色主体加品牌色点缀，悬停时播放动效。名称和参数与分层图标相同，切换风格只需修改一行 import。",
   },
+  {
+    href: "/docs/guides/line/",
+    label: "Line style",
+    zh: "线性风格",
+    title: "Line icons: stroke width and four variants",
+    zhTitle: "线性图标：粗细与四种变体",
+    description: "Line icons on a 24 grid with a stroke width from 0.5 to 3, in four variants from outline to solid tint, each with a hover motion. Switch from the layered icons with one import.",
+    zhDescription: "24 网格的线性图标，粗细可在 0.5 到 3 之间调整，提供从线性到面性填充的四种变体，悬停时播放动效。从分层图标切换只需修改一行 import。",
+  },
 ];
 
 export const COMPARISONS: LearnPage[] = [

@@ -85,7 +85,7 @@ export function CollectionDock() {
         >
           <Button variant="ghost" className="rounded-pill" onClick={() => setOpen(true)}>
             <RiBookmarkFill data-icon="inline-start" />
-            <span key={count} className="swap-in tabular-nums">{tr("{count} saved", "已收藏 {count} 个", { count })}</span>
+            <span key={count} className="tabular-nums">{tr("{count} saved", "已收藏 {count} 个", { count })}</span>
           </Button>
           <Button className="rounded-pill" disabled={busy} onClick={save}>
             <RiDownloadLine data-icon="inline-start" />

@@ -9,6 +9,7 @@ import { animate, bindTrigger } from './runtime.js';
 export { toSvg, VIEWBOX, uid, badgeStyle } from './icon.js';
 export { animate, bindTrigger, setVariant, VARIANTS } from './runtime.js';
 export { portableShadow } from './color.js';
+export { lineStill, LINE_VARIANTS, LINE_STROKE } from './line.js';
 
 /**
  * Creates an <svg> element for an icon, animated on hover unless `trigger` is 'none'.
@@ -21,7 +22,7 @@ export function createIcon(ic, options = {}) {
   tpl.innerHTML = toSvg(ic, rest);
   const svg = tpl.content.firstElementChild;
   if (trigger === 'none') return svg;
-  const ctl = animate(svg, ic, { state: active ? { active: true } : {} });
+  const ctl = animate(svg, ic, { state: active ? { active: true } : {}, variant: rest.variant });
   svg.kubai = ctl;
   let off = trigger === 'parent' ? null : bindTrigger(svg, ctl, ic);
   if (!off) queueMicrotask(() => { off = bindTrigger(svg.closest('[data-kubai-trigger]') || svg.parentElement || svg, ctl, ic); });
@@ -43,7 +44,7 @@ export function replaceIcons({ icons, root = document, attr = 'data-kubai' } = {
     if (!ic) continue;
     const d = el.dataset;
     el.replaceWith(createIcon(ic, {
-      size: d.size ? Number(d.size) : undefined, color: d.color, variant: d.variant, badgeColor: d.badgeColor, trigger: d.trigger,
+      size: d.size ? Number(d.size) : undefined, color: d.color, variant: d.variant, badgeColor: d.badgeColor, strokeWidth: d.strokeWidth ? Number(d.strokeWidth) : undefined, trigger: d.trigger,
       title: el.getAttribute('aria-label') || undefined, className: el.getAttribute('class') || undefined
     }));
   }

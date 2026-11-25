@@ -93,7 +93,7 @@ function ModulesCard({ bytes }: { bytes: number[] }) {
           );
         })}
       </div>
-      <p key={summary} className="swap-in flex h-8 items-center text-caption text-muted-foreground tabular-nums">{summary}</p>
+      <p key={summary} className="flex h-8 items-center text-caption text-muted-foreground tabular-nums">{summary}</p>
     </Card>
   );
 }

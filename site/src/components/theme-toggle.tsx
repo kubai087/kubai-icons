@@ -1,5 +1,4 @@
 "use client";
-import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
 import { RiContrast2Line } from "@remixicon/react";
 import { Moon, Sun } from "kubai-icons-react";
@@ -12,8 +11,8 @@ function useThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
   const flip = () => setTheme(resolvedTheme === "dark" ? "light" : "dark");
   const toggle = () => {
-    if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) flip();
-    else document.startViewTransition(() => flushSync(flip));
+    // The theme changes at once; a cross-fade of the whole page only delays it.
+    flip();
   };
   return toggle;
 }

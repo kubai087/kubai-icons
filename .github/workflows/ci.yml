@@ -80,6 +80,10 @@ jobs:
         run: node styles/duotone/check.mjs
       - name: Export the two-tone solid examples as SVG
         run: node styles/duotone/export.mjs
+      - name: Self-check the line examples at every checked stroke width
+        run: node styles/line/check.mjs
+      - name: Export the line examples as SVG
+        run: node styles/line/export.mjs
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -87,6 +91,7 @@ jobs:
           path: |
             check-out/
             styles/duotone/check-out/
+            styles/line/check-out/
 
   # The status check required by the branch rule. A job skipped after a failed dependency
   # counts as passing, so this one always runs and reads the results itself.

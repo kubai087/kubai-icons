@@ -5,9 +5,11 @@ import {
   Download, CloudUpload, Gift, Package, Heart, Star, Key, Smartphone,
 } from "kubai-icons-react";
 import * as Duo from "kubai-icons-react/duotone";
+import * as Line from "kubai-icons-react/line";
 import { Segmented } from "@/components/kit/segmented";
 import { tile } from "@/components/kit/styles";
-import { useIconStyle } from "@/components/browser/prefs";
+import { STYLE_OPTIONS, useIconStyle } from "@/components/browser/prefs";
+import type { IconStyle } from "@/lib/icons";
 import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
@@ -23,10 +25,15 @@ const DUO_WALL = [
   Duo.Folder, Duo.Mail, Duo.Calendar, Duo.Lock, Duo.Settings, Duo.Trash, Duo.Bell, Duo.Camera, Duo.Bookmark, Duo.Clock,
   Duo.BookOpen, Duo.MapPin, Duo.Download, Duo.Upload, Duo.Gift, Duo.Package, Duo.Heart, Duo.Lightbulb, Duo.Key, Duo.Phone,
 ];
+/** The line tile in each slot: the line style has every object of the wall. */
+const LINE_WALL = [
+  Line.Folder, Line.Mail, Line.Calendar, Line.Lock, Line.Settings, Line.Trash, Line.Bell, Line.Camera, Line.Bookmark, Line.AlarmClock,
+  Line.Notebook, Line.Compass, Line.Download, Line.CloudUpload, Line.Gift, Line.Package, Line.Heart, Line.Star, Line.Key, Line.Smartphone,
+];
 const COLORS = ["#5393FF", "#6366F1", "#EC4899", "#F97316", "#22C55E", "#06B6D4", "#8B5CF6", "#F43F5E", "#14B8A6", "#0284C7"];
 
-/** The tiles the headline talks about, in the order of its lines, in both styles. */
-export const STORY = [Folder, Bell, Lock].map((Icon) => ({ Icon, Duo: DUO_WALL[WALL.indexOf(Icon)], color: COLORS[WALL.indexOf(Icon) % COLORS.length] }));
+/** The tiles the headline talks about, in the order of its lines, in every style. */
+export const STORY = [Folder, Bell, Lock].map((Icon) => ({ Icon, Duo: DUO_WALL[WALL.indexOf(Icon)], Line: LINE_WALL[WALL.indexOf(Icon)], color: COLORS[WALL.indexOf(Icon) % COLORS.length] }));
 
 /** How long each line of the headline plays, in milliseconds. */
 const BEAT = 1800;
@@ -65,9 +72,9 @@ const HOLD = 1400;
  */
 const offsetOf = (i: number) => (((i * 9) % WALL.length) / WALL.length) * PERIOD;
 
-type TileProps = { Icon: (typeof WALL)[number]; DuoIcon: (typeof DUO_WALL)[number]; duo: boolean; color: string; offset: number; running: boolean; index: number; told: boolean; playing: boolean };
+type TileProps = { Icon: (typeof WALL)[number]; DuoIcon: (typeof DUO_WALL)[number]; LineIcon: (typeof LINE_WALL)[number]; style: IconStyle; color: string; offset: number; running: boolean; index: number; told: boolean; playing: boolean };
 
-const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, running, index, told, playing }: TileProps) {
+const WallTile = memo(function WallTile({ Icon, DuoIcon, LineIcon, style, color, offset, running, index, told, playing }: TileProps) {
   const [turn, setTurn] = useState(false);
   const [held, setHeld] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -85,7 +92,7 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, run
     return () => { window.clearTimeout(timer); setTurn(false); };
   }, [running, onScreen, held, offset, told]);
 
-  const toggles = Icon === Bookmark && !duo;
+  const toggles = Icon === Bookmark && style === "layered";
   const hover = turn || held || playing;
   return (
     <div
@@ -98,8 +105,8 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, run
       onClick={toggles ? () => setSaved((v) => !v) : undefined}
     >
       {/* A switch of style swaps each tile in turn, along the diagonals like their arrival. */}
-      <span key={duo ? "duo" : "layered"} className="swap-in grid place-items-center" style={{ animationDelay: `${((index % 5) + Math.floor(index / 5)) * 40}ms` }}>
-        {duo ? <DuoIcon size={36} color={color} trigger="none" hover={hover} /> : <Icon size={36} color={color} trigger="none" hover={hover} active={toggles ? saved : undefined} />}
+      <span key={style} className="swap-pop grid place-items-center" style={{ animationDelay: `${((index % 5) + Math.floor(index / 5)) * 40}ms` }}>
+        {style === "duotone" ? <DuoIcon size={36} color={color} trigger="none" hover={hover} /> : style === "line" ? <LineIcon size={36} color={color} trigger="none" hover={hover} /> : <Icon size={36} color={color} trigger="none" hover={hover} active={toggles ? saved : undefined} />}
       </span>
     </div>
   );
@@ -108,7 +115,7 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, duo, color, offset, run
 /**
  * The homepage icon grid: each icon loops its motion on its own beat while on screen, unless
  * the visitor pauses the walls or asks for reduced motion. A switch above it shows the
- * two-tone style.
+ * two-tone and line styles.
  */
 export function HeroWall() {
   const ref = useRef<HTMLDivElement>(null);
@@ -125,13 +132,13 @@ export function HeroWall() {
           value={style}
           onChange={setStyle}
           label={tr("Style", "风格")}
-          options={[{ value: "layered", label: tr("Layered", "分层") }, { value: "duotone", label: tr("Two-tone", "双色") }]}
+          options={STYLE_OPTIONS.map((o) => ({ value: o.value, label: tr(o.en, o.zh) }))}
         />
       </div>
       <div ref={ref} className="grid w-full grid-cols-5 gap-tiles">
         {WALL.map((Icon, i) => {
           const line = STORY.findIndex((s) => s.Icon === Icon);
-          return <WallTile key={i} Icon={Icon} DuoIcon={DUO_WALL[i]} duo={style === "duotone"} color={COLORS[i % COLORS.length]} offset={offsetOf(i)} running={running} index={i} told={line >= 0} playing={line >= 0 && line === beat} />;
+          return <WallTile key={i} Icon={Icon} DuoIcon={DUO_WALL[i]} LineIcon={LINE_WALL[i]} style={style} color={COLORS[i % COLORS.length]} offset={offsetOf(i)} running={running} index={i} told={line >= 0} playing={line >= 0 && line === beat} />;
         })}
       </div>
     </div>

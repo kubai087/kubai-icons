@@ -5,8 +5,10 @@ export interface KubaiIconData {
   /** Layered icons: the motion as a target pose and a draw function. */
   readonly target?: (hover: boolean, state: Record<string, unknown>) => Record<string, unknown>;
   readonly draw?: (params: any, elements: Record<string, Element>, instance: object) => void;
-  /** 'duotone' for the two-tone style (kubai-icons/duotone); absent for layered icons. */
-  readonly style?: 'duotone';
+  /** 'duotone' for the two-tone style (kubai-icons/duotone), 'line' for the line style (kubai-icons/line); absent for layered icons. */
+  readonly style?: 'duotone' | 'line';
+  /** Line icons: the layers at strokes 1.5, 2 and 2.5 and the motion, for drawing any stroke and variant. */
+  readonly line?: { w: Record<string, unknown>; fx: unknown; enter?: unknown };
   /** The icon's own viewBox when it isn't the layered one (two-tone: '0 0 16 16'). */
   readonly viewBox?: string;
   /** Two-tone icons: the hover motion, as poses of named layers. */
@@ -20,6 +22,8 @@ export interface KubaiIconData {
 }
 
 export type KubaiVariant = 'color' | 'soft';
+/** The four variants of the line style. */
+export type KubaiLineVariant = 'outline' | 'line-duo' | 'fill' | 'solid-tint';
 export type KubaiTrigger = 'hover' | 'parent' | 'none';
 
 export interface KubaiSvgOptions {
@@ -27,8 +31,10 @@ export interface KubaiSvgOptions {
   size?: number | string;
   /** Accent colour, any CSS colour. Defaults to currentColor. */
   color?: string;
-  /** 'color' (default) or 'soft', the clear look with lifted fills and deep marks. */
-  variant?: KubaiVariant;
+  /** 'color' (default) or 'soft', the clear look with lifted fills and deep marks. Line icons: 'outline' (default), 'line-duo', 'fill' or 'solid-tint'. */
+  variant?: KubaiVariant | KubaiLineVariant;
+  /** Line icons only: the stroke width, 0.5 to 3 in steps of 0.25. Default 2. */
+  strokeWidth?: number;
   /** Ink of the corner badge: any CSS colour, or 'semantic'. Default: black and white. */
   badgeColor?: string;
   /** Accessible name. Without it the icon is aria-hidden. */

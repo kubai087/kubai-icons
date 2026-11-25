@@ -8,6 +8,7 @@ This repository holds three things under three licences.
 
 - `icons/` and `badges/`: every icon and badge definition;
 - `icons-duotone/`: the two-tone icons, imported from the skill's style as plain layer data;
+- `icons-line/`: the line icons, imported from the skill's line style as plain layer data;
 - `packages/`: `kubai-icons`, `kubai-icons-react`, `kubai-icons-vue` and `kubai-icons-static`, including their built files.
 
 Use, change and redistribute these freely, in commercial work or not. Keep the copyright notice with the source; credit in the products you ship is welcome but not required.
@@ -18,7 +19,7 @@ Use, change and redistribute these freely, in commercial work or not. Keep the c
 
 ## The skill: Kubai Icons License
 
-[`LICENSE`](LICENSE) (source-available) covers the skill: `SKILL.md`, `PROMPT.md`, `src/`, `index.html`, `scripts/`, `history/`, the two-tone style in `styles/duotone/` (also released on its own as the `kubai-duotone` skill, under the same licence), and the README media in `assets/`. You may install and run the skill for any work, and the icons you draw with it are yours; see the licence for the rest.
+[`LICENSE`](LICENSE) (source-available) covers the skill: `SKILL.md`, `PROMPT.md`, `src/`, `index.html`, `scripts/`, `history/`, the two-tone style in `styles/duotone/` and the line style in `styles/line/` (also released on their own as the `kubai-duotone` and `kubai-line` skills, under the same licence), and the README media in `assets/`. You may install and run the skill for any work, and the icons you draw with it are yours; see the licence for the rest.
 
 ## Names and logos
 

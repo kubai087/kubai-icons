@@ -2,6 +2,7 @@
 import { memo, useEffect, useState, useSyncExternalStore } from "react";
 import { RiBookmarkFill, RiBookmarkLine, RiCheckboxBlankCircleLine, RiCheckboxCircleFill } from "@remixicon/react";
 import { HoverIcon, prefetchIcon } from "@/components/kit/icon-image";
+import { LineIcon } from "@/components/kit/line-icon";
 import { PREVIEW_SIZE } from "./prefs";
 import { tile } from "@/components/kit/styles";
 import { toggleSaved, useSaved } from "@/lib/collection";
@@ -37,7 +38,8 @@ export function useLocalName(meta: IconMeta | undefined) {
 type TileProps = { meta: IconMeta; size: number; raster?: number; color: string; variant: "color" | "soft"; selecting: boolean; hit?: string | null; onOpen: (m: IconMeta, color: string) => void };
 
 export const IconTile = memo(function IconTile({ meta, size, raster, color, variant, selecting, hit, onOpen }: TileProps) {
-  const icon = useIcon(meta);
+  const line = meta.style === "line";
+  const icon = useIcon(line ? null : meta);
   const saved = useSaved(meta.name);
   const seen = useIconSeen(meta.name);
   const tr = useTr();
@@ -55,7 +57,9 @@ export const IconTile = memo(function IconTile({ meta, size, raster, color, vari
         title={local ? `${local} ${meta.name}` : meta.name}
         className={cn(tile({ active: selecting && saved }), "group relative aspect-square w-full")}
       >
-        {icon ? (
+        {line ? (
+          <LineIcon name={meta.name} size={size} color={color} />
+        ) : icon ? (
           <HoverIcon icon={icon} size={size} raster={raster} color={color} variant={variant} />
         ) : (
           <span className="block rounded-control bg-muted-foreground/10" style={{ width: size * 0.8, height: size * 0.8 }} />
@@ -66,7 +70,7 @@ export const IconTile = memo(function IconTile({ meta, size, raster, color, vari
         {meta.new && !seen && <span className="pointer-events-none absolute top-1.5 start-1.5 rounded-pill bg-brand px-1.5 text-[10px] leading-4 font-semibold text-white">{tr("New", "新")}</span>}
         {hit && <span className="absolute inset-x-2 bottom-2 truncate text-center text-caption text-muted-foreground transition-opacity group-hover:opacity-0">{hit}</span>}
       </button>
-      {meta.style === "duotone" ? null : selecting ? (
+      {meta.style ? null : selecting ? (
         <span aria-hidden className="pointer-events-none absolute top-2 end-2">
           {saved ? <RiCheckboxCircleFill className="size-4 text-foreground" /> : <RiCheckboxBlankCircleLine className="size-4 text-muted-foreground/50" />}
         </span>

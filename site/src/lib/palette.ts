@@ -6,6 +6,7 @@ export const SWATCHES = [
   { name: "Pink", value: "#EC4899" },
   { name: "Orange", value: "#F97316" },
   { name: "Green", value: "#22C55E" },
+  { name: "Slate", value: "#64748B" },
   { name: "Ink", value: "#2E3036" },
 ];
 const HUES = SWATCHES.slice(0, 5).map((s) => s.value);

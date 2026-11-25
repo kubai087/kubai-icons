@@ -5,12 +5,20 @@ import { Slider } from "@/components/ui/slider";
 import { Glide } from "@/components/kit/glide";
 import { cn } from "@/lib/utils";
 
-/** A pixel size set by a common preset, by dragging, or by typing a number. */
-export function SizeControl({ value, onChange, min, max, presets, label, commonLabel, pixelsLabel, className }: {
+/**
+ * A value set by a common preset, by dragging, or by typing a number: the icon size in pixels,
+ * and the line style's stroke width. The slider, the arrow keys and typed values all snap to
+ * `step`; `decimals` allows typing a decimal point (stroke widths such as 2.25).
+ */
+export function SizeControl({ value, onChange, min, max, step = 1, decimals = false, stretch = false, presets, label, commonLabel, pixelsLabel, className }: {
   value: number;
   onChange: (size: number) => void;
   min: number;
   max: number;
+  step?: number;
+  decimals?: boolean;
+  /** The slider takes all the room left at every width (two controls side by side). */
+  stretch?: boolean;
   presets: number[];
   label: string;
   commonLabel: string;
@@ -20,15 +28,16 @@ export function SizeControl({ value, onChange, min, max, presets, label, commonL
   // What is being typed, which may be unfinished or out of range. Null when not typing.
   const [draft, setDraft] = useState<string | null>(null);
   const clamp = (n: number) => Math.min(max, Math.max(min, n));
+  const snap = (n: number) => clamp(+(Math.round((n - min) / step) * step + min).toFixed(3));
 
   const type = (raw: string) => {
-    const digits = raw.replace(/\D/g, "").slice(0, 3);
-    setDraft(digits);
-    const n = Number(digits);
-    if (digits && n >= min && n <= max) onChange(n);
+    const text = (decimals ? raw.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1") : raw.replace(/\D/g, "")).slice(0, 4);
+    setDraft(text);
+    const n = Number(text);
+    if (text && !text.endsWith(".") && n >= min && n <= max && snap(n) === n) onChange(n);
   };
   const finish = () => {
-    if (draft) onChange(clamp(Number(draft)));
+    if (draft && !Number.isNaN(Number(draft))) onChange(snap(Number(draft)));
     setDraft(null);
   };
   const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -36,13 +45,13 @@ export function SizeControl({ value, onChange, min, max, presets, label, commonL
     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
       e.preventDefault();
       setDraft(null);
-      onChange(clamp(value + (e.key === "ArrowUp" ? 1 : -1) * (e.shiftKey ? 10 : 1)));
+      onChange(snap(value + (e.key === "ArrowUp" ? 1 : -1) * step * (e.shiftKey ? 4 : 1)));
     }
   };
 
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <div role="group" aria-label={commonLabel} className="relative isolate flex shrink-0">
+      <div role="group" aria-label={commonLabel} className="relative isolate flex w-32 shrink-0 justify-between pointer-coarse:w-auto">
         <Glide selector="[aria-pressed=true]" className="rounded-control bg-muted" />
         {presets.map((size) => {
           const on = size === value;
@@ -62,8 +71,8 @@ export function SizeControl({ value, onChange, min, max, presets, label, commonL
           );
         })}
       </div>
-      <div className="min-w-16 flex-1 lg:w-28 lg:flex-none">
-        <Slider aria-label={label} value={[value]} min={min} max={max} step={1} onValueChange={(v) => { setDraft(null); onChange(Array.isArray(v) ? v[0] : (v as number)); }} />
+      <div className={cn("min-w-16 flex-1", !stretch && "lg:w-28 lg:flex-none")}>
+        <Slider aria-label={label} value={[value]} min={min} max={max} step={step} onValueChange={(v) => { setDraft(null); onChange(Array.isArray(v) ? v[0] : (v as number)); }} />
       </div>
       <Input
         value={draft ?? String(value)}
@@ -71,7 +80,7 @@ export function SizeControl({ value, onChange, min, max, presets, label, commonL
         onBlur={finish}
         onKeyDown={onKey}
         onFocus={(e) => e.target.select()}
-        inputMode="numeric"
+        inputMode={decimals ? "decimal" : "numeric"}
         aria-label={pixelsLabel}
         className="h-7 w-11 shrink-0 px-1 text-center text-caption tabular-nums pointer-coarse:h-9 pointer-coarse:w-12 pointer-coarse:text-field"
       />

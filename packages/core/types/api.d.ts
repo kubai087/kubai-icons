@@ -1,4 +1,4 @@
-import type { KubaiController, KubaiSvgOptions, KubaiTrigger } from './types.js';
+import type { KubaiController, KubaiSvgOptions, KubaiTrigger, KubaiLineVariant } from './types.js';
 export declare const VIEWBOX: string;
 /** A drop shadow's filter primitives in the form design tools read as a shadow effect. */
 export declare function portableShadow(color: string, opacity: number): string;
@@ -9,7 +9,13 @@ export declare function uid(): string;
 export declare function badgeStyle(icon: KubaiIconData, badgeColor?: string): Record<string, string>;
 /** Full SVG markup for one icon instance (server rendering, innerHTML, strings). */
 export declare function toSvg(icon: KubaiIconData, options?: KubaiSvgOptions): string;
-export declare function animate(svg: Element, icon: KubaiIconData, options?: { state?: Record<string, unknown> }): KubaiController;
+export declare function animate(svg: Element, icon: KubaiIconData, options?: { state?: Record<string, unknown>; variant?: string }): KubaiController;
+/** A standalone line SVG in fixed colours (the light tones mixed over white from a hex color), without motion tags. */
+export declare function lineStill(line: NonNullable<KubaiIconData["line"]>, options?: { s?: number; variant?: KubaiLineVariant; color?: string; size?: number; id?: string }): string;
+/** The four variants of the line style. */
+export declare const LINE_VARIANTS: KubaiLineVariant[];
+/** The stroke widths a line icon takes (0.5 to 3 in steps of 0.25) and the regular one. */
+export declare const LINE_STROKE: { min: number; max: number; step: number; regular: number };
 export declare function bindTrigger(target: Element, controller: KubaiController, icon: Pick<KubaiIconData, 'tap'>, onToggle?: (active: boolean) => void): () => void;
 /** Creates an animated <svg> element. */
 export declare function createIcon(icon: KubaiIconData, options?: KubaiSvgOptions & { trigger?: KubaiTrigger; active?: boolean }): SVGSVGElement & { kubai?: KubaiController };

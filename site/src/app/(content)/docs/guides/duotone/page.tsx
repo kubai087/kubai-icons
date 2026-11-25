@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Code, Prose, Title } from "@/components/docs/prose";
 import { Faq } from "@/learn/faq";
-import { DuotoneWall } from "@/learn/duotone-wall";
+import { DuotoneWall } from "@/learn/style-wall";
 import { learnMeta, learnPage } from "@/learn/pages";
 
 const HREF = "/docs/guides/duotone/";

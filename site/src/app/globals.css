@@ -306,11 +306,13 @@
 }
 .page-in { animation: page-in 0.18s ease-out; }
 
-/* Content replaced in place, such as a tab, a count or a filtered grid. */
-@keyframes swap-in {
-  from { opacity: 0; }
+/* Content replaced in place (a tab, a count, a filtered grid) changes at once: a fade between
+   the old and the new only blurs the moment of change. Where the change itself should be seen
+   (the hero wall switching style, the headline's icon), the new content pops in instead. */
+@keyframes swap-pop {
+  from { scale: 0.6; }
 }
-.swap-in { animation: swap-in 0.16s ease-out; }
+.swap-pop { animation: swap-pop 0.28s cubic-bezier(.34, 1.56, .64, 1) backwards; }
 
 /* Blocks rising out of a blur. `--i` is a block's place in the sequence. */
 @keyframes rise-in {
@@ -340,7 +342,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-in, .swap-in, .rise-in, .reveal { animation: none; }
+  .page-in, .swap-pop, .rise-in, .reveal { animation: none; }
 }
 
 /* Chinese has no use for the tight tracking set for Latin headings. */
@@ -349,10 +351,8 @@ html[lang="zh-CN"] :is(h1, h2, h3, .font-heading, [data-slot="sheet-title"], [da
 }
 html[lang="zh-CN"] h1 { line-height: 1.25; }
 
-/* Switching theme cross-fades the whole page. */
-::view-transition-old(root),
-::view-transition-new(root) { animation-duration: 0.24s; }
-
 /* Icons: colour changes cross-fade, since every derived colour follows currentColor. */
 .kubai-icon { transition: color 0.3s ease; }
+/* A line icon's light tone and fill mix toward the page, so they hold in the dark theme. */
+.kubai-line { --kl-bg: var(--background); }
 @media (prefers-reduced-motion: reduce) { .kubai-icon { transition: none; } }

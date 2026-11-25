@@ -241,7 +241,14 @@
  "Two-tone": "Bicolor",
  "Pause animations": "Pausar animaciones",
  "Browse two-tone icons": "Ver iconos bicolor",
- "Now in two-tone": "Ahora en bicolor",
  "Read the guide": "Leer la guía",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Los mismos iconos, dibujados también como formas sólidas en una cuadrícula de 16: un cuerpo claro con detalles en tu color. Cada uno se sigue moviendo al pasar el cursor."
+ "Browse line icons": "Ver iconos de línea",
+ "Common stroke widths": "Grosores habituales",
+ "Line": "Línea",
+ "Line two-tone": "Línea bicolor",
+ "Now in line style": "Ahora en línea",
+ "Solid": "Sólido",
+ "Solid tint": "Sólido tintado",
+ "Stroke width": "Grosor del trazo",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Los mismos iconos, también dibujados con líneas redondeadas en una cuadrícula de 24: cualquier grosor de trazo de 0,5 a 3, en línea, línea bicolor, sólido y sólido tintado. Todos siguen moviéndose al pasar el cursor."
 }

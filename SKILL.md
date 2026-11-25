@@ -1,27 +1,28 @@
 ---
 name: kubai-icons
-description: 生成一套风格统一的功能图标，有两种风格可选。分层动态（默认）：沿用 Lumno 书签文件夹图标的构造，后片、内容、前片分层，外描边，所有颜色从一个主色推导，悬停时形变，也可以导出静态 SVG。双色面性：16 网格的实心双色图标，浅色主体加主色点缀，悬停时有表现含义的动效，也可以导出静态 SVG，适合界面里的小尺寸图标。用户要做图标、功能图标、动态图标、静态 SVG 图标、面性或双色图标、duotone 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
+description: 生成一套风格统一的功能图标，有三种风格可选。分层动态（默认）：沿用 Lumno 书签文件夹图标的构造，后片、内容、前片分层，外描边，所有颜色从一个主色推导，悬停时形变，也可以导出静态 SVG。双色面性：16 网格的实心双色图标，浅色主体加主色点缀，悬停时有表现含义的动效，也可以导出静态 SVG，适合界面里的小尺寸图标。线性：24 网格的圆角线条，线宽随文字字重调整（0.5–3），一份绘制得到线性、线性双色、面性、面性填充四种变体，悬停时有表现含义的动效，也可以导出静态 SVG。用户要做图标、功能图标、动态图标、静态 SVG 图标、面性或双色图标、duotone 图标、线性或描边图标、outline 图标、icon set、带 hover 动效的图标，或要往这套图标里加新图标时使用。
 license: Kubai Icons License (source-available). Complete terms in LICENSE.
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
   display_name: "Kubai 动态图标"
   display_name_en: "Kubai Icons"
-  description_zh: "按同一种风格稳定地画出功能图标。两种风格可选：文件夹式的前后分层、外描边、悬停时做物体本身会做的动作的动态图标；或者 16 网格、浅色主体加主色点缀的双色面性图标。"
-  description_en: "Draws functional icons in one consistent style, in either of two looks: layered animated icons with outside outlines and hover motion the object itself would make, or two-tone solid icons on a 16 grid with light bodies and accents in the brand colour."
+  description_zh: "按同一种风格稳定地画出功能图标。三种风格可选：文件夹式的前后分层、外描边、悬停时做物体本身会做的动作的动态图标；16 网格、浅色主体加主色点缀的双色面性图标；或者 24 网格、线宽可调、带四种变体的线性图标。"
+  description_en: "Draws functional icons in one consistent style, in any of three looks: layered animated icons with outside outlines and hover motion the object itself would make, two-tone solid icons on a 16 grid with light bodies and accents in the brand colour, or line icons on a 24 grid with an adjustable stroke width and four variants."
 ---
 
 # Kubai Icons
 
-这个 skill 自带两种风格的完整实现：每种都有规则、范例图标、自检脚本和导出脚本。你的工作是按规则写新图标，不是重写引擎。
+这个 skill 自带三种风格的完整实现：每种都有规则、范例图标、自检脚本和导出脚本。你的工作是按规则写新图标，不是重写引擎。
 
-## 两种风格
+## 三种风格
 
 | 风格 | 样子 | 交付 | 规则 | 适合 |
 | --- | --- | --- | --- | --- |
 | 分层动态（默认） | 文件夹式的后片、内容、前片分层，外描边，投影和内发光，悬停时形变 | 动态 SVG + JS，或静态 SVG | `PROMPT.md` | 网页、营销页、需要动效和质感的地方，常用 24–96px |
 | 双色面性 | 16 网格的实心图标，浅色主体加主色点缀，两色直接相接 | 静态 SVG，或 SVG + JS 的悬停动效 | `styles/duotone/SKILL.md`（单独的 skill `kubai-duotone`） | 界面里的导航、按钮、列表、标签页，常用 16–48px |
+| 线性 | 24 网格的圆角线条，线宽 0.5–3（常规 2），线性、线性双色、面性、面性填充四种变体 | 静态 SVG，或 SVG + JS 的悬停动效 | `styles/line/SKILL.md`（单独的 skill `kubai-line`） | 和文字并排的界面图标，如工具栏、菜单、表单，常用 16–32px |
 
-用户说"面性""实心""填充""双色""duotone""bulk""两种颜色"，或要的是界面里 16–24px 的小图标，就是双色面性。用户说"动态""悬停""hover""动效""分层"，或没有提到风格但要放在网页里，就是分层动态。两种都说不清时，先问一句，并用上表说明区别。
+用户说"面性""实心""填充""双色""duotone""bulk""两种颜色"，或要的是界面里 16–24px 的小图标，就是双色面性。用户说"动态""悬停""hover""动效""分层"，或没有提到风格但要放在网页里，就是分层动态。用户说"线性""线条""描边""outline""line""SF Symbols"，或要求线宽跟文字字重匹配，就是线性。说不清时，先问一句，并用上表说明区别。
 
 ## 包里有什么
 
@@ -33,11 +34,11 @@ metadata:
 - `scripts/measure.js`：测量规则的代码，由自检脚本加载。量的是动作有没有跳帧、结束时是否平稳停下，尺寸和居中，分层，线宽，过小的细节，细缝，被盖住的描边露头，尖角接缝处的毛刺，以及落在背景上却没有描边的边。
 - `scripts/export.mjs`：静态导出。把图标渲染成不依赖脚本和样式表的独立 SVG 文件，可以指定色板、主色和静止或悬停状态。
 
-以上为分层动态风格的文件。双色面性风格是独立的 skill（`kubai-duotone`），文件位于 `styles/duotone/`，规则、文件说明和流程见其中的 `SKILL.md`。
+以上为分层动态风格的文件。双色面性风格是独立的 skill（`kubai-duotone`），文件位于 `styles/duotone/`；线性风格也是独立的 skill（`kubai-line`），文件位于 `styles/line/`。两者的规则、文件说明和流程见各自目录中的 `SKILL.md`。
 
 ## 流程
 
-1. 确定风格（见"两种风格"）。选择双色面性时：已安装 `kubai-duotone` skill 则使用该 skill，否则阅读 `styles/duotone/SKILL.md` 并按其流程执行，以下第 2–9 步不适用。选择分层动态时，阅读 `PROMPT.md`，继续以下步骤。
+1. 确定风格（见"三种风格"）。选择双色面性时：已安装 `kubai-duotone` skill 则使用该 skill，否则阅读 `styles/duotone/SKILL.md` 并按其流程执行，以下第 2–9 步不适用。选择线性时：已安装 `kubai-line` skill 则使用该 skill，否则阅读 `styles/line/SKILL.md` 并按其流程执行，以下第 2–9 步同样不适用。选择分层动态时，阅读 `PROMPT.md`，继续以下步骤。
 2. 确定交付形式。用户没说清楚时先问一句：
    - 动态（默认）：SVG + JS，悬停时形变，靠 `src/engine.js` 在页面里运行。适合网页和能跑 JS 的界面。
    - 静态：独立的 `.svg` 文件，没有动效，任何地方都能用：设计工具、原生 App、文档、`<img>`。用户提到"切图""SVG 文件""放进 Figma""App 里用"等，就是要静态。

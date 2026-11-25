@@ -27,6 +27,7 @@ For a skill change:
 
 - [ ] `node scripts/check.mjs` prints `No script errors.`
 - [ ] For the two-tone style: `node styles/duotone/check.mjs` reports 0 findings, and `sheet.png` is attached
+- [ ] For the line style: `node styles/line/check.mjs` reports 0 findings, `node tools/line-import.mjs` has been run, and `sheet.png` is attached
 - [ ] Existing icons look the same, or before and after screenshots of what moved are attached
 
 For a skill gallery example:

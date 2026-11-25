@@ -241,7 +241,14 @@
  "Two-tone": "雙色",
  "Pause animations": "暫停動畫",
  "Browse two-tone icons": "瀏覽雙色圖示",
- "Now in two-tone": "現已提供雙色風格",
  "Read the guide": "查看指南",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "同一套圖示新增面性畫法：16 網格，淺色主體配主色點綴，懸停時同樣播放動效。"
+ "Browse line icons": "瀏覽線性圖示",
+ "Common stroke widths": "常用粗細",
+ "Line": "線性",
+ "Line two-tone": "線性雙色",
+ "Now in line style": "現已提供線性風格",
+ "Solid": "面性",
+ "Solid tint": "面性填充",
+ "Stroke width": "粗細",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "同一套圖示新增線性畫法：24 網格，粗細可在 0.5 到 3 之間調整，提供線性、線性雙色、面性和面性填充四種變體，懸停時同樣播放動效。"
 }

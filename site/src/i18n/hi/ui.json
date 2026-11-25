@@ -241,7 +241,14 @@
  "Two-tone": "दो रंग",
  "Pause animations": "एनिमेशन रोकें",
  "Browse two-tone icons": "दो रंग वाले आइकन देखें",
- "Now in two-tone": "अब दो रंगों में भी",
  "Read the guide": "गाइड पढ़ें",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "वही आइकन, अब 16 ग्रिड पर ठोस आकारों में भी: हल्के रंग का मुख्य भाग और आपके रंग में उभार। हर आइकन होवर पर अब भी हिलता है।"
+ "Browse line icons": "लाइन आइकन देखें",
+ "Common stroke widths": "आम स्ट्रोक मोटाई",
+ "Line": "लाइन",
+ "Line two-tone": "दो रंग वाली लाइन",
+ "Now in line style": "अब लाइन स्टाइल में भी",
+ "Solid": "ठोस",
+ "Solid tint": "हल्के रंग से भरा",
+ "Stroke width": "स्ट्रोक की मोटाई",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "वही आइकन, अब 24 ग्रिड पर गोल किनारों वाली लाइनों में भी: 0.5 से 3 तक कोई भी स्ट्रोक मोटाई, लाइन, दो रंग वाली लाइन, ठोस और हल्के रंग से भरे रूप में। हर आइकन होवर पर अब भी हिलता है।"
 }

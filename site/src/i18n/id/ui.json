@@ -241,7 +241,14 @@
  "Two-tone": "Dua warna",
  "Pause animations": "Jeda animasi",
  "Browse two-tone icons": "Telusuri ikon dua warna",
- "Now in two-tone": "Kini juga dua warna",
  "Read the guide": "Baca panduan",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Ikon yang sama, kini juga digambar sebagai bentuk padat pada grid 16: badan terang dengan aksen dalam warna Anda. Setiap ikon tetap bergerak saat diarahkan kursor."
+ "Browse line icons": "Telusuri ikon garis",
+ "Common stroke widths": "Ketebalan garis umum",
+ "Line": "Garis",
+ "Line two-tone": "Garis dua warna",
+ "Now in line style": "Kini juga bergaya garis",
+ "Solid": "Padat",
+ "Solid tint": "Padat berwarna lembut",
+ "Stroke width": "Ketebalan garis",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Ikon yang sama, kini juga digambar dengan garis membulat pada kisi 24: ketebalan garis berapa pun dari 0,5 hingga 3, dalam gaya garis, garis dua warna, padat, dan padat berwarna lembut. Setiap ikon tetap bergerak saat diarahkan kursor."
 }

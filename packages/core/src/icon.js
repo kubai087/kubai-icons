@@ -1,5 +1,6 @@
 // The shape every built icon module exports, and the <svg> wrapper around its markup.
 import { VARIANTS } from './color.js';
+import { lineIconMarkup } from './line.js';
 
 export const VIEWBOX = '0 -3 31 31';
 export const PLACEHOLDER = /__K__/g;
@@ -32,19 +33,22 @@ const styleOf = (o) => Object.entries(o).map(([k, v]) => `${k}:${v}`).join(';');
 /**
  * Full SVG markup for one instance. Options: size (px), color (any CSS colour; defaults to
  * currentColor), variant ('color' | 'soft'; defaults to what the page sets, else 'color'), badgeColor (ink for the corner badge: any CSS
- * colour, or 'semantic'), title (accessible name), className, id.
+ * colour, or 'semantic'), title (accessible name), className, id. Line icons also take
+ * strokeWidth (0.5 to 3, default 2) and read variant as 'outline' | 'line-duo' | 'fill' |
+ * 'solid-tint'.
  */
-export function toSvg(ic, { size = 24, color, variant, badgeColor, title, className, id = uid(), attrs = {} } = {}) {
-  // A two-tone icon has its own two colours; the layered variants and badge ink don't apply.
-  const duo = ic.style === 'duotone';
+export function toSvg(ic, { size = 24, color, variant, badgeColor, strokeWidth, title, className, id = uid(), attrs = {} } = {}) {
+  // Two-tone and line icons have their own colours; the layered variants and badge ink don't apply.
+  const line = ic.style === 'line', duo = ic.style === 'duotone' || line;
   const style = { ...(duo ? {} : VARIANTS[variant] || {}), ...(color ? { color } : {}), ...(duo ? {} : badgeStyle(ic, badgeColor)) };
   const a = {
     xmlns: 'http://www.w3.org/2000/svg', viewBox: ic.viewBox || VIEWBOX, width: size, height: size, fill: 'none', overflow: 'visible',
-    class: ['kubai-icon', duo && 'kubai-duotone', `kubai-icon-${ic.name}`, className].filter(Boolean).join(' '),
+    class: ['kubai-icon', ic.style === 'duotone' && 'kubai-duotone', line && 'kubai-line', `kubai-icon-${ic.name}`, className].filter(Boolean).join(' '),
     ...(title ? { role: 'img' } : { 'aria-hidden': 'true' }),
     ...(Object.keys(style).length ? { style: styleOf(style) } : {}),
     ...attrs
   };
   const head = Object.entries(a).map(([k, v]) => ` ${k}="${esc(v)}"`).join('');
-  return `<svg${head}>${title ? `<title>${esc(title)}</title>` : ''}${ic.markup.replace(PLACEHOLDER, id)}</svg>`;
+  const markup = line ? lineIconMarkup(ic, { strokeWidth, variant }) : ic.markup;
+  return `<svg${head}>${title ? `<title>${esc(title)}</title>` : ''}${markup.replace(PLACEHOLDER, id)}</svg>`;
 }

@@ -56,7 +56,7 @@ Clone the repository into your skills folder. In Codex, use `~/.agents/skills` i
 git clone https://github.com/kubai087/kubai-icons.git ~/.claude/skills/kubai-icons
 ```
 
-Or download `kubai-icons-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.0.0) and unzip it there:
+Or download `kubai-icons-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.1.0) and unzip it there:
 
 ```bash
 unzip kubai-icons-v*.zip -d ~/.claude/skills/
@@ -77,6 +77,7 @@ Describe what you need in plain words. The skill triggers on requests about icon
 - "We need an icon for Export that matches the others."
 - "Give me static SVG files I can drop into Figma."
 - "Draw two-tone solid icons for our app's tab bar."
+- "Draw line icons for our toolbar, at a stroke width of 1.5."
 
 The agent then:
 
@@ -86,20 +87,27 @@ The agent then:
 
 To start a set for your own product, the skill copies the engine, gallery and self-check into your project and works there.
 
-### Two styles
+### Three styles
 
-The skill draws in either of two styles and asks when your request doesn't make it clear.
+The skill draws in any of three styles and asks when your request doesn't make it clear.
 
 | Style | Looks | Delivers | Rules |
 | --- | --- | --- | --- |
 | Layered (default) | Folder-like back and front pieces, outside outlines, shadows, hover motion | Animated SVG + JS, or static SVG | [`PROMPT.md`](PROMPT.md) |
 | Two-tone solid | Solid shapes on a 16 grid: a light body with accents in the brand colour; lively hover motion that acts out what the icon means | Static SVG, or SVG + JS for the motion | [`styles/duotone/`](styles/duotone), also released on its own as the `kubai-duotone` skill |
+| Line | Rounded strokes on a 24 grid whose width follows the text weight (0.5 to 3); four variants from one drawing (line, line two-tone, solid, solid tint); hover motion that acts out what the icon means | Static SVG, or SVG + JS for the motion | [`styles/line/`](styles/line), also released on its own as the `kubai-line` skill |
 
 <p align="center">
   <img src="assets/duotone.png" alt="Five hundred and two two-tone solid icons, from a folder, a calendar and a camera to home, search, settings, a star, a paper plane, a map, a crown, a plane, line and funnel charts, status marks in circles, a database, wifi and a store, and variants with a plus, a check, a sparkle or an off slash" width="720" />
 </p>
 
 Ask for "solid", "filled", "two-tone" or "duotone" icons, or small icons for an app's interface, and the skill uses the two-tone style.
+
+<p align="center">
+  <img src="assets/line.png" alt="Five hundred line icons in blue, from a check, a cross, search, settings and a star to arrows, text formatting, files and folders, mail, chat, people, locks, devices, media controls, charts, money, clocks, weather, nature, home, food, maps, transport, tools, code, science, health and basic shapes" width="720" />
+</p>
+
+Ask for "line", "outline" or "stroke" icons, icons in the manner of SF Symbols, or a stroke width that matches your text, and the skill uses the line style.
 
 <p align="center">
   <img src="assets/skill.webp" alt="Six icons on hover: an alarm clock rings, a notebook opens, a scan line sweeps a QR code, a door opens to an exit arrow, a calculator key presses, a compass needle settles north" />
@@ -207,7 +215,7 @@ node scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/
 
 Everything for this style is in [`styles/duotone/`](styles/duotone): the rules, the geometry kit, 502 examples with their hover motion (eleven of them variants with a badge: plus, minus, check, sparkle or an off slash), a self-check and an export script. Names are in English. [`CHANGELOG.md`](styles/duotone/CHANGELOG.md) records each change and the problem behind it.
 
-It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.0.0) and unzip it into your skills folder:
+It is also a skill of its own, `kubai-duotone`. To install only this style, download `kubai-duotone-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.1.0) and unzip it into your skills folder:
 
 ```bash
 unzip kubai-duotone-v*.zip -d ~/.claude/skills/
@@ -222,6 +230,31 @@ node styles/duotone/export.mjs --primary #0EA5E9 --out icons/   # another brand 
 ```
 
 The self-check measures what the rules can measure: whether each icon fills its keyline, how much of it is the primary colour, whether it uses both tones, and whether neighbouring parts touch or keep a gap of exactly 1.
+
+</details>
+
+<details>
+<summary><strong>Line style</strong></summary>
+
+<br />
+
+Everything for this style is in [`styles/line/`](styles/line): the rules, the geometry kit, 500 examples with their hover motion, the four variants, a self-check and an export script. Names are in English. [`CATALOG.md`](styles/line/CATALOG.md) lists the 500 icons with the Kubai Icons and SF Symbols names they match, and [`CHANGELOG.md`](styles/line/CHANGELOG.md) records each change and the problem behind it.
+
+It is also a skill of its own, `kubai-line`. To install only this style, download `kubai-line-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.1.0) and unzip it into your skills folder:
+
+```bash
+unzip kubai-line-v*.zip -d ~/.claude/skills/
+```
+
+With the whole repository installed as `kubai-icons`, you don't need it: that skill sends line requests to the same files.
+
+```bash
+node styles/line/check.mjs --only lock --out check-out/lock    # sheets and findings.md
+node styles/line/export.mjs --only lock,camera --stroke 1.5 --out icons/
+node styles/line/export.mjs --variant line-duo --color #0EA5E9 --out icons/   # the light tone follows the colour
+```
+
+The self-check draws every icon at each stroke width from 1.5 to 2.5 and measures what the rules can measure: the keyline it fills, the canvas, gaps between parts, how much ink each part carries, stroke widths, whether straight edges fall on whole pixels at the regular width, the optical centre, and whether the motion leaves the canvas.
 
 </details>
 

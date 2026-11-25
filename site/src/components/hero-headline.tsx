@@ -62,10 +62,10 @@ export function HeroHeadline({ className }: { className?: string }) {
   const slot = (
       /* The icons of the wall's story take turns here, each playing as its beat comes. */
       <span aria-hidden className="grid size-[1em] shrink-0 *:[grid-area:1/1]">
-        {STORY.map(({ Icon, Duo, color }, i) => {
+        {STORY.map(({ Icon, Duo, Line, color }, i) => {
           // The headline's icon follows the wall's style.
-          const Shown = style === "duotone" ? Duo : Icon;
-          return <Shown key={`${style}${i}`} size={48} color={color} trigger="none" hover={beat === i} className={cn("size-full transition-opacity duration-300 motion-reduce:transition-none", (beat ?? 0) !== i && "opacity-0")} />;
+          const Shown = style === "duotone" ? Duo : style === "line" ? Line : Icon;
+          return <Shown key={`${style}${i}`} size={48} color={color} trigger="none" hover={beat === i} className={cn("size-full", (beat ?? 0) === i ? "swap-pop" : "invisible")} />;
         })}
       </span>
   );

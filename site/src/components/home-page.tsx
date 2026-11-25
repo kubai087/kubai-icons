@@ -12,11 +12,11 @@ import { AgentGuide } from "@/components/agent-guide";
 import { Container } from "@/components/kit/layout";
 import { HeroWall } from "@/components/hero-wall";
 import { HeroBadge } from "@/components/hero-badge";
-import { DuotoneBand } from "@/components/duotone-band";
+import { StyleBand } from "@/components/style-band";
 import { HeroHeadline } from "@/components/hero-headline";
 import { FeatureCards } from "@/components/feature-cards";
 import { SponsorSlot } from "@/components/sponsor-slot";
-import { duotoneCount, iconCount, moduleBytes } from "@/lib/catalog";
+import { duotoneCount, iconCount, lineCount, moduleBytes } from "@/lib/catalog";
 
 /** The home page, in either language. */
 export function HomePage({ locale }: { locale: Locale }) {
@@ -41,7 +41,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <section className="grid gap-12 py-section lg:min-h-[calc(100svh-var(--header))] lg:grid-cols-[1.05fr_1fr] lg:items-center lg:pb-[calc(var(--section)+8svh)]">
         <div className="space-y-7">
           <div className="space-y-4">
-            <div className="rise-in"><HeroBadge count={iconCount() + duotoneCount()} /></div>
+            <div className="rise-in"><HeroBadge count={iconCount() + duotoneCount() + lineCount()} /></div>
             <HeroHeadline className="rise-in font-heading text-display font-semibold [--i:1]" />
             <p className="rise-in max-w-xl text-lead text-muted-foreground text-pretty [--i:2]">
               {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}
@@ -70,7 +70,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         <HeroWall />
       </section>
 
-      <DuotoneBand className="reveal" />
+      <StyleBand className="reveal" />
       <FeatureCards className="reveal mt-6" moduleBytes={moduleBytes(MODULE_DEMO)} />
       <SkillPrompt className="reveal mt-6 rounded-panel px-panel py-5" />
     </Container>

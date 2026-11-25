@@ -13,9 +13,6 @@ const GAP = 10;
 /** Rough height of what covers the top of the page, for choosing the icon to keep in view. */
 const COVERED = 190;
 
-/** How long tiles take to appear when the list changes. They never travel, so results stay put while typing. */
-const ARRIVE_MS = 140;
-
 /** How long the size has to hold still before icons are redrawn at it. */
 const RASTER_DELAY = 200;
 
@@ -26,12 +23,8 @@ const snap = (px: number) => {
 };
 
 /** A windowed grid: only the rows near the viewport are in the DOM. */
-export function IconGrid({ icons, tile, size, color, variant, selecting, hits, animateChanges, restScroll, onOpen }: {
+export function IconGrid({ icons, tile, size, color, variant, selecting, hits, onOpen }: {
   icons: IconMeta[]; tile: number; size: number; color: string; variant: "color" | "soft"; selecting: boolean; hits?: Map<string, string | null>;
-  /** Set once the visitor has changed the list, so what the page does while loading stays still. */
-  animateChanges: boolean;
-  /** Where the page scrolls to when the list changes, if it is further down than that. */
-  restScroll: () => number;
   onOpen: (m: IconMeta, color: string) => void;
 }) {
   const rtl = languageOf(useLocale()).dir === "rtl";
@@ -67,27 +60,8 @@ export function IconGrid({ icons, tile, size, color, variant, selecting, hits, a
   const step = cell + GAP;
   const v = useWindowVirtualizer({ count: rows, estimateSize: () => step, overscan: 6, scrollMargin: offset });
   useEffect(() => { v.measure(); }, [cell, v]);
-  // When the list changes, tiles that keep their place stay still and the rest fade in where they belong.
-  const shown = useRef({ icons, cols });
-  useLayoutEffect(() => {
-    const was = shown.current;
-    shown.current = { icons, cols };
-    const grid = ref.current;
-    if (was.icons === icons || !animateChanges || !grid || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (window.scrollY > restScroll()) {
-      grid.animate({ opacity: [0, 1] }, { duration: ARRIVE_MS, easing: "ease-out" });
-      return;
-    }
-    const before = new Map(was.icons.map((m, i) => [m.name, i]));
-    for (const el of grid.children as HTMLCollectionOf<HTMLElement>) {
-      if (before.get(el.dataset.name!) === Number(el.dataset.index) && was.cols === cols) continue;
-      // A tile still fading from the last change continues from where it is.
-      const moving = el.getAnimations();
-      const opacity = moving.length ? getComputedStyle(el).opacity : "0";
-      moving.forEach((a) => a.cancel());
-      el.animate({ opacity: [opacity, "1"] }, { duration: ARRIVE_MS, easing: "ease-out" });
-    }
-  });
+  // When the list changes, it shows at once: tiles never travel and never fade, so results
+  // stay put while typing.
   // While the size is changing, the existing bitmaps are scaled; they are redrawn once it settles.
   const [raster, setRaster] = useState(size);
   useEffect(() => {

@@ -241,7 +241,14 @@
  "Two-tone": "Hai màu",
  "Pause animations": "Tạm dừng hoạt ảnh",
  "Browse two-tone icons": "Xem biểu tượng hai màu",
- "Now in two-tone": "Nay có thêm kiểu hai màu",
  "Read the guide": "Đọc hướng dẫn",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "Cùng bộ biểu tượng, nay được vẽ thêm dạng khối đặc trên lưới 16: thân màu nhạt với điểm nhấn theo màu của bạn. Mỗi biểu tượng vẫn chuyển động khi di chuột."
+ "Browse line icons": "Xem biểu tượng nét",
+ "Common stroke widths": "Độ dày nét thường dùng",
+ "Line": "Nét",
+ "Line two-tone": "Nét hai màu",
+ "Now in line style": "Nay có thêm kiểu nét",
+ "Solid": "Đặc",
+ "Solid tint": "Đặc tô nhạt",
+ "Stroke width": "Độ dày nét",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Vẫn là bộ biểu tượng đó, nay còn được vẽ bằng nét bo tròn trên lưới 24: độ dày nét bất kỳ từ 0,5 đến 3, với các kiểu nét, nét hai màu, đặc và đặc tô nhạt. Mỗi biểu tượng vẫn chuyển động khi rê chuột."
 }

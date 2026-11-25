@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kubai 线性图标 — 预览</title>
+<style>/*CSS*/</style>
+</head>
+<body>
+<header class="hero">
+  <p class="eyebrow">Kubai Icons · 线性图标</p>
+  <h1>Kubai 线性图标</h1>
+  <p class="lede">参考 SF Symbols 的做法：笔画粗细跟随旁边文字的字重，每个图标画一次，就能输出线性、线性双色、面性、面性填充四种变体，以及斜线、角标、圆框、方框等按规则生成的变体。动效改用弹簧驱动，每个图标选一种能表现自身含义的动作。</p>
+</header>
+
+<nav class="bar" aria-label="显示设置">
+  <div class="group"><span class="k">字重</span>
+    <div class="seg" id="weight">
+      <button type="button" data-v="light" aria-pressed="false">细 <small>1.5</small></button>
+      <button type="button" data-v="regular" aria-pressed="true">常规 <small>2</small></button>
+      <button type="button" data-v="medium" aria-pressed="false">中等 <small>2.25</small></button>
+      <button type="button" data-v="bold" aria-pressed="false">粗 <small>2.5</small></button>
+    </div>
+    <input id="stroke" type="range" min="1.5" max="2.5" step="0.25" value="2" aria-label="线宽"><output id="stroke-out">2</output>
+  </div>
+  <div class="group"><span class="k">变体</span>
+    <div class="seg" id="variant">
+      <button type="button" data-v="outline" aria-pressed="true">线性</button>
+      <button type="button" data-v="line-duo" aria-pressed="false">线性双色</button>
+      <button type="button" data-v="fill" aria-pressed="false">面性</button>
+      <button type="button" data-v="solid-tint" aria-pressed="false">面性填充</button>
+    </div>
+  </div>
+  <div class="group"><span class="k">颜色</span>
+    <div class="seg swatches" id="hue">
+      <button type="button" data-v="ink" aria-pressed="true" aria-label="墨色"><i style="--c:var(--ink)"></i></button>
+      <button type="button" data-v="brand" aria-pressed="false" aria-label="品牌蓝"><i style="--c:#5A76F2"></i></button>
+      <button type="button" data-v="sky" aria-pressed="false" aria-label="天蓝"><i style="--c:#1F95DB"></i></button>
+      <button type="button" data-v="green" aria-pressed="false" aria-label="绿"><i style="--c:#1E9B6A"></i></button>
+      <button type="button" data-v="orange" aria-pressed="false" aria-label="橙"><i style="--c:#E8673A"></i></button>
+      <button type="button" data-v="violet" aria-pressed="false" aria-label="紫"><i style="--c:#8A5CF0"></i></button>
+      <button type="button" data-v="custom" aria-pressed="false" aria-label="自定义颜色" class="custom"><input id="custom" type="color" value="#5A76F2" aria-label="选择颜色"></button>
+    </div>
+  </div>
+  <div class="group"><span class="k">尺寸</span><input id="size" type="range" min="16" max="56" step="4" value="32" aria-label="图标尺寸"><output id="size-out">32px</output></div>
+  <button id="play-all" class="play" type="button">全部播放</button>
+</nav>
+
+<main>
+  <section>
+    <div class="head"><h2>画布与标准</h2><p>24×24 画布，四周留 2。圆直径 20，方块 18，矩形 20×16，都在整像素上。常规线宽 2，水平和竖直的边缘都落在整像素上；圆头端点、圆角连接。</p></div>
+    <div class="canvas">
+      <div class="canvas-key"><div id="canvas-key"></div>
+        <dl class="specs">
+          <dt>画布</dt><dd>24 × 24，可用区域 2–22</dd>
+          <dt>圆</dt><dd>直径 20</dd>
+          <dt>方块</dt><dd>18 × 18</dd>
+          <dt>横向 / 纵向</dt><dd>20 × 16 / 16 × 20</dd>
+          <dt>线宽</dt><dd>1.5 · 2 · 2.25 · 2.5（最细 1.5，最粗 2.5）</dd>
+          <dt>整像素</dt><dd>常规字重下直线边缘取整</dd>
+          <dt>外圆角</dt><dd>短边 × 0.24，平滑</dd>
+          <dt>部件间距</dt><dd>至少 1.5</dd>
+        </dl>
+      </div>
+      <div class="canvas-roles">
+        <p class="legend"><span class="r-primary">主体</span>说明这是什么，撑满参考线 <span class="r-secondary">辅助</span>盖子、提手、外圈等 <span class="r-detail">细节</span>印在主体上的记号</p>
+        <p class="note">多部件的图标先定各部分的角色和墨量占比，再画。下面四个图标按角色着色，数字是预设的权重。</p>
+        <div id="canvas-demo" class="canvas-demo"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><h2>图标（500）</h2><p>按分类排列。悬停播放动效；带 ⇄ 的图标点按后切换状态。</p></div>
+    <div class="grid" id="base"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>四种变体</h2><p>线性、线性双色、面性、面性填充由同一份绘制得到。双色和填充用两种实色，不用半透明，叠在一起时颜色均匀；两种颜色都可以另外指定，留给之后着色。</p></div>
+    <div class="four" id="four"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>按规则生成的变体</h2><p>斜线、角标、圆框、方框都由原图标自动生成：斜线只在一侧留出空隙，物体不被切散，角标在物体上切出圆形缺口，框内图标缩小后笔画粗细不变。</p></div>
+    <div class="grid" id="variants"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>与文字搭配</h2><p>每档字重对应一种笔画粗细。图标和文字放在一起时，按文字的字重选图标的字重，两者看起来一样重。</p></div>
+    <div id="pairing" class="pairing"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>可变颜色</h2><p>信号、音量、电量这类有分级的图标，按数值点亮一部分，其余部分变淡。</p></div>
+    <div class="vc"><input id="vc" type="range" min="0" max="100" value="60" aria-label="数值"><output id="vc-out">60%</output></div>
+    <div id="vc-icons" class="vc-icons"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>动效</h2><p>效果对应 SF Symbols 的几种预设，全部由阻尼弹簧驱动：起势快，落位时有一次轻微回弹。每个图标只用一种能表现含义的效果，播放完回到原位。</p></div>
+    <div id="effects" class="effects"></div>
+  </section>
+
+  <section>
+    <div class="head"><h2>16px 实际大小</h2><p>常规字重，1 倍显示。</p></div>
+    <div class="grid tiny" id="tiny16"></div>
+  </section>
+</main>
+<footer>Copyright © 2026 Kubai087</footer>
+<script>/*JS*/</script>
+</body>
+</html>

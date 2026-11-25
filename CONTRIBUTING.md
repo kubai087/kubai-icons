@@ -39,13 +39,14 @@ Nothing to install. Open `index.html` in a browser to see the gallery. The scrip
 node scripts/check.mjs --only 文件夹,邮件     # self-check, screenshots in check-out/
 node scripts/export.mjs --only 文件夹         # static SVG, files in export/
 node styles/duotone/check.mjs --only folder  # two-tone style, files in styles/duotone/check-out/
+node styles/line/check.mjs --only lock       # line style, files in styles/line/check-out/
 ```
 
 `scripts/media.mjs` also needs `ffmpeg` and `img2webp`. Both output folders are ignored by git.
 
 ### Improving the skill
 
-The skill is `PROMPT.md`, `SKILL.md`, the engine and the scripts, plus the two-tone solid style in `styles/duotone/` (its rules are `GUIDE.md`). The most useful contributions make the next icon come out right on the first try.
+The skill is `PROMPT.md`, `SKILL.md`, the engine and the scripts, plus the two-tone solid style in `styles/duotone/` and the line style in `styles/line/` (each with its rules in `GUIDE.md`). The most useful contributions make the next icon come out right on the first try.
 
 - **A rule left you guessing.** Open a skill feedback issue first. Quote the rule, name the icon you were drawing, and say what you had to decide yourself. A screenshot helps. Rule changes start from evidence like this.
 - **Run a blind test.** Give a fresh agent session nothing but `SKILL.md` and `PROMPT.md`, ask for a few icons the set doesn't have, and report every place it had to guess. This is how most of the current rules were found.
@@ -86,6 +87,7 @@ Not every icon will be merged, even a good one. The gallery is meant to read as 
 npm run validate && npm run build && npm test   # library changes
 node scripts/check.mjs                          # skill changes; must print `No script errors.`
 node styles/duotone/check.mjs                   # two-tone style changes; findings.md must list no findings
+node styles/line/check.mjs                      # line style changes; findings.md must list no findings
 ```
 
 CI runs both, builds every package and the website, and renders contact sheets. Fill in the checklist in the pull request template.

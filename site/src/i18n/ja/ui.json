@@ -241,7 +241,14 @@
  "Two-tone": "2色",
  "Pause animations": "アニメーションを一時停止",
  "Browse two-tone icons": "2色アイコンを見る",
- "Now in two-tone": "2色スタイルが登場",
  "Read the guide": "ガイドを読む",
- "The same icons, also drawn as solid shapes on a 16 grid: a light body with accents in your color. Each one still moves on hover.": "同じアイコンを、16 グリッド上の塗りの形でも描きました。淡い本体にアクセントカラーを添えています。ホバーで動くのはこれまでどおりです。"
+ "Browse line icons": "線アイコンを見る",
+ "Common stroke widths": "よく使う線の太さ",
+ "Line": "線",
+ "Line two-tone": "線・2色",
+ "Now in line style": "線スタイルが登場",
+ "Solid": "塗り",
+ "Solid tint": "塗り・淡色",
+ "Stroke width": "線の太さ",
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.5 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "同じアイコンを、24グリッドの丸みのある線でも描きました。線の太さは0.5〜3で自由に選べ、線、線・2色、塗り、塗り・淡色の4種類があります。どれもホバーで動きます。"
 }

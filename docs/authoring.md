@@ -133,6 +133,16 @@ node tools/duotone-import.mjs --only name
 
 This writes `icons-duotone/<name>.json`: the icon's layers and hover motion as plain data, which `tools/build.mjs` renders into the packages. Use the layered icon's name when the object is the same, so the two styles switch by import path; the icon then takes its category and search words from the layered one. An icon the layered library doesn't have needs `--category` (and `--tags`). `node tools/duotone-import.mjs --check`, also run by the tests, fails when `icons-duotone/` is out of step with the skill.
 
+## Line icons
+
+The line style (`kubai-icons/line` and the `line` paths of the other packages) is drawn with the `kubai-line` skill in `styles/line/`, not written here by hand. Draw and check an icon there (`styles/line/GUIDE.md`, `node styles/line/check.mjs --only name`), give it a category in `styles/line/catalog.mjs` if the layered library doesn't have it, then import it:
+
+```bash
+node tools/line-import.mjs --only name
+```
+
+This writes `icons-line/<name>.json`: the icon's layers at strokes 1.5, 2 and 2.5 for each variant, and its hover motion, as plain data, which `tools/build.mjs` renders into the packages; the runtime draws any other stroke from the nearest of the three. Use the layered icon's name when the object is the same, so the styles switch by import path; the icon then takes its category and search words from the layered one. `node tools/line-import.mjs --check`, also run by the tests, fails when `icons-line/` is out of step with the skill, and `tests/line.test.js` checks that the packages draw every icon exactly as the skill does.
+
 ## Release versions
 
 `icons/versions.json` records the release each icon first shipped in. Leave a new icon out of

@@ -15,6 +15,8 @@ export const firstChunk = () => `/data/icons/_first.js?v=${index().hashes._first
 export const iconCount = () => index().icons.length;
 /** How many icons the two-tone style has; the home page counts them with the layered ones. */
 export const duotoneCount = () => index().duotone?.length ?? 0;
+/** How many icons the line style has; counted with the others too. */
+export const lineCount = () => index().line?.length ?? 0;
 
 /** The gzipped size in bytes of each named icon's ES module, or 0 if it is not built. */
 export const moduleBytes = (names: string[]) =>
