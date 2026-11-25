@@ -163,21 +163,23 @@ export const TONE = { light: 0.42, fill: 0.2 };
 /**
  * The shells to fill in solid-tint: icon.tint names them; or else every closed shape of a primary
  * or secondary part (a head and a body, two people, a ring round a check). Details are not
- * filled: they sit on the fill, and closed ones are holes in it (a lens, a keyhole).
+ * filled: they sit on the fill, and closed ones are holes in it (a lens, a keyhole). A part hidden
+ * at rest (ghost) is filled only when icon.tint names it.
  */
 export function tintOf(icon, L) {
-  const shells = L.filter((l) => l.k === 'shell' && !l.ghost);
+  const shells = L.filter((l) => l.k === 'shell');
   if (icon.tint) return new Set(shells.filter((l) => icon.tint.includes(l.n)));
-  return new Set(shells.filter((l) => (l.role ?? 'primary') !== 'detail'));
+  return new Set(shells.filter((l) => !l.ghost && (l.role ?? 'primary') !== 'detail'));
 }
 /**
  * The parts drawn in the light tone in line-duo: icon.light names them; or else the inner parts
  * (details, and parts sitting on a closed shape: a lens, a keyhole, the check in a circle); or,
- * when there are none, the secondary parts (a handle, a clapper, the waves of a speaker).
+ * when there are none, the secondary parts (a handle, a clapper, the waves of a speaker). A part
+ * hidden at rest (ghost) is light only when icon.light names it.
  */
 export function lightOf(icon, L) {
   const live = L.filter((l) => !l.ghost), byName = Object.fromEntries(L.filter((l) => l.n).map((l) => [l.n, l]));
-  if (icon.light) return new Set(live.filter((l) => icon.light.includes(l.n)));
+  if (icon.light) return new Set(L.filter((l) => icon.light.includes(l.n)));
   const inner = live.filter((l) => l.role === 'detail' || (l.on && byName[l.on]?.k === 'shell'));
   if (inner.length && inner.length < live.length) return new Set(inner);
   const sec = live.filter((l) => l.role === 'secondary');

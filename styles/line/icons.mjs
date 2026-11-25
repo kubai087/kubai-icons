@@ -12,6 +12,11 @@ import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, 
 import { CATALOG } from './catalog.mjs';
 import { SETS } from './set/index.mjs';
 
+const DEG = Math.PI / 180;
+// The globe's meridians face the viewer at this longitude east and west: the width 4.6 they
+// have on a sphere of radius 9.
+const GLOBE_LON = +(Math.asin(4.6 / 9) / DEG).toFixed(2);
+
 // A slash variant: hover draws the slash while the object reacts; switching back on waits for
 // the slash to be erased, then plays the object's own motion.
 const off = (v, back, react) => ({ ...v, fx: [{ t: 'draw', on: ['slash'] }, react], enter: react, swap: { icon: back, play: 700 } });
@@ -784,21 +789,33 @@ const CORE = {
   },
   globe: {
     label: '地球', key: 'circle',
-    plan: '主体：球面圆；辅助：经线（椭圆，说明是球）；细节：赤道',
+    plan: '主体：球面圆；辅助：经线（东西两条半椭圆，说明是球）；细节：赤道',
     weights: { [P]: 0.44, [S]: 0.38, [D]: 0.18 },
+    // in line-duo the meridian that comes round from behind is light like the other two
+    light: ['west', 'east', 'equator', 'back'],
     draw(g, ctx) {
-      // In the fill the meridian and the equator are holes drawn on the sphere: both stop one
+      // In the fill the meridians and the equator are holes drawn on the sphere: all stop one
       // stroke short of its edge (a meridian run out through the poles would cross the edge at a
-      // shallow angle and leave thin wedges). The meridian narrows with it, a little less than in
-      // proportion, so the ink inside it keeps round ends.
-      const { h, s } = g, R = ctx?.variant === 'fill' ? 10 - 1.5 * s : 10 - h, W = n(4.6 * Math.sqrt(R / (10 - h)));
+      // shallow angle and leave thin wedges). The meridians narrow with it, a little less than in
+      // proportion, so the ink inside them keeps round ends.
+      // The two meridians are half ellipses at longitudes ∓GLOBE_LON, their width W; a third waits
+      // behind the western rim (hidden at rest) and comes round when the globe turns (§5).
+      const { h, s } = g, R = ctx?.variant === 'fill' ? 10 - 1.5 * s : 10 - h, W = 4.6 * Math.sqrt(R / (10 - h));
+      const half = (lon) => {
+        const w = n(Math.abs(W * Math.sin(lon * DEG) / Math.sin(GLOBE_LON * DEG)));
+        return `M12 ${n(12 - R)}A${w} ${n(R)} 0 0 ${lon > 0 ? 1 : 0} 12 ${n(12 + R)}`;
+      };
       return [
         shell(g.ring(12, 12, 10), { n: 'ring', role: P }),
-        line(`M12 ${n(12 - R)}A${W} ${n(R)} 0 0 1 12 ${n(12 + R)}A${W} ${n(R)} 0 0 1 12 ${n(12 - R)}Z`, { n: 'meridian', role: S, on: 'ring' }),
-        line(g.seg(2 + h, 12, 22 - h, 12), { n: 'equator', role: D, on: 'ring', ends: 'in' })
+        line(half(-GLOBE_LON), { n: 'west', role: S, on: 'ring', part: 'meridian' }),
+        line(half(GLOBE_LON), { n: 'east', role: S, on: 'ring', part: 'meridian' }),
+        line(g.seg(2 + h, 12, 22 - h, 12), { n: 'equator', role: D, on: 'ring', ends: 'in' }),
+        line(half(-3 * GLOBE_LON), { n: 'back', role: S, on: 'ring', part: 'meridian', ghost: true })
       ];
     },
-    fx: { t: 'flip', on: ['meridian'], turns: 1, o: [12, 12] }
+    // The globe turns by the gap between two meridians, so each cycle ends as it began. A meridian
+    // fades as it reaches the rim; in the fill sooner, while its hole still keeps a rim.
+    fx: { t: 'turn', on: ['west', 'east', 'back'], at: [-GLOBE_LON, GLOBE_LON, -3 * GLOBE_LON], step: 2 * GLOBE_LON, ms: 900, o: [12, 12], edge: [66, 90], fill: { edge: [38, 54] } }
   },
   'chart-bar': {
     anchor: 'base',

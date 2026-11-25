@@ -41,15 +41,23 @@ export default {
     ends: 'in',
     plan: '主体：左右两页（一个闭合形，书脊处上下各凹 3）；细节：书脊线',
     weights: { [P]: 0.82, [D]: 0.18 },
-    draw(g) {
+    // in solid-tint a turning leaf is filled like the pages it lies on
+    tint: ['book', 'leaf1', 'leaf2'],
+    draw(g, ctx) {
       const b = openBook(g);
+      // Two leaves lie on the right page, hidden at rest; turning, each hides what is behind it:
+      // in lines just the area it covers, in the fill a clear band round it as well, so the solid
+      // page stands apart from the solid book.
+      const hide = ctx?.variant === 'fill' ? { occ: true } : { cutD: b.page + 'Z' };
+      const leaf = (k) => shell(b.page + 'Z', { n: `leaf${k}`, role: D, ghost: true, ...hide });
       return [
         shell(b.book, { n: 'book', role: P }),
-        line(b.spine, { n: 'spine', role: D, on: 'book' })
+        line(b.spine, { n: 'spine', role: D, on: 'book' }),
+        leaf(1), leaf(2)
       ];
     },
-    // 翻开：书页轻轻弹起再落下（不做翻页的三维压扁，GUIDE.md §5）
-    fx: { t: 'keys', on: ['book', 'spine'], o: [12, 20], sy: [0.9, 1.03], ms: 300 },
+    // 翻页：书页绕书脊翻到左边，宽度随角度收窄再展开，线宽不变（GUIDE.md §5）
+    fx: { t: 'leaf', on: ['leaf1', 'leaf2'], o: [12, 12], ms: 560, stagger: 220 },
     swap: 'book'
   },
   'book-marked': {

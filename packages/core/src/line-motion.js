@@ -1,7 +1,7 @@
 // The line style's motion engine (线性): damped springs after SF Symbols' presets. Each icon
 // names one effect that acts out what it means (bounce, beat, wiggle, shake, rotate, flip,
-// orbit, draw, variable, keys, from) and aims it at some of its layers by their data-l name.
-// Every effect returns to rest. The same engine as the kubai-line skill's motion.mjs; a test
+// orbit, draw, variable, keys, from, and the depth effects turn, leaf and scan) and aims it at
+// some of its layers by their data-l name. Every effect returns to rest. The same engine as the kubai-line skill's motion.mjs; a test
 // keeps the two in step.
 
 const TAU = Math.PI * 2;
@@ -24,7 +24,31 @@ export function settle(t, hz = 2.2, z = 0.55) {
 const easeOut = (u) => 1 - Math.pow(1 - clamp(u), 3);
 const inOut = (u) => { u = clamp(u); return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; };
 
-const REST = { x: 0, y: 0, r: 0, s: 1, sx: 1, sy: 1, a: 1, w: 1 };
+/**
+ * Path data scaled by kx across and ky down about (ox, oy): the shape narrows, mirrors when a
+ * factor is below 0, and its stroke keeps its width because only the coordinates change. Arcs
+ * keep their tilt (0 in this set).
+ */
+export function scalePath(d, kx = 1, ky = 1, ox = 12, oy = 12) {
+  const tok = d.match(/[a-z]|-?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/gi) || [];
+  const ARGS = { m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0 };
+  const X = (v, rel) => f(rel ? v * kx : ox + (v - ox) * kx), Y = (v, rel) => f(rel ? v * ky : oy + (v - oy) * ky);
+  let out = '', cmd = '', i = 0;
+  while (i < tok.length) {
+    if (/[a-z]/i.test(tok[i])) { cmd = tok[i++]; out += cmd; if (!ARGS[cmd.toLowerCase()]) continue; }
+    const c = cmd.toLowerCase(), rel = cmd !== cmd.toUpperCase(), a = tok.slice(i, i + ARGS[c]).map(Number);
+    i += ARGS[c];
+    let v;
+    if (c === 'h') v = [X(a[0], rel)];
+    else if (c === 'v') v = [Y(a[0], rel)];
+    else if (c === 'a') v = [f(Math.abs(a[0] * kx)), f(Math.abs(a[1] * ky)), a[2], a[3], kx * ky < 0 ? 1 - a[4] : a[4], X(a[5], rel), Y(a[6], rel)];
+    else v = a.map((q, j) => (j % 2 ? Y(q, rel) : X(q, rel)));
+    out += (/[a-z]$/i.test(out) ? '' : ' ') + v.join(' ');
+  }
+  return out;
+}
+
+const REST = { x: 0, y: 0, r: 0, s: 1, sx: 1, sy: 1, gx: 1, gy: 1, a: 1, w: 1 };
 const SEG = 150; // ms per keyframe step
 const HOME = 0.42; // s for the spring home
 
@@ -109,7 +133,7 @@ export const EFFECTS = {
     len: (p, n) => 760 + (p.delay ?? 0) + (p.by ? (n - 1) * (p.stagger ?? 80) : 0),
     pose(p, t, i) {
       const u = (t - (p.delay ?? 0) - (p.by ? i * (p.stagger ?? 80) : 0)) / 1000, k = settle(Math.max(u, 0), p.hz ?? 2.2, p.z ?? 0.55), out = {};
-      for (const key of ['x', 'y', 'r', 's', 'sx', 'sy']) if (p[key] != null) out[key] = REST[key] + (p[key] - REST[key]) * k;
+      for (const key of ['x', 'y', 'r', 's', 'sx', 'sy', 'gx', 'gy']) if (p[key] != null) out[key] = REST[key] + (p[key] - REST[key]) * k;
       if (p.a != null) out.a = p.a + (1 - p.a) * easeOut(u / 0.18);
       return out;
     }
@@ -117,11 +141,11 @@ export const EFFECTS = {
   keys: {
     len(p) {
       if (p.ms) return p.ms + HOME * 1000;
-      const k = Math.max(1, ...['x', 'y', 'r', 's', 'sx', 'sy', 'a'].map((key) => (Array.isArray(p[key]) ? p[key].length : 0)));
+      const k = Math.max(1, ...['x', 'y', 'r', 's', 'sx', 'sy', 'gx', 'gy', 'a'].map((key) => (Array.isArray(p[key]) ? p[key].length : 0)));
       return 190 + (k - 1) * SEG + HOME * 1000 + (p.by ? 70 : 0);
     },
     pose(p, t, i) {
-      const keys = ['x', 'y', 'r', 's', 'sx', 'sy', 'a'].filter((k) => p[k] != null);
+      const keys = ['x', 'y', 'r', 's', 'sx', 'sy', 'gx', 'gy', 'a'].filter((k) => p[k] != null);
       const k = Math.max(1, ...keys.map((key) => [].concat(p[key]).length));
       t -= p.by ? i * (p.stagger ?? 70) : 0;
       const out = {}, go = p.ms ? p.ms : 190 + (k - 1) * SEG;
@@ -137,6 +161,47 @@ export const EFFECTS = {
       }
       return out;
     }
+  },
+  // Meridians round a sphere seen from the front. Each group is one meridian drawn as a half
+  // ellipse at its longitude `at` (degrees, 0 facing the viewer); a cycle turns the sphere by
+  // `step`, so with meridians `step` apart the last frame looks like the first. A meridian's
+  // width follows sin(longitude); it fades out between edge[0] and edge[1] as it goes round the rim.
+  turn: {
+    loop: true,
+    len: (p) => p.ms ?? 1100,
+    pose(p, t, i) {
+      const L = p.ms ?? 1100, rad = Math.PI / 180, at = p.at[i], q = at + p.step * ((t % L) / L);
+      const [e0, e1] = p.edge ?? [70, 90], off = Math.abs(((q + 540) % 360) - 180);
+      return { gx: Math.sin(q * rad) / Math.sin(at * rad), a: 1 - clamp((off - e0) / (e1 - e0)) };
+    }
+  },
+  // Pages turning over the spine at o: each group is a page drawn lying on the right, hidden at
+  // rest. Its width is the cosine of the angle it has turned, so it narrows to a line as it
+  // stands up and opens out on the left; groups follow one another by stagger.
+  leaf: {
+    len: (p, n) => (p.ms ?? 560) + (n - 1) * (p.stagger ?? 200),
+    pose(p, t, i) {
+      const u = (t - i * (p.stagger ?? 200)) / (p.ms ?? 560);
+      if (u <= 0 || u >= 1) return { a: 0 };
+      return { [p.axis === 'y' ? 'gy' : 'gx']: Math.cos(Math.PI * inOut(u)), a: 1 };
+    }
+  },
+  // A bar sweeps in front of a picture: the first group is the bar, drawn upright at x = 12 and
+  // hidden at rest; the others are the picture. The bar comes in at x1 and runs to x0, wiping the
+  // picture away behind it, and fades; the empty frame waits; the bar comes back at x0 and runs
+  // to x1 drawing the picture again. The picture shows only left of the bar. With axis 'y' the
+  // bar lies across at y = 12 and runs from y1 up to y0 and back down; the picture shows above it.
+  scan: {
+    len: (p) => 2 * (p.ms ?? 460) + (p.hold ?? 200) + 120,
+    pose(p, t, i) {
+      const S = p.ms ?? 460, H = p.hold ?? 200, F = 90, Y = p.axis === 'y';
+      const p0 = (Y ? p.y0 : p.x0) ?? 3, p1 = (Y ? p.y1 : p.x1) ?? 21;
+      const back = t >= S + H, u = back ? (t - S - H) / S : t / S;
+      const pos = t < S ? p1 + (p0 - p1) * inOut(u) : back ? p0 + (p1 - p0) * inOut(u) : p0;
+      if (i > 0) return Y ? { clipY: pos } : { clip: pos };
+      const a = back ? clamp((t - S - H) / F) * (1 - clamp((t - 2 * S - H) / 120)) : clamp(t / 60) * (1 - clamp((t - S + F) / F));
+      return { [Y ? 'y' : 'x']: pos - 12, a };
+    }
   }
 };
 
@@ -144,6 +209,9 @@ const mergePose = (a, b) => ({
   x: (a.x ?? 0) + (b.x ?? 0), y: (a.y ?? 0) + (b.y ?? 0), r: (a.r ?? 0) + (b.r ?? 0),
   s: (a.s ?? 1) * (b.s ?? 1), sx: (a.sx ?? 1) * (b.sx ?? 1), sy: (a.sy ?? 1) * (b.sy ?? 1),
   a: a.a == null ? b.a : b.a == null ? a.a : a.a * b.a, w: a.w == null ? b.w : b.w == null ? a.w : Math.min(a.w, b.w),
+  gx: a.gx == null ? b.gx : b.gx == null ? a.gx : a.gx * b.gx, gy: a.gy == null ? b.gy : b.gy == null ? a.gy : a.gy * b.gy,
+  clip: a.clip == null ? b.clip : b.clip == null ? a.clip : Math.min(a.clip, b.clip),
+  clipY: a.clipY == null ? b.clipY : b.clipY == null ? a.clipY : Math.min(a.clipY, b.clipY),
   o: b.o ?? a.o
 });
 
@@ -158,7 +226,7 @@ export function transform(p) {
 function groups(spec) {
   if (spec.on === 'all' || !spec.on) return [['all']];
   const list = spec.on.map((g) => [].concat(g));
-  return spec.by || spec.t === 'draw' || spec.t === 'variable' ? list : [list.flat()];
+  return spec.by || ['draw', 'variable', 'turn', 'leaf', 'scan'].includes(spec.t) ? list : [list.flat()];
 }
 
 /** Hover motion for one <svg> rendered with motion: true. */
@@ -176,7 +244,9 @@ export function attach(svg, fx) {
     if (!el || !el.getBBox) return [12, 12];
     const b = el.getBBox(); return [b.x + b.width / 2, b.y + b.height / 2];
   };
-  const parts = list.map((spec) => {
+  const parts = list.map((given) => {
+    // spec.fill: settings that differ in the fill variant (a knock-out must keep its rim)
+    const spec = fill && given.fill ? { ...given, ...given.fill } : given;
     const gs = groups(spec), E = EFFECTS[spec.t];
     if (!E) throw new Error(`Unknown effect ${spec.t}`);
     return { spec, gs, E, len: E.len(spec, gs.length), o: spec.oBadge ? centre(gs[0][0]) : spec.o };
@@ -186,6 +256,26 @@ export function attach(svg, fx) {
   const ghost = Object.fromEntries(names.map((n) => [n, nodes[n].some((e) => e.getAttribute('opacity') === '0')]));
   const loops = parts.some((p) => p.E.loop);
   const span = Math.max(...parts.map((p) => p.len));
+  // Reshaped paths keep their rest data here; one clip, made on first use, serves every part.
+  const rest = new Map();
+  const pathsOf = (el) => (el.tagName === 'path' ? [el] : [...el.querySelectorAll('path')]);
+  let clipRect = null;
+  const clipTo = (x, y) => {
+    if (!clipRect) {
+      const NS = 'http://www.w3.org/2000/svg', doc = svg.ownerDocument, cp = doc.createElementNS(NS, 'clipPath');
+      cp.setAttribute('id', `kl-clip-${Math.random().toString(36).slice(2, 10)}`);
+      cp.setAttribute('clipPathUnits', 'userSpaceOnUse');
+      clipRect = doc.createElementNS(NS, 'rect');
+      for (const [k, v] of [['x', -6], ['y', -6]]) clipRect.setAttribute(k, v);
+      cp.appendChild(clipRect);
+      let defs = svg.querySelector('defs');
+      if (!defs) { defs = doc.createElementNS(NS, 'defs'); svg.insertBefore(defs, svg.firstChild); }
+      defs.appendChild(cp);
+    }
+    clipRect.setAttribute('width', x == null ? 36 : f(Math.max(0, x + 6)));
+    clipRect.setAttribute('height', y == null ? 36 : f(Math.max(0, y + 6)));
+    return clipRect.parentNode.getAttribute('id');
+  };
 
   function paint(t, done) {
     const pose = {};
@@ -206,6 +296,18 @@ export function attach(svg, fx) {
           el.setAttribute('stroke-dasharray', `${f(clamp(q.w))} 2`);
           el.setAttribute('stroke-opacity', q.w < 0.01 ? 0 : 1);
         } else { el.removeAttribute('stroke-dasharray'); el.removeAttribute('stroke-opacity'); }
+        const gx = q.gx ?? 1, gy = q.gy ?? 1, bent = Math.abs(gx - 1) > 1e-6 || Math.abs(gy - 1) > 1e-6;
+        if (bent || rest.size) {
+          for (const p of pathsOf(el)) {
+            if (!bent && !rest.has(p)) continue;
+            if (!rest.has(p)) rest.set(p, p.getAttribute('d'));
+            const [ox, oy] = q.o || [12, 12];
+            const d = bent ? scalePath(rest.get(p), gx, gy, ox, oy) : rest.get(p);
+            if (p.getAttribute('d') !== d) p.setAttribute('d', d);
+          }
+        }
+        if (q.clip != null || q.clipY != null) el.setAttribute('clip-path', `url(#${clipTo(q.clip, q.clipY)})`);
+        else el.removeAttribute('clip-path');
       }
     }
   }
@@ -240,3 +342,4 @@ export function attach(svg, fx) {
     get loops() { return loops; }
   };
 }
+

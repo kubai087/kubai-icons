@@ -41,8 +41,8 @@ export default {
     plan: '主体：屏幕；辅助：底座（比屏幕宽，铺满横向参考线）',
     weights: { [P]: 0.7, [S]: 0.3 },
     draw(g) { return [shell(g.box(4, 4, 16, 12, SCR), { n: 'screen', role: P }), line(g.span(2, 19, 22, 19), { n: 'base', role: S })]; },
-    // 合上屏幕再打开：屏幕绕底边的铰链折下
-    fx: { t: 'keys', on: ['screen'], o: [12, 16], sy: [0.12], ms: 340 }
+    // 合上屏幕再打开：屏幕绕底边的铰链折下，高度按转角收窄，线宽不变（GUIDE.md §5.1）
+    fx: { t: 'keys', on: ['screen'], o: [12, 16], gy: [0.12], ms: 340 }
   },
   desktop: {
     anchor: 'base',
@@ -496,11 +496,13 @@ export default {
       return [
         line(corners, { n: 'frame', role: P }),
         solid(g.area(7, 7, 4, 4, 1) + g.area(13, 7, 4, 4, 1) + g.area(7, 13, 4, 4, 1) + g.area(14, 14, 3, 3, 0.75), { n: 'code', role: D }),
-        line(g.span(5, 12, 19, 12), { n: 'beam', role: D, ghost: true })
+        // the scan line: wider than the frame and parted from it by a clear band, so it reads as
+        // passing in front of the code (GUIDE.md §5.1); hidden at rest
+        line(g.span(2, 12, 22, 12), { n: 'beam', role: D, gap: true, ghost: true })
       ];
     },
     area: (g) => [{ n: 'frame', d: g.rr(3 + g.h, 3 + g.h, 18 - g.s, 18 - g.s, 4.5 - g.h) }],
-    // 扫码: a scan line sweeps down the code and fades
-    fx: { t: 'keys', on: ['beam'], ghost: true, y: [-6, 6], a: [1, 0], ms: 700 }
+    // 扫码: the scan line runs up the code, wiping it, and back down, reading it in again
+    fx: { t: 'scan', axis: 'y', on: ['beam', ['code']], y0: 5, y1: 19 }
   }
 };
