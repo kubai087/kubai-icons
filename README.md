@@ -238,7 +238,7 @@ The self-check measures what the rules can measure: whether each icon fills its 
 
 <br />
 
-Everything for this style is in [`styles/line/`](styles/line): the rules, the geometry kit, 1,272 examples with their hover motion, the four variants, a self-check and an export script. Names are in English. [`CATALOG.md`](styles/line/CATALOG.md) lists the 500 icons with the Kubai Icons and SF Symbols names they match, and [`CHANGELOG.md`](styles/line/CHANGELOG.md) records each change and the problem behind it.
+Everything for this style is in [`styles/line/`](styles/line): the rules, the geometry kit, 1,285 examples with their hover motion, the four variants, a self-check and an export script. Names are in English. [`CATALOG.md`](styles/line/CATALOG.md) lists the icons with the Kubai Icons and SF Symbols names they match, and [`CHANGELOG.md`](styles/line/CHANGELOG.md) records each change and the problem behind it.
 
 It is also a skill of its own, `kubai-line`. To install only this style, download `kubai-line-v*.zip` from the [skill release](https://github.com/kubai087/kubai-icons/releases/tag/v2.1.0) and unzip it into your skills folder:
 
