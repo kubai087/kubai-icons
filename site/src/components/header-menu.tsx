@@ -46,8 +46,6 @@ function HeaderMenuPanel({ className }: { className?: string }) {
         <XIcon className="hidden size-[18px] text-muted-foreground group-data-popup-open:block" />
       </DropdownMenuTrigger>
       <MenuPrimitive.Portal>
-        {/* Dims the page under the panel; the header stays as it is, so its button can close the menu. */}
-        <MenuPrimitive.Backdrop className="fixed inset-x-0 top-(--header) bottom-0 z-40 bg-black/10 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:bg-black/40" />
         <MenuPrimitive.Positioner anchor={header} side="bottom" align="end" sideOffset={6} collisionPadding={0} className="isolate z-50 outline-none">
           <MenuPrimitive.Popup
             data-slot="dropdown-menu-content"
