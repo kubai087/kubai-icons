@@ -228,7 +228,9 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
         </div>
       </div>
     
-      <div className="flex min-w-0 flex-col gap-6 p-panel">
+      {/* A container, so the actions fit this column's width rather than the window's: one row
+          from @md, and two to a row below 290px, where SVG, PNG and the two icons no longer fit. */}
+      <div className="@container flex min-w-0 flex-col gap-6 p-panel">
         {/* Every line here keeps one line's height, so switching versions never moves
             the controls below. */}
         <header key={meta.name} className="relative">
@@ -261,8 +263,8 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           </div>
         </header>
 
-        <div className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 max-[359px]:grid-cols-2 max-[359px]:[&>*]:w-full sm:grid-cols-[1fr_auto_auto_auto_auto]">
-          <Button size="xl" className="col-span-4 has-data-[icon=inline-start]:ps-5 max-[359px]:col-span-2 sm:col-span-1" onClick={actions.copySvg}>
+        <div className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 @max-[290px]:grid-cols-2 @max-[290px]:[&>*]:w-full @md:grid-cols-[1fr_auto_auto_auto_auto]">
+          <Button size="xl" className="col-span-4 has-data-[icon=inline-start]:ps-5 @max-[290px]:col-span-2 @md:col-span-1" onClick={actions.copySvg}>
             <DoneIcon done={done === "copy"} icon={CopyIcon} />
             <span key={done === "copy" ? "done" : "idle"} >{done === "copy" ? tr("Copied", "已复制") : tr("Copy SVG", "复制 SVG")}</span>
           </Button>

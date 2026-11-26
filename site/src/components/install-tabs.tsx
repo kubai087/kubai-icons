@@ -16,7 +16,7 @@ const PKGS = [
 export function InstallTabs() {
   const [cur, setCur] = useState(PKGS[0]);
   return (
-    <div className={cn("max-w-md overflow-hidden", card)}>
+    <div className={cn("overflow-hidden lg:max-w-md", card)}>
       <div className="relative isolate flex gap-1 border-b px-1.5 pt-2">
         {PKGS.map((p) => (
           <button

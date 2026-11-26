@@ -126,7 +126,7 @@ export function HeroWall() {
   const tr = useTr();
 
   return (
-    <div className="flex w-full max-w-xl flex-col gap-3 lg:max-w-none">
+    <div className="flex w-full flex-col gap-3">
       <div className="rise-in flex items-center justify-end gap-2 [--i:1]">
         <WallPause />
         <Segmented
