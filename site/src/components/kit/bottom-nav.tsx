@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, type ReactNode } from "react";
-import { RiArrowUpSLine } from "@remixicon/react";
+import { ChevronUpIcon } from "@/components/kit/ui-icons";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,7 @@ export function BottomNav({ label, title, progress, trailing, raised = false, cl
           <SheetTrigger className="tap focus-inset flex h-9 min-w-0 items-center gap-2 rounded-pill ps-3 pe-2.5 text-control font-medium transition-colors hover:bg-muted aria-expanded:bg-muted">
             {progress !== undefined && <ProgressRing value={progress} />}
             <span className="min-w-0 truncate">{label}</span>
-            <RiArrowUpSLine aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+            <ChevronUpIcon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
           </SheetTrigger>
           <SheetContent side="bottom" className="max-h-[80dvh] gap-0 rounded-t-panel pb-[env(safe-area-inset-bottom)]">
             <SheetHeader className="px-panel pt-5 pb-3">
