@@ -70,7 +70,7 @@ export function LanguageSwitch({ className, iconOnly }: { className?: string; ic
       <DropdownMenuTrigger aria-label={label} title={label} className={className}>
         {iconOnly ? <LanguagesIcon className="size-4" /> : current}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={8} className="max-h-[min(26rem,70svh)] w-44 overflow-y-auto p-1.5 max-lg:grid max-lg:max-h-none max-lg:w-72 max-lg:grid-cols-2">
+      <DropdownMenuContent align="end" sideOffset={8} className="max-h-[min(26rem,70svh)] w-44 overflow-y-auto p-1.5">
         <LanguageItems links={links} />
       </DropdownMenuContent>
     </DropdownMenu>
