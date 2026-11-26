@@ -31,7 +31,7 @@ export function AgentGuide() {
       <DialogContent className="max-h-[calc(100dvh-2rem)] gap-4 overflow-y-auto p-panel sm:max-w-xl">
         <DialogHeader>
           <DialogTitle className="text-subheading font-semibold">{tr("Ask your agent", "交给 Agent")}</DialogTitle>
-          <DialogDescription>{tr("Copy this and send it to your agent.", "复制下面的提示词，发给你的 Agent")}</DialogDescription>
+          <DialogDescription>{tr("Copy this and send it to your agent.", "复制下面的提示词，发给你的 Agent。")}</DialogDescription>
         </DialogHeader>
         <Segmented
           value={use}
@@ -45,7 +45,7 @@ export function AgentGuide() {
         {/* Both prompts hold their space, so the dialog keeps its height between them. */}
         <div className="grid *:[grid-area:1/1]">
           {(Object.keys(prompts) as Use[]).map((key) => (
-            <pre key={key} className={cn(card, "px-4 py-3.5 font-mono text-code whitespace-pre-wrap [overflow-wrap:anywhere]", key !== use && "invisible")}>
+            <pre key={key} className={cn(card, "px-4 py-3.5 font-mono text-code whitespace-pre-wrap [overflow-wrap:anywhere] [unicode-bidi:plaintext]", key !== use && "invisible")}>
               {prompts[key]}
             </pre>
           ))}

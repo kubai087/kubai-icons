@@ -32,7 +32,7 @@ export default function Page() {
       <h2>深色模式</h2>
       <p>和文字一样，给颜色类配一个 <code>dark:</code> 变体：</p>
       <Code lang="tsx" code={`<Folder className="text-blue-600 dark:text-blue-400" />`} />
-      <p>如果希望切换主题时颜色平滑过渡，加上 <code>transition-colors</code>。<code>color</code> 的过渡会让图标里的所有渐变一起渐变。</p>
+      <p>如果希望切换主题时颜色平滑过渡，加上 <code>transition-colors</code>。<code>color</code> 的过渡会让图标里的所有渐变平滑过渡到新颜色。</p>
       <Code lang="tsx" code={`<Folder className="text-blue-600 transition-colors dark:text-blue-400" />`} />
       <p>要让整个主题使用 soft 样式，请参阅<Link href="/zh/docs/guides/colors-dark-mode/">颜色和深色模式</Link>。</p>
       <h2>角标颜色和单独的色调</h2>

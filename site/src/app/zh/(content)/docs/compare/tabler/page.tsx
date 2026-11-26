@@ -10,8 +10,8 @@ export const metadata = learnMeta(HREF, "zh");
 const FACTS: [string, string, string][] = [
   ["风格", "三种风格共用名称：线性、双色面性和分层彩色", "线性图标，部分图标另有填充版本"],
   ["网格与描边", "线性：24 网格，圆角描边，粗细可取大于 0 的任意值（默认 2）。双色：16 网格，实心", "24 网格，圆角描边，默认粗细 2，可调整"],
-  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，书签丝带向下长出", "不内置动效，图标是静态 SVG"],
-  ["图标数量", "线性约 1,270 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "线性图标 5,000 个以上，其中约 1,000 个另有填充版本"],
+  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，书签丝带向下伸长", "不内置动效，图标是静态 SVG"],
+  ["图标数量", "线性约 1,280 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "线性图标 5,000 个以上，其中约 1,000 个另有填充版本"],
   ["变体", "线性：outline、line-duo、fill 和 solid-tint，每个图标都有", "线性，以及部分图标单独提供的填充版本"],
   ["颜色", "一种颜色，浅色和填充色由它混合得到", "描边或填充使用一种颜色"],
   ["软件包", "React、Vue、原生 JavaScript、Web Component 和静态 SVG", "React、Vue、Svelte、Solid、Preact、Angular、React Native、图标字体和 SVG 文件"],
@@ -87,7 +87,7 @@ import { Home, Bell, Heart } from "kubai-icons-react/line";
           <tr><td><code>color</code></td><td><code>color</code>，默认 <code>currentColor</code></td></tr>
           <tr><td><code>stroke</code></td><td><code>strokeWidth</code>。两者默认都是 2，没改过粗细的可以不写</td></tr>
           <tr><td><code>Icon…Filled</code></td><td>同一个图标加 <code>variant=&quot;fill&quot;</code></td></tr>
-          <tr><td><code>title</code></td><td><code>title</code>；不设置时图标对读屏软件隐藏</td></tr>
+          <tr><td><code>title</code></td><td><code>title</code>；不设置时图标对屏幕阅读器隐藏</td></tr>
           <tr><td><code>className</code> 等 SVG 属性</td><td>透传到 SVG</td></tr>
         </tbody>
       </table>

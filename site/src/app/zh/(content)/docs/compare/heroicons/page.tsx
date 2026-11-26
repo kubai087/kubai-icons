@@ -8,11 +8,11 @@ const HREF = "/docs/compare/heroicons/";
 export const metadata = learnMeta(HREF, "zh");
 
 const FACTS: [string, string, string][] = [
-  ["风格", "分层的彩色图标，带渐变、柔和阴影和高光", "1.5px 描边的线性图标，以及实心图标"],
-  ["悬停动效", "每个图标都内置动效：文件夹会打开，铃铛会摇动", "不内置动效，图标是静态 SVG"],
-  ["图标数量", "900 多种物件，加上带角标和带斜线的版本共近 3,000 个", "300 个以上"],
-  ["样式", "color 和 soft 两种样式，另有带角标（加号、对勾、叉号等）和带斜线的“关闭”版本", "24px 线性、24px 实心、20px 实心和 16px 实心"],
-  ["颜色", "一个主色，所有色调都由它派生", "一种颜色，通过 currentColor 设置"],
+  ["风格", "三种风格共用名称：线性、双色面性和分层彩色", "1.5px 描边的线性图标，以及实心图标"],
+  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，文件夹会打开", "不内置动效，图标是静态 SVG"],
+  ["图标数量", "线性约 1,280 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "300 个以上"],
+  ["变体", "线性：outline、line-duo、fill 和 solid-tint。双色：16 网格实心。分层：color 和 soft", "24px 线性、24px 实心、20px 实心和 16px 实心"],
+  ["颜色", "一个主色，浅色、填充色和渐变都由它派生", "一种颜色，通过 currentColor 设置"],
   ["尺寸", "通过 size prop 设置", "通过 SVG 上的 CSS 类设置，例如 size-6"],
   ["软件包", "React、Vue、原生 JavaScript、Web Component 和静态 SVG", "React 和 Vue，也可以在官网复制 SVG 和 JSX"],
   ["许可证", "MIT", "MIT"],
@@ -36,7 +36,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Heroicons 是 Tailwind CSS 团队制作的一套精简图标，包含线性和实心两种形式。Kubai Icons 是一套分层的彩色图标，每个图标都有各自的悬停动效。两者都使用 MIT 许可证，都提供 React 和 Vue 软件包。">
+      <Title lead="Heroicons 是 Tailwind CSS 团队制作的一套精简图标，包含线性和实心两种形式。Kubai Icons 提供名称共用的线性、双色面性和分层彩色三种风格，每个图标都有各自的悬停动效。两者都使用 MIT 许可证，都提供 React 和 Vue 软件包。">
         {page.zhTitle}
       </Title>
       <h2>概览</h2>
@@ -65,17 +65,17 @@ export default function Page() {
       <h2>从 Heroicons 迁移</h2>
       <p>安装对应框架的软件包，以 React 为例：</p>
       <Code lang="bash" code="npm install kubai-icons-react" />
-      <p>Heroicons 的每种样式都有自己的导入路径，所有名称都以 <code>Icon</code> 结尾。Kubai Icons 只有一个导入路径，同时也会以 <code>Icon</code> 后缀导出每个图标，所以物件名称相同时，<code>BellIcon</code> 这样的名称可以继续使用：</p>
+      <p>Heroicons 的每种样式都有自己的导入路径，所有名称都以 <code>Icon</code> 结尾。Kubai Icons 在三种风格中同样会以 <code>Icon</code> 后缀导出每个图标——24 网格线性图标用 <code>kubai-icons-react/line</code>，16 网格实心图标用 <code>kubai-icons-react/duotone</code>，分层彩色图标用 <code>kubai-icons-react</code>——所以 <code>BellIcon</code> 这样的名称可以继续使用：</p>
       <Code lang="tsx" code={`// 迁移前
 import { HomeIcon, BellIcon } from "@heroicons/react/24/outline";
 
 <HomeIcon className="size-6 text-gray-500" />
 
-// 迁移后
-import { HomeIcon, BellIcon } from "kubai-icons-react";
+// 迁移后（1.5 粗细的线性风格；去掉 "/line" 则为分层彩色）
+import { HomeIcon, BellIcon } from "kubai-icons-react/line";
 
-<HomeIcon size={24} className="text-gray-500" />`} />
-      <p>Heroicons 通过 CSS 类设置尺寸，Kubai 图标则使用以像素为单位的 <code>size</code> prop，默认为 24。颜色的用法相同：两者都跟随 <code>currentColor</code>，文字颜色类可以直接改变图标颜色。Kubai 没有实心图标组，需要更浅的效果时可以使用 <code>variant=&quot;soft&quot;</code>。详见 <Link href="/zh/docs/react/">React 的 Props</Link>。</p>
+<HomeIcon size={24} strokeWidth={1.5} className="text-gray-500" />`} />
+      <p>Heroicons 通过 CSS 类设置尺寸；Kubai 图标提供以像素为单位的 <code>size</code> prop（默认为 24），同时 <code>size-6</code> 等 CSS 尺寸类也同样有效。颜色的用法相同：两者都跟随 <code>currentColor</code>，文字颜色类可以直接改变图标颜色。24px 实心图标可用线性风格的 <code>variant=&quot;fill&quot;</code>，16px 实心图标可用 <code>kubai-icons-react/duotone</code>。详见<Link href="/zh/docs/guides/line/">线性风格</Link>和 <Link href="/zh/docs/react/">React 的 Props</Link>。</p>
       <h2>名称对照表</h2>
       <p>常用 Heroicons 图标对应的最接近的 Kubai 图标。两列都是 React 的导出名，Vue 软件包使用相同的名称。</p>
       <table>
@@ -91,7 +91,7 @@ import { HomeIcon, BellIcon } from "kubai-icons-react";
         heading="常见问题"
         items={[
           { q: "可以在同一个项目里同时使用 Heroicons 和 Kubai Icons 吗？", a: "可以。两个软件包互不依赖，可以逐个页面替换。两种风格放在一起差别明显，建议不要在同一个工具栏里混用。" },
-          { q: "有实心或线性样式吗？", a: "没有。每个 Kubai 图标都是分层的彩色图形。`variant=\"soft\"` 是更浅的版本，填充更淡，轮廓更深。" },
+          { q: "有实心或线性样式吗？", a: "有。从 `kubai-icons-react/line` 导入可获得 24 网格的线性图标（设 `variant=\"fill\"` 即为实心图形），从 `kubai-icons-react/duotone` 导入可获得 16 网格的双色实心图标。" },
           { q: "Kubai 图标可以配合 Tailwind CSS 使用吗？", a: "可以。图标跟随 `currentColor`，`text-sky-600` 这样的类可以设置图标颜色，`className` 会透传给 SVG。" },
           { q: "一个图标会让打包体积增加多少？", a: "压缩并 gzip 后，第一个 Kubai 图标连同共享运行时约 4 KB，之后每个图标约 0.6 KB。未导入的图标会被移除。" },
         ]}

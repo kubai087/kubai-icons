@@ -6,13 +6,13 @@ export const metadata = pageMeta({ title: "隐私", path: "/zh/docs/analytics/",
 export default function Page() {
   return (
     <Prose>
-      <Title lead={"本页说明 Kubai Icons 的软件包和网站收集哪些数据"}>
+      <Title lead={"本页说明 Kubai Icons 的软件包和网站收集哪些数据。"}>
         隐私
       </Title>
       <div className="my-5 space-y-5">
           <p>本页为中文译文，如有歧义，以英文版为准。</p>
           <h2>软件包</h2>
-          <p>npm 软件包和 CDN 文件不包含任何跟踪或遥测功能。Web Component仅在加载图标文件时发起网络请求，请求地址与组件自身的加载来源相同。</p>
+          <p>npm 软件包和 CDN 文件不包含任何跟踪或遥测功能。Web Component 仅在加载图标文件时发起网络请求，请求地址与组件自身的加载来源相同。</p>
           <h2>网站</h2>
           <p>本网站使用 <a href="https://umami.is/privacy">Umami</a> 统计页面浏览量和下列产品事件，以了解缺少哪些图标以及哪些格式较为常用：</p>
           <ul>

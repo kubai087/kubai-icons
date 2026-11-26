@@ -11,7 +11,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Besides the layered and two-tone icons, the library comes in a line style: rounded strokes on a 24 grid, a stroke width you choose from 0.25 to 3, four variants, and a hover motion that acts out what each icon means. It suits interface icons that sit next to text, at 16 to 32 pixels.">
+      <Title lead="Besides the layered and two-tone icons, the library comes in a line style: rounded strokes on a 24 grid, a stroke width you can set to any value above 0, four variants, and a hover motion that acts out what each icon means. It suits interface icons that sit next to text, at 16 to 32 pixels.">
         {page.title}
       </Title>
       <LineWall />

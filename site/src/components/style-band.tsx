@@ -22,12 +22,11 @@ import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/kit/segmented";
 import { panel, tile } from "@/components/kit/styles";
 import { WallPause } from "@/components/kit/wall-pause";
-import { hasIconPages } from "@/lib/i18n";
 import type { IconStyle } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { STYLE_OPTIONS } from "@/components/browser/prefs";
 import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
-import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
+import { useLocalize, useTr } from "@/lib/use-locale";
 import { LINE_VARIANTS, type LineVariant } from "@/lib/line";
 import { setLineSettings, useLineSettings } from "@/lib/line-settings";
 import { setBandStyle, useBandStyle } from "@/lib/band-style";
@@ -87,7 +86,6 @@ const BandTile = memo(function BandTile({ Icon, style, variant, stroke, offset, 
 export function StyleBand({ className }: { className?: string }) {
   const tr = useTr();
   const loc = useLocalize();
-  const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   // Shared with the feature cards below, which follow it; line draws at the browser's variant and stroke.
   const style = useBandStyle();
@@ -132,14 +130,11 @@ export function StyleBand({ className }: { className?: string }) {
         <div className="flex flex-wrap gap-3">
           <Button size="lg" nativeButton={false} render={<Link href={loc(`/icons/?style=${style === "layered" ? "line" : style}`)} />}>
             {style === "duotone" ? tr("Browse two-tone icons", "浏览双色图标") : tr("Browse line icons", "浏览线性图标")}
-            <ChevronRightIcon data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 motion-reduce:transition-none" />
+            <ChevronRightIcon data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 rtl:group-hover/button:-translate-x-0.5 motion-reduce:transition-none" />
           </Button>
-          {/* The guide is written in English and Simplified Chinese only. */}
-          {hasIconPages(locale) && (
-            <Button size="lg" variant="ghost" nativeButton={false} className="text-muted-foreground max-sm:px-0" render={<Link href={loc(style === "duotone" ? "/docs/guides/duotone/" : "/docs/guides/line/")} />}>
-              {tr("Read the guide", "查看指南")}
-            </Button>
-          )}
+          <Button size="lg" variant="ghost" nativeButton={false} className="text-muted-foreground max-sm:px-0" render={<Link href={loc(style === "duotone" ? "/docs/guides/duotone/" : "/docs/guides/line/")} />}>
+            {tr("Read the guide", "查看指南")}
+          </Button>
         </div>
       </div>
       <div ref={ref} className="grid grid-cols-5 gap-tiles">

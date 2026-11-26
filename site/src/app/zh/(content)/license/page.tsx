@@ -2,12 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { Prose, Title } from "@/components/docs/prose";
 import { REPO } from "@/lib/site";
 
-export const metadata = pageMeta({ title: "许可证", path: "/zh/license/", description: "Kubai Icons 的许可方式：图标和软件包采用 MIT 许可证，网站保留所有权利，智能体 Skill 源码可见。" });
+export const metadata = pageMeta({ title: "许可证", path: "/zh/license/", description: "Kubai Icons 的许可方式：图标和软件包采用 MIT 许可证，网站保留所有权利，Agent Skill 源码可见。" });
 
 export default function Page() {
   return (
     <Prose>
-      <Title lead={"图标和软件包采用 MIT 许可证，网站保留所有权利，Skill 源码可见"}>许可证</Title>
+      <Title lead={"图标和软件包采用 MIT 许可证，网站保留所有权利，Skill 源码可见。"}>许可证</Title>
       <div className="my-5 space-y-5">
           <p>本页为中文译文，如有歧义，以英文版为准。</p>
           <h2>图标和软件包</h2>

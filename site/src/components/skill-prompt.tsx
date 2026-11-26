@@ -15,7 +15,7 @@ export function SkillPrompt({ className }: { className?: string }) {
         <Wand size={28} color="#8B5CF6" trigger="parent" className="shrink-0" />
         <div className="min-w-0">
           <p className="text-body font-medium">{tr("Can’t find the icon you need?", "没找到需要的图标？")}</p>
-          <p className="text-body text-muted-foreground">{tr("The Kubai Icons skill draws new ones for your product in the same style.", "Kubai Icons Skill 可按同一风格为产品绘制新图标")}</p>
+          <p className="text-body text-muted-foreground">{tr("The Kubai Icons skill draws new ones for your product in the same style.", "Kubai Icons Skill 可按同一风格为产品绘制新图标。")}</p>
         </div>
       </div>
       <Link href={loc("/skill/")} className={cn(buttonVariants({ variant: "outline", size: "sm" }))}>{tr("Get the skill", "安装 Skill")}</Link>

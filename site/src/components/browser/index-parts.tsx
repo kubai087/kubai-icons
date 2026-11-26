@@ -51,7 +51,7 @@ export function IndexCard({ href, name, count, zh, onClick, icons }: { href: str
           <span className="min-w-0 text-sm font-semibold">{name}</span>
           <span className="flex shrink-0 items-center text-caption text-muted-foreground tabular-nums transition-colors group-hover:text-foreground">
             {zh ? `${count} 个` : count}
-            <ChevronRightIcon aria-hidden className="-me-1 size-4 opacity-0 transition-[opacity,translate] duration-200 group-hover:translate-x-0.5 group-hover:opacity-100 rtl:rotate-180 motion-reduce:transition-none" />
+            <ChevronRightIcon aria-hidden className="-me-1 size-4 opacity-0 transition-[opacity,translate] duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:opacity-100 rtl:rotate-180 motion-reduce:transition-none" />
           </span>
         </span>
         {/* Phones fit three, so the rest hide there. */}

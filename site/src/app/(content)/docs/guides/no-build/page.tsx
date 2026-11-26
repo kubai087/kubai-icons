@@ -97,9 +97,9 @@ export class ToolbarComponent {
       <Faq
         heading="Questions"
         items={[
-          { q: "Which version does the CDN script load?", a: "A URL with `@0` loads the latest 0.x release, so new icons become available without changing the page. The CDN can take a while to switch to a new release. Pin an exact version, such as `kubai-icons@0.9.0`, to keep a page unchanged." },
+          { q: "Which version does the CDN script load?", a: "A URL with `@0` loads the latest 0.x release, so new icons become available without changing the page. The CDN can take a while to switch to a new release. Pin an exact version, such as `kubai-icons@0.16.0`, to keep a page unchanged." },
           { q: "Does the web component work with React or Vue?", a: "It does, but the `kubai-icons-react` and `kubai-icons-vue` packages are a better fit there: they render on the server and take props." },
-          { q: "How do I find an icon's name?", a: "Search the icon browser at /icons/. The name is shown on each icon's panel and page, in kebab-case, such as `calendar-check`." },
+          { q: "How do I find an icon's name?", a: "Open the icon browser and search by word or meaning. Each icon's panel shows its kebab-case name, such as `calendar-check`." },
           { q: "Is the motion accessible?", a: "Keyboard focus plays the motion as hover does, a tap plays it on touch screens, and `prefers-reduced-motion` skips the animation." },
         ]}
       />

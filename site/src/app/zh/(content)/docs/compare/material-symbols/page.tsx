@@ -11,8 +11,8 @@ const FACTS: [string, string, string][] = [
   ["风格", "三种风格共用名称：线性、双色面性和分层彩色", "三种风格：Outlined、Rounded 和 Sharp"],
   ["网格", "线性：24 网格，圆角描边。双色：16 网格，实心", "默认尺寸下为 24 网格，光学尺寸可在 20 到 48 之间调整"],
   ["调整方式", "线性：粗细可取大于 0 的任意值，有四种变体，都通过 props 设置", "可变字体的轴：填充、字重（100 到 700）、等级和光学尺寸"],
-  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，书签丝带向下长出", "不内置动效；轴数值之间的变化可以用 CSS 过渡实现"],
-  ["图标数量", "线性约 1,270 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "3,000 个以上，每个都有三种风格"],
+  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，书签丝带向下伸长", "不内置动效；轴数值之间的变化可以用 CSS 过渡实现"],
+  ["图标数量", "线性约 1,280 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "3,000 个以上，每个都有三种风格"],
   ["提供方式", "React 和 Vue 组件、原生 JavaScript、Web Component 和静态 SVG", "Google Fonts 提供的可变图标字体和 SVG 文件；各框架的封装由社区软件包提供"],
   ["许可证", "MIT", "Apache 2.0"],
 ];
@@ -91,7 +91,7 @@ import { Bell, Heart } from "kubai-icons-react/line";
           <tr><td>Outlined、Rounded、Sharp</td><td>线性风格是圆角描边，最接近 Rounded</td></tr>
         </tbody>
       </table>
-      <p>需要无障碍名称时传入 <code>title</code>；不传时图标对读屏软件隐藏，和作为装饰的字体图标通常的处理一样。如果通过组件库使用 Material 图标，对应方式相同：MUI 的 <code>fontSize</code> 这类尺寸参数改为以像素为单位的 <code>size</code>，主题色改为 CSS 颜色。在纯 HTML 中用 Web Component 替换 span：<code>&lt;kubai-icon name=&quot;bell&quot; icon-style=&quot;line&quot;&gt;</code>，详见<Link href="/zh/docs/guides/no-build/">无需构建工具</Link>。</p>
+      <p>需要无障碍名称时传入 <code>title</code>；不传时图标对屏幕阅读器隐藏，和作为装饰的字体图标通常的处理一样。如果通过组件库使用 Material 图标，对应方式相同：MUI 的 <code>fontSize</code> 这类尺寸参数改为以像素为单位的 <code>size</code>，主题色改为 CSS 颜色。在纯 HTML 中用 Web Component 替换 span：<code>&lt;kubai-icon name=&quot;bell&quot; icon-style=&quot;line&quot;&gt;</code>，详见<Link href="/zh/docs/guides/no-build/">无需构建工具</Link>。</p>
       <h2>没有直接对应的部分</h2>
       <ul>
         <li><strong>等级和光学尺寸。</strong>Kubai 线性图标只调整描边粗细，按尺寸和背景选择合适的值即可。</li>

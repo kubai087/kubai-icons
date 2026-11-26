@@ -8,11 +8,11 @@ const HREF = "/docs/compare/phosphor/";
 export const metadata = learnMeta(HREF, "zh");
 
 const FACTS: [string, string, string][] = [
-  ["风格", "分层的彩色图标，带渐变、柔和阴影和高光", "扁平图标，有六种字重"],
-  ["悬停动效", "每个图标都内置动效：文件夹会打开，铃铛会摇动", "不内置动效，图标是静态 SVG"],
-  ["图标数量", "900 多种物件，加上带角标和带斜线的版本共近 3,000 个", "1,500 个以上，每个都有全部字重"],
-  ["样式", "color 和 soft 两种样式，另有带角标（加号、对勾、叉号等）和带斜线的“关闭”版本", "thin、light、regular、bold、fill 和 duotone"],
-  ["颜色", "一个主色，所有色调都由它派生", "一种颜色；duotone 会加一层同色的浅色填充"],
+  ["风格", "三种风格共用名称：线性、双色面性和分层彩色", "扁平图标，有六种字重"],
+  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，文件夹会打开", "不内置动效，图标是静态 SVG"],
+  ["图标数量", "线性约 1,280 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "1,500 个以上，每个都有全部字重"],
+  ["变体", "线性：粗细可调，并提供 outline、line-duo、fill 和 solid-tint。分层：color 和 soft", "thin、light、regular、bold、fill 和 duotone"],
+  ["颜色", "一个主色，浅色、填充色和渐变都由它派生", "一种颜色；duotone 会加一层同色的浅色填充"],
   ["软件包", "React、Vue、原生 JavaScript、Web Component 和静态 SVG", "React、Vue、用于网页的图标字体、SVG 文件，以及 Flutter、SwiftUI 等平台的库"],
   ["许可证", "MIT", "MIT"],
 ];
@@ -35,7 +35,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Phosphor 是一套规模较大、使用灵活的图标库，每个图标都有六种字重。Kubai Icons 是一套分层的彩色图标，每个图标都有各自的悬停动效。两者都使用 MIT 许可证，都提供 React 和 Vue 软件包。">
+      <Title lead="Phosphor 是一套规模较大、使用灵活的图标库，每个图标都有六种字重。Kubai Icons 提供名称共用的三种风格——粗细可调且包含四种变体的线性图标、双色面性图标和分层彩色图标——每个图标都有各自的悬停动效。两者都使用 MIT 许可证，都提供 React 和 Vue 软件包。">
         {page.zhTitle}
       </Title>
       <h2>概览</h2>
@@ -70,11 +70,11 @@ import { HouseIcon, BellIcon } from "@phosphor-icons/react";
 
 <HouseIcon size={24} weight="duotone" />
 
-// 迁移后
-import { HomeIcon, BellIcon } from "kubai-icons-react";
+// 迁移后（线性风格；去掉 "/line" 为分层彩色，改用 "/duotone" 为双色实心）
+import { HomeIcon, BellIcon } from "kubai-icons-react/line";
 
-<HomeIcon size={24} />`} />
-      <p><code>size</code> 和 <code>color</code> 的用法相同。Kubai 没有字重，所以去掉 <code>weight</code>，需要更浅的效果时改用 <code>variant=&quot;soft&quot;</code>。Phosphor 的 <code>mirrored</code> 在 Kubai 中没有对应的 prop，需要时可以用 CSS 翻转图标。Phosphor 用 <code>IconContext</code> 设置的默认值，在 Kubai 中通过继承实现：<code>color</code> 和样式会跟随最近一个设置了它们的父元素。详见<Link href="/zh/docs/customize/">自定义</Link>。</p>
+<HomeIcon size={24} variant="solid-tint" />`} />
+      <p><code>size</code> 和 <code>color</code> 的用法相同。在线性风格（<code>kubai-icons-react/line</code>）中，Phosphor 从细到粗的 <code>weight</code> 可改用 <code>strokeWidth</code>（可取大于 0 的任意值，默认 2），<code>weight=&quot;fill&quot;</code> 改用 <code>variant=&quot;fill&quot;</code>，<code>weight=&quot;duotone&quot;</code> 改用 <code>variant=&quot;solid-tint&quot;</code> 或 <code>&quot;line-duo&quot;</code>。Phosphor 的 <code>mirrored</code> 在 Kubai 中没有对应的 prop，需要时可以用 CSS 翻转图标。Phosphor 用 <code>IconContext</code> 设置的默认值，在 Kubai 中通过继承实现：<code>color</code> 和样式会跟随最近一个设置了它们的父元素。详见<Link href="/zh/docs/guides/line/">线性风格</Link>和<Link href="/zh/docs/customize/">自定义</Link>。</p>
       <h2>名称对照表</h2>
       <p>常用 Phosphor 图标对应的最接近的 Kubai 图标。Phosphor 也会导出不带后缀的旧名称，例如 <code>House</code>，这些名称现已弃用。</p>
       <table>
@@ -90,7 +90,7 @@ import { HomeIcon, BellIcon } from "kubai-icons-react";
         heading="常见问题"
         items={[
           { q: "可以在同一个项目里同时使用 Phosphor 和 Kubai Icons 吗？", a: "可以。两个软件包互不依赖，可以逐个页面替换。两种风格放在一起差别明显，建议不要在同一个工具栏里混用。" },
-          { q: "有 thin 或 bold 这样的字重吗？", a: "没有。每个 Kubai 图标都是只有一种粗细的分层彩色图形。`variant=\"soft\"` 是更浅的版本，填充更淡，轮廓更深。" },
+          { q: "有 thin 或 bold 这样的字重吗？", a: "有。在线性风格（`kubai-icons-react/line`）中，可以把 `strokeWidth` 设为大于 0 的任意值（例如细体用 1.5、常规用 2、粗体用 2.5），也可以用 `variant=\"fill\"` 获得实心图形。" },
           { q: "一个图标会让打包体积增加多少？", a: "压缩并 gzip 后，第一个 Kubai 图标连同共享运行时约 4 KB，之后每个图标约 0.6 KB。未导入的图标会被移除。" },
           { q: "可以在商业项目中使用 Kubai Icons 吗？", a: "可以。和 Phosphor 一样，Kubai Icons 使用 MIT 许可证，允许商业使用，只需保留许可证声明。" },
         ]}

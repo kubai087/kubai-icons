@@ -66,7 +66,7 @@ function ColorCard() {
   const [color, setColor] = useState(SWATCHES[0].value);
   const { style, extra } = useLook();
   return (
-    <Card title={tr("Color", "配色")} body={tr("All tones are derived from a single accent color.", "所有色调均由同一主色派生")}>
+    <Card title={tr("Colors", "配色")} body={tr("All tones are derived from a single accent color.", "所有色调均由同一主色派生")}>
       <Row>
         {COLOR[style].map((Icon, i) => <Icon key={`${style}${i}`} size={ICON} color={color} {...extra} />)}
       </Row>

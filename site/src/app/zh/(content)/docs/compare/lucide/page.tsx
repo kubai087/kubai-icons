@@ -8,11 +8,11 @@ const HREF = "/docs/compare/lucide/";
 export const metadata = learnMeta(HREF, "zh");
 
 const FACTS: [string, string, string][] = [
-  ["风格", "分层的彩色图标，带渐变、柔和阴影和高光", "线性图标，在 24×24 网格上用 2px 描边绘制"],
-  ["悬停动效", "每个图标都内置动效：文件夹会打开，铃铛会摇动", "不内置动效，图标是静态 SVG"],
-  ["图标数量", "900 多种物件，加上带角标和带斜线的版本共近 3,000 个", "1,600 个以上"],
-  ["样式", "color 和 soft 两种样式，另有带角标（加号、对勾、叉号等）和带斜线的“关闭”版本", "一种样式，描边粗细可调"],
-  ["颜色", "一个主色，所有色调都由它派生", "描边使用一种颜色"],
+  ["风格", "三种风格共用名称：线性、双色面性和分层彩色", "线性图标，在 24×24 网格上用 2px 描边绘制"],
+  ["悬停动效", "每个图标都内置动效：锁梁抬起打开，文件夹会打开", "不内置动效，图标是静态 SVG"],
+  ["图标数量", "线性约 1,280 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "1,600 个以上"],
+  ["变体", "线性：outline、line-duo、fill 和 solid-tint，粗细可取大于 0 的任意值。分层：color 和 soft，另有带角标版本", "一种样式，描边粗细可调"],
+  ["颜色", "一个主色，浅色、填充色和渐变都由它派生", "描边使用一种颜色"],
   ["软件包", "React、Vue、原生 JavaScript、Web Component 和静态 SVG", "React、React Native、Vue、Svelte、Preact、Solid、Angular、Astro、原生 JavaScript 和静态 SVG"],
   ["许可证", "MIT", "ISC"],
 ];
@@ -35,7 +35,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Lucide 是一套由社区维护的大型线性图标库。Kubai Icons 是一套数量较少的分层彩色图标，每个图标都有各自的悬停动效。两者都开源，都可以在 React、Vue 和纯 SVG 中使用。">
+      <Title lead="Lucide 是一套由社区维护的大型 24 网格线性图标库。Kubai Icons 提供名称共用的三种风格——同样基于 24 网格的线性图标、双色面性图标和分层彩色图标——每个图标都有各自的悬停动效。两者都开源，都可以在 React、Vue 和纯 SVG 中使用。">
         {page.zhTitle}
       </Title>
       <h2>概览</h2>
@@ -68,9 +68,9 @@ export default function Page() {
       <Code lang="tsx" code={`// 迁移前
 import { House, Bell, Settings } from "lucide-react";
 
-// 迁移后
-import { Home, Bell, Settings } from "kubai-icons-react";`} />
-      <p><code>size</code> 和 <code>color</code> 的用法相同：<code>size</code> 设置宽高（单位为像素），<code>color</code> 默认为 <code>currentColor</code>。Kubai 图标没有描边，所以去掉 <code>strokeWidth</code> 和 <code>absoluteStrokeWidth</code>。需要更浅的效果时，使用 <code>variant=&quot;soft&quot;</code>。<code>className</code> 等其他 SVG 属性会透传。详见 <Link href="/zh/docs/react/">React 的 Props</Link>。</p>
+// 迁移后（同为 24 网格的线性风格；去掉 "/line" 则为分层彩色图标）
+import { Home, Bell, Settings } from "kubai-icons-react/line";`} />
+      <p>在线性风格中，<code>size</code>、<code>color</code> 和 <code>strokeWidth</code> 的用法相同：<code>size</code> 设置宽高（单位为像素），<code>color</code> 默认为 <code>currentColor</code>，<code>strokeWidth</code> 默认为 2（去掉 <code>absoluteStrokeWidth</code>）。需要填充或双色线性效果时，把 <code>variant</code> 设为 <code>&quot;fill&quot;</code>、<code>&quot;line-duo&quot;</code> 或 <code>&quot;solid-tint&quot;</code>；需要分层彩色图标时，改为从 <code>kubai-icons-react</code> 导入。<code>className</code> 等其他 SVG 属性会透传。详见<Link href="/zh/docs/guides/line/">线性风格</Link>和 <Link href="/zh/docs/react/">React 的 Props</Link>。</p>
       <h2>名称对照表</h2>
       <p>常用 Lucide 图标对应的最接近的 Kubai 图标。较新的 lucide-react 也会以别名导出旧名称，例如 <code>AlertTriangle</code>。</p>
       <table>
@@ -86,7 +86,7 @@ import { Home, Bell, Settings } from "kubai-icons-react";`} />
         heading="常见问题"
         items={[
           { q: "可以在同一个项目里同时使用 Lucide 和 Kubai Icons 吗？", a: "可以。两个软件包互不依赖，可以逐个页面替换。两种风格放在一起差别明显，建议不要在同一个工具栏里混用。" },
-          { q: "有类似 Lucide 的线性样式吗？", a: "没有。每个 Kubai 图标都是分层的彩色图形。`variant=\"soft\"` 是更浅的版本，填充更淡，轮廓更深。" },
+          { q: "有类似 Lucide 的线性样式吗？", a: "有。从 `kubai-icons-react/line`（或 `kubai-icons-vue/line`）导入即可：基于 24 网格的圆角描边图标，`strokeWidth` 默认为 2，并提供 `line-duo`、`fill` 和 `solid-tint` 变体。" },
           { q: "一个图标会让打包体积增加多少？", a: "压缩并 gzip 后，第一个 Kubai 图标连同共享运行时约 4 KB，之后每个图标约 0.6 KB。未导入的图标会被移除。" },
           { q: "可以在商业项目中使用 Kubai Icons 吗？", a: "可以。Kubai Icons 使用 MIT 许可证，Lucide 使用 ISC 许可证，两者都允许商业使用，只需保留许可证声明。" },
         ]}

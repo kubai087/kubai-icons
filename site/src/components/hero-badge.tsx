@@ -19,7 +19,7 @@ export function HeroBadge({ count }: { count: number }) {
         <span className="max-[399px]:hidden">{tr("Now with an agent skill", "现已提供 Agent Skill")}</span>
         <span className="min-[400px]:hidden">{tr("agent skill", "Agent Skill")}</span>
       </span>
-      <ChevronRightIcon className="rtl:rotate-180 -ms-1 size-4 text-muted-foreground transition-[translate] duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none" />
+      <ChevronRightIcon className="rtl:rotate-180 -ms-1 size-4 text-muted-foreground transition-[translate] duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none" />
     </Link>
   );
 }

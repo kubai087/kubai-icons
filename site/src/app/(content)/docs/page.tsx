@@ -15,6 +15,9 @@ export default function Page() {
           <p>
             Each icon takes all its shades from one accent color. On hover, it acts out what the object does: a folder opens, an envelope unseals. Each icon is a separate ES module that holds the SVG markup of its still state, called the rest pose, and its hover motion.
           </p>
+          <p>
+            Besides the default layered icons, the packages include <Link href="/docs/guides/duotone/">two-tone solid icons</Link> on a 16 grid (under <code>/duotone</code>) and <Link href="/docs/guides/line/">line icons</Link> on a 24 grid with adjustable stroke width and four variants (under <code>/line</code>). Icons share names and hover props across styles.
+          </p>
           <h2>Packages</h2>
           <table>
             <thead><tr><th>Package</th><th>Use it for</th><th>Docs</th></tr></thead>

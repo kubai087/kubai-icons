@@ -7,7 +7,7 @@ export const metadata = pageMeta({ title: "React 动态图标", path: "/zh/docs/
 export default function Page() {
   return (
     <Prose>
-      <Title lead={<><code>kubai-icons-react</code> 将每个图标封装为一个 React 组件，要求 React 18 或更高版本</>}>
+      <Title lead={<><code>kubai-icons-react</code> 将每个图标封装为一个 React 组件，要求 React 18 或更高版本。</>}>
         React
       </Title>
       <h2>安装</h2>
@@ -58,7 +58,7 @@ export function ItemIcon({ name }: { name: string }) {
 }`} />
       <div className="my-5 space-y-5">
           <h2>服务端渲染</h2>
-          <p>图标无需配置即可用于 Next.js 的 Server Components 和 Client Components。SVG 代码在服务端渲染，动效在激活时添加。<code>DynamicIcon</code> 是个例外：它在服务端渲染一个空的占位元素，到浏览器中才加载图标。</p>
+          <p>图标无需配置即可用于 Next.js 的 Server Components 和 Client Components。SVG 代码在服务端渲染，动效在水合后添加。<code>DynamicIcon</code> 是个例外：它在服务端渲染一个空的占位元素，到浏览器中才加载图标。</p>
           <h2>深层导入</h2>
           <p>为避免开发服务器加载包的入口文件，可直接从各图标自身的文件导入。详见<Link href="/zh/docs/performance/">性能</Link>。</p>
         </div>

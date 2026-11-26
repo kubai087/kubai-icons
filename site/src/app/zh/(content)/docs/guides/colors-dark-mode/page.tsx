@@ -22,7 +22,7 @@ export default function Page() {
 <span style={{ color: "#14B8A6" }}>
   <Leaf /> Sustainability
 </span>`} />
-      <p>任何 CSS 颜色都可以使用，包括主题变量，例如 <code>color=&quot;var(--brand)&quot;</code>。色调由 <code>color-mix()</code> 计算，所以给 <code>color</code> 加上过渡后，所有渐变会一起渐变：</p>
+      <p>任何 CSS 颜色都可以使用，包括主题变量，例如 <code>color=&quot;var(--brand)&quot;</code>。色调由 <code>color-mix()</code> 计算，所以给 <code>color</code> 加上过渡后，所有渐变都会平滑过渡到新颜色：</p>
       <Code lang="css" code={`.kubai-icon { transition: color .3s ease; }`} />
       <h2>角标</h2>
       <p>带角标的图标（例如 <code>folder-plus</code> 或 <code>user-check</code>）在一角有一个圆形角标，默认是深灰色圆底加白色符号。<code>badgeColor</code> 可以把圆底设为任意颜色，<code>badgeColor=&quot;semantic&quot;</code> 会为每种角标选择合适的颜色：添加用绿色，移除用红色，警告用琥珀色。</p>

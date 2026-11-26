@@ -1,11 +1,12 @@
 import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { Prose, Title, Code } from "@/components/docs/prose";
+import type { Locale } from "@/lib/i18n";
 import { REPO, submitPrompt } from "@/lib/site";
 
 export const metadata = pageMeta({ title: "Contributing icons", path: "/docs/contributing/", description: "Request a new icon or contribute one to Kubai Icons: what a request needs, how to run the project, and how icons are checked." });
 
-export default function Page() {
+export default function Page({ locale = "en" }: { locale?: Locale } = {}) {
   return (
     <Prose>
       <Title lead={"This page describes how to request an icon, report an icon bug and contribute a drawing."}>
@@ -21,7 +22,7 @@ export default function Page() {
           <p>Export the drawing as SVG. With the skill, run <code>node scripts/export.mjs</code>. A static SVG is enough: if the icon is accepted, the motion is added during review. To propose your own motion, add the icon&apos;s source file.</p>
           <p>A maintainer reviews each submission by eye against the design rules, using a preview posted on the issue. Logos, trademarks and anything traced from another icon set cannot be accepted. Accepted icons join the library under the MIT License, credited to you.</p>
           <p>To have a coding agent submit the icon, paste this prompt into it. The agent asks you to confirm the terms, then posts the issue with the GitHub CLI:</p>
-          <Code code={submitPrompt("en")} />
+          <Code code={submitPrompt(locale)} />
           <h2>Draw an icon</h2>
           <p>Icons are stored in <code>icons/</code>, one ES module per icon. Draw them with the <Link href="/skill/">Kubai Icons skill</Link> or by hand, following <a href={`${REPO}/blob/master/PROMPT.md`}>PROMPT.md</a> and <a href={`${REPO}/blob/master/docs/authoring.md`}>docs/authoring.md</a>. To check your work, replace <code>my-icon</code> below with your icon&apos;s name:</p>
         </div>

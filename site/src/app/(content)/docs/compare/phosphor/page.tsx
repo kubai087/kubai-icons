@@ -8,11 +8,11 @@ const HREF = "/docs/compare/phosphor/";
 export const metadata = learnMeta(HREF, "en");
 
 const FACTS: [string, string, string][] = [
-  ["Style", "Layered color icons with gradients, a soft shadow and highlights", "Flat icons in six weights"],
-  ["Hover animation", "Built into every icon: a folder opens, a bell rings", "None built in; icons are static SVG"],
-  ["Icons", "More than 900 objects, nearly 3,000 with badged and slashed versions", "More than 1,500, each in every weight"],
-  ["Variants", "Color and soft, plus badged (plus, check, x…) and slashed “off” versions", "Thin, light, regular, bold, fill and duotone"],
-  ["Color", "One accent color; every shade is derived from it", "One color; duotone adds a lighter fill of the same color"],
+  ["Style", "Three styles that share names: line, two-tone solid and layered color", "Flat icons in six weights"],
+  ["Hover animation", "Built into every icon: a lock's shackle lifts open, a folder opens", "None built in; icons are static SVG"],
+  ["Icons", "About 1,280 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "More than 1,500, each in every weight"],
+  ["Variants", "Line: adjustable stroke width, plus outline, line-duo, fill and solid-tint. Layered: color and soft", "Thin, light, regular, bold, fill and duotone"],
+  ["Color", "One accent color; light tones, fill tints and gradients are derived from it", "One color; duotone adds a lighter fill of the same color"],
   ["Packages", "React, Vue, plain JavaScript, a web component and static SVG", "React, Vue, an icon font for the web, SVG files, and libraries for Flutter, SwiftUI and other platforms"],
   ["License", "MIT", "MIT"],
 ];
@@ -35,7 +35,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Phosphor is a large, flexible icon family where every icon comes in six weights. Kubai Icons is a set of layered color icons, each with its own hover motion. Both are MIT licensed and have React and Vue packages.">
+      <Title lead="Phosphor is a large, flexible icon family where every icon comes in six weights. Kubai Icons comes in three styles that share names — line icons with adjustable stroke width and four variants, solid two-tone icons and layered color icons — and gives every icon its own hover motion. Both are MIT licensed and have React and Vue packages.">
         {page.title}
       </Title>
       <h2>At a glance</h2>
@@ -70,11 +70,11 @@ import { HouseIcon, BellIcon } from "@phosphor-icons/react";
 
 <HouseIcon size={24} weight="duotone" />
 
-// After
-import { HomeIcon, BellIcon } from "kubai-icons-react";
+// After (line style; omit "/line" for layered color or use "/duotone" for solid two-tone)
+import { HomeIcon, BellIcon } from "kubai-icons-react/line";
 
-<HomeIcon size={24} />`} />
-      <p><code>size</code> and <code>color</code> work the same way. There are no weights, so replace <code>weight</code> with nothing, or with <code>variant=&quot;soft&quot;</code> for a lighter look. Phosphor&apos;s <code>mirrored</code> has no Kubai prop; flip the icon with CSS if you need it. Defaults that Phosphor sets with <code>IconContext</code> are set in Kubai by inheritance: <code>color</code> and the variant follow the nearest parent that sets them. See <Link href="/docs/customize/">Customization</Link>.</p>
+<HomeIcon size={24} variant="solid-tint" />`} />
+      <p><code>size</code> and <code>color</code> work the same way. In the line style (<code>kubai-icons-react/line</code>), replace Phosphor&apos;s thin-to-bold <code>weight</code> with <code>strokeWidth</code> (any value above 0, default 2), <code>weight=&quot;fill&quot;</code> with <code>variant=&quot;fill&quot;</code>, and <code>weight=&quot;duotone&quot;</code> with <code>variant=&quot;solid-tint&quot;</code> or <code>&quot;line-duo&quot;</code>. Phosphor&apos;s <code>mirrored</code> has no Kubai prop; flip the icon with CSS if you need it. Defaults that Phosphor sets with <code>IconContext</code> are set in Kubai by inheritance: <code>color</code> and the variant follow the nearest parent that sets them. See the <Link href="/docs/guides/line/">line style</Link> and <Link href="/docs/customize/">Customization</Link>.</p>
       <h2>Name table</h2>
       <p>The closest Kubai icon for common Phosphor icons. Phosphor also exports the older names without the suffix, such as <code>House</code>, which are now deprecated.</p>
       <table>
@@ -90,7 +90,7 @@ import { HomeIcon, BellIcon } from "kubai-icons-react";
         heading="Questions"
         items={[
           { q: "Can I use Phosphor and Kubai Icons in the same project?", a: "Yes. The packages are independent, so you can switch one screen at a time. The two styles look different side by side, so mixing them in one toolbar is best avoided." },
-          { q: "Is there a thin or bold weight?", a: "No. Every Kubai icon is a layered color drawing in one weight. `variant=\"soft\"` gives a lighter version with paler fills and darker outlines." },
+          { q: "Is there a thin or bold weight?", a: "Yes, in the line style (`kubai-icons-react/line`): set `strokeWidth` to any value above 0 (for example 1.5 for light, 2 for regular and 2.5 for bold), or use `variant=\"fill\"` for filled shapes." },
           { q: "How much does an icon add to the bundle?", a: "Minified and gzipped, the first Kubai icon adds about 4 KB including the shared runtime, and each further icon about 0.6 KB. Icons you do not import are removed." },
           { q: "Can I use Kubai Icons in commercial projects?", a: "Yes. Like Phosphor, Kubai Icons is MIT licensed, which allows commercial use as long as the license notice is kept." },
         ]}

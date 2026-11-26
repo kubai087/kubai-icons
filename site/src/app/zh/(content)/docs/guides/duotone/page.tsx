@@ -42,7 +42,7 @@ import { Folder, BellOff } from "kubai-icons-react/line";
       <Code lang="css" code={`.sidebar .kubai-duotone { --kd-b: #2B3566; }`} />
       <p>分层图标的 <code>variant</code> 和 <code>badgeColor</code> 参数对双色图标无效。<code>svg-duotone/</code> 中的文件使用默认颜色 #5A76F2 和 #BDC8FA。</p>
       <h2>动效</h2>
-      <p>每个图标在悬停时播放动效，<code>trigger</code>、<code>hover</code>、<code>title</code> 等参数与分层图标相同。例如盖子打开、日历撕下一页、信纸从信封中抽出。只在悬停时出现的部件在服务端渲染的标记中处于隐藏状态，脚本运行前不会闪现。开启"减少动态效果"时，图标直接显示动作结束时的姿态。</p>
+      <p>每个图标在悬停时播放动效，<code>trigger</code>、<code>hover</code>、<code>title</code> 等参数与分层图标相同。例如盖子打开、日历撕下一页、信纸从信封中抽出。只在悬停时出现的部件在服务端渲染的标记中处于隐藏状态，脚本运行前不会闪现。开启“减弱动态效果”时，图标直接显示动作结束时的姿态。</p>
       <h2>变体</h2>
       <p><code>folder-plus</code>、<code>calendar-check</code>、<code>search-sparkle</code>、<code>bell-off</code> 等变体在同一物体上加一个角标：加号、减号、对勾、叉号、星光或斜线，大小和位置固定。</p>
       <h2>绘制更多图标</h2>

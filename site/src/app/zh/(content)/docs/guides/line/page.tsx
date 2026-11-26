@@ -11,7 +11,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="除分层和双色图标外，图标库还提供线性图标：24 网格上的圆角描边，粗细可在 0.25 到 3 之间选择，有四种变体，悬停时播放表现图标含义的动效。适用于和文字并排的界面图标，常用尺寸为 16–32 像素。">
+      <Title lead="除分层和双色图标外，图标库还提供线性图标：24 网格上的圆角描边，粗细可取大于 0 的任意值，有四种变体，悬停时播放表现图标含义的动效。适用于和文字并排的界面图标，常用尺寸为 16–32 像素。">
         {page.zhTitle}
       </Title>
       <LineWall />
@@ -36,8 +36,8 @@ import { Lock, Camera } from "kubai-icons-react/line";
       </table>
       <p>大部分线性图标都有同名的分层图标，少数只在线性风格中提供。完整列表见 <code>kubai-icons/line/icons.json</code>，其中只有线性版的图标带有 <code>only: true</code>。</p>
       <h2>粗细</h2>
-      <p><code>strokeWidth</code> 可取大于 0 的任意值，默认为 2；本站的图标浏览器提供 0.25 到 3，初始为 1.75。建议与旁边文字的字重对应：细体用 1.5，常规用 2，中等用 2.25，粗体用 2.5。在 Vue 中写作 <code>:stroke-width</code>，在 Web Component 上写作 <code>stroke-width</code>。</p>
-      <p>在 24 像素、粗细为 2 时，所有边缘都落在整像素上。外轮廓按外边缘定位，所以图标在任何粗细下都保持同样的尺寸，内部细节会随粗细调整位置以保持间距。1.5 到 2.5 之间的粗细逐个图标检查过，其他粗细使用最接近的已检查几何绘制。</p>
+      <p><code>strokeWidth</code> 可取大于 0 的任意值，默认为 2；本站的图标库提供 0.25 到 3，初始为 1.75。建议与旁边文字的字重对应：细体用 1.5，常规用 2，中等用 2.25，粗体用 2.5。在 Vue 中写作 <code>:stroke-width</code>，在 Web Component 上写作 <code>stroke-width</code>。</p>
+      <p>在 24 像素、粗细为 2 时，所有边缘都落在整像素上。外轮廓按外边缘定位，所以图标在任何粗细下都保持同样的尺寸，内部细节会随粗细调整位置以保持间距。1.5 到 2.5 之间的粗细逐个图标检查过，其他粗细按最接近的已校验粗细绘制。</p>
       <h2>变体</h2>
       <table>
         <thead><tr><th><code>variant</code></th><th>效果</th></tr></thead>
@@ -71,7 +71,7 @@ import { Lock, Camera } from "kubai-icons-react/line";
 .sidebar .kubai-line { --kl-light: #BDC8FA; --kl-fill: #E8ECFD; }`} />
       <p>分层图标的 <code>badgeColor</code> 参数在这里不生效。<code>svg-line/</code> 中的文件为线性变体、粗细 2、颜色为 <code>currentColor</code>。</p>
       <h2>动效</h2>
-      <p>每个图标在悬停时播放动效，<code>trigger</code>、<code>hover</code> 和 <code>title</code> 参数与其他风格相同。动效尽量表现状态变化：锁的锁梁抬起打开，书签丝带向下长出，垃圾桶的盖子抬起，斜线沿着要关闭的图标画出。有些动效让部件在空间里运动，外轮廓保持不动：地球的经线绕球转动，打开的书一页页翻过，笔记本电脑的屏幕绕铰链合上；整个过程中线宽不变。开启减少动态效果后，图标保持静止。</p>
+      <p>每个图标在悬停时播放动效，<code>trigger</code>、<code>hover</code> 和 <code>title</code> 参数与其他风格相同。动效尽量表现状态变化：锁的锁梁抬起打开，书签丝带向下伸长，垃圾桶的盖子抬起，斜线沿着要关闭的图标画出。有些动效让部件在空间里运动，外轮廓保持不动：地球仪的经线绕球面转动，打开的书一页页翻过，笔记本电脑的屏幕绕铰链合上；整个过程中线宽不变。开启“减弱动态效果”后，图标保持静止。</p>
       <h2>绘制更多图标</h2>
       <p>线性图标使用 <Link href="/zh/skill/">kubai-line Skill</Link> 绘制，它遵循同样的网格、描边和布局规则，每个图标在加入图标库前都会在各个粗细下检查。用它为你自己的产品绘制的图标归你所有。</p>
       <Faq

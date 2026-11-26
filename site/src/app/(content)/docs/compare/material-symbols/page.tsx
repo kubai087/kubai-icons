@@ -12,7 +12,7 @@ const FACTS: [string, string, string][] = [
   ["Grid", "Line: 24 grid, rounded strokes. Two-tone: 16 grid, solid", "24 grid at the default size, with optical sizes from 20 to 48"],
   ["Adjusting", "Line: any stroke width above 0 and four variants, set with props", "Variable font axes: fill, weight (100 to 700), grade and optical size"],
   ["Hover animation", "Built into every icon: a lock's shackle lifts open, a bookmark ribbon grows down", "None built in; changes between axis values can be animated with CSS"],
-  ["Icons", "About 1,270 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "More than 3,000, each in all three styles"],
+  ["Icons", "About 1,280 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "More than 3,000, each in all three styles"],
   ["Delivery", "Components for React and Vue, plain JavaScript, a web component and static SVG", "A variable icon font from Google Fonts and SVG files; community packages wrap them for frameworks"],
   ["License", "MIT", "Apache 2.0"],
 ];

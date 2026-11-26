@@ -6,7 +6,7 @@ export const metadata = pageMeta({ title: "JavaScript 图标与 Web Component", 
 export default function Page() {
   return (
     <Prose>
-      <Title lead={<><code>kubai-icons</code> 通过原生 JavaScript 创建图标，并提供 <code>&lt;kubai-icon&gt;</code> Web Component</>}>
+      <Title lead={<><code>kubai-icons</code> 通过原生 JavaScript 创建图标，并提供 <code>&lt;kubai-icon&gt;</code> Web Component。</>}>
         JavaScript
       </Title>
       <h2>安装</h2>
@@ -42,7 +42,7 @@ document.querySelector("#toolbar").append(
       <p>
         在中国大陆访问 jsDelivr 可能不稳定。生产环境建议用 npm 安装后随项目打包。如果需要使用 CDN，可以改用南方科技大学的镜像，这个地址必须写确切的版本号：
       </p>
-      <Code lang="html" code={`<script type="module" src="https://mirrors.sustech.edu.cn/unpkg/kubai-icons@0.3.0/dist/cdn/element.js"></script>`} />
+      <Code lang="html" code={`<script type="module" src="https://mirrors.sustech.edu.cn/unpkg/kubai-icons@0.16.0/dist/cdn/element.js"></script>`} />
       <h2 id="server-rendering">在服务端渲染</h2>
       <p><code>toSvg</code> 以 HTML 字符串的形式返回图标，不带动效：</p>
       <Code lang="js" code={`import { toSvg, Folder } from "kubai-icons";

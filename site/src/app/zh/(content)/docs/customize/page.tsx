@@ -7,7 +7,7 @@ export const metadata = pageMeta({ title: "自定义图标", path: "/zh/docs/cus
 export default function Page() {
   return (
     <Prose>
-      <Title lead={"图标的颜色、角标、尺寸和动效都通过 props 和 CSS 自定义属性设置"}>
+      <Title lead={"图标的颜色、角标、尺寸和动效都通过 props 和 CSS 自定义属性设置。"}>
         自定义
       </Title>
       <div className="my-5 space-y-5">

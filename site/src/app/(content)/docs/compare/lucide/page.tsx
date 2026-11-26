@@ -8,11 +8,11 @@ const HREF = "/docs/compare/lucide/";
 export const metadata = learnMeta(HREF, "en");
 
 const FACTS: [string, string, string][] = [
-  ["Style", "Layered color icons with gradients, a soft shadow and highlights", "Outline icons drawn with a 2px stroke on a 24×24 grid"],
-  ["Hover animation", "Built into every icon: a folder opens, a bell rings", "None built in; icons are static SVG"],
-  ["Icons", "More than 900 objects, nearly 3,000 with badged and slashed versions", "More than 1,600"],
-  ["Variants", "Color and soft, plus badged (plus, check, x…) and slashed “off” versions", "One style, with adjustable stroke width"],
-  ["Color", "One accent color; every shade is derived from it", "One color for the stroke"],
+  ["Style", "Three styles that share names: line, two-tone solid and layered color", "Outline icons drawn with a 2px stroke on a 24×24 grid"],
+  ["Hover animation", "Built into every icon: a lock's shackle lifts open, a folder opens", "None built in; icons are static SVG"],
+  ["Icons", "About 1,280 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "More than 1,600"],
+  ["Variants", "Line: outline, line-duo, fill and solid-tint, with any stroke width above 0. Layered: color and soft, plus badged versions", "One style, with adjustable stroke width"],
+  ["Color", "One accent color; light tones, fill tints and gradients are derived from it", "One color for the stroke"],
   ["Packages", "React, Vue, plain JavaScript, a web component and static SVG", "React, React Native, Vue, Svelte, Preact, Solid, Angular, Astro, plain JavaScript and static SVG"],
   ["License", "MIT", "ISC"],
 ];
@@ -35,7 +35,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Lucide is a large, community-run set of outline icons. Kubai Icons is a smaller set of layered color icons, each with its own hover motion. Both are open source and work with React, Vue and plain SVG.">
+      <Title lead="Lucide is a large, community-run set of outline icons on a 24 grid. Kubai Icons comes in three styles that share names — line icons on the same 24 grid, solid two-tone icons and layered color icons — and gives every icon its own hover motion. Both are open source and work with React, Vue and plain SVG.">
         {page.title}
       </Title>
       <h2>At a glance</h2>
@@ -68,9 +68,9 @@ export default function Page() {
       <Code lang="tsx" code={`// Before
 import { House, Bell, Settings } from "lucide-react";
 
-// After
-import { Home, Bell, Settings } from "kubai-icons-react";`} />
-      <p><code>size</code> and <code>color</code> work the same way: <code>size</code> sets the width and height in pixels, and <code>color</code> defaults to <code>currentColor</code>. Kubai icons have no stroke, so drop <code>strokeWidth</code> and <code>absoluteStrokeWidth</code>. For a lighter look, use <code>variant=&quot;soft&quot;</code>. Other SVG props, such as <code>className</code>, pass through. See the <Link href="/docs/react/">React props</Link>.</p>
+// After (line style on the same 24 grid; omit "/line" for layered color icons)
+import { Home, Bell, Settings } from "kubai-icons-react/line";`} />
+      <p><code>size</code>, <code>color</code> and <code>strokeWidth</code> work the same way in the line style: <code>size</code> sets the width and height in pixels, <code>color</code> defaults to <code>currentColor</code>, and <code>strokeWidth</code> defaults to 2 (drop <code>absoluteStrokeWidth</code>). For filled or two-tone line looks, set <code>variant</code> to <code>&quot;fill&quot;</code>, <code>&quot;line-duo&quot;</code> or <code>&quot;solid-tint&quot;</code>; for layered color icons, import from <code>kubai-icons-react</code> instead. Other SVG props, such as <code>className</code>, pass through. See the <Link href="/docs/guides/line/">line style</Link> and <Link href="/docs/react/">React props</Link>.</p>
       <h2>Name table</h2>
       <p>The closest Kubai icon for common Lucide icons. Recent lucide-react versions also export older names as aliases, such as <code>AlertTriangle</code>.</p>
       <table>
@@ -86,7 +86,7 @@ import { Home, Bell, Settings } from "kubai-icons-react";`} />
         heading="Questions"
         items={[
           { q: "Can I use Lucide and Kubai Icons in the same project?", a: "Yes. The packages are independent, so you can switch one screen at a time. The two styles look different side by side, so mixing them in one toolbar is best avoided." },
-          { q: "Is there an outline style like Lucide's?", a: "No. Every Kubai icon is a layered color drawing. `variant=\"soft\"` gives a lighter version with paler fills and darker outlines." },
+          { q: "Is there an outline style like Lucide's?", a: "Yes. Import from `kubai-icons-react/line` (or `kubai-icons-vue/line`): rounded strokes on a 24 grid with `strokeWidth` defaulting to 2, plus `line-duo`, `fill` and `solid-tint` variants." },
           { q: "How much does an icon add to the bundle?", a: "Minified and gzipped, the first Kubai icon adds about 4 KB including the shared runtime, and each further icon about 0.6 KB. Icons you do not import are removed." },
           { q: "Can I use Kubai Icons in commercial projects?", a: "Yes. Kubai Icons is MIT licensed and Lucide is ISC licensed. Both allow commercial use as long as the license notice is kept." },
         ]}

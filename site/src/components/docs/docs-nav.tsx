@@ -6,8 +6,7 @@ import { ClipTip } from "@/components/kit/clip-tip";
 import { Glide } from "@/components/kit/glide";
 import { BottomNav, useReadingProgress } from "@/components/kit/bottom-nav";
 import { cn } from "@/lib/utils";
-import { hasIconPages } from "@/lib/i18n";
-import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
+import { useLocalize, useTr } from "@/lib/use-locale";
 import { withLearnPages } from "@/learn/pages";
 
 export const DOCS = [
@@ -36,9 +35,9 @@ export const DOCS = [
   ] },
 ];
 
-/** The docs nav for the current page's language: English and Chinese add their guides and comparisons. */
+/** The full docs nav, including framework guides, usage guides and comparisons. */
 export function useDocs() {
-  return hasIconPages(useLocale()) ? withLearnPages(DOCS) : DOCS;
+  return withLearnPages(DOCS);
 }
 
 /** A page in the nav: a long title ends in an ellipsis and shows in full in a tooltip. The sheet's rows are taller. */

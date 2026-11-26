@@ -11,7 +11,7 @@ const FACTS: [string, string, string][] = [
   ["Style", "Three styles that share names: line, two-tone solid and layered color", "Line icons; the free set is drawn in one style, Stroke Rounded"],
   ["Grid & stroke", "Line: 24 grid, rounded strokes, any width above 0 (default 2). Two-tone: 16 grid, solid", "24 grid, rounded strokes, 1.5 wide by default and adjustable"],
   ["Hover animation", "Built into every icon: a lock's shackle lifts open, a bookmark ribbon grows down", "None built in; icons are static SVG"],
-  ["Icons", "About 1,270 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "Several thousand in the free set; the paid Pro set has many more"],
+  ["Icons", "About 1,280 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "Several thousand in the free set; the paid Pro set has many more"],
   ["Variants", "Line: outline, line-duo, fill and solid-tint, all free", "Free: Stroke Rounded only. Pro adds more styles, such as solid, duotone and bulk"],
   ["Color", "One color; the light tone and fill tint are mixed from it", "One color; the two-color Pro styles take a primary and a secondary color"],
   ["Packages", "React, Vue, plain JavaScript, a web component and static SVG", "React, React Native, Vue, Svelte and Angular, with the icon data in a separate package"],

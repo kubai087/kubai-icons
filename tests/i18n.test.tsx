@@ -10,12 +10,18 @@ import { translateTree } from '../site/src/lib/translate-tree';
 const site = path.resolve('site/src');
 const CALLS: Record<string, number> = { tr: 0, msg: 0, pick: 1, translated: 1 };
 
-function sourceFiles(dir: string): string[] {
+const LEARN_SHARED = new Set(['pages.ts', 'style-wall.tsx']);
+
+function sourceFiles(dir: string, inLearn = false): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const file = path.join(dir, e.name);
-    // Only English and Simplified Chinese have a page per icon, and src/learn holds guides,
-    // comparisons and collections, which are written in those two languages only.
-    if (e.isDirectory()) return ['i18n', 'generated', 'zh', 'learn'].includes(e.name) ? [] : sourceFiles(file);
+    // Only English and Simplified Chinese have a page per icon and icon-set pages; guides and
+    // comparisons in src/learn are shared across every language.
+    if (e.isDirectory()) {
+      if (['i18n', 'generated', 'zh'].includes(e.name) || (inLearn && e.name === 'motion')) return [];
+      return sourceFiles(file, inLearn || e.name === 'learn');
+    }
+    if (inLearn) return LEARN_SHARED.has(e.name) ? [file] : [];
     return /\.tsx?$/.test(e.name) && e.name !== 'icon-page.tsx' ? [file] : [];
   });
 }

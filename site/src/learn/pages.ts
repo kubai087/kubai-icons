@@ -1,5 +1,5 @@
-// Guides and comparisons, written in English and Simplified Chinese only. They live in the
-// docs and take their title, description and nav label from here.
+// Guides and comparisons. They live in the docs and take their title, description and nav label
+// from here; other languages translate them through CONTENT_PAGES and ui.json.
 import type { Locale } from "@/lib/i18n";
 import { localize } from "@/lib/i18n";
 import { pageMeta } from "@/lib/seo";
@@ -94,8 +94,8 @@ export const GUIDES: LearnPage[] = [
     zh: "线性风格",
     title: "Line icons: stroke width & four variants",
     zhTitle: "线性图标：粗细与四种变体",
-    description: "Line icons on a 24 grid with a stroke width from 0.25 to 3, in four variants from outline to solid tint, each with a hover motion. Switch from the layered icons with one import.",
-    zhDescription: "24 网格的线性图标，粗细可在 0.25 到 3 之间调整，提供从线性到面性填充的四种变体，悬停时播放动效。从分层图标切换只需修改一行 import。",
+    description: "Line icons on a 24 grid with any stroke width above 0, in four variants from outline to solid tint, each with a hover motion. Switch from the layered icons with one import.",
+    zhDescription: "24 网格的线性图标，粗细可取大于 0 的任意值，提供从线性到面性填充的四种变体，悬停时播放动效。从分层图标切换只需修改一行 import。",
   },
 ];
 
@@ -172,9 +172,8 @@ const FRAMEWORKS = ["/docs/guides/nextjs/", "/docs/guides/nuxt/", "/docs/guides/
 const byHref = (hrefs: string[]) => hrefs.map((h) => GUIDES.find((g) => g.href === h)!);
 
 /**
- * The docs nav with the guides and comparisons added, for English and Simplified Chinese.
- * Framework guides follow the packages, usage guides join the existing Guides group, and the
- * comparisons follow it.
+ * The docs nav with the guides and comparisons added. Framework guides follow the packages,
+ * usage guides join the existing Guides group, and the comparisons follow it.
  */
 export function withLearnPages(docs: NavGroup[]): NavGroup[] {
   const usage = GUIDES.filter((g) => !FRAMEWORKS.includes(g.href));

@@ -12,7 +12,7 @@ export const tile = cva("grid place-items-center rounded-tile bg-surface transit
 });
 
 /** A row in a side list: icon categories, docs pages. */
-export const navItem = cva("focus-inset flex w-full items-center gap-2 rounded-control px-2.5 py-1.5 text-left text-control transition-colors", {
+export const navItem = cva("focus-inset flex w-full items-center gap-2 rounded-control px-2.5 py-1.5 text-start text-control transition-colors", {
   variants: {
     active: {
       true: "bg-muted text-foreground in-[[data-glide]]:bg-transparent",

@@ -5,7 +5,8 @@ import { Children, cloneElement, Fragment, isValidElement, type ReactElement, ty
 import Link from "next/link";
 import { Title } from "@/components/docs/prose";
 
-type Element = ReactElement<{ children?: ReactNode; href?: string; lead?: ReactNode }>;
+type Qa = { q: string; a: string };
+type Element = ReactElement<{ children?: ReactNode; href?: string; lead?: ReactNode; heading?: string; items?: Qa[] }>;
 type Tools = { text: (english: string) => string; href: (path: string) => string };
 
 const BLOCKS = new Set<unknown>(["h1", "h2", "h3", "h4", "p", "li", "th", "td", "dt", "dd", "caption", "figcaption", "summary", Title]);
@@ -68,7 +69,14 @@ function unit(children: ReactNode, tools: Tools): ReactNode[] | null {
 function walk(node: ReactNode, tools: Tools): ReactNode {
   if (!isValidElement(node)) return Array.isArray(node) ? node.map((n) => walk(n, tools)) : node;
   const el = node as Element;
-  const props = { ...linked(el, tools), ...(el.props.lead ? { lead: unit(el.props.lead, tools) ?? el.props.lead } : {}) };
+  const props = {
+    ...linked(el, tools),
+    ...(el.props.lead ? { lead: unit(el.props.lead, tools) ?? el.props.lead } : {}),
+    ...(typeof el.props.heading === "string" ? { heading: tools.text(el.props.heading) } : {}),
+    ...(Array.isArray(el.props.items) && el.props.items.every((i) => typeof i?.q === "string" && typeof i?.a === "string")
+      ? { items: el.props.items.map((i) => ({ q: tools.text(i.q), a: tools.text(i.a) })) }
+      : {}),
+  };
   const translated = BLOCKS.has(el.type) ? unit(el.props.children, tools) : null;
   if (translated) return cloneElement(el, props, ...translated);
   if (el.props.children === undefined) return cloneElement(el, props);

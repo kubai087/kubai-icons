@@ -33,7 +33,7 @@ export default function Page() {
       </ul>
       <p>常见产品类型的现成图标组合见<Link href="/zh/icons/sets/">图标合集</Link>。</p>
       <h2>通过 URL 获取任意颜色</h2>
-      <p>每个图标都可以通过一个固定地址获取 SVG，主色可以任意指定。这适合能从 URL 导入图片的工具，以及无法安装软件包的 AI 助手：</p>
+      <p>每个图标都可以通过一个固定地址获取 SVG，主色可以任意指定。这适合能从 URL 导入图片的工具，以及无法安装软件包的编程 Agent：</p>
       <Code lang="text" code={`https://icons.kubai.design/api/icon/folder.svg?color=EC4899&variant=soft&size=512`} />
       <ul>
         <li><code>color</code>：六位十六进制颜色值，可带或不带 <code>#</code>。默认值：5393FF。</li>

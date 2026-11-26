@@ -25,5 +25,5 @@ export default async function ContentPage({ params }: Props) {
   const { slug } = await params;
   const text = await loadDocsText(locale);
   const Page = CONTENT_PAGES[slug.join("/")].default;
-  return translateTree(Page(), (english) => text[english] ?? english, (path) => localize(path, locale));
+  return translateTree(Page({ locale }), (english) => text[english] ?? english, (path) => localize(path, locale));
 }

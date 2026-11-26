@@ -6,7 +6,7 @@ export const metadata = pageMeta({ title: "图标无障碍", path: "/zh/docs/acc
 export default function Page() {
   return (
     <Prose>
-      <Title lead={"本页说明图标如何配合屏幕阅读器、键盘、触摸输入和减弱动态效果设置"}>
+      <Title lead={"本页说明图标如何配合屏幕阅读器、键盘、触摸输入和减弱动态效果设置。"}>
         无障碍
       </Title>
       <h2>无障碍名称</h2>
@@ -18,7 +18,7 @@ export default function Page() {
 <button aria-label="Settings"><Settings /></button>
 
 <button><Settings title="Settings" /></button>`} />
-      <p><code>&lt;kubai-icon&gt;</code> Web Component从 <code>label</code> 属性获取无障碍名称。</p>
+      <p><code>&lt;kubai-icon&gt;</code> Web Component 从 <code>label</code> 属性获取无障碍名称。</p>
       <h2>输入与动效</h2>
       <ul className="my-5">
           <li>设置了 <code>prefers-reduced-motion</code> 时，图标不播放动画，直接进入结束状态。</li>

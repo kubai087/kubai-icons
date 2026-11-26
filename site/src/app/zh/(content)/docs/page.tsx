@@ -15,6 +15,9 @@ export default function Page() {
           <p>
             每个图标的各级色调都来自同一个主色。悬停时，图标呈现相应实物的运动：文件夹打开，信封拆开。每个图标都是一个独立的 ES 模块，其中包含静止状态的 SVG 代码和悬停动效。
           </p>
+          <p>
+            除了默认的分层图标外，各个软件包还提供 16 网格的<Link href="/zh/docs/guides/duotone/">双色面性图标</Link>（位于 <code>/duotone</code>）以及 24 网格、粗细可调且包含四种变体的<Link href="/zh/docs/guides/line/">线性图标</Link>（位于 <code>/line</code>）。各风格共用图标名称和悬停参数。
+          </p>
           <h2>软件包</h2>
           <table>
             <thead><tr><th>包名</th><th>适用场景</th><th>文档</th></tr></thead>
@@ -43,7 +46,7 @@ export default function App() {
       <div className="my-5 space-y-5">
           <h2>图标名称</h2>
           <p>
-            图标名称采用英文 kebab-case 格式：<code>folder</code>、<code>cloud-rain</code>、<code>arrow-up-right</code>。JavaScript、React 和 Vue 包以 PascalCase 形式导出，例如 <code>CloudRain</code>；React 和 Vue 还会同时导出 <code>CloudRainIcon</code>。静态文件保留 kebab-case 名称。<Link href="/zh/icons/">图标页</Link>可以按名称和标签搜索。
+            图标名称采用英文 kebab-case 格式：<code>folder</code>、<code>cloud-rain</code>、<code>arrow-up-right</code>。JavaScript、React 和 Vue 包以 PascalCase 形式导出，例如 <code>CloudRain</code>；React 和 Vue 还会同时导出 <code>CloudRainIcon</code>。静态文件保留 kebab-case 名称。<Link href="/zh/icons/">图标库</Link>可以按名称和标签搜索。
           </p>
           <p>
             许多基础图标还提供带角标的版本，例如 <code>folder-plus</code>、<code>user-check</code> 和 <code>calendar-clock</code>。表示可关闭功能的图标另有带斜线的版本，例如 <code>bell-off</code>。
@@ -64,7 +67,7 @@ npm install kubai-icons-static@latest   # static SVG files`} />
             使用 <code>@0</code> 的 CDN 链接（例如 <code>kubai-icons@0</code>）会加载最新的 0.x 版本，不用改代码就能用上新图标。新版本发布后，CDN 可能需要一段时间才会切换过去。
           </p>
           <p>
-            在<Link href="/zh/icons/">图标页</Link>中，“新增”分类列出最新版本加入的图标，每个新图标的详情面板会注明需要哪个版本。
+            在<Link href="/zh/icons/">图标库</Link>中，“新增”分类列出最新版本加入的图标，每个新图标的详情面板会注明需要哪个版本。
           </p>
         </div>
     </Prose>

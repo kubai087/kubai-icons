@@ -10,7 +10,7 @@ export const metadata = learnMeta(HREF, "zh");
 const FACTS: [string, string, string][] = [
   ["风格", "三种风格共用名称：线性、双色面性和分层彩色", "免费版：solid、regular 和品牌图标。Pro 版另有 light、thin、duotone 等风格"],
   ["动效", "每个图标有各自的悬停动效，表现自身含义：铃铛会摇动，文件夹会打开", "可开启的通用动画，例如 spin、beat、bounce 和 shake，可用于任何图标并循环播放"],
-  ["图标数量", "线性约 1,270 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "免费版约 2,000 个，包括品牌图标；Pro 版数量多得多"],
+  ["图标数量", "线性约 1,280 个，双色 502 个，分层 973 个（加上带角标和带斜线的版本共 3,078 个）", "免费版约 2,000 个，包括品牌图标；Pro 版数量多得多"],
   ["尺寸", "size prop，单位为像素", "相对文字大小的尺寸，例如 lg 或 2x"],
   ["颜色", "一个主色，所有色调都由它派生", "一种颜色；duotone 图标可设置主色和辅色"],
   ["软件包", "React、Vue、原生 JavaScript、Web Component 和静态 SVG", "Web 字体加 CSS、SVG 加 JavaScript，以及 React、Vue 和 Angular 组件"],
@@ -88,7 +88,7 @@ import { Home, Bell } from "kubai-icons-react/duotone";
           <tr><td><code>spin</code>、<code>beat</code>、<code>bounce</code>、<code>shake</code> 等</td><td>没有循环动画。图标自身的动效在悬停时播放；需要由代码触发时，把 <code>hover</code> 设为 true</td></tr>
           <tr><td><code>flip</code>、<code>rotation</code>、<code>transform</code></td><td>通过 <code>className</code> 或 <code>style</code> 使用 CSS <code>transform</code></td></tr>
           <tr><td><code>fixedWidth</code>、<code>widthAuto</code></td><td>不需要：所有图标都是正方形</td></tr>
-          <tr><td><code>title</code></td><td><code>title</code>；不设置时图标对读屏软件隐藏</td></tr>
+          <tr><td><code>title</code></td><td><code>title</code>；不设置时图标对屏幕阅读器隐藏</td></tr>
           <tr><td>duotone 的颜色（<code>--fa-primary-color</code> 等）</td><td>使用双色风格，或在线性图标上用 <code>variant=&quot;line-duo&quot;</code> 加 <code>--kl-light</code></td></tr>
         </tbody>
       </table>

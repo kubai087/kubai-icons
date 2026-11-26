@@ -8,11 +8,11 @@ const HREF = "/docs/compare/heroicons/";
 export const metadata = learnMeta(HREF, "en");
 
 const FACTS: [string, string, string][] = [
-  ["Style", "Layered color icons with gradients, a soft shadow and highlights", "Outline icons with a 1.5px stroke, and solid icons"],
-  ["Hover animation", "Built into every icon: a folder opens, a bell rings", "None built in; icons are static SVG"],
-  ["Icons", "More than 900 objects, nearly 3,000 with badged and slashed versions", "More than 300"],
-  ["Variants", "Color and soft, plus badged (plus, check, x…) and slashed “off” versions", "24px outline, 24px solid, 20px solid and 16px solid"],
-  ["Color", "One accent color; every shade is derived from it", "One color, through currentColor"],
+  ["Style", "Three styles that share names: line, two-tone solid and layered color", "Outline icons with a 1.5px stroke, and solid icons"],
+  ["Hover animation", "Built into every icon: a lock's shackle lifts open, a folder opens", "None built in; icons are static SVG"],
+  ["Icons", "About 1,280 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "More than 300"],
+  ["Variants", "Line: outline, line-duo, fill and solid-tint. Two-tone: 16-grid solid. Layered: color and soft", "24px outline, 24px solid, 20px solid and 16px solid"],
+  ["Color", "One accent color; light tones, fill tints and gradients are derived from it", "One color, through currentColor"],
   ["Sizing", "A size prop", "CSS classes on the SVG, such as size-6"],
   ["Packages", "React, Vue, plain JavaScript, a web component and static SVG", "React and Vue, plus SVG and JSX to copy from the website"],
   ["License", "MIT", "MIT"],
@@ -36,7 +36,7 @@ export default function Page() {
   const page = learnPage(HREF);
   return (
     <Prose>
-      <Title lead="Heroicons is a compact set of outline and solid icons from the makers of Tailwind CSS. Kubai Icons is a set of layered color icons, each with its own hover motion. Both are MIT licensed and have React and Vue packages.">
+      <Title lead="Heroicons is a compact set of outline and solid icons from the makers of Tailwind CSS. Kubai Icons comes in three styles that share names — line, two-tone solid and layered color — and gives every icon its own hover motion. Both are MIT licensed and have React and Vue packages.">
         {page.title}
       </Title>
       <h2>At a glance</h2>
@@ -65,17 +65,17 @@ export default function Page() {
       <h2>Switching from Heroicons</h2>
       <p>Install the package for your framework. Here it is React:</p>
       <Code lang="bash" code="npm install kubai-icons-react" />
-      <p>Heroicons imports each style from its own path, and every name ends in <code>Icon</code>. Kubai Icons has one import path, and also exports each icon with an <code>Icon</code> suffix, so names such as <code>BellIcon</code> keep working where the object has the same name:</p>
+      <p>Heroicons imports each style from its own path, and every name ends in <code>Icon</code>. Kubai Icons also exports each icon with an <code>Icon</code> suffix across all three styles — <code>kubai-icons-react/line</code> for 24-grid outline icons, <code>kubai-icons-react/duotone</code> for 16-grid solid icons, and <code>kubai-icons-react</code> for layered color icons — so names such as <code>BellIcon</code> keep working:</p>
       <Code lang="tsx" code={`// Before
 import { HomeIcon, BellIcon } from "@heroicons/react/24/outline";
 
 <HomeIcon className="size-6 text-gray-500" />
 
-// After
-import { HomeIcon, BellIcon } from "kubai-icons-react";
+// After (line style at 1.5 stroke width; omit "/line" for layered color)
+import { HomeIcon, BellIcon } from "kubai-icons-react/line";
 
-<HomeIcon size={24} className="text-gray-500" />`} />
-      <p>Heroicons are sized with CSS classes. Kubai icons take a <code>size</code> prop in pixels instead, and default to 24. Color works the same way: both follow <code>currentColor</code>, so text color classes recolor them. There is no solid set; <code>variant=&quot;soft&quot;</code> gives a lighter look. See the <Link href="/docs/react/">React props</Link>.</p>
+<HomeIcon size={24} strokeWidth={1.5} className="text-gray-500" />`} />
+      <p>Heroicons are sized with CSS classes; Kubai icons take a <code>size</code> prop in pixels (default 24), and CSS sizing classes such as <code>size-6</code> work too. Color works the same way: both follow <code>currentColor</code>, so text color classes recolor them. For solid 24px icons use <code>variant=&quot;fill&quot;</code> on the line style, and for 16px solid icons use <code>kubai-icons-react/duotone</code>. See the <Link href="/docs/guides/line/">line style</Link> and <Link href="/docs/react/">React props</Link>.</p>
       <h2>Name table</h2>
       <p>The closest Kubai icon for common Heroicons. Both columns are React exports; the Vue packages use the same names.</p>
       <table>
@@ -91,7 +91,7 @@ import { HomeIcon, BellIcon } from "kubai-icons-react";
         heading="Questions"
         items={[
           { q: "Can I use Heroicons and Kubai Icons in the same project?", a: "Yes. The packages are independent, so you can switch one screen at a time. The two styles look different side by side, so mixing them in one toolbar is best avoided." },
-          { q: "Is there a solid or outline style?", a: "No. Every Kubai icon is a layered color drawing. `variant=\"soft\"` gives a lighter version with paler fills and darker outlines." },
+          { q: "Is there a solid or outline style?", a: "Yes. Import from `kubai-icons-react/line` for 24-grid outline icons (and `variant=\"fill\"` for filled shapes), or from `kubai-icons-react/duotone` for solid two-tone icons on a 16 grid." },
           { q: "Do Kubai icons work with Tailwind CSS?", a: "Yes. Icons follow `currentColor`, so classes such as `text-sky-600` set their color, and `className` passes through to the SVG." },
           { q: "How much does an icon add to the bundle?", a: "Minified and gzipped, the first Kubai icon adds about 4 KB including the shared runtime, and each further icon about 0.6 KB. Icons you do not import are removed." },
         ]}

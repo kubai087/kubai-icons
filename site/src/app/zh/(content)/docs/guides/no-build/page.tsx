@@ -97,9 +97,9 @@ export class ToolbarComponent {
       <Faq
         heading="常见问题"
         items={[
-          { q: "CDN 脚本加载的是哪个版本？", a: "带 `@0` 的地址会加载最新的 0.x 版本，页面不用修改就能用上新图标。CDN 切换到新版本可能需要一段时间。如果希望页面保持不变，可以固定一个具体版本，例如 `kubai-icons@0.9.0`。" },
+          { q: "CDN 脚本加载的是哪个版本？", a: "带 `@0` 的地址会加载最新的 0.x 版本，页面不用修改就能用上新图标。CDN 切换到新版本可能需要一段时间。如果希望页面保持不变，可以固定一个具体版本，例如 `kubai-icons@0.16.0`。" },
           { q: "Web Component 可以在 React 或 Vue 中使用吗？", a: "可以，但在这两个框架中更适合使用 `kubai-icons-react` 和 `kubai-icons-vue`：它们支持服务端渲染，并通过 props 设置。" },
-          { q: "怎样查到图标的名称？", a: "在 /zh/icons/ 的图标库中搜索。每个图标的面板和页面上都会显示它的 kebab-case 名称，例如 `calendar-check`。" },
+          { q: "怎样查到图标的名称？", a: "打开图标库，按词语或含义搜索即可。每个图标的面板上都会显示它的 kebab-case 名称，例如 `calendar-check`。" },
           { q: "动效对无障碍友好吗？", a: "键盘焦点会像悬停一样播放动效，触屏设备上点按会播放，设置了 `prefers-reduced-motion` 时不播放动画。" },
         ]}
       />

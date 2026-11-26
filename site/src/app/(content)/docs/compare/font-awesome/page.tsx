@@ -10,7 +10,7 @@ export const metadata = learnMeta(HREF, "en");
 const FACTS: [string, string, string][] = [
   ["Style", "Three styles that share names: line, two-tone solid and layered color", "Free: solid, regular and brand icons. Pro adds light, thin, duotone and other styles"],
   ["Animation", "A hover motion for each icon that acts out its meaning: a bell rings, a folder opens", "General animations you switch on, such as spin, beat, bounce and shake, that loop on any icon"],
-  ["Icons", "About 1,270 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "About 2,000 in the free set, including brand logos; Pro has many more"],
+  ["Icons", "About 1,280 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "About 2,000 in the free set, including brand logos; Pro has many more"],
   ["Sizing", "A size prop in pixels", "Sizes relative to the text, such as lg or 2x"],
   ["Color", "One accent color; every shade is derived from it", "One color; duotone icons take a primary and a secondary color"],
   ["Packages", "React, Vue, plain JavaScript, a web component and static SVG", "Web fonts with CSS, SVG with JavaScript, and components for React, Vue and Angular"],

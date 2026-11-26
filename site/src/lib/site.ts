@@ -95,9 +95,25 @@ export const submitPrompt = (locale: Locale = "en") =>
     `把我绘制的图标提交到 Kubai Icons 图标库：
 1. 在 Skill 目录中运行 node scripts/export.mjs --only <图标名>，导出 SVG。
 2. 请我确认：图标由我绘制，不含徽标或抄袭的内容，并同意以 MIT 许可证发布。未确认则停止。
-3. 运行 gh issue create --repo kubai087/kubai-icons --title "[Icon submission] <name>"，正文使用这些标题："### Name"（短横线连接的小写英文）、"### What it does on hover"、"### Files"（用代码块放入 SVG，如有 .js 源文件也一并放入）。
+3. 运行 gh issue create --repo kubai087/kubai-icons --title "[Icon submission] <图标名>"，正文使用这些标题："### Name"（短横线连接的小写英文）、"### What it does on hover"、"### Files"（用代码块放入 SVG，如有 .js 源文件也一并放入）。
 4. 告诉我 Issue 链接。`,
     { site: SITE_URL, repo: REPO },
+  );
+/** A prompt that has a coding agent clone or update the skill in its skills folder. */
+export const installSkillPrompt = (locale: Locale = "en") =>
+  pick(
+    locale,
+    `Install the Kubai Icons skill for me:
+clone {repo} into your skills folder as kubai-icons
+(~/.claude/skills in Claude Code, ~/.agents/skills in Codex;
+if it's already there, pull the latest version instead),
+make sure SKILL.md exists in that folder, and tell me when it's ready.`,
+    `请帮我安装 Kubai Icons Skill：
+将 {repo} 克隆到你的 skills 文件夹中，目录名为 kubai-icons
+（Claude Code 使用 ~/.claude/skills，Codex 使用 ~/.agents/skills；
+如果已经存在，则改为拉取最新版本），
+确认该文件夹中有 SKILL.md，准备好后告诉我。`,
+    { repo: REPO },
   );
 /** A prefilled GitHub issue for an icon request. */
 export const requestUrl = (query = "") =>
