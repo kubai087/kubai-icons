@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "Dùng trong công cụ thiết kế",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} npm downloads": "{count} lượt tải trên npm",
+ "{count} in the last 7 days": "{count} trong 7 ngày qua"
 }

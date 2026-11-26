@@ -12,6 +12,7 @@ import { AgentGuide } from "@/components/agent-guide";
 import { Container } from "@/components/kit/layout";
 import { HeroWall } from "@/components/hero-wall";
 import { HeroBadge } from "@/components/hero-badge";
+import { NpmDownloads } from "@/components/npm-downloads";
 import { StyleBand } from "@/components/style-band";
 import { HeroHeadline } from "@/components/hero-headline";
 import { FeatureCards } from "@/components/feature-cards";
@@ -46,12 +47,16 @@ export function HomePage({ locale }: { locale: Locale }) {
             <p className="rise-in max-w-xl text-lead text-muted-foreground text-pretty [--i:2]">
               {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}
             </p>
-            <p className="rise-in flex items-center gap-1.5 text-control text-muted-foreground [--i:2]">
-              {pick(locale, "Designed by", "设计")}
-              <AuthorLink place="home" className="tap relative inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline">
-                <XBrandIcon className="size-3.5" aria-hidden />{AUTHOR.name}
-              </AuthorLink>
-            </p>
+            {/* No separator between the two: when a long language wraps, the second simply starts the next line. */}
+            <div className="rise-in flex flex-wrap items-center gap-x-5 gap-y-1 text-control text-muted-foreground [--i:2]">
+              <p className="flex items-center gap-1.5">
+                {pick(locale, "Designed by", "设计")}
+                <AuthorLink place="home" className="tap relative inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline">
+                  <XBrandIcon className="size-3.5" aria-hidden />{AUTHOR.name}
+                </AuthorLink>
+              </p>
+              <NpmDownloads locale={locale} />
+            </div>
           </div>
           <div className="rise-in flex flex-wrap gap-3 [--i:3]">
             <Link href={localize("/icons/", locale)} className={buttonVariants({ size: "xl" })}>

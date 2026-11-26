@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "Usar em ferramentas de design",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} npm downloads": "{count} downloads no npm",
+ "{count} in the last 7 days": "{count} nos últimos 7 dias"
 }

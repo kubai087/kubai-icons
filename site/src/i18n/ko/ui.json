@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "디자인 도구에서 사용",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} npm downloads": "npm 다운로드 {count}회",
+ "{count} in the last 7 days": "최근 7일 {count}회"
 }

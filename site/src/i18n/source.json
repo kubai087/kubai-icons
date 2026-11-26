@@ -269,6 +269,8 @@
   "{count} icons",
   "{count} imported",
   "{count} imported, {size} KB gzipped",
+  "{count} in the last 7 days",
+  "{count} npm downloads",
   "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.",
   "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.",
   "{count} saved",
