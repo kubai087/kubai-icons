@@ -15,7 +15,8 @@
 // width s, so every weight is drawn, not scaled: outlines are placed by their OUTER edge and keep
 // their size, strokes grow inward.
 import { rr, circ, polygon, rot } from './smooth.mjs';
-import { fitEnds } from './ends.mjs';
+import { fitEnds, parse, flatten, distance, inside } from './ends.mjs';
+import { EFFECTS } from './motion.mjs';
 
 export { rr, circ, polygon, rot };
 
@@ -185,6 +186,177 @@ export function lightOf(icon, L) {
   const sec = live.filter((l) => l.role === 'secondary');
   return new Set(sec.length < live.length ? sec : []);
 }
+// The poses the hover motion fx gives each named layer (as motion.mjs paints them), at n moments
+// through it: [{ name: { x, y, r, s, sx, sy, gx, gy, a, w, o } }]. Effects on the whole drawing
+// move every layer alike and are left out.
+function motionPoses(fx, n = 24) {
+  const parts = [].concat(fx || []).filter((spec) => spec.on && spec.on !== 'all').map((spec) => {
+    const list = spec.on.map((g) => [].concat(g)), E = EFFECTS[spec.t];
+    const gs = spec.by || ['draw', 'variable', 'turn', 'leaf', 'scan'].includes(spec.t) ? list : [list.flat()];
+    return { spec, gs, E, len: E.len(spec, gs.length) };
+  });
+  if (!parts.length) return [];
+  const span = Math.max(...parts.map((p) => p.len)), mul = (a, b) => (a == null ? b : b == null ? a : a * b);
+  return Array.from({ length: n }, (_, k) => {
+    const t = (span * (k + 1)) / (n + 1), pose = {};
+    for (const p of parts) p.gs.forEach((grp, i) => {
+      const q = p.E.pose(p.spec, t, i, p.gs.length) || {};
+      for (const name of grp) {
+        const a = pose[name] ?? {};
+        pose[name] = {
+          x: (a.x ?? 0) + (q.x ?? 0), y: (a.y ?? 0) + (q.y ?? 0), r: (a.r ?? 0) + (q.r ?? 0), s: (a.s ?? 1) * (q.s ?? 1),
+          sx: (a.sx ?? 1) * (q.sx ?? 1), sy: (a.sy ?? 1) * (q.sy ?? 1), gx: mul(a.gx, q.gx), gy: mul(a.gy, q.gy),
+          a: mul(a.a, q.a), w: a.w == null ? q.w : q.w == null ? a.w : Math.min(a.w, q.w), o: p.spec.o ?? a.o
+        };
+      }
+    });
+    return pose;
+  });
+}
+// A point moved by a pose: reshaped about o (gx, gy), then turned, scaled and moved as transform().
+function posed([px, py], q) {
+  const [ox, oy] = q.o || [12, 12], s = q.s ?? 1;
+  const u = (px - ox) * (q.gx ?? 1) * s * (q.sx ?? 1), v = (py - oy) * (q.gy ?? 1) * s * (q.sy ?? 1);
+  const r = ((q.r ?? 0) * Math.PI) / 180, c = Math.cos(r), sn = Math.sin(r);
+  return [u * c - v * sn + ox + (q.x ?? 0), u * sn + v * c + oy + (q.y ?? 0)];
+}
+/**
+ * Where the light parts of line-duo are clipped (GUIDE.md §4.2). The dark lines go over the light
+ * ones, but a light part that reaches past the centre line of a dark stroke shows through its
+ * anti-aliased far edge, and pokes out past it when the part moves. So for each light part and
+ * each dark shape it reaches, the far half of that dark stroke (and a margin past it) is taken out
+ * of the light part. Each clip names the dark layer and how:
+ *   [key, 'in']        the light part keeps the inside of the dark closed path `key`
+ *   [key, 'out']       it keeps the outside
+ *   [key, 'side', d]   it keeps the side d of the dark straight line `key`
+ *   [key, 'strip', d]  the strips d along the dark path `key`, on the far side of it from each
+ *                      stretch of the light part that reaches it, go (curves, and light parts in
+ *                      several pieces that meet the dark one from both sides)
+ * A light part, or a piece of one, with visible ink on both sides of a dark shape (it crosses it)
+ * is not clipped by it, nor one that would be at any moment of the hover motion fx (a part that
+ * slides over a dark shape keeps all its ink). Layers are compared only when drawn in the same
+ * frame (tf). Returns a Map from a light layer to its clips; layers need their keys (render, the
+ * importer).
+ */
+export function litClips(L, lit, s, fx) {
+  const out = new Map();
+  // points no more than e apart along a polyline, or along every polyline of a path
+  const fine = (P, e) => P.flatMap((q, k) => {
+    if (!k) return [q];
+    const [ax, ay] = P[k - 1], m = Math.max(1, Math.ceil(Math.hypot(q[0] - ax, q[1] - ay) / e));
+    return Array.from({ length: m }, (_, j) => [ax + ((q[0] - ax) * (j + 1)) / m, ay + ((q[1] - ay) * (j + 1)) / m]);
+  });
+  const samples = (d) => flatten(d).flatMap((P) => fine(P, 0.1));
+  const closed = (d) => (d.match(/M/g) || []).length === (d.match(/Z/g) || []).length;
+  // a dark straight line: its two ends
+  const straight = (d) => { const c = parse(d); return c.length === 2 && c[0].c === 'M' && c[1].c === 'L' ? [c[0].a, c[1].a] : null; };
+  // which side of the polylines M a point is on, by the nearest segment: 1 left, -1 right, 0 past
+  // an open end or on it
+  const sideOf = ([px, py], M) => {
+    let best = Infinity, sg = 0;
+    for (const Q of M) for (let k = 1; k < Q.length; k++) {
+      const [ax, ay] = Q[k - 1], [bx, by] = Q[k], dx = bx - ax, dy = by - ay, LL = dx * dx + dy * dy || 1;
+      const t = ((px - ax) * dx + (py - ay) * dy) / LL, tc = Math.max(0, Math.min(1, t)), e = Math.hypot(px - ax - tc * dx, py - ay - tc * dy);
+      if (e < best - 1e-9) {
+        best = e;
+        const end = (t < 0 && k === 1 || t > 1 && k === Q.length - 1) && Math.hypot(Q[0][0] - Q[Q.length - 1][0], Q[0][1] - Q[Q.length - 1][1]) > 1e-6;
+        sg = end ? 0 : Math.sign(dx * (py - ay) - dy * (px - ax));
+      }
+    }
+    return sg;
+  };
+  // the one side the visible ink of points P is on (by test), through the motion too; else null
+  const sideThrough = (P, M, h, l, m, test) => {
+    const at = (Pp, Mm) => new Set(Pp.filter((p) => distance(p, Mm) > h + 0.05).map((p) => test(p, Mm)).filter((v) => v !== 0));
+    const side = at(P, M);
+    if (side.size !== 1) return null;
+    const [v] = side;
+    for (const q of poses) {
+      const ql = q[l.key] ?? {}, qm = q[m.key] ?? {};
+      // moved alike, the two keep their places relative to each other
+      if (JSON.stringify(ql) === JSON.stringify(qm) && ql.gx == null && ql.gy == null) continue;
+      if ((ql.a ?? 1) < 0.05 || (qm.a ?? 1) < 0.05 || (qm.w ?? 1) < 0.01) continue;
+      const now = at(P.map((p) => posed(p, ql)), M.map((Q) => Q.map((p) => posed(p, qm))));
+      if (now.size > 1 || (now.size === 1 && !now.has(v))) return null;
+    }
+    return v;
+  };
+  // the bounding box of polylines: [x0, y0, x1, y1]
+  const box = (M) => M.flat().reduce((b, [x, y]) => [Math.min(b[0], x), Math.min(b[1], y), Math.max(b[2], x), Math.max(b[3], y)], [Infinity, Infinity, -Infinity, -Infinity]);
+  const dark = L.filter((m) => !lit.has(m) && !m.ghost && m.k !== 'solid');
+  const poses = motionPoses(fx);
+  for (const l of lit) {
+    if (l.k === 'solid') continue;
+    const h = s / (l.sc ?? 1) / 2, P = samples(l.d), list = [], lb = box([P]);
+    for (const m of dark) {
+      if ((m.tf ?? '') !== (l.tf ?? '')) continue;
+      const M = flatten(m.d), mb = box(M);
+      if (lb[0] > mb[2] + h + 0.05 || mb[0] > lb[2] + h + 0.05 || lb[1] > mb[3] + h + 0.05 || mb[1] > lb[3] + h + 0.05) continue;
+      // the light part reaches the dark stroke's centre line
+      if (Math.min(...P.map((p) => distance(p, M))) > h + 0.02) continue;
+      const shut = closed(m.d), seg = shut ? null : straight(m.d);
+      if (shut || seg) {
+        const v = sideThrough(P, M, h, l, m, shut ? (p, Mm) => (inside(p, Mm) ? 1 : -1) : sideOf);
+        if (v != null) {
+          if (shut) { list.push([m.key, v > 0 ? 'in' : 'out']); continue; }
+          // the half-plane on the light part's side of the line
+          const [[ax, ay], [bx, by]] = seg, len = Math.hypot(bx - ax, by - ay) || 1, ux = (bx - ax) / len, uy = (by - ay) / len;
+          const nx = -uy * v, ny = ux * v, R = 40, pt = (t, o) => `${n(ax + ux * t + nx * o)} ${n(ay + uy * t + ny * o)}`;
+          list.push([m.key, 'side', `M${pt(-R, 0)}L${pt(len + R, 0)}L${pt(len + R, R)}L${pt(-R, R)}Z`]);
+          continue;
+        }
+      }
+      // piece by piece, against each piece of the dark path: strips on its far side, where they meet
+      const strips = [], W = s / (m.sc ?? 1) + 0.5;
+      for (const piece of l.d.split(/(?=M)/)) {
+        const Q = samples(piece);
+        if (!Q.length || Math.min(...Q.map((p) => distance(p, M))) > h + 0.02) continue;
+        for (const raw of M) {
+          if (Math.min(...Q.map((p) => distance(p, [raw]))) > h + 0.02) continue;
+          const v = sideThrough(Q, [raw], h, l, m, sideOf);
+          if (v == null) continue;
+          const D = fine(raw, 0.25);
+          const near = D.map((q, k) => k > 0 && distance([(q[0] + D[k - 1][0]) / 2, (q[1] + D[k - 1][1]) / 2], [Q]) < 2 * h + 0.3);
+          for (let k = 1; k < D.length; k++) {
+            if (!near[k] || near[k - 1]) continue;
+            let e = k; while (e + 1 < D.length && near[e + 1]) e++;
+            const a = Math.max(0, k - 2), b = Math.min(D.length - 1, e + 1), run = D.slice(a, b + 1);
+            // each point moved W across, away from the light piece (v is its side, left positive)
+            const off = run.map((q, j) => {
+              const p0 = run[Math.max(0, j - 1)], p1 = run[Math.min(run.length - 1, j + 1)], tl = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]) || 1;
+              return [q[0] - ((-(p1[1] - p0[1]) / tl) * v * W), q[1] - (((p1[0] - p0[0]) / tl) * v * W)];
+            });
+            let poly = [...run, ...off.reverse()];
+            const area = poly.reduce((acc, q, j) => { const r = poly[(j + 1) % poly.length]; return acc + q[0] * r[1] - r[0] * q[1]; }, 0);
+            if (area < 0) poly = poly.reverse();
+            // not where another piece of the light part shows (a spoke on the other side)
+            const ring = [[...poly, poly[0]]];
+            if (P.some((p) => distance(p, [raw]) > h + 0.05 && (inside(p, ring) || distance(p, ring) < h))) { k = e; continue; }
+            strips.push(`M${poly.map((q) => `${n(q[0])} ${n(q[1])}`).join('L')}Z`);
+            k = e;
+          }
+        }
+      }
+      if (strips.length) list.push([m.key, 'strip', strips.join('')]);
+    }
+    if (list.length) out.set(l, list);
+  }
+  return out;
+}
+/**
+ * The mask contents of one clip (litClips), on white: the band round the dark layer m wide enough
+ * for the light part's ink on the far side, less the side the light part keeps (or the strips
+ * given). s is the stroke.
+ * tag wraps a piece so it moves with m; open is m's own clear bands in white, where m is not drawn
+ * and the light part stays.
+ */
+export function clipMask([, k, d], m, s, tag, open = '') {
+  const t = m.tf ? ` transform="${m.tf}"` : '';
+  if (k === 'strip') return tag(`<path d="${d}" fill="#000"${t}/>`) + open;
+  const keep = k === 'in' ? m.d : k === 'out' ? `M-12 -12H36V36H-12Z${m.d}` : d;
+  return tag(`<path d="${m.d}" fill="none" stroke="#000" stroke-width="${n((2 * s + 0.5) / (m.sc ?? 1))}" stroke-linecap="round" stroke-linejoin="round"${t}/>`)
+    + tag(`<path d="${keep}" fill="#fff" fill-rule="evenodd"${t}/>`) + open;
+}
 /** A colour mixed toward the background: hex by arithmetic, anything else with color-mix(). */
 export function mixTone(color, share, bg = '#FFFFFF') {
   const hex = (c) => /^#[0-9a-f]{6}$/i.test(c) && [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
@@ -269,6 +441,19 @@ export function render(icon, o = {}) {
   const tagged = (l, svg) => (motion ? `<g data-l="${l.key}"${l.ghost ? ' opacity="0"' : ''}>${svg}</g>` : svg);
   const defs = [];
   const box = 'maskUnits="userSpaceOnUse" x="-6" y="-6" width="36" height="36"><rect x="-6" y="-6" width="36" height="36" fill="#fff"/>';
+  // line-duo: what is taken out of each light part where it reaches under a dark one (litClips)
+  const clips = two ? litClips(L, lit, s, icon.fx) : new Map(), byKey = Object.fromEntries(L.map((l) => [l.key, l]));
+  // The clear bands parts in front cut round them out of layer i (gap, occ, cutD, cut), in ink.
+  const bands = (i, ink) => {
+    const l = L[i], B = [];
+    L.forEach((m, j) => {
+      if (j <= i || m.part === l.part || depth(m, l) || (m.ghost && !motion)) return;
+      if (m.cutD) B.push(tagged(m, `<path d="${m.cutD}" fill="${ink}"${m.tf ? ` transform="${m.tf}"` : ''}/>`));
+      else if (m.cut) B.push(tagged(m, `<path d="${m.cut.d}" fill="none" stroke="${ink}" stroke-width="${n(m.cut.w)}" stroke-linecap="round"${pathLen}/>`));
+      else if (m.gap || m.occ) B.push(tagged(m, shape(m, ink, 2 * gapOf(s), m.occ ? true : solidForm(m))));
+    });
+    return B;
+  };
   const out = [], under = [], back = [];
   L.forEach((l, i) => {
     const p = paint(l);
@@ -285,12 +470,7 @@ export function render(icon, o = {}) {
       if (d) cuts.push(tagged(m, shape(m, d % 2 ? '#000' : '#fff')));
     });
     // Clear bands cut by parts in front, from other parts.
-    L.forEach((m, j) => {
-      if (j <= i || m.part === l.part || depth(m, l) || (m.ghost && !motion)) return;
-      if (m.cutD) cuts.push(tagged(m, `<path d="${m.cutD}" fill="#000"${m.tf ? ` transform="${m.tf}"` : ''}/>`));
-      else if (m.cut) cuts.push(tagged(m, `<path d="${m.cut.d}" fill="none" stroke="#000" stroke-width="${n(m.cut.w)}" stroke-linecap="round"${pathLen}/>`));
-      else if (m.gap || m.occ) cuts.push(tagged(m, shape(m, '#000', 2 * gapOf(s), m.occ ? true : solidForm(m))));
-    });
+    cuts.push(...bands(i, '#000'));
     if (!cutting) cuts.length = 0;
     if (skip) return;
     // Solid-tint: the shell's area in a light tint of its own colour, under every stroke. Shells
@@ -314,6 +494,12 @@ export function render(icon, o = {}) {
       defs.push(`<mask id="${id}-m${i}" ${box}${cuts.join('')}</mask>`);
       piece = `<g mask="url(#${id}-m${i})">${piece}</g>`;
     }
+    // line-duo: the far half of each dark stroke this light part reaches goes (GUIDE.md §4.2)
+    if (cutting) (clips.get(l) ?? []).forEach((c, j) => {
+      const m = byKey[c[0]];
+      defs.push(`<mask id="${id}-c${i}-${j}" ${box}${clipMask(c, m, s, (svg) => tagged(m, svg), bands(L.indexOf(m), '#fff').join(''))}</mask>`);
+      piece = `<g mask="url(#${id}-c${i}-${j})">${piece}</g>`;
+    });
     // line-duo: light parts go under the dark ones, so a dark line always crosses on top
     (lit.has(l) ? back : out).push(piece);
   });

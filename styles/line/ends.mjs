@@ -10,7 +10,7 @@
 const n = (v) => +(+v).toFixed(3);
 
 /** Parses a path into absolute commands { c, a: [args] } (M L H V C Q A Z; relative ones made absolute). */
-function parse(d) {
+export function parse(d) {
   const t = d.match(/[MLHVCQAZmlhvcqaz]|-?\d*\.?\d+(?:e-?\d+)?/g), out = [];
   let i = 0, x = 0, y = 0, x0 = 0, y0 = 0, c = '';
   const num = () => +t[i++];
@@ -47,7 +47,7 @@ function arcCentre(x1, y1, [rx, ry, , large, sweep, x2, y2]) {
 }
 
 /** The path as a polyline (for the host's edge). */
-function flatten(d) {
+export function flatten(d) {
   const pts = [], polys = []; let x = 0, y = 0, x0 = 0, y0 = 0;
   const push = () => { if (pts.length > 1) polys.push(pts.splice(0)); else pts.length = 0; };
   for (const { c, a } of parse(d)) {
@@ -63,7 +63,7 @@ function flatten(d) {
   push();
   return polys;
 }
-function distance([px, py], polys) {
+export function distance([px, py], polys) {
   let best = Infinity;
   for (const P of polys) for (let k = 1; k < P.length; k++) {
     const [ax, ay] = P[k - 1], [bx, by] = P[k], dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy || 1;
@@ -72,7 +72,7 @@ function distance([px, py], polys) {
   }
   return best;
 }
-function inside([px, py], polys) {
+export function inside([px, py], polys) {
   let w = false;
   for (const P of polys) for (let k = 1; k < P.length; k++) {
     const [ax, ay] = P[k - 1], [bx, by] = P[k];
