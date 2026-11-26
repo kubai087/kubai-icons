@@ -1,6 +1,6 @@
 "use client";
 import { DOWNLOADS_FALLBACK } from "@/lib/site";
-import { useTr } from "@/lib/use-locale";
+import { useLocale, useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
 /** Read at build time by next.config.ts, as "total,week". */
@@ -16,9 +16,10 @@ function Count({ text, count }: { text: string; count: number }) {
 /** The npm packages' combined downloads, as the install box's last row. */
 export function NpmDownloads({ className }: { className?: string }) {
   const tr = useTr();
+  const chinese = useLocale().startsWith("zh");
   return (
     // Each phrase keeps to one line, so a narrow screen wraps between them, never inside one.
-    <p className={cn("flex flex-wrap gap-x-3 text-caption text-muted-foreground tabular-nums", className)}>
+    <p className={cn("flex flex-wrap gap-x-3 text-caption text-muted-foreground tabular-nums", chinese && "font-zh", className)}>
       <Count text={tr("{count} downloads", "累计下载 {count} 次")} count={COUNTS.total} />
       <Count text={tr("{count} in the last 7 days", "近 7 天 {count} 次")} count={COUNTS.week} />
     </p>
