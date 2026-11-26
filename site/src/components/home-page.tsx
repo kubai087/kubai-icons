@@ -47,16 +47,12 @@ export function HomePage({ locale }: { locale: Locale }) {
             <p className="rise-in max-w-xl text-lead text-muted-foreground text-pretty [--i:2]">
               {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}
             </p>
-            {/* No separator between the two: when a long language wraps, the second simply starts the next line. */}
-            <div className="rise-in flex flex-wrap items-center gap-x-5 gap-y-1 text-control text-muted-foreground [--i:2]">
-              <p className="flex items-center gap-1.5">
-                {pick(locale, "Designed by", "设计")}
-                <AuthorLink place="home" className="tap relative inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline">
-                  <XBrandIcon className="size-3.5" aria-hidden />{AUTHOR.name}
-                </AuthorLink>
-              </p>
-              <NpmDownloads locale={locale} />
-            </div>
+            <p className="rise-in flex items-center gap-1.5 text-control text-muted-foreground [--i:2]">
+              {pick(locale, "Designed by", "设计")}
+              <AuthorLink place="home" className="tap relative inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline">
+                <XBrandIcon className="size-3.5" aria-hidden />{AUTHOR.name}
+              </AuthorLink>
+            </p>
           </div>
           <div className="rise-in flex flex-wrap gap-3 [--i:3]">
             <Link href={localize("/icons/", locale)} className={buttonVariants({ size: "xl" })}>
@@ -66,7 +62,10 @@ export function HomePage({ locale }: { locale: Locale }) {
             <AgentGuide />
             <Link href={localize("/docs/", locale)} className={buttonVariants({ size: "xl", variant: "ghost", className: "px-3 text-muted-foreground max-sm:hidden" })}>{pick(locale, "Documentation", "查看文档")}</Link>
           </div>
-          <div className="rise-in [--i:4]"><InstallTabs /></div>
+          <div className="rise-in space-y-2.5 [--i:4]">
+            <InstallTabs />
+            <NpmDownloads locale={locale} className="px-1" />
+          </div>
           <div className="rise-in flex flex-col gap-1 text-control [--i:5]">
             <span className="text-caption font-medium text-muted-foreground">{pick(locale, "Sponsors", "赞助")}</span>
             <SponsorSlot />
