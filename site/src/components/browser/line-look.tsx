@@ -2,6 +2,7 @@
 // The line icons' variant and stroke width outside the icon browser, on the line icon set pages.
 // They read and change the same shared settings as the browser, so a choice carries across pages.
 import { LineIcon, useLineIcon } from "@/components/kit/line-icon";
+import { LineVariantSample } from "@/components/kit/line-variant-sample";
 import { Segmented } from "@/components/kit/segmented";
 import { SizeControl } from "@/components/kit/size-control";
 import { LINE_STROKE, LINE_STROKES, LINE_VARIANTS } from "@/lib/line";
@@ -23,7 +24,7 @@ export function LineLookControls({ className }: { className?: string }) {
         onChange={(v) => setLineSettings({ variant: v })}
         label={tr("Variant", "变体")}
         dense
-        options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineIcon name="camera" size={18} color="currentColor" variant={o.value} s={2} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
+        options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineVariantSample variant={o.value} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
       />
       <SizeControl
         stretch

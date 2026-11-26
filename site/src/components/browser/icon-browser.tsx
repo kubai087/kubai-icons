@@ -12,6 +12,7 @@ import { Kbd } from "@/components/ui/kbd";
 import { Segmented } from "@/components/kit/segmented";
 import { SizeControl } from "@/components/kit/size-control";
 import { LineIcon } from "@/components/kit/line-icon";
+import { LineVariantSample } from "@/components/kit/line-variant-sample";
 import { warmIcon } from "@/components/kit/icon-image";
 import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
@@ -327,7 +328,7 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
                 onChange={(variant) => setLineSettings({ variant })}
                 label={tr("Variant", "变体")}
                 dense
-                options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineIcon name="camera" size={18} color="currentColor" variant={o.value} s={2} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
+                options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineVariantSample variant={o.value} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
               />
             )}
             {!duo && (

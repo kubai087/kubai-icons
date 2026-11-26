@@ -8,7 +8,7 @@ import type { KubaiIconData } from "kubai-icons";
 import { loadIcon, loadIndex, peekIcon, type IconMeta } from "@/lib/icons";
 import { LINE_STROKES, LINE_VARIANTS, type LineVariant } from "@/lib/line";
 import { setLineSettings, useLineSettings } from "@/lib/line-settings";
-import { LineIcon } from "@/components/kit/line-icon";
+import { LineVariantSample } from "@/components/kit/line-variant-sample";
 import { Segmented } from "@/components/kit/segmented";
 import { useTr } from "@/lib/use-locale";
 import { tile } from "@/components/kit/styles";
@@ -106,7 +106,7 @@ export function LineWall({ color }: { color?: string }) {
         onChange={(variant) => setLineSettings({ variant })}
         label={tr("Variant", "变体")}
         dense
-        options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineIcon name="camera" size={18} color="currentColor" variant={o.value} s={2} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
+        options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineVariantSample variant={o.value} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
       />
       <Segmented
         value={String(settings.s)}

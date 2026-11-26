@@ -341,8 +341,28 @@
   }
 }
 
+/* The bar shown while the app moves to another page: it creeps toward the end without
+   reaching it, then fills and fades once the page is in place. */
+@keyframes nav-progress {
+  from { scale: 0 1; }
+  to { scale: 0.9 1; }
+}
+@keyframes nav-progress-done {
+  from { scale: 1 1; opacity: 1; }
+  to { scale: 1 1; opacity: 0; }
+}
+.nav-progress {
+  height: 100%;
+  background: #5A76F2;
+  transform-origin: left;
+  animation: nav-progress 8s cubic-bezier(.08, .7, .2, 1) forwards;
+}
+.nav-progress-done { animation: nav-progress-done 0.3s ease-out forwards; }
+[dir="rtl"] .nav-progress { transform-origin: right; }
+
 @media (prefers-reduced-motion: reduce) {
   .page-in, .swap-pop, .rise-in, .reveal { animation: none; }
+  .nav-progress:not(.nav-progress-done) { animation: none; scale: 1 1; opacity: 0.6; }
 }
 
 /* Chinese has no use for the tight tracking set for Latin headings. */

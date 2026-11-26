@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { AnalyticsScript } from "@/components/analytics-script";
+import { NavProgress } from "@/components/nav-progress";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HOME_DESCRIPTION } from "@/lib/seo";
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-dvh flex-col">
         <ThemeProvider>
           <TooltipProvider>
+            <NavProgress />
             <SiteHeader />
             {/* At least a screen tall, so the footer never shows half-cut in the first view. */}
             <main className="min-h-[calc(100svh-var(--header))] flex-1">{children}</main>

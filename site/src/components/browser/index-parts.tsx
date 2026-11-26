@@ -1,6 +1,6 @@
 // The pieces of the "All icons by category" section under the icon browser, shared by the
 // layered version, rendered on the server, and the two-tone and line versions, drawn in the page.
-import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import type { ReactNode } from "react";
 import { ChevronRightIcon } from "@/components/kit/ui-icons";
 import { quietLink } from "@/components/kit/styles";
@@ -38,10 +38,11 @@ export function IndexSection({ zh, total, count, cards, names }: { zh: boolean; 
 export function IndexCard({ href, name, count, zh, onClick, icons }: { href: string; name: string; count: number; zh: boolean; onClick?: (e: React.MouseEvent) => void; icons: ReactNode[] }) {
   return (
     <li>
-      <Link
+      <IntentLink
         href={href}
-        prefetch={false}
         onClick={onClick}
+        // With a click handler, the card filters the page it is on.
+        data-in-page={onClick ? true : undefined}
         // A white card with a light border, so its grey icon tiles stand out. Hover lifts it with a
         // soft shadow, and its icons rise in turn, left to right.
         className="group flex h-full flex-col gap-4 rounded-card border border-border/60 bg-background p-4 transition-[border-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-sm motion-reduce:hover:translate-y-0"
@@ -61,7 +62,7 @@ export function IndexCard({ href, name, count, zh, onClick, icons }: { href: str
             </span>
           ))}
         </span>
-      </Link>
+      </IntentLink>
     </li>
   );
 }

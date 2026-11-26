@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -59,7 +59,7 @@ export function CategoryPageBody({ id, locale }: { id: string; locale: Locale })
       <Breadcrumbs trail={[{ name: pick(locale, "Icons", "图标"), path: localize("/icons/", locale) }, { name, path: localize(`/icons/category/${id}/`, locale) }]} />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Heading level={1} title={titleFor(name, locale)} lead={visibleLead(icons.length, locale)} />
-        <Link href={localize(`/icons/?category=${id}`, locale)} prefetch={false} className={buttonVariants({ variant: "outline" })}>{pick(locale, "Search and recolor", "在图标库中查看")}</Link>
+        <IntentLink href={localize(`/icons/?category=${id}`, locale)} className={buttonVariants({ variant: "outline" })}>{pick(locale, "Search and recolor", "在图标库中查看")}</IntentLink>
       </div>
       <IconLinks icons={icons} locale={locale} />
       </div>
@@ -67,7 +67,7 @@ export function CategoryPageBody({ id, locale }: { id: string; locale: Locale })
       <PageSection title={pick(locale, "Icon categories", "图标分类")}>
         <nav aria-label={pick(locale, "Icon categories", "图标分类")} className="flex flex-wrap gap-1.5">
           {allCategories().map((c) => (
-            <Link key={c.id} href={localize(`/icons/category/${c.id}/`, locale)} prefetch={false} aria-current={c.id === id ? "page" : undefined} className={chip({ active: c.id === id })}>{nameIn(c, locale)}</Link>
+            <IntentLink key={c.id} href={localize(`/icons/category/${c.id}/`, locale)} aria-current={c.id === id ? "page" : undefined} className={chip({ active: c.id === id })}>{nameIn(c, locale)}</IntentLink>
           ))}
         </nav>
       </PageSection>

@@ -61,10 +61,10 @@ export function StyleIndex({ style, icons, categories, onCategory, onIcon }: {
         />
       ))}
       names={groups.map((c) => (
-        <IndexNames key={c.id} title={<Link href={loc(`/icons/?style=${style}&category=${c.id}`)} prefetch={false} onClick={(e) => onCategory(e, c.id)} className="hover:underline">{c.name}</Link>}>
+        <IndexNames key={c.id} title={<Link href={loc(`/icons/?style=${style}&category=${c.id}`)} prefetch={false} data-in-page onClick={(e) => onCategory(e, c.id)} className="hover:underline">{c.name}</Link>}>
           {c.icons.map((i) => (
             <li key={i.name}>
-              <Link href={loc(`/icons/?style=${style}&icon=${i.name}`)} prefetch={false} onClick={(e) => onIcon(e, i)}>{nameOf(i)}</Link>
+              <Link href={loc(`/icons/?style=${style}&icon=${i.name}`)} prefetch={false} data-in-page onClick={(e) => onIcon(e, i)}>{nameOf(i)}</Link>
             </li>
           ))}
         </IndexNames>

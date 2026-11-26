@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import { tile } from "@/components/kit/styles";
 import { localNameOf } from "@/lib/catalog";
 import type { IconMeta } from "@/lib/icons";
@@ -20,7 +20,7 @@ export function IconLinks({ icons, locale = "en", style = "layered" }: { icons: 
         const name = locale === "en" ? undefined : localNameOf(i, locale);
         return (
           <li key={i.name}>
-            <Link href={localize(iconHref(style, i.name), locale)} prefetch={false} title={name ? `${name} ${i.name}` : undefined} data-kubai-trigger={style === "line" || undefined} className={cn(tile(), "aspect-[4/3] w-full content-center sm:aspect-square gap-2 p-2 text-center")}>
+            <IntentLink href={localize(iconHref(style, i.name), locale)} title={name ? `${name} ${i.name}` : undefined} data-kubai-trigger={style === "line" || undefined} className={cn(tile(), "aspect-[4/3] w-full content-center sm:aspect-square gap-2 p-2 text-center")}>
               {style === "line" ? (
                 // Live, at the line variant and stroke width chosen on the page or in the browser.
                 <LinePreview name={i.name} size={40} src={previewPath(style, i.name)} alt={`${name ?? iconLabel(i.name)}${STYLE_ALT.line[locale === "zh" ? 1 : 0]}`} />
@@ -29,7 +29,7 @@ export function IconLinks({ icons, locale = "en", style = "layered" }: { icons: 
                 <img src={asset(previewPath(style, i.name))} alt={style === "layered" ? pick(locale, "{label} icon", "{label}图标", { label: name ?? iconLabel(i.name) }) : `${name ?? iconLabel(i.name)}${STYLE_ALT[style][locale === "zh" ? 1 : 0]}`} width={40} height={40} loading="lazy" decoding="async" />
               )}
               <span className={cn("w-full truncate text-caption text-muted-foreground", !name && "font-mono")}>{name ?? i.name}</span>
-            </Link>
+            </IntentLink>
           </li>
         );
       })}

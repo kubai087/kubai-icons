@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import type { ReactNode } from "react";
 import { localize, type Locale } from "@/lib/i18n";
 import { asset } from "@/lib/site";
@@ -52,7 +52,7 @@ export function SetCards({ sets, locale, style = "layered", className }: { sets:
     <ul className={cn("grid gap-3 sm:grid-cols-2 lg:grid-cols-3", className)}>
       {sets.map((c) => (
         <li key={c.id}>
-          <Link href={localize(setPath(style, c.id), locale)} prefetch={false} className={card}>
+          <IntentLink href={localize(setPath(style, c.id), locale)} className={card}>
             <span className="flex gap-2" aria-hidden>
               {c.icons.slice(0, 6).map((n) =>
                 style === "line" ? (
@@ -67,7 +67,7 @@ export function SetCards({ sets, locale, style = "layered", className }: { sets:
               <span className="font-medium">{zh ? c.zhTitle : c.title}</span>
               <span className="text-control text-muted-foreground">{zh ? `${c.icons.length} 个图标` : `${c.icons.length} icons`}</span>
             </span>
-          </Link>
+          </IntentLink>
         </li>
       ))}
     </ul>

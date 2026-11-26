@@ -235,7 +235,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           <Description className={cn("flex h-5 items-center gap-0.5 pe-24 text-control whitespace-nowrap sm:pe-8 text-muted-foreground *:[a]:no-underline", !onCategory && !meta.by && "sr-only")}>
             {onCategory ? (
               <>
-                <a href={asset(loc(`/icons/category/${meta.category}/`))} onClick={(e) => { if (!e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); onCategory(meta.category); } }} className={cn("tap relative", quietLink, root && meta.base && "max-sm:hidden")}>{catName}</a>
+                <a href={asset(loc(`/icons/category/${meta.category}/`))} data-in-page onClick={(e) => { if (!e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); onCategory(meta.category); } }} className={cn("tap relative", quietLink, root && meta.base && "max-sm:hidden")}>{catName}</a>
                 {root && meta.base && (
                   <>
                     <ChevronRightIcon aria-hidden className="size-4 shrink-0 max-sm:hidden rtl:rotate-180" />
@@ -362,6 +362,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
                           render={
                             <a
                               href={asset(loc(`/icons/?q=${encodeURIComponent(word)}`))}
+                              data-in-page
                               onClick={(e) => { if (onKeyword && !e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); onKeyword(word); } }}
                               className="inline-flex h-6 items-center rounded-control bg-surface px-2 text-caption text-muted-foreground no-underline transition-colors hover:bg-surface-hover hover:text-foreground pointer-coarse:h-8"
                             />

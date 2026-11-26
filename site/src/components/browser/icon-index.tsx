@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import { allCategories, baseIcons, iconsIn, localNameOf } from "@/lib/catalog";
 import { hasIconPages, localize, pick, type Locale } from "@/lib/i18n";
 import { iconLabel } from "@/lib/seo";
@@ -34,12 +34,12 @@ export function IconIndex({ locale = "en" }: { locale?: Locale }) {
         />
       ))}
       names={categories.map((c) => (
-        <IndexNames key={c.id} title={<Link href={localize(`/icons/category/${c.id}/`, locale)} prefetch={false} className="hover:underline">{c.name}</Link>}>
+        <IndexNames key={c.id} title={<IntentLink href={localize(`/icons/category/${c.id}/`, locale)} className="hover:underline">{c.name}</IntentLink>}>
           {c.icons.map((i) => (
             <li key={i.name}>
-              <Link href={localize(`/icons/${i.name}/`, locale)} prefetch={false}>
+              <IntentLink href={localize(`/icons/${i.name}/`, locale)}>
                 {locale === "en" ? iconLabel(i.name) : localNameOf(i, locale)}
-              </Link>
+              </IntentLink>
             </li>
           ))}
         </IndexNames>

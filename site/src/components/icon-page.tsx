@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { Container } from "@/components/kit/layout";
 import { chip } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import { IconLinks } from "@/components/browser/icon-links";
 import { IconPageView } from "@/components/browser/icon-page-view";
 import { allCategories, familyOf, iconByName, relatedTo, localNameOf, zhWords } from "@/lib/catalog";
@@ -116,7 +116,7 @@ export function IconPageBody({ name, locale }: { name: string; locale: Locale })
             stackAtXl
             rows={[
               ...(motion ? [{ label: pick(locale, "Hover motion", "悬停动效"), value: <MotionDemo meta={meta} text={motion} /> }] : []),
-              ...(category ? [{ label: pick(locale, "Category", "分类"), value: <Link href={localize(`/icons/category/${category.id}/`, locale)} prefetch={false} className="underline underline-offset-4 hover:text-foreground">{categoryName}</Link> }] : []),
+              ...(category ? [{ label: pick(locale, "Category", "分类"), value: <IntentLink href={localize(`/icons/category/${category.id}/`, locale)} className="underline underline-offset-4 hover:text-foreground">{categoryName}</IntentLink> }] : []),
               ...(badgeNames.length ? [{
                 label: pick(locale, "Badged versions ({count})", "带角标的版本（{count} 个）", { count: badgeNames.length }),
                 value: <Tags items={badgeNames} />,
@@ -126,7 +126,7 @@ export function IconPageBody({ name, locale }: { name: string; locale: Locale })
                 value: (
                   <ul className="flex flex-wrap gap-1.5">
                     {sets.map((c) => (
-                      <li key={c.id}><Link href={localize(`/icons/sets/${c.id}/`, locale)} prefetch={false} className={cn(chip(), "border")}>{pick(locale, c.title, c.zhTitle)}</Link></li>
+                      <li key={c.id}><IntentLink href={localize(`/icons/sets/${c.id}/`, locale)} className={cn(chip(), "border")}>{pick(locale, c.title, c.zhTitle)}</IntentLink></li>
                     ))}
                   </ul>
                 ),

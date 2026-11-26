@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { LanguagesIcon } from "@/components/kit/ui-icons";
+import { startNavigation } from "@/components/nav-progress";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { languageOf, LANGUAGES, localeOf, localize } from "@/lib/i18n";
 import { asset } from "@/lib/site";
@@ -28,6 +29,7 @@ export function useLanguages() {
       onClick: (e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;
         e.preventDefault();
+        startNavigation();
         router.push((target.includes("?") ? target : target + window.location.search) + window.location.hash, { scroll: false });
       },
     };

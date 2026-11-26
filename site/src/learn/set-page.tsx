@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { IntentLink } from "@/components/kit/intent-link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -69,9 +70,9 @@ function StyleLinks({ current, hrefs, locale }: { current: SetStyle; hrefs: [Set
   return (
     <nav aria-label={locale === "zh" ? "风格" : "Style"} className="flex flex-wrap gap-1">
       {hrefs.map(([s, href]) => (
-        <Link key={s} href={localize(href, locale)} prefetch={false} aria-current={s === current ? "page" : undefined} className={cn(chip({ active: s === current }), "border")}>
+        <IntentLink key={s} href={localize(href, locale)} aria-current={s === current ? "page" : undefined} className={cn(chip({ active: s === current }), "border")}>
           {locale === "zh" ? STYLE[s].zh : STYLE[s].en}
-        </Link>
+        </IntentLink>
       ))}
     </nav>
   );
@@ -116,9 +117,9 @@ export function SetsIndex({ locale, style = "layered" }: { locale: Locale; style
         <Heading level={1} title={zh ? t.zhTitle : t.title} lead={zh ? t.zhDescription : t.description} />
         <div className="flex items-center gap-3">
           <span className="text-control text-muted-foreground">{zh ? `${sets.length} 个合集` : `${sets.length} sets`}</span>
-          <Link href={localize(browserHref(style), locale)} prefetch={false} className={buttonVariants({ variant: "outline" })}>
+          <IntentLink href={localize(browserHref(style), locale)} className={buttonVariants({ variant: "outline" })}>
             <SearchIcon data-icon="inline-start" />{zh ? "搜索全部图标" : "Search all icons"}
-          </Link>
+          </IntentLink>
         </div>
       </div>
       <StyleBar style={style}>
@@ -164,9 +165,9 @@ export function SetPageBody({ id, locale, style = "layered" }: { id: string; loc
                 <BookmarkIcon data-icon="inline-start" />{zh ? "全部加入收藏夹" : "Add all to my collection"}
               </a>
             )}
-            <Link href={localize(browserSetHref(style, id), locale)} prefetch={false} className={buttonVariants({ variant: layered ? "ghost" : "outline" })}>
+            <IntentLink href={localize(browserSetHref(style, id), locale)} className={buttonVariants({ variant: layered ? "ghost" : "outline" })}>
               <SearchIcon data-icon="inline-start" />{zh ? "在图标库中打开" : "Open in the icon browser"}
-            </Link>
+            </IntentLink>
           </div>
         </div>
         <StyleBar style={style}>
