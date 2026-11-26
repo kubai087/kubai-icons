@@ -240,6 +240,38 @@ function posed([px, py], q) {
  */
 export function litClips(L, lit, s, fx) {
   const out = new Map();
+  // whether a point lies within thr of the polylines M (as ends.mjs measures distance). The
+  // segments are filed once for each M in a grid of unit cells, and only the cells round the point
+  // are searched.
+  const grids = new WeakMap();
+  const near = (M, thr) => {
+    let G = grids.get(M);
+    if (!G) {
+      G = new Map();
+      for (const Q of M) for (let k = 1; k < Q.length; k++) {
+        const [ax, ay] = Q[k - 1], [bx, by] = Q[k], sg = [ax, ay, bx - ax, by - ay];
+        for (let i = Math.floor(Math.min(ax, bx)); i <= Math.floor(Math.max(ax, bx)); i++) {
+          for (let j = Math.floor(Math.min(ay, by)); j <= Math.floor(Math.max(ay, by)); j++) {
+            const c = `${i},${j}`;
+            if (!G.has(c)) G.set(c, []);
+            G.get(c).push(sg);
+          }
+        }
+      }
+      grids.set(M, G);
+    }
+    return ([px, py]) => {
+      for (let i = Math.floor(px - thr); i <= Math.floor(px + thr); i++) {
+        for (let j = Math.floor(py - thr); j <= Math.floor(py + thr); j++) {
+          for (const [ax, ay, dx, dy] of G.get(`${i},${j}`) ?? []) {
+            const LL = dx * dx + dy * dy || 1, t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / LL));
+            if (Math.hypot(px - ax - t * dx, py - ay - t * dy) <= thr) return true;
+          }
+        }
+      }
+      return false;
+    };
+  };
   // points no more than e apart along a polyline, or along every polyline of a path
   const fine = (P, e) => P.flatMap((q, k) => {
     if (!k) return [q];
@@ -267,7 +299,7 @@ export function litClips(L, lit, s, fx) {
   };
   // the one side the visible ink of points P is on (by test), through the motion too; else null
   const sideThrough = (P, M, h, l, m, test) => {
-    const at = (Pp, Mm) => new Set(Pp.filter((p) => distance(p, Mm) > h + 0.05).map((p) => test(p, Mm)).filter((v) => v !== 0));
+    const at = (Pp, Mm) => { const close = near(Mm, h + 0.05); return new Set(Pp.filter((p) => !close(p)).map((p) => test(p, Mm)).filter((v) => v !== 0)); };
     const side = at(P, M);
     if (side.size !== 1) return null;
     const [v] = side;
@@ -283,6 +315,13 @@ export function litClips(L, lit, s, fx) {
   };
   // the bounding box of polylines: [x0, y0, x1, y1]
   const box = (M) => M.flat().reduce((b, [x, y]) => [Math.min(b[0], x), Math.min(b[1], y), Math.max(b[2], x), Math.max(b[3], y)], [Infinity, Infinity, -Infinity, -Infinity]);
+  // inside(), answered at once for a point outside the polylines' bounding box
+  const boxes = new WeakMap();
+  const within = (p, M) => {
+    if (!boxes.has(M)) boxes.set(M, box(M));
+    const b = boxes.get(M);
+    return p[0] >= b[0] && p[0] <= b[2] && p[1] >= b[1] && p[1] <= b[3] && inside(p, M);
+  };
   const dark = L.filter((m) => !lit.has(m) && !m.ghost && m.k !== 'solid');
   const poses = motionPoses(fx);
   for (const l of lit) {
@@ -293,10 +332,10 @@ export function litClips(L, lit, s, fx) {
       const M = flatten(m.d), mb = box(M);
       if (lb[0] > mb[2] + h + 0.05 || mb[0] > lb[2] + h + 0.05 || lb[1] > mb[3] + h + 0.05 || mb[1] > lb[3] + h + 0.05) continue;
       // the light part reaches the dark stroke's centre line
-      if (Math.min(...P.map((p) => distance(p, M))) > h + 0.02) continue;
+      if (!P.some(near(M, h + 0.02))) continue;
       const shut = closed(m.d), seg = shut ? null : straight(m.d);
       if (shut || seg) {
-        const v = sideThrough(P, M, h, l, m, shut ? (p, Mm) => (inside(p, Mm) ? 1 : -1) : sideOf);
+        const v = sideThrough(P, M, h, l, m, shut ? (p, Mm) => (within(p, Mm) ? 1 : -1) : sideOf);
         if (v != null) {
           if (shut) { list.push([m.key, v > 0 ? 'in' : 'out']); continue; }
           // the half-plane on the light part's side of the line
@@ -310,16 +349,18 @@ export function litClips(L, lit, s, fx) {
       const strips = [], W = s / (m.sc ?? 1) + 0.5;
       for (const piece of l.d.split(/(?=M)/)) {
         const Q = samples(piece);
-        if (!Q.length || Math.min(...Q.map((p) => distance(p, M))) > h + 0.02) continue;
+        if (!Q.length || !Q.some(near(M, h + 0.02))) continue;
+        const QQ = [Q];
         for (const raw of M) {
-          if (Math.min(...Q.map((p) => distance(p, [raw]))) > h + 0.02) continue;
-          const v = sideThrough(Q, [raw], h, l, m, sideOf);
+          const R1 = [raw];
+          if (!Q.some(near(R1, h + 0.02))) continue;
+          const v = sideThrough(Q, R1, h, l, m, sideOf);
           if (v == null) continue;
-          const D = fine(raw, 0.25);
-          const near = D.map((q, k) => k > 0 && distance([(q[0] + D[k - 1][0]) / 2, (q[1] + D[k - 1][1]) / 2], [Q]) < 2 * h + 0.3);
+          const D = fine(raw, 0.25), close = near(QQ, 2 * h + 0.3), clear = (p) => near(R1, h + 0.05)(p);
+          const hit = D.map((q, k) => k > 0 && close([(q[0] + D[k - 1][0]) / 2, (q[1] + D[k - 1][1]) / 2]));
           for (let k = 1; k < D.length; k++) {
-            if (!near[k] || near[k - 1]) continue;
-            let e = k; while (e + 1 < D.length && near[e + 1]) e++;
+            if (!hit[k] || hit[k - 1]) continue;
+            let e = k; while (e + 1 < D.length && hit[e + 1]) e++;
             const a = Math.max(0, k - 2), b = Math.min(D.length - 1, e + 1), run = D.slice(a, b + 1);
             // each point moved W across, away from the light piece (v is its side, left positive)
             const off = run.map((q, j) => {
@@ -331,7 +372,7 @@ export function litClips(L, lit, s, fx) {
             if (area < 0) poly = poly.reverse();
             // not where another piece of the light part shows (a spoke on the other side)
             const ring = [[...poly, poly[0]]];
-            if (P.some((p) => distance(p, [raw]) > h + 0.05 && (inside(p, ring) || distance(p, ring) < h))) { k = e; continue; }
+            if (P.some((p) => !clear(p) && (inside(p, ring) || near(ring, h)(p)))) { k = e; continue; }
             strips.push(`M${poly.map((q) => `${n(q[0])} ${n(q[1])}`).join('L')}Z`);
             k = e;
           }
