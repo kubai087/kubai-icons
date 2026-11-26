@@ -107,9 +107,11 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
 
   # The previous address, on GitHub Pages, forwards visitors to the site.
+  # Without a status check, `if` also needs every earlier job to have succeeded, and the friends
+  # job is skipped on pushes, so this job never ran. It now asks only that the site was published.
   forward-old-address:
     needs: cloudflare
-    if: github.event_name != 'schedule'
+    if: ${{ !cancelled() && needs.cloudflare.result == 'success' && github.event_name != 'schedule' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
