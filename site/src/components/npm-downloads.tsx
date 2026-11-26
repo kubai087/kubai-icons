@@ -13,13 +13,13 @@ function Count({ text, count }: { text: string; count: number }) {
   return <span className="whitespace-nowrap">{before}<span className="font-medium text-foreground">{count.toLocaleString("en")}</span>{after}</span>;
 }
 
-/** The npm packages' combined downloads, as the install box's last row. */
+/** The npm packages' combined downloads, as a line under the install box. The caller sets the size. */
 export function NpmDownloads({ className }: { className?: string }) {
   const tr = useTr();
   const chinese = useLocale().startsWith("zh");
   return (
     // Each phrase keeps to one line, so a narrow screen wraps between them, never inside one.
-    <p className={cn("flex flex-wrap gap-x-3 text-caption text-muted-foreground tabular-nums", chinese && "font-zh", className)}>
+    <p className={cn("flex flex-wrap gap-x-3 text-muted-foreground tabular-nums", chinese && "font-zh", className)}>
       <Count text={tr("{count} downloads", "累计下载 {count} 次")} count={COUNTS.total} />
       <Count text={tr("{count} in the last 7 days", "近 7 天 {count} 次")} count={COUNTS.week} />
     </p>

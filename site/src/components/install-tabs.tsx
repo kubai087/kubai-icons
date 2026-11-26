@@ -5,7 +5,6 @@ import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { card } from "./kit/styles";
 import { Glide } from "./kit/glide";
-import { NpmDownloads } from "./npm-downloads";
 
 const PKGS = [
   { id: "react", label: "React", cmd: "npm i kubai-icons-react" },
@@ -36,7 +35,6 @@ export function InstallTabs() {
         <code key={cur.id} className="font-mono text-control">{cur.cmd}</code>
         <CopyButton text={cur.cmd} onCopy={() => track("install_copy", { pkg: cur.id })} />
       </div>
-      <NpmDownloads className="border-t px-4 py-2" />
     </div>
   );
 }
