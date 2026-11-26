@@ -94,6 +94,13 @@ jobs:
       - name: Tell search engines about new pages
         continue-on-error: true
         run: node tools/indexnow.mjs previous-sitemap.xml site/out/sitemap.xml
+      # Google takes no IndexNow: when the sitemap changed, submit it through Search Console.
+      # Without the GOOGLE_SERVICE_ACCOUNT secret this step only prints a note.
+      - name: Submit the sitemap to Google
+        continue-on-error: true
+        run: node tools/google-sitemap.mjs previous-sitemap.xml site/out/sitemap.xml
+        env:
+          GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
 
   # The previous address, on GitHub Pages, forwards visitors to the site.
   forward-old-address:
