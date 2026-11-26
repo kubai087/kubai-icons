@@ -279,6 +279,6 @@
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "Работа в дизайнерских инструментах",
  "shadcn/ui": "shadcn/ui",
- "{count} npm downloads": "{count} загрузок из npm",
+ "{count} downloads": "{count} загрузок",
  "{count} in the last 7 days": "{count} за последние 7 дней"
 }

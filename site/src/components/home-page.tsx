@@ -12,7 +12,6 @@ import { AgentGuide } from "@/components/agent-guide";
 import { Container } from "@/components/kit/layout";
 import { HeroWall } from "@/components/hero-wall";
 import { HeroBadge } from "@/components/hero-badge";
-import { NpmDownloads } from "@/components/npm-downloads";
 import { StyleBand } from "@/components/style-band";
 import { HeroHeadline } from "@/components/hero-headline";
 import { FeatureCards } from "@/components/feature-cards";
@@ -62,10 +61,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             <AgentGuide />
             <Link href={localize("/docs/", locale)} className={buttonVariants({ size: "xl", variant: "ghost", className: "px-3 text-muted-foreground max-sm:hidden" })}>{pick(locale, "Documentation", "查看文档")}</Link>
           </div>
-          <div className="rise-in space-y-2.5 [--i:4]">
-            <InstallTabs />
-            <NpmDownloads locale={locale} />
-          </div>
+          <div className="rise-in [--i:4]"><InstallTabs /></div>
           <div className="rise-in flex flex-col gap-1 text-control [--i:5]">
             <span className="text-caption font-medium text-muted-foreground">{pick(locale, "Sponsors", "赞助")}</span>
             <SponsorSlot />

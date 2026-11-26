@@ -279,6 +279,6 @@
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "在設計工具中使用",
  "shadcn/ui": "shadcn/ui",
- "{count} npm downloads": "npm 累計下載 {count} 次",
+ "{count} downloads": "累計下載 {count} 次",
  "{count} in the last 7 days": "近 7 天 {count} 次"
 }
