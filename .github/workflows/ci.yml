@@ -62,8 +62,44 @@ jobs:
           path: check-out/
           if-no-files-found: ignore
 
+  # Which of the skill's self-checks a pull request needs: the gallery (src/, scripts/,
+  # index.html), the two-tone style (styles/duotone/) or the line style (styles/line/). A change
+  # to this workflow or to the dependencies runs all three, and so does every push to master.
+  changes:
+    name: What changed
+    runs-on: ubuntu-latest
+    outputs:
+      gallery: ${{ steps.diff.outputs.gallery }}
+      duotone: ${{ steps.diff.outputs.duotone }}
+      line: ${{ steps.diff.outputs.line }}
+      any: ${{ steps.diff.outputs.any }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: diff
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT" != pull_request ]; then
+            printf '%s\n' gallery=true duotone=true line=true any=true >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git fetch --depth=1 origin "$BASE"
+          files=$(git diff --name-only FETCH_HEAD)
+          has() { if printf '%s\n' "$files" | grep -qE "$1"; then echo true; else echo false; fi; }
+          all=$(has '^(\.github/workflows/ci\.yml|package\.json|package-lock\.json)$')
+          gallery=$all; duotone=$all; line=$all
+          [ "$(has '^(src/|scripts/|index\.html$)')" = true ] && gallery=true
+          [ "$(has '^styles/duotone/')" = true ] && duotone=true
+          [ "$(has '^styles/line/')" = true ] && line=true
+          any=false
+          [ "$gallery$duotone$line" != falsefalsefalse ] && any=true
+          printf '%s\n' "gallery=$gallery" "duotone=$duotone" "line=$line" "any=$any" | tee -a "$GITHUB_OUTPUT"
+
   skill:
     name: Skill self-check
+    needs: changes
+    if: needs.changes.outputs.any == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -76,16 +112,22 @@ jobs:
       - name: Allow Chrome's sandbox
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Self-check every gallery icon
+        if: needs.changes.outputs.gallery == 'true'
         run: node scripts/check.mjs
       - name: Export every gallery icon as static SVG
+        if: needs.changes.outputs.gallery == 'true'
         run: node scripts/export.mjs
       - name: Self-check the two-tone solid examples
+        if: needs.changes.outputs.duotone == 'true'
         run: node styles/duotone/check.mjs
       - name: Export the two-tone solid examples as SVG
+        if: needs.changes.outputs.duotone == 'true'
         run: node styles/duotone/export.mjs
       - name: Self-check the line examples at every checked stroke width
+        if: needs.changes.outputs.line == 'true'
         run: node styles/line/check.mjs
       - name: Export the line examples as SVG
+        if: needs.changes.outputs.line == 'true'
         run: node styles/line/export.mjs
       - uses: actions/upload-artifact@v7
         if: always()
@@ -97,12 +139,16 @@ jobs:
             styles/line/check-out/
 
   # The status check required by the branch rule. A job skipped after a failed dependency
-  # counts as passing, so this one always runs and reads the results itself.
+  # counts as passing, so this one always runs and reads the results itself. The skill job may
+  # be skipped only when no part of the skill changed.
   check:
     name: check
-    needs: [library, skill]
+    needs: [library, changes, skill]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Require the library and skill jobs to pass
-        run: test "${{ needs.library.result }}" = success && test "${{ needs.skill.result }}" = success
+        run: |
+          test "${{ needs.library.result }}" = success
+          test "${{ needs.changes.result }}" = success
+          if [ "${{ needs.changes.outputs.any }}" = true ]; then test "${{ needs.skill.result }}" = success; fi
