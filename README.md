@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>An agent skill that draws animated icons in one consistent style.</strong><br />
-  Plus 2,800+ open-source icons drawn with it, for React, Vue and the web.
+  Plus 2,800+ open-source icons drawn with it, for React, Vue and plain JavaScript.
 </p>
 
 <p align="center">

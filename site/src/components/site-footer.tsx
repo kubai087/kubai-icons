@@ -43,7 +43,7 @@ export function SiteFooter() {
             <Logo size={24} />
             Kubai Icons
           </Link>
-          <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}</p>
+          <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and plain JavaScript.", "开源图标库，每个图标都有专属动效")}</p>
           <p className="pt-1 text-caption text-muted-foreground">
             © {new Date().getFullYear()}{" "}
             <AuthorLink place="footer" className="tap relative font-medium text-foreground underline-offset-4 hover:underline">{AUTHOR.name}</AuthorLink>

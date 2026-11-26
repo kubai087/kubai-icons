@@ -45,7 +45,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             <div className="rise-in"><HeroBadge count={iconCount() + duotoneCount() + lineCount()} /></div>
             <HeroHeadline className="rise-in font-heading text-display font-semibold [--i:1]" />
             <p className="rise-in max-w-xl text-lead text-muted-foreground text-pretty [--i:2]">
-              {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}
+              {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.", "开源图标库，每个图标都有专属动效")}
             </p>
             <p className="rise-in flex items-center gap-1.5 text-control text-muted-foreground [--i:2]">
               {pick(locale, "Designed by", "设计")}
