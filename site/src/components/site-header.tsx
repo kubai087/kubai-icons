@@ -70,7 +70,7 @@ export function SiteHeader() {
             <MessageCircle size={18} color="#5393FF" trigger="parent" />
             <span>{tr("Feedback", "反馈")}</span>
           </FeedbackLink>
-          <AuthorLink place="header" label={tr("Kubai087 on X", "Kubai087 的 X 主页")} className={cn("tap relative hidden size-8 place-items-center rounded-control hover:bg-muted lg:grid", quietLink)}>
+          <AuthorLink place="header" label={tr("Kubai087 on X", "枯白 Kubai 的 X 主页")} className={cn("tap relative hidden size-8 place-items-center rounded-control hover:bg-muted lg:grid", quietLink)}>
             <XBrandIcon className="size-4" />
           </AuthorLink>
           <LanguageSwitch className={cn("tap relative hidden size-8 place-items-center rounded-control hover:bg-muted lg:grid", quietLink)} iconOnly />

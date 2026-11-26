@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { SkillPrompt } from "@/components/skill-prompt";
 import { absolute, HOME_DESCRIPTION, HOME_DESCRIPTION_ZH, SITE_NAME } from "@/lib/seo";
 import { localize, pick, type Locale } from "@/lib/i18n";
-import { AUTHOR, MODULE_DEMO, REPO } from "@/lib/site";
+import { AUTHOR, authorName, MODULE_DEMO, REPO } from "@/lib/site";
 import { buttonVariants } from "@/components/ui/button";
 import { InstallTabs } from "@/components/install-tabs";
 import { AgentGuide } from "@/components/agent-guide";
@@ -47,9 +47,9 @@ export function HomePage({ locale }: { locale: Locale }) {
               {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}
             </p>
             <p className="rise-in flex items-center gap-1.5 text-control text-muted-foreground [--i:2]">
-              {pick(locale, "Designed by", "设计")}
+              {pick(locale, "Designed by", "设计师")}
               <AuthorLink place="home" className="tap relative inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline">
-                <XBrandIcon className="size-3.5" aria-hidden />{AUTHOR.name}
+                <XBrandIcon className="size-3.5" aria-hidden />{authorName(locale)}
               </AuthorLink>
             </p>
           </div>

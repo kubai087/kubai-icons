@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { track } from "@/lib/analytics";
 import { absolute } from "@/lib/seo";
-import { AUTHOR, feedbackUrl, REPO } from "@/lib/site";
+import { AUTHOR, authorName, feedbackUrl, REPO } from "@/lib/site";
 import { LanguageItems, useLanguages } from "./language-switch";
 import { ThemeMenuItem } from "./theme-toggle";
 import { useResetAcrossLg } from "@/lib/use-reset-across-lg";
-import { useLocalize, useTr } from "@/lib/use-locale";
+import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
 /** Each row is a full-size touch target. */
@@ -36,6 +36,7 @@ function HeaderMenuPanel({ className }: { className?: string }) {
   const path = usePathname() ?? "/";
   const tr = useTr();
   const loc = useLocalize();
+  const locale = useLocale();
   const { current, links } = useLanguages();
   const [languagesOpen, setLanguagesOpen] = useState(false);
   return (
@@ -66,7 +67,7 @@ function HeaderMenuPanel({ className }: { className?: string }) {
               <GithubIcon />GitHub<Away />
             </DropdownMenuItem>
             <DropdownMenuItem className={ITEM} render={<a href={AUTHOR.x} target="_blank" rel="noreferrer" />} onClick={() => track("author_x_open", { place: "header_menu" })}>
-              <XBrandIcon />{tr("{name} on X", "{name} 的 X 主页", { name: AUTHOR.name })}<Away />
+              <XBrandIcon />{tr("{name} on X", "{name} 的 X 主页", { name: authorName(locale) })}<Away />
             </DropdownMenuItem>
             <DropdownMenuSeparator className="mx-1 my-1.5" />
             <ThemeMenuItem className={ITEM} />

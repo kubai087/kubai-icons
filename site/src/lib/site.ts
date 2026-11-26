@@ -4,6 +4,8 @@ export const REPO = "https://github.com/kubai087/kubai-icons";
 /** The icons the home page's Modules demo can import. */
 export const MODULE_DEMO = ["folder", "bell", "lock", "mail"];
 export const AUTHOR = { name: "Kubai087", x: "https://x.com/kubai087" } as const;
+/** The author's name as shown to people: Chinese pages use the Chinese one. */
+export const authorName = (locale: string) => (locale === "zh" ? "枯白 Kubai" : AUTHOR.name);
 /** The post on X that describes the paid places, where open places link. */
 export const SPONSOR_POST = "https://x.com/Kubai087/status/2120923602031919194";
 /** The one paid sponsor slot, shown on the home page and billed monthly. null while it is open.
