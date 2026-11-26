@@ -177,6 +177,8 @@
  "Submit an icon": "아이콘 제출",
  "Submit an icon you drew with the Kubai Icons skill or by hand. Accepted icons join the open-source library with credit to you.": "Kubai Icons Skill로 그렸거나 직접 그린 아이콘을 제출하세요. 채택된 아이콘은 제작자 표기와 함께 오픈소스 라이브러리에 추가됩니다.",
  "Submit my icon to the Kubai Icons library:\n1. Export it as an SVG by running node scripts/export.mjs --only <name> in the skill folder.\n2. Ask me to confirm that I made it, that it contains no logos or copied artwork, and that I agree to publish it under the MIT License. Stop if I do not confirm.\n3. Run gh issue create --repo kubai087/kubai-icons --title \"[Icon submission] <name>\" with a body using these headings: \"### Name\" (kebab-case), \"### What it does on hover\" and \"### Files\" (the SVG in a code block, plus the icon's .js source if there is one).\n4. Tell me the issue link.": "제가 그린 아이콘을 Kubai Icons 라이브러리에 제출해 주세요.\n1. Skill 폴더에서 node scripts/export.mjs --only <name>을 실행해 SVG로 내보냅니다.\n2. 제가 직접 만든 아이콘인지, 로고나 복제한 작업물이 포함되어 있지 않은지, 그리고 MIT 라이선스로 공개하는 데 동의하는지 저에게 확인을 요청하세요. 제가 확인하지 않으면 중단합니다.\n3. gh issue create --repo kubai087/kubai-icons --title \"[Icon submission] <name>\"을 실행합니다. 본문에는 \"### Name\"(케밥 케이스), \"### What it does on hover\", \"### Files\"(SVG 코드 블록과, 아이콘의 .js 소스가 있으면 함께 첨부) 제목을 사용합니다.\n4. 이슈 링크를 알려 주세요.",
+ "Switch to dark mode": "다크 모드로 전환",
+ "Switch to light mode": "라이트 모드로 전환",
  "Sync": "동기화",
  "Tap to play": "탭하여 재생",
  "Text & Editing": "텍스트·편집",

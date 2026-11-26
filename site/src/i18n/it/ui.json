@@ -177,6 +177,8 @@
  "Submit an icon": "Invia un'icona",
  "Submit an icon you drew with the Kubai Icons skill or by hand. Accepted icons join the open-source library with credit to you.": "Invia un'icona disegnata con la Skill di Kubai Icons o a mano. Le icone accettate entrano nella libreria open source con il tuo nome come autore.",
  "Submit my icon to the Kubai Icons library:\n1. Export it as an SVG by running node scripts/export.mjs --only <name> in the skill folder.\n2. Ask me to confirm that I made it, that it contains no logos or copied artwork, and that I agree to publish it under the MIT License. Stop if I do not confirm.\n3. Run gh issue create --repo kubai087/kubai-icons --title \"[Icon submission] <name>\" with a body using these headings: \"### Name\" (kebab-case), \"### What it does on hover\" and \"### Files\" (the SVG in a code block, plus the icon's .js source if there is one).\n4. Tell me the issue link.": "Invia la mia icona alla libreria Kubai Icons:\n1. Esportala come SVG eseguendo node scripts/export.mjs --only <name> nella cartella della Skill.\n2. Chiedimi di confermare che l'ho realizzata io, che non contiene loghi o opere copiate e che accetto di pubblicarla con licenza MIT. Fermati se non confermo.\n3. Esegui gh issue create --repo kubai087/kubai-icons --title \"[Icon submission] <name>\" con un corpo che usa questi titoli: \"### Name\" (in kebab-case), \"### What it does on hover\" e \"### Files\" (l'SVG in un blocco di codice, più il sorgente .js dell'icona se esiste).\n4. Dimmi il link della issue.",
+ "Switch to dark mode": "Passa al tema scuro",
+ "Switch to light mode": "Passa al tema chiaro",
  "Sync": "Sincronia",
  "Tap to play": "Tocca per riprodurre",
  "Text & Editing": "Testo e modifica",
