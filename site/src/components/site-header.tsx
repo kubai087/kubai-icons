@@ -17,7 +17,8 @@ import { localize } from "@/lib/i18n";
 import { useLocalize, useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
-// Links marked `wide` sit in the bar from that breakpoint; below it they are in HeaderMenu.
+// Links marked `wide` sit in the bar from that breakpoint; below it they are in HeaderMenu,
+// which also holds the language list there.
 const NAV = [
   { href: "/icons/", label: "Icons", zh: "图标" },
   { href: "/docs/", label: "Docs", zh: "文档" },
@@ -72,7 +73,7 @@ export function SiteHeader() {
           <AuthorLink place="header" label={tr("Kubai087 on X", "Kubai087 的 X 主页")} className={cn("tap relative hidden size-8 place-items-center rounded-control hover:bg-muted lg:grid", quietLink)}>
             <XBrandIcon className="size-4" />
           </AuthorLink>
-          <LanguageSwitch className={cn("tap relative grid size-8 place-items-center rounded-control hover:bg-muted", quietLink)} iconOnly />
+          <LanguageSwitch className={cn("tap relative hidden size-8 place-items-center rounded-control hover:bg-muted lg:grid", quietLink)} iconOnly />
           <ThemeToggle className="max-lg:hidden" />
           <GitHubStars className="ms-1 hidden min-[360px]:inline-flex" />
           <HeaderMenu className="ms-1 lg:hidden" />

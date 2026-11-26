@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LanguagesIcon } from "@/components/kit/ui-icons";
+import { CheckIcon, LanguagesIcon } from "@/components/kit/ui-icons";
 import { startNavigation } from "@/components/nav-progress";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { languageOf, LANGUAGES, localeOf, localize } from "@/lib/i18n";
@@ -48,11 +48,12 @@ export function DocumentLanguage() {
   return null;
 }
 
-/** One row per language, each a real link so it can open in a new tab. */
-export function LanguageItems({ links }: { links: LanguageLink[] }) {
+/** One row per language, each a real link so it can open in a new tab. `marked` adds a check to the current one. */
+export function LanguageItems({ links, className, marked }: { links: LanguageLink[]; className?: string; marked?: boolean }) {
   return links.map((l) => (
-    <DropdownMenuItem key={l.code} render={<a href={l.href} hrefLang={l.tag} lang={l.tag} aria-current={l.current ? "page" : undefined} onClick={l.onClick} />} className={cn("pointer-coarse:min-h-11", l.current && "font-medium")}>
+    <DropdownMenuItem key={l.code} render={<a href={l.href} hrefLang={l.tag} lang={l.tag} aria-current={l.current ? "page" : undefined} onClick={l.onClick} />} className={cn("pointer-coarse:min-h-11", className, l.current && "font-medium")}>
       {l.name}
+      {marked && l.current && <CheckIcon className="ms-auto text-muted-foreground" />}
     </DropdownMenuItem>
   ));
 }
