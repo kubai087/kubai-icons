@@ -52,7 +52,7 @@ import { Lock, Camera } from "kubai-icons-react/line";
       <h2>Colors</h2>
       <p>A line icon uses up to three colors: the lines, a light tone and a fill tint. Which of them a variant shows:</p>
       <table>
-        <thead><tr><th><code>variant</code></th><th>Lines and shapes</th><th>Light tone</th><th>Fill tint</th></tr></thead>
+        <thead><tr><th><code>variant</code></th><th>Lines & shapes</th><th>Light tone</th><th>Fill tint</th></tr></thead>
         <tbody>
           <tr><td><code>outline</code></td><td>Every line</td><td>–</td><td>–</td></tr>
           <tr><td><code>line-duo</code></td><td>The outer lines</td><td>Inner and key parts</td><td>–</td></tr>

@@ -9,7 +9,7 @@ export default function Page() {
     <Prose>
       <Title lead={"The icons and packages are MIT licensed, the website is all rights reserved, and the skill is source-available."}>License</Title>
       <div className="my-5 space-y-5">
-          <h2>Icons and packages</h2>
+          <h2>Icons & packages</h2>
           <p>The icons and the packages <code>kubai-icons</code>, <code>kubai-icons-react</code>, <code>kubai-icons-vue</code> and <code>kubai-icons-static</code> are released under the <a href={`${REPO}/blob/master/LICENSE-ICONS`}>MIT License</a>. Commercial use, modification and redistribution are permitted, provided the copyright notice is retained with the source. Attribution in shipped products is not required.</p>
           <h2>Website</h2>
           <p>The website, including its code, text, design and layout, is <a href={`${REPO}/blob/master/LICENSE-SITE`}>all rights reserved</a>. Its source may be read and run locally to prepare a contribution. Copying, hosting or redistributing it requires written permission. The icons on the website remain under the MIT License.</p>

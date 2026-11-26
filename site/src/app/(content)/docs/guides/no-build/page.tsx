@@ -42,7 +42,7 @@ export default function Page() {
   <kubai-icon name="download" size="18" trigger="parent"></kubai-icon>
   Downloads
 </a>`} />
-      <h2>WordPress and other CMSs</h2>
+      <h2>WordPress & other CMSs</h2>
       <p>In the WordPress block editor, add a <strong>Custom HTML</strong> block and paste the script tag and the icons into it. If you use icons on many pages, add the script tag once to the site&apos;s header instead, through your theme or a plugin that inserts code into the head, and use only the <code>&lt;kubai-icon&gt;</code> elements in your blocks. The same approach works in any CMS or site builder that accepts custom HTML.</p>
       <Code lang="html" code={`${SCRIPT}
 
@@ -50,7 +50,7 @@ export default function Page() {
   <kubai-icon name="leaf" size="28"></kubai-icon>
   Grown without pesticides
 </p>`} />
-      <h2>Svelte and SvelteKit</h2>
+      <h2>Svelte & SvelteKit</h2>
       <p>Add the script tag to <code>src/app.html</code> in SvelteKit, or to <code>index.html</code> in a Vite app. Svelte renders custom elements as they are, and attributes can be bound:</p>
       <Code lang="svelte" code={`<script>
   let { icon = "folder" } = $props();

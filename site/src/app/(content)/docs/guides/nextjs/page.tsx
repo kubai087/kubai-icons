@@ -54,8 +54,8 @@ export function CategoryIcon({ name }: { name: string }) {
       <p>In development, <code>next dev</code> may load the package index, which references every icon. Importing each icon from its own file avoids that and keeps reloads quick:</p>
       <Code lang="tsx" code={`import Folder from "kubai-icons-react/icons/folder";`} />
       <p>Production builds remove unused icons either way. See <Link href="/docs/performance/">Performance</Link>.</p>
-      <h2>Color and theme</h2>
-      <p>Icons take their color from <code>currentColor</code>, so they follow the text color of the element around them, including in dark mode. To set a soft look for the whole app, set the variant once on the <code>&lt;body&gt;</code>. See <Link href="/docs/guides/colors-dark-mode/">Colors and dark mode</Link>.</p>
+      <h2>Color & theme</h2>
+      <p>Icons take their color from <code>currentColor</code>, so they follow the text color of the element around them, including in dark mode. To set a soft look for the whole app, set the variant once on the <code>&lt;body&gt;</code>. See <Link href="/docs/guides/colors-dark-mode/">Colors & dark mode</Link>.</p>
       <Faq
         heading="Questions"
         items={[

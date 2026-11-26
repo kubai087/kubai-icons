@@ -16,7 +16,7 @@ export type Collection = {
 export const COLLECTIONS: Collection[] = [
   {
     id: "dashboard",
-    title: "Dashboard and admin panel icons",
+    title: "Dashboard & admin panel icons",
     zhTitle: "仪表盘和后台管理图标",
     description: "Animated icons for dashboards and admin panels: charts, metrics, users, settings, alerts and navigation, for React, Vue and SVG.",
     zhDescription: "适用于仪表盘和后台管理系统的动态图标：图表、指标、用户、设置、提醒和导航，提供 React、Vue 组件和 SVG。",
@@ -26,7 +26,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "ecommerce",
-    title: "E-commerce and online store icons",
+    title: "E-commerce & online store icons",
     zhTitle: "电商和网店图标",
     description: "Animated icons for online stores: cart, bag, checkout, payment, shipping, discounts, wishlist and reviews, for React, Vue and SVG.",
     zhDescription: "适用于网店的动态图标：购物车、购物袋、结算、支付、配送、折扣、收藏和评价，提供 React、Vue 组件和 SVG。",
@@ -36,7 +36,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "finance",
-    title: "Finance and banking icons",
+    title: "Finance & banking icons",
     zhTitle: "金融和银行图标",
     description: "Animated icons for banking, fintech and accounting apps: cards, wallets, coins, currencies, charts, receipts and security.",
     zhDescription: "适用于银行、金融科技和记账应用的动态图标：银行卡、钱包、硬币、货币、图表、票据和安全。",
@@ -46,7 +46,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "settings-account",
-    title: "Settings and account icons",
+    title: "Settings & account icons",
     zhTitle: "设置和账户图标",
     description: "Animated icons for settings pages and account screens: profile, password, security, notifications, appearance, language and billing.",
     zhDescription: "适用于设置页和账户页面的动态图标：个人资料、密码、安全、通知、外观、语言和账单。",
@@ -56,7 +56,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "file-manager",
-    title: "File manager and document icons",
+    title: "File manager & document icons",
     zhTitle: "文件管理和文档图标",
     description: "Animated icons for file managers, cloud drives and document apps: folders, file types, upload, download, share and archive.",
     zhDescription: "适用于文件管理器、云盘和文档应用的动态图标：文件夹、文件类型、上传、下载、分享和归档。",
@@ -66,7 +66,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "text-editor",
-    title: "Text editor and toolbar icons",
+    title: "Text editor & toolbar icons",
     zhTitle: "文本编辑器和工具栏图标",
     description: "Animated icons for rich text editors and formatting toolbars: bold, italic, alignment, lists, links, tables, undo and redo.",
     zhDescription: "适用于富文本编辑器和格式工具栏的动态图标：加粗、斜体、对齐、列表、链接、表格、撤销和重做。",
@@ -76,7 +76,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "chat-messaging",
-    title: "Chat and messaging app icons",
+    title: "Chat & messaging app icons",
     zhTitle: "聊天和消息应用图标",
     description: "Animated icons for chat apps and inboxes: messages, send, reply, calls, voice, attachments, mentions and notifications.",
     zhDescription: "适用于聊天应用和收件箱的动态图标：消息、发送、回复、通话、语音、附件、提及和通知。",
@@ -86,7 +86,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "media-player",
-    title: "Music and video player icons",
+    title: "Music & video player icons",
     zhTitle: "音乐和视频播放器图标",
     description: "Animated icons for music and video players: play, pause, skip, volume, playlists, subtitles, casting and full screen.",
     zhDescription: "适用于音乐和视频播放器的动态图标：播放、暂停、跳过、音量、播放列表、字幕、投屏和全屏。",
@@ -96,7 +96,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "developer",
-    title: "Developer and DevOps icons",
+    title: "Developer & DevOps icons",
     zhTitle: "开发者和 DevOps 图标",
     description: "Animated icons for developer tools and docs: code, terminal, Git, databases, servers, containers, APIs and workflows.",
     zhDescription: "适用于开发者工具和技术文档的动态图标：代码、终端、Git、数据库、服务器、容器、API 和工作流。",
@@ -106,7 +106,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "security",
-    title: "Security and privacy icons",
+    title: "Security & privacy icons",
     zhTitle: "安全和隐私图标",
     description: "Animated icons for security and privacy screens: locks, keys, passwords, biometrics, shields, verification and alerts.",
     zhDescription: "适用于安全和隐私相关界面的动态图标：锁、钥匙、密码、生物识别、盾牌、认证和警告。",
@@ -116,7 +116,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "healthcare",
-    title: "Healthcare and medical icons",
+    title: "Healthcare & medical icons",
     zhTitle: "医疗健康图标",
     description: "Animated icons for healthcare and medical apps: doctors, hospitals, medicine, vital signs, dental care, lab tests and accessibility.",
     zhDescription: "适用于医疗健康应用的动态图标：医生、医院、药品、生命体征、牙科、化验和无障碍。",
@@ -126,7 +126,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "fitness",
-    title: "Fitness and sports app icons",
+    title: "Fitness & sports app icons",
     zhTitle: "健身和运动应用图标",
     description: "Animated icons for fitness trackers and sports apps: workouts, running, cycling, timers, goals, trophies and ball sports.",
     zhDescription: "适用于健身记录和运动应用的动态图标：训练、跑步、骑行、计时、目标、奖杯和球类运动。",
@@ -136,7 +136,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "food-restaurant",
-    title: "Food and restaurant icons",
+    title: "Food & restaurant icons",
     zhTitle: "餐饮和外卖图标",
     description: "Animated icons for restaurants, food delivery and recipe apps: dishes, drinks, desserts, cooking, menus and orders.",
     zhDescription: "适用于餐厅、外卖和菜谱应用的动态图标：菜品、饮品、甜点、烹饪、菜单和订单。",
@@ -146,7 +146,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "travel",
-    title: "Travel and booking icons",
+    title: "Travel & booking icons",
     zhTitle: "旅行和预订图标",
     description: "Animated icons for travel and booking apps: flights, boarding passes, hotels, maps, luggage, tickets and attractions.",
     zhDescription: "适用于旅行和预订应用的动态图标：航班、登机牌、酒店、地图、行李、门票和景点。",
@@ -166,7 +166,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "smart-home",
-    title: "Smart home and IoT icons",
+    title: "Smart home & IoT icons",
     zhTitle: "智能家居和物联网图标",
     description: "Animated icons for smart home and IoT apps: lights, locks, thermostats, cameras, appliances, sensors and connectivity.",
     zhDescription: "适用于智能家居和物联网应用的动态图标：灯光、门锁、温控器、摄像头、家电、传感器和网络连接。",
@@ -176,7 +176,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "education",
-    title: "Education and e-learning icons",
+    title: "Education & e-learning icons",
     zhTitle: "教育和在线学习图标",
     description: "Animated icons for schools and e-learning apps: courses, books, classes, quizzes, certificates, school supplies and science.",
     zhDescription: "适用于学校和在线学习应用的动态图标：课程、书籍、课堂、测验、证书、文具和科学。",
@@ -186,7 +186,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "logistics",
-    title: "Shipping and logistics icons",
+    title: "Shipping & logistics icons",
     zhTitle: "物流和配送图标",
     description: "Animated icons for shipping, logistics and warehouse apps: parcels, trucks, labels, scanning, routes, tracking and delivery.",
     zhDescription: "适用于物流、配送和仓储应用的动态图标：包裹、货车、面单、扫码、路线、追踪和派送。",
@@ -196,7 +196,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "real-estate",
-    title: "Real estate and property icons",
+    title: "Real estate & property icons",
     zhTitle: "房产和物业图标",
     description: "Animated icons for real estate and property apps: homes, buildings, rooms, keys, contracts, maps and amenities.",
     zhDescription: "适用于房产和物业应用的动态图标：住宅、楼宇、房间、钥匙、合同、地图和配套设施。",
@@ -206,7 +206,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "social",
-    title: "Social media and community icons",
+    title: "Social media & community icons",
     zhTitle: "社交媒体和社区图标",
     description: "Animated icons for social and community apps: likes, comments, shares, follows, posts, live video, reactions and badges.",
     zhDescription: "适用于社交和社区应用的动态图标：点赞、评论、分享、关注、发帖、直播、表情和徽章。",
@@ -216,7 +216,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "productivity",
-    title: "Project management and productivity icons",
+    title: "Project management & productivity icons",
     zhTitle: "项目管理和效率工具图标",
     description: "Animated icons for project management and productivity tools: tasks, boards, calendars, timers, notes, goals and teams.",
     zhDescription: "适用于项目管理和效率工具的动态图标：任务、看板、日历、计时器、笔记、目标和团队。",
@@ -226,7 +226,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "kids",
-    title: "Kids and family app icons",
+    title: "Kids & family app icons",
     zhTitle: "儿童和家庭应用图标",
     description: "Animated icons for kids, parenting and family apps: babies, toys, school, sweets, animals, parties and play.",
     zhDescription: "适用于儿童、育儿和家庭应用的动态图标：婴儿、玩具、上学、零食、动物、聚会和游戏。",
@@ -236,7 +236,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "ai",
-    title: "AI and automation icons",
+    title: "AI & automation icons",
     zhTitle: "AI 和自动化图标",
     description: "Animated icons for AI products and automation tools: assistants, generation, voice, vision, workflows and integrations.",
     zhDescription: "适用于 AI 产品和自动化工具的动态图标：助手、生成、语音、视觉、工作流和集成。",
@@ -246,7 +246,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "automotive",
-    title: "Car and transport app icons",
+    title: "Car & transport app icons",
     zhTitle: "汽车和出行应用图标",
     description: "Animated icons for car, ride-hailing and transport apps: vehicles, fuel, charging, parking, traffic, routes and repairs.",
     zhDescription: "适用于汽车、网约车和出行应用的动态图标：车辆、加油、充电、停车、交通、路线和维修。",
@@ -256,7 +256,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "fashion-beauty",
-    title: "Fashion and beauty icons",
+    title: "Fashion & beauty icons",
     zhTitle: "服饰和美妆图标",
     description: "Animated icons for fashion stores and beauty apps: clothing, shoes, bags, jewelry, accessories, makeup and grooming.",
     zhDescription: "适用于服饰店铺和美妆应用的动态图标：服装、鞋子、包袋、珠宝、配饰、彩妆和个人护理。",
@@ -266,7 +266,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "farming-gardening",
-    title: "Farming and gardening icons",
+    title: "Farming & gardening icons",
     zhTitle: "农业和园艺图标",
     description: "Animated icons for farming, gardening and sustainability apps: plants, seeds, tools, crops, animals, weather and renewable energy.",
     zhDescription: "适用于农业、园艺和可持续发展应用的动态图标：植物、种子、工具、作物、动物、天气和可再生能源。",

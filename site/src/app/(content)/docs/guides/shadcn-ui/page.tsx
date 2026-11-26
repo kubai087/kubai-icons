@@ -88,7 +88,7 @@ import { LogOut, User } from "kubai-icons-react";
       <p>Icons take their color from <code>currentColor</code>, so inside a shadcn/ui button they follow the button&apos;s text color in each variant and in dark mode. To give an icon its own color, use a text class or a theme variable:</p>
       <Code lang="tsx" code={`<Bell className="text-primary" />
 <Trash color="var(--destructive)" />`} />
-      <p>See <Link href="/docs/guides/colors-dark-mode/">Colors and dark mode</Link> for the soft variant and page-wide settings.</p>
+      <p>See <Link href="/docs/guides/colors-dark-mode/">Colors & dark mode</Link> for the soft variant and page-wide settings.</p>
       <Faq
         heading="Questions"
         items={[

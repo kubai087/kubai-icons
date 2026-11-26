@@ -420,7 +420,7 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
               <h2 className="min-w-0 truncate font-heading text-subheading font-semibold">{openSet.title}</h2>
               <span className="text-control text-muted-foreground">{locale === "zh" ? `${openSet.icons.length} 个图标` : `${openSet.icons.length} icons`}</span>
               <a href={asset(loc(setPath(styleKey, openSet.id)))} className="text-control text-muted-foreground underline-offset-4 hover:text-foreground hover:underline sm:ms-auto">
-                {locale === "zh" ? "合集介绍和代码" : "About this set and its code"}
+                {locale === "zh" ? "合集介绍和代码" : "About this set & its code"}
               </a>
             </div>
           )}

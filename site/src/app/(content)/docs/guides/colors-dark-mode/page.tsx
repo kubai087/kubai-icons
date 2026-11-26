@@ -31,7 +31,7 @@ export default function Page() {
 <FolderPlus />                          {/* dark badge */}
 <FolderPlus badgeColor="semantic" />    {/* green plus */}
 <FolderPlus badgeColor="#7C3AED" />`} />
-      <h2>The color and soft variants</h2>
+      <h2>The color & soft variants</h2>
       <p>The default <code>color</code> variant uses saturated fills. <code>soft</code> uses lighter fills and darker outlines, and draws the white marks in a dark tone. Set it on one icon:</p>
       <Code lang="tsx" code={`<Folder variant="soft" />`} />
       <p>Or set it once for a whole page or section. The variant is inherited like color, and the closest setting wins: the icon&apos;s own prop, then the nearest element, then the default.</p>
@@ -71,7 +71,7 @@ dark.addEventListener("change", apply);`} />
         </tbody>
       </table>
       <p>The soft variant sets all of these except <code>--ki-b</code>.</p>
-      <h2>Static files and downloads</h2>
+      <h2>Static files & downloads</h2>
       <p>Static SVG files have their colors written in. <code>kubai-icons-static</code> ships <code>svg/</code> in the default blue (<code>#5393FF</code>) and <code>svg-soft/</code> in the soft variant. For another color, request the icon by URL, or download it from the <Link href="/icons/">icon browser</Link> in a chosen color and variant:</p>
       <Code lang="html" code={`<img src="https://icons.kubai.design/api/icon/folder.svg?color=EC4899&variant=soft" width="28" height="28" alt="" />`} />
       <p>Static files don&apos;t follow dark mode by themselves. Use a separate file per theme, for example with a <code>&lt;picture&gt;</code> element and a <code>prefers-color-scheme</code> media query.</p>

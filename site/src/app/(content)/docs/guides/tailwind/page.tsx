@@ -34,8 +34,8 @@ export default function Page() {
       <Code lang="tsx" code={`<Folder className="text-blue-600 dark:text-blue-400" />`} />
       <p>To fade the color when the theme changes, add <code>transition-colors</code>. Transitions on <code>color</code> cross-fade every gradient in the icon.</p>
       <Code lang="tsx" code={`<Folder className="text-blue-600 transition-colors dark:text-blue-400" />`} />
-      <p>For the soft variant across a whole theme, see <Link href="/docs/guides/colors-dark-mode/">Colors and dark mode</Link>.</p>
-      <h2>Badge color and single tones</h2>
+      <p>For the soft variant across a whole theme, see <Link href="/docs/guides/colors-dark-mode/">Colors & dark mode</Link>.</p>
+      <h2>Badge color & single tones</h2>
       <p>Icons read a few CSS custom properties, which Tailwind can set with arbitrary properties. For example, <code>--ki-b</code> is the color of the badge disc on badged icons:</p>
       <Code lang="tsx" code={`import { FolderPlus } from "kubai-icons-react";
 

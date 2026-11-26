@@ -33,7 +33,7 @@ const WORDS: Record<Exclude<SetStyle, "layered">, StyleWords> = {
   },
 };
 
-/** "Dashboard and …" becomes "dashboard and …"; a leading acronym such as "AI" stays. */
+/** "Dashboard & …" becomes "dashboard & …"; a leading acronym such as "AI" stays. */
 const lowerFirst = (s: string) => (/^[A-Z][A-Z]/.test(s) ? s : s[0].toLowerCase() + s.slice(1));
 const firstSentence = (s: string) => s.split(/(?<=\.)\s/)[0];
 const firstZhSentence = (s: string) => `${s.split("。")[0]}。`;

@@ -41,7 +41,7 @@ import { Trash } from "kubai-icons-vue";
   <kubai-icon name="settings" size="18" trigger="parent"></kubai-icon>
   Settings
 </a>`} />
-      <h2>Cards and list rows</h2>
+      <h2>Cards & list rows</h2>
       <p>The marked element can be as large as you like: a card, a table row or a menu item. Every icon inside it with <code>trigger=&quot;parent&quot;</code> plays together.</p>
       <Code lang="tsx" code={`import { CalendarCheck, Mail } from "kubai-icons-react";
 
@@ -80,7 +80,7 @@ export function DropZone() {
     </div>
   );
 }`} />
-      <h2>Keyboard, touch and toggles</h2>
+      <h2>Keyboard, touch & toggles</h2>
       <ul>
         <li>Keyboard focus on the marked element plays the motion, as hover does. Focus left behind by a mouse click does not.</li>
         <li>On touch screens, a tap plays the motion forward and back.</li>

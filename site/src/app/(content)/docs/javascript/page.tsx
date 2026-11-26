@@ -1,7 +1,7 @@
 import { pageMeta } from "@/lib/seo";
 import { Prose, Title, Code } from "@/components/docs/prose";
 
-export const metadata = pageMeta({ title: "JavaScript icons and web component", path: "/docs/javascript/", description: "Create animated SVG icons from plain JavaScript or the kubai-icon web component, with no framework and tree-shakable imports." });
+export const metadata = pageMeta({ title: "JavaScript icons & web component", path: "/docs/javascript/", description: "Create animated SVG icons from plain JavaScript or the kubai-icon web component, with no framework and tree-shakable imports." });
 
 export default function Page() {
   return (

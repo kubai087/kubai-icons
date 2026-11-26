@@ -59,7 +59,7 @@ export function CategoryPageBody({ id, locale }: { id: string; locale: Locale })
       <Breadcrumbs trail={[{ name: pick(locale, "Icons", "图标"), path: localize("/icons/", locale) }, { name, path: localize(`/icons/category/${id}/`, locale) }]} />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Heading level={1} title={titleFor(name, locale)} lead={visibleLead(icons.length, locale)} />
-        <IntentLink href={localize(`/icons/?category=${id}`, locale)} className={buttonVariants({ variant: "outline" })}>{pick(locale, "Search and recolor", "在图标库中查看")}</IntentLink>
+        <IntentLink href={localize(`/icons/?category=${id}`, locale)} className={buttonVariants({ variant: "outline" })}>{pick(locale, "Search & recolor", "在图标库中查看")}</IntentLink>
       </div>
       <IconLinks icons={icons} locale={locale} />
       </div>

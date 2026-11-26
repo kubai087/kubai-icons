@@ -19,7 +19,7 @@ export default function Page() {
 
 <button><Settings title="Settings" /></button>`} />
       <p>The <code>&lt;kubai-icon&gt;</code> web component takes its accessible name from the <code>label</code> attribute.</p>
-      <h2>Input and motion</h2>
+      <h2>Input & motion</h2>
       <ul className="my-5">
           <li>When <code>prefers-reduced-motion</code> is set, icons move directly to the end pose without animating.</li>
           <li>With <code>trigger=&quot;parent&quot;</code>, keyboard focus plays the motion as hover does. Focus left behind by a mouse click does not.</li>

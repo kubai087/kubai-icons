@@ -15,7 +15,7 @@ export default function Page() {
           <p>Every layered icon is a square of 31×31 units, with the artwork centered in it. Four keylines, which are guide shapes that keep icons the same visual size, set the outer bounds: a circle 23 units across, a 20.6-unit square, a 23×18.4 landscape rectangle and an 18.4×23 portrait rectangle. Icons are centered, not bottom-aligned.</p>
           <h2>Layers</h2>
           <p>An icon has a mid-tone back piece with a drop shadow, and usually a lighter front piece with a soft highlight along its top edge. White content, such as a symbol or lines, can sit between the two. An icon with no front piece has white content large enough to form a second layer. The top corners of the front piece are rounded separately, which exposes the back piece at the corners.</p>
-          <h2>Outlines and corners</h2>
+          <h2>Outlines & corners</h2>
           <p>Outlines are 1 unit wide and sit outside the fill. The corner radius is 2.2 for the body of an icon (3.2 including the outline) and 1.2 for content. A colored band inside an outline is at least 2 units wide, or is left out.</p>
           <h2>Color</h2>
           <p>Each tone is designed against a reference blue, then shifted to the accent color while keeping its lightness relative to that accent. Marks are white on mid-tone pieces and dark on light pieces.</p>

@@ -9,7 +9,7 @@ export const metadata = learnMeta(HREF, "en");
 
 const FACTS: [string, string, string][] = [
   ["Style", "Three styles that share names: line, two-tone solid and layered color", "Line icons; the free set is drawn in one style, Stroke Rounded"],
-  ["Grid and stroke", "Line: 24 grid, rounded strokes, any width above 0 (default 2). Two-tone: 16 grid, solid", "24 grid, rounded strokes, 1.5 wide by default and adjustable"],
+  ["Grid & stroke", "Line: 24 grid, rounded strokes, any width above 0 (default 2). Two-tone: 16 grid, solid", "24 grid, rounded strokes, 1.5 wide by default and adjustable"],
   ["Hover animation", "Built into every icon: a lock's shackle lifts open, a bookmark ribbon grows down", "None built in; icons are static SVG"],
   ["Icons", "About 1,270 line, 502 two-tone and 973 layered (3,078 with badged and slashed versions)", "Several thousand in the free set; the paid Pro set has many more"],
   ["Variants", "Line: outline, line-duo, fill and solid-tint, all free", "Free: Stroke Rounded only. Pro adds more styles, such as solid, duotone and bulk"],
@@ -64,7 +64,7 @@ export default function Page() {
         <li>You want one set of names across styles: an area can move from line to layered color or two-tone by changing the import.</li>
         <li>You want new icons in the same style. The <Link href="/skill/">kubai-line skill</Link> lets a coding agent draw them on the same grid and stroke.</li>
       </ul>
-      <h2>Hugeicons styles and their Kubai equivalents</h2>
+      <h2>Hugeicons styles & their Kubai equivalents</h2>
       <p>The free Hugeicons set is one style; the Pro set adds filled and two-color styles. Every Kubai line icon has the matching variants for free, and the two-tone style covers the solid two-color look:</p>
       <table>
         <thead><tr><th>Hugeicons style</th><th>Looks like</th><th>Closest in Kubai</th></tr></thead>
