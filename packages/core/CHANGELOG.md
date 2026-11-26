@@ -1,5 +1,11 @@
 # kubai-icons
 
+## 0.16.0
+
+### Minor Changes
+
+- Add the line style: 1,285 icons on a 24 grid in rounded strokes, each with a hover motion that acts out what it means. Import them from a `line` path, with the same names as the layered icons where both exist: `kubai-icons/line`, `kubai-icons-react/line`, `kubai-icons-vue/line`, `<kubai-icon icon-style="line">`, and `svg-line/` in `kubai-icons-static`. `strokeWidth` (`stroke-width` on the web component) takes any width above 0, default 2, and `variant` takes `outline`, `line-duo`, `fill` or `solid-tint`. The lines follow `color`; the light tone and the tint are mixed toward `--kl-bg` (white), or set with `--kl-light` and `--kl-fill`. `lineStill()` returns a standalone SVG of a line icon in fixed colours. ([#141](https://github.com/kubai087/kubai-icons/pull/141))
+
 ## 0.15.0
 
 ### Minor Changes
