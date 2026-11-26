@@ -256,5 +256,6 @@
  "Dot": "Point",
  "Edit": "Modifier",
  "Shield": "Bouclier",
- "Drawn in the icon's own color": "Dans la couleur de l’icône"
+ "Drawn in the icon's own color": "Dans la couleur de l’icône",
+ "Categories": "Catégories"
 }

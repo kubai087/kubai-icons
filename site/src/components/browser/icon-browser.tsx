@@ -16,7 +16,9 @@ import { LineVariantSample } from "@/components/kit/line-variant-sample";
 import { warmIcon } from "@/components/kit/icon-image";
 import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
-import { chip, navItem, tile as tileStyle } from "@/components/kit/styles";
+import { navItem, tile as tileStyle } from "@/components/kit/styles";
+import { BottomNav } from "@/components/kit/bottom-nav";
+import { useCollection } from "@/lib/collection";
 import { SetsEntry } from "@/learn/sets-entry";
 import { setPath, type BrowserSet } from "@/learn/set-paths";
 import { setLineSettings, useLineSettings } from "@/lib/line-settings";
@@ -237,6 +239,32 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
     e.preventDefault();
     pickCat(id);
   };
+  // The category list: the sidebar on wide screens, the bottom sheet on phones, whose rows are taller.
+  const categoryList = (sheet = false) => {
+    const big = sheet ? "py-2.5 text-body" : undefined;
+    return (
+      <>
+        <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
+        <button type="button" aria-current={!cat} onClick={() => pickCat("")} className={cn(navItem({ active: !cat }), big)}>
+          <span className="truncate">{tr("All", "全部")}</span>
+        </button>
+        {hasNew && (
+          <button type="button" aria-current={cat === NEW_CAT} onClick={() => pickCat(NEW_CAT)} className={cn(navItem({ active: cat === NEW_CAT }), big)}>
+            <span className="truncate">{tr("New", "新增")}</span>
+            {!newSeen && <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />}
+          </button>
+        )}
+        <SetsEntry style={styleKey} sets={styleSets} current={openSet?.id ?? ""} open={setsOpen} onToggle={() => setSetsOpen((v) => !v)} onPick={(e, id) => filterTo(e, SET + id)} rowClassName={big} />
+        {styleCats.map((c) => (
+          <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} onClick={(e) => filterTo(e, c.id)} className={cn(navItem({ active: cat === c.id }), big)}>
+            <span className="truncate">{tr(c.en, c.zh ?? c.en)}</span>
+          </a>
+        ))}
+      </>
+    );
+  };
+  const saved = useCollection().length;
+  const catName = openSet ? openSet.name : cat === NEW_CAT ? tr("New", "新增") : cat ? (() => { const c = cats.find((x) => x.id === cat); return c ? tr(c.en, c.zh ?? c.en) : ""; })() : tr("All", "全部");
   const related = useMemo(() => {
     if (!open) return [];
     const root = open.base ?? open.name;
@@ -247,9 +275,9 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
   const trailingSize = useDeferredValue(prefs.size);
   const gridSize = sizing ? trailingSize : prefs.size;
   const tile = 64 + gridSize * 1.5;
-  // Rendered in the panel on wide screens and beside the category chips on narrow ones.
-  const selectButton = (className: string) => (
-    <Button className={className} variant={selecting ? "default" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
+  // Rendered in the panel on wide screens and in the bottom bar on narrow ones, where it is quiet beside the category.
+  const selectButton = (className: string, quiet = false) => (
+    <Button className={className} variant={selecting ? "default" : quiet ? "ghost" : "outline"} size="sm" aria-pressed={selecting} onClick={() => setSelecting((v) => !v)}>
       {selecting ? tr("Done", "完成") : tr("Select", "多选")}
     </Button>
   );
@@ -258,22 +286,7 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
     <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
       <aside className="hidden lg:block">
         <nav className="isolate sticky top-[calc(var(--header)+var(--stick))] -me-2 max-h-[calc(100dvh-var(--header)-2*var(--stick))] space-y-0.5 overflow-y-auto pe-2 pb-6 [mask-image:linear-gradient(to_bottom,black_calc(100%-1.5rem),transparent)]">
-          <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
-          <button type="button" aria-current={!cat} onClick={() => pickCat("")} className={navItem({ active: !cat })}>
-            <span className="truncate">{tr("All", "全部")}</span>
-          </button>
-          {hasNew && (
-            <button type="button" aria-current={cat === NEW_CAT} onClick={() => pickCat(NEW_CAT)} className={navItem({ active: cat === NEW_CAT })}>
-              <span className="truncate">{tr("New", "新增")}</span>
-              {!newSeen && <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />}
-            </button>
-          )}
-          <SetsEntry as="nav" style={styleKey} sets={styleSets} current={openSet?.id ?? ""} open={setsOpen} onToggle={() => setSetsOpen((v) => !v)} onPick={(e, id) => filterTo(e, SET + id)} />
-          {styleCats.map((c) => (
-            <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} onClick={(e) => filterTo(e, c.id)} className={navItem({ active: cat === c.id })}>
-              <span className="truncate">{tr(c.en, c.zh ?? c.en)}</span>
-            </a>
-          ))}
+          {categoryList()}
         </nav>
       </aside>
       <div className="min-w-0 space-y-5 lg:space-y-3">
@@ -394,20 +407,6 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
               </div>
             </div>
           </div>
-          {/* On narrow screens Select sits at the end of the category row, where it stays in place while the chips scroll. */}
-          <div className="-mx-gutter mb-3 flex items-center lg:hidden">
-            <div className={cn("relative isolate flex min-w-0 flex-1 gap-0.5 overflow-x-auto ps-gutter pb-0.5", duo ? "pe-gutter" : "pe-3 [mask-image:linear-gradient(to_left,transparent,black_1.25rem)] rtl:[mask-image:linear-gradient(to_right,transparent,black_1.25rem)]")}>
-              <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
-              <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
-              {hasNew && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
-              <SetsEntry as="chip" style={styleKey} sets={styleSets} current={openSet?.id ?? ""} open={setsOpen} onToggle={() => setSetsOpen((v) => !v)} onPick={(e, id) => filterTo(e, SET + id)} />
-              {/* An open sets list takes the place of the categories, which come back when it closes. */}
-              {!setsOpen && styleCats.map((c) => (
-                <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
-              ))}
-            </div>
-            {!duo && selectButton("ms-1 me-gutter shrink-0")}
-          </div>
           </div>
         </div>
         <div className="min-h-dvh">
@@ -461,6 +460,19 @@ export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { ca
           )}
         </div>
       </div>
+      {/* Phones choose the category from a bar at the bottom, with Select beside it. */}
+      <BottomNav
+        className="lg:hidden"
+        title={tr("Categories", "分类")}
+        raised={saved > 0}
+        label={<>{catName}{index ? <span className="ms-1.5 font-normal text-muted-foreground tabular-nums">{results.length}</span> : null}</>}
+        trailing={!duo && <>
+          <span aria-hidden className="h-5 w-px bg-border" />
+          {selectButton("h-9 rounded-pill px-3.5", true)}
+        </>}
+      >
+        <nav className="relative isolate space-y-0.5">{categoryList(true)}</nav>
+      </BottomNav>
       <IconDialog
         meta={open}
         related={related}

@@ -376,3 +376,15 @@ html[lang="zh-CN"] h1 { line-height: 1.25; }
 /* A line icon's light tone and fill mix toward the page, so they hold in the dark theme. */
 .kubai-line { --kl-bg: var(--background); }
 @media (prefers-reduced-motion: reduce) { .kubai-icon { transition: none; } }
+
+/* Docs tables of three columns, on phones: each row's first cell gets a line of its own, and
+   the other two sit side by side below it, so names stay whole and the last column has room.
+   The rows share one grid, so the columns still line up from row to row. */
+@media (width < 40rem) {
+  .prose-table table:has(th:nth-child(3):last-child) { display: grid; grid-template-columns: fit-content(45%) 1fr; }
+  .prose-table table:has(th:nth-child(3):last-child) :is(thead, tbody, tr) { display: contents; }
+  .prose-table table:has(th:nth-child(3):last-child) :is(th, td):first-child { grid-column: 1 / -1; }
+  .prose-table table:has(th:nth-child(3):last-child) th:first-child:empty { display: none; }
+  .prose-table table:has(th:nth-child(3):last-child) td:first-child { padding-bottom: 0.25rem; }
+  .prose-table table:has(th:nth-child(3):last-child) td:not(:first-child) { border-top: 0; padding-top: 0; }
+}
