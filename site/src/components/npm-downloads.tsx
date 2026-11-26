@@ -16,9 +16,9 @@ function Count({ text, count }: { text: string; count: number }) {
 export function NpmDownloads({ locale, className }: { locale: Locale; className?: string }) {
   return (
     // Each part keeps to one line, so a narrow screen wraps between them, never inside one.
-    <p className={cn("flex flex-wrap gap-x-1.5 text-caption text-muted-foreground tabular-nums", className)}>
+    // Spacing alone separates them, so a wrapped line has nothing left hanging at its end.
+    <p className={cn("flex flex-wrap gap-x-3 text-control text-muted-foreground tabular-nums", className)}>
       <Count text={pick(locale, "{count} npm downloads", "npm 累计下载 {count} 次")} count={COUNTS.total} />
-      <span aria-hidden>·</span>
       <Count text={pick(locale, "{count} in the last 7 days", "近 7 天 {count} 次")} count={COUNTS.week} />
     </p>
   );

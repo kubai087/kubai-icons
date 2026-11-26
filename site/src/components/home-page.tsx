@@ -64,7 +64,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           </div>
           <div className="rise-in space-y-2.5 [--i:4]">
             <InstallTabs />
-            <NpmDownloads locale={locale} className="px-1" />
+            <NpmDownloads locale={locale} />
           </div>
           <div className="rise-in flex flex-col gap-1 text-control [--i:5]">
             <span className="text-caption font-medium text-muted-foreground">{pick(locale, "Sponsors", "赞助")}</span>
