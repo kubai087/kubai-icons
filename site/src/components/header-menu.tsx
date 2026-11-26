@@ -54,9 +54,6 @@ export function HeaderMenu({ className }: { className?: string }) {
             <DropdownMenuItem className={ITEM} render={<Link href={loc("/icons/submit/")} />}>
               <UploadIcon />{tr("Submit an icon", "提交图标")}
             </DropdownMenuItem>
-            <DropdownMenuItem className={ITEM} render={<Link href={loc("/links/")} />}>
-              <Link2Icon />{tr("Partners", "合作伙伴")}
-            </DropdownMenuItem>
             <DropdownMenuItem className={ITEM} render={<a href={feedbackUrl(absolute(path))} target="_blank" rel="noreferrer" />} onClick={() => track("feedback_open")}>
               <MessageIcon />{tr("Feedback", "反馈")}<Away />
             </DropdownMenuItem>
@@ -69,17 +66,8 @@ export function HeaderMenu({ className }: { className?: string }) {
             <DropdownMenuSeparator className="mx-1 my-1.5" />
             <ThemeMenuItem className={ITEM} />
             <Collapsible.Root open={languagesOpen} onOpenChange={setLanguagesOpen}>
-              <DropdownMenuItem
-                className={cn(ITEM, "scroll-mt-2")}
-                closeOnClick={false}
-                aria-expanded={languagesOpen}
-                onClick={(e) => {
-                  const row = e.currentTarget as HTMLElement;
-                  // Once the list has opened, scrolls the panel so it starts at this row.
-                  if (!languagesOpen) setTimeout(() => row.scrollIntoView({ block: "start", behavior: "smooth" }), 220);
-                  setLanguagesOpen((o) => !o);
-                }}
-              >
+              {/* The list opens downward and the rows above stay where they are; the panel scrolls once it is full. */}
+              <DropdownMenuItem className={ITEM} closeOnClick={false} aria-expanded={languagesOpen} onClick={() => setLanguagesOpen((o) => !o)}>
                 <LanguagesIcon />{tr("Language", "语言")}
                 <span className="ms-auto text-muted-foreground">{current}</span>
                 <ChevronDownIcon className={cn("text-muted-foreground transition-transform duration-200", languagesOpen && "rotate-180")} />
@@ -88,6 +76,10 @@ export function HeaderMenu({ className }: { className?: string }) {
                 <LanguageItems links={links} className="min-h-10 rounded-lg ps-9.5 pe-3" marked />
               </Collapsible.Panel>
             </Collapsible.Root>
+            <DropdownMenuSeparator className="mx-1 my-1.5" />
+            <DropdownMenuItem className={ITEM} render={<Link href={loc("/links/")} />}>
+              <Link2Icon />{tr("Partners", "合作伙伴")}
+            </DropdownMenuItem>
           </MenuPrimitive.Popup>
         </MenuPrimitive.Positioner>
       </MenuPrimitive.Portal>
