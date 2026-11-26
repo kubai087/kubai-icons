@@ -61,9 +61,12 @@ for (const n of names) for (const [w, s] of STEP) for (const v of ['outline', 'f
     els: layersOf(icon, s, v).filter((l) => !l.ghost && !(v === 'fill' && l.on)).map((l) => ({ d: l.d, k: l.k, cap: l.cap ?? 'round', part: l.part ?? null, n: l.n ?? null, tf: l.tf ?? '', gap: !!(l.gap || l.occ || l.cutD) }))
   });
 }
-const res = evaluate(`<!doctype html><body>${jobs.map((j, i) => `<div data-i="${i}">${j.svg}</div>${j.role ? `<div data-r="${i}">${j.role}</div>` : ''}`).join('')}
+// The jobs are measured a page at a time: one page holding a full set at every stroke is so large
+// that Chrome takes many times longer to lay it out and measure it.
+const PAGE = 1500;
+const measurePage = (part) => evaluate(`<!doctype html><body>${part.map((j, i) => `<div data-i="${i}">${j.svg}</div>${j.role ? `<div data-r="${i}">${j.role}</div>` : ''}`).join('')}
 <svg id="geo" viewBox="0 0 24 24" width="240" height="240"></svg><canvas id="cv" width="240" height="240"></canvas><pre id="out"></pre><script>
-const jobs = ${JSON.stringify(jobs.map(({ svg, role, ...j }) => ({ ...j, role: !!role })))};
+const jobs = ${JSON.stringify(part.map(({ svg, role, ...j }) => ({ ...j, role: !!role })))};
 const ROLE = ${JSON.stringify(ROLE_RGB)};
 const NS = 'http://www.w3.org/2000/svg', geo = document.getElementById('geo');
 const res = jobs.map(() => ({}));
@@ -144,6 +147,8 @@ jobs.forEach((job, i) => {
   img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(document.querySelector('[data-r="' + i + '"]').innerHTML)));
 });
 </script>`);
+const res = [];
+for (let k = 0; k < jobs.length; k += PAGE) res.push(...measurePage(jobs.slice(k, k + PAGE)));
 
 const find = [], weightsTable = [];
 jobs.forEach((j, i) => {
