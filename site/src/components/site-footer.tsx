@@ -5,11 +5,11 @@ import { GithubIcon } from "@/components/kit/ui-icons";
 import { AuthorLink } from "@/components/author-link";
 import { FeedbackLink } from "@/components/feedback-link";
 import { Logo } from "@/components/logo";
-import { AUTHOR, REPO } from "@/lib/site";
+import { authorName, REPO } from "@/lib/site";
 import { Container } from "@/components/kit/layout";
 import { quietLink } from "@/components/kit/styles";
 import { cn } from "@/lib/utils";
-import { useLocalize, useTr } from "@/lib/use-locale";
+import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
 import { LearnFooterLinks } from "@/learn/footer-links";
 
 const link = cn("block w-fit py-1 pointer-coarse:py-2", quietLink);
@@ -33,6 +33,7 @@ function Column({ title, children }: { title: string; children: ReactNode }) {
 
 export function SiteFooter() {
   const tr = useTr();
+  const locale = useLocale();
   const loc = useLocalize();
   return (
     <footer className="mt-section border-t">
@@ -43,10 +44,10 @@ export function SiteFooter() {
             <Logo size={24} />
             Kubai Icons
           </Link>
-          <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}</p>
+          <p className="max-w-64 text-control text-pretty text-muted-foreground">{tr("Open-source animated icons for React, Vue and plain JavaScript.", "开源图标库，每个图标都有专属动效")}</p>
           <p className="pt-1 text-caption text-muted-foreground">
             © {new Date().getFullYear()}{" "}
-            <AuthorLink place="footer" className="tap relative font-medium text-foreground underline-offset-4 hover:underline">{AUTHOR.name}</AuthorLink>
+            <AuthorLink place="footer" className="tap relative font-medium text-foreground underline-offset-4 hover:underline">{authorName(locale)}</AuthorLink>
           </p>
         </div>
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">

@@ -4,6 +4,8 @@ export const REPO = "https://github.com/kubai087/kubai-icons";
 /** The icons the home page's Modules demo can import. */
 export const MODULE_DEMO = ["folder", "bell", "lock", "mail"];
 export const AUTHOR = { name: "Kubai087", x: "https://x.com/kubai087" } as const;
+/** The author's name as shown to people: Chinese pages use the Chinese one. */
+export const authorName = (locale: string) => (locale === "zh" ? "枯白 Kubai" : AUTHOR.name);
 /** The post on X that describes the paid places, where open places link. */
 export const SPONSOR_POST = "https://x.com/Kubai087/status/2120923602031919194";
 /** The one paid sponsor slot, shown on the home page and billed monthly. null while it is open.
@@ -24,6 +26,43 @@ export async function fetchStars(init?: RequestInit): Promise<number | null> {
     if (!res.ok) return null;
     const { stargazers_count: stars } = await res.json();
     return typeof stars === "number" ? stars : null;
+  } catch {
+    return null;
+  }
+}
+export type Downloads = { total: number; week: number };
+/** The day the packages were first published; the total counts from here. */
+const FIRST_PUBLISHED = "2026-11-08";
+/** Used when npm cannot be reached at build time: the four packages' counts through 2026-11-25. */
+export const DOWNLOADS_FALLBACK: Downloads = { total: 50918, week: 18613 };
+
+/**
+ * The npm packages' combined downloads, all time and in the last 7 days, or null when npm cannot
+ * be read. npm's counts trail by a day or two. A range may span at most 18 months, so the total
+ * is asked for a year at a time.
+ */
+export async function fetchDownloads(init?: RequestInit): Promise<Downloads | null> {
+  const names = Object.values(PACKAGES).join(",");
+  const sum = async (period: string) => {
+    const res = await fetch(`https://api.npmjs.org/downloads/point/${period}/${names}`, init);
+    if (!res.ok) throw new Error(`npm ${res.status}`);
+    const counts: Record<string, { downloads: number } | null> = await res.json();
+    return Object.values(PACKAGES).reduce((n, name) => {
+      const d = counts[name]?.downloads;
+      if (typeof d !== "number") throw new Error(`npm: no count for ${name}`);
+      return n + d;
+    }, 0);
+  };
+  const day = (d: Date) => d.toISOString().slice(0, 10);
+  try {
+    const periods: string[] = [];
+    const today = new Date();
+    for (let from = new Date(FIRST_PUBLISHED); from <= today; from = new Date(Date.UTC(from.getUTCFullYear() + 1, from.getUTCMonth(), from.getUTCDate()))) {
+      const to = new Date(Date.UTC(from.getUTCFullYear() + 1, from.getUTCMonth(), from.getUTCDate() - 1));
+      periods.push(`${day(from)}:${day(to < today ? to : today)}`);
+    }
+    const [week, ...years] = await Promise.all(["last-week", ...periods].map(sum));
+    return { total: years.reduce((a, b) => a + b, 0), week };
   } catch {
     return null;
   }

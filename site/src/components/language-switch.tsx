@@ -1,11 +1,12 @@
 "use client";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LanguagesIcon } from "@/components/kit/ui-icons";
+import { CheckIcon, LanguagesIcon } from "@/components/kit/ui-icons";
 import { startNavigation } from "@/components/nav-progress";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { languageOf, LANGUAGES, localeOf, localize } from "@/lib/i18n";
 import { asset } from "@/lib/site";
+import { useResetAcrossLg } from "@/lib/use-reset-across-lg";
 import { useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
@@ -48,11 +49,12 @@ export function DocumentLanguage() {
   return null;
 }
 
-/** One row per language, each a real link so it can open in a new tab. */
-export function LanguageItems({ links }: { links: LanguageLink[] }) {
+/** One row per language, each a real link so it can open in a new tab. `marked` adds a check to the current one. */
+export function LanguageItems({ links, className, marked }: { links: LanguageLink[]; className?: string; marked?: boolean }) {
   return links.map((l) => (
-    <DropdownMenuItem key={l.code} render={<a href={l.href} hrefLang={l.tag} lang={l.tag} aria-current={l.current ? "page" : undefined} onClick={l.onClick} />} className={cn("pointer-coarse:min-h-11", l.current && "font-medium")}>
+    <DropdownMenuItem key={l.code} render={<a href={l.href} hrefLang={l.tag} lang={l.tag} aria-current={l.current ? "page" : undefined} onClick={l.onClick} />} className={cn("pointer-coarse:min-h-11", className, l.current && "font-medium")}>
       {l.name}
+      {marked && l.current && <CheckIcon className="ms-auto text-muted-foreground" />}
     </DropdownMenuItem>
   ));
 }
@@ -62,12 +64,13 @@ export function LanguageSwitch({ className, iconOnly }: { className?: string; ic
   const { current, links } = useLanguages();
   const tr = useTr();
   const label = tr("Language", "语言");
+  const reset = useResetAcrossLg();
   return (
-    <DropdownMenu>
+    <DropdownMenu key={reset}>
       <DropdownMenuTrigger aria-label={label} title={label} className={className}>
         {iconOnly ? <LanguagesIcon className="size-4" /> : current}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={8} className="max-h-[min(26rem,70svh)] w-44 overflow-y-auto p-1.5 max-lg:grid max-lg:max-h-none max-lg:w-72 max-lg:grid-cols-2">
+      <DropdownMenuContent align="end" sideOffset={8} className="max-h-[min(26rem,70svh)] w-44 overflow-y-auto p-1.5">
         <LanguageItems links={links} />
       </DropdownMenuContent>
     </DropdownMenu>

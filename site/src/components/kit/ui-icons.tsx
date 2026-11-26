@@ -33,11 +33,12 @@ import Languages from "kubai-icons-react/line/icons/languages";
 import Link from "kubai-icons-react/line/icons/link";
 import Link2 from "kubai-icons-react/line/icons/link-2";
 import MessageSquareText from "kubai-icons-react/line/icons/message-square-text";
+import MoonLine from "kubai-icons-react/line/icons/moon";
 import MoreHorizontal from "kubai-icons-react/line/icons/more-horizontal";
 import Pause from "kubai-icons-react/line/icons/pause";
 import Play from "kubai-icons-react/line/icons/play";
 import Plus from "kubai-icons-react/line/icons/plus";
-import SunMoon from "kubai-icons-react/line/icons/sun-moon";
+import SunLine from "kubai-icons-react/line/icons/sun";
 import Upload from "kubai-icons-react/line/icons/upload";
 
 type Variant = "outline" | "fill";
@@ -108,7 +109,8 @@ export const MoreIcon = moving(MoreHorizontal, "MoreIcon");
 export const PauseIcon = moving(Pause, "PauseIcon");
 export const PlayIcon = moving(Play, "PlayIcon");
 export const PlusIcon = moving(Plus, "PlusIcon");
-export const SunMoonIcon = moving(SunMoon, "SunMoonIcon");
+export const MoonIcon = moving(MoonLine, "MoonIcon");
+export const SunIcon = moving(SunLine, "SunIcon");
 export const UploadIcon = moving(Upload, "UploadIcon");
 
 // Brand marks are drawn as their owners publish them, not redrawn in our line style.

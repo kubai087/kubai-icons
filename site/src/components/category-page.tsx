@@ -17,7 +17,7 @@ const nameIn = (c: { en: string; zh?: string }, locale: Locale) => pick(locale, 
 const leadFor = (count: number, name: string, locale: Locale) =>
   pick(
     locale,
-    "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.",
+    "{count} open-source animated {lower} icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.",
     "“{name}”分类共有 {count} 个开源图标，提供 React、Vue 组件、Web Component 和静态 SVG，每个图标都有各自的悬停动效。",
     { count, name, lower: name.toLowerCase() },
   );
@@ -26,7 +26,7 @@ const titleFor = (name: string, locale: Locale) => pick(locale, "{name} icons", 
 const visibleLead = (count: number, locale: Locale) =>
   pick(
     locale,
-    "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.",
+    "{count} open-source animated icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.",
     "共 {count} 个开源图标，提供 React、Vue 组件、Web Component 和静态 SVG，每个图标都有各自的悬停动效",
     { count },
   );

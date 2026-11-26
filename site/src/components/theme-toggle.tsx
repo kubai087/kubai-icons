@@ -1,6 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
-import { SunMoonIcon } from "@/components/kit/ui-icons";
+import { MoonIcon, SunIcon } from "@/components/kit/ui-icons";
 import { Moon, Sun } from "kubai-icons-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -17,13 +17,17 @@ function useThemeSwitch() {
   return toggle;
 }
 
-/** The theme switch as a row of a menu. */
+/** The theme switch as a row of a menu. It names the theme it switches to; CSS picks the
+ * wording, so the first paint already matches the page's theme. */
 export function ThemeMenuItem({ className }: { className?: string }) {
   const toggle = useThemeSwitch();
   const tr = useTr();
   return (
     <DropdownMenuItem className={className} onClick={toggle} closeOnClick={false}>
-      <SunMoonIcon />{tr("Toggle dark mode", "切换深色模式")}
+      <MoonIcon className="dark:hidden" />
+      <SunIcon className="hidden dark:block" />
+      <span className="dark:hidden">{tr("Switch to dark mode", "切换到深色模式")}</span>
+      <span className="hidden dark:inline">{tr("Switch to light mode", "切换到浅色模式")}</span>
     </DropdownMenuItem>
   );
 }
