@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>An agent skill that draws animated icons in one consistent style.</strong><br />
-  Plus 2,800+ open-source icons drawn with it, for React, Vue and plain JavaScript.
+  Plus 4,800+ open-source icons drawn with it, for React, Vue and plain JavaScript.
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
 | Part | What you get |
 | --- | --- |
 | **Agent skill** | The rules, engine and self-check that draw every icon in one hand. Give Claude Code, Codex or another coding agent a product, and it draws the icons that product needs. |
-| **Icon library** | 2,800+ icons: nearly 900 objects, plus badged and slashed "off" versions. For React, Vue, plain JavaScript, web components and static SVG. MIT licensed. |
+| **Icon library** | 4,800+ icons in three styles: nearly 1,400 objects, plus badged and slashed "off" versions. For React, Vue, plain JavaScript, web components and static SVG. MIT licensed. |
 | **Website** | [icons.kubai.design](https://icons.kubai.design/), in 16 languages. Search every icon by name, shape or meaning, recolor it, copy its code or a prompt for your agent, download it as SVG or PNG, and save a collection as a ZIP. |
 
 ## Install the skill
