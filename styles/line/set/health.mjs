@@ -2,6 +2,8 @@
 // health: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: first-aid hospital-cross pill pills heart-pulse stethoscope syringe bandage virus brain tooth ambulance
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { enclose, slash } from '../kit.mjs';
+import { off } from '../variants.mjs';
 import { fitEnds } from '../ends.mjs';
 
 const R2 = Math.SQRT1_2;
@@ -115,7 +117,7 @@ function fillets(g, pts) {
   return d;
 }
 
-export default {
+const set = {
   'first-aid': {
     label: '急救箱', key: 'landscape',
     plan: '主体：箱体；辅助：提手；细节：十字（线条加号，臂宽与跨度之比与医疗十字相同，约三分之一）',
@@ -351,3 +353,378 @@ export default {
     fx: { t: 'keys', on: 'all', x: [1.2, -0.4] }
   }
 };
+
+// --- Medicines, instruments and care ----------------------------------------------------------
+
+// A drop as a filled shape: a circle of radius R at (cx, cy) and the lines tangent to it from a
+// tip above at tipY (solid parts: no stroke to allow for).
+function drop(cx, cy, R, tipY) {
+  const b = Math.acos(R / (cy - tipY)), Pt = (a) => `${n(cx + R * Math.cos(a))} ${n(cy + R * Math.sin(a))}`;
+  return `M${n(cx)} ${n(tipY)}L${Pt(-Math.PI / 2 + b)}A${n(R)} ${n(R)} 0 1 1 ${Pt(-Math.PI / 2 - b)}Z`;
+}
+
+// The bone by centre line: a shaft 6 wide between two knobs of two circles each (outer radius
+// 4.5), drawn clockwise from the top of the left knob's shaft joint.
+function bone(g) {
+  const { h } = g, r = 4.5 - h, yt = 9 + h, yb = 15 - h, cl = 6.5, cr = 17.5, d = Math.sqrt(r * r - h * h), m = Math.sqrt(r * r - 9);
+  const A = (x, y) => `${n(x)} ${n(y)}`, arc = (to, large) => `A${n(r)} ${n(r)} 0 ${large} 1 ${to}`;
+  return `M${A(cl + d, yt)}H${n(cr - d)}${arc(A(cr + m, 12), 1)}${arc(A(cr - d, yb), 1)}H${n(cl + d)}${arc(A(cl - m, 12), 1)}${arc(A(cl + d, yt), 1)}Z`;
+}
+
+Object.assign(set, {
+  'pill-bottle': {
+    label: '药瓶', key: 'portrait',
+    plan: '主体：瓶身；辅助：瓶盖（比瓶身宽，与瓶身隔开）；细节：瓶身上的十字（随字重缩小）',
+    weights: { [P]: 0.51, [S]: 0.41, [D]: 0.08 },
+    draw(g) {
+      const k = 1.5 - Math.max(0, g.s - 2);
+      return [
+        shell(g.box(4, 2, 16, 5, 1.5), { n: 'cap', role: S }),
+        shell(g.box(5, 9, 14, 13, 3.5), { n: 'bottle', role: P }),
+        line(plus(g, 12, 16, k), { n: 'cross', role: D, on: 'bottle' })
+      ];
+    },
+    light: ['cross'],
+    // 服药: the cap twists open and back
+    fx: { t: 'keys', on: ['cap'], o: [12, 4.5], r: [-8, 2], y: [-0.6, 0], ms: 360 }
+  },
+  ointment: {
+    label: '药膏', key: 'landscape', fit: 'x',
+    allow: { optical: '管身左宽右窄，分量在左，按整体外框定位' },
+    ends: 'out',
+    plan: '主体：药膏管（左端压平、向右收窄）；辅助：右端的管盖（与管身隔开）；细节：左端的封口线（在面性中切开管身）',
+    weights: { [P]: 0.66, [S]: 0.22, [D]: 0.12 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.polygon([[2 + h, 6 + h], [15, 8.5], [15, 15.5], [2 + h, 18 - h]], [0.75, 1, 1, 0.75]), { n: 'tube', role: P }),
+        line(g.seg(6, 7, 6, 17), { n: 'seam', role: D, on: 'tube' }),
+        shell(g.box(18, 9, 4, 6, 1.5), { n: 'cap', role: S })
+      ];
+    },
+    // 挤药膏: the tube is squeezed and springs back
+    fx: { t: 'keys', on: ['tube', 'seam'], o: [16, 12], sy: [0.82, 1.04], ms: 320 }
+  },
+  'eye-drops': {
+    anchor: 'base',
+    label: '滴眼液', key: 'portrait', fit: 'y',
+    plan: '主体：瓶身；辅助：收窄的瓶嘴（一笔线条，接在瓶身顶上）；细节：瓶身上的水滴（实心）',
+    weights: { [P]: 0.6, [S]: 0.24, [D]: 0.16 },
+    draw(g) {
+      const { h, s } = g, k = 1 - Math.max(0, s - 2) * 0.4;
+      return [
+        line(g.pl([[9.5, 10 + h], [10.5, 3 + h], [13.5, 3 + h], [14.5, 10 + h]]), { n: 'nozzle', role: S }),
+        shell(g.box(6, 10, 12, 12, 3.5), { n: 'bottle', role: P }),
+        solid(drop(12, 17, 1.5 * k, 17 - 3.5 * k), { n: 'drop', role: D, on: 'bottle' })
+      ];
+    },
+    allow: { keyline: '瓶嘴是一条线，顶端略低于纵向参考线' },
+    // 滴药: the bottle tips and the drop is squeezed out
+    fx: [{ t: 'keys', on: 'all', o: [12, 22], r: [-10, 2], ms: 380 }, { t: 'keys', on: ['drop'], o: [12, 18], s: [1.3, 0.95], ms: 300 }]
+  },
+  'thermometer-medical': {
+    label: '体温计', key: 'live',
+    allow: { optical: '探头只是一条线，分量在右上的机身，按整体外框定位' },
+    plan: '主体：体温计机身（45° 斜放的圆头长条）；辅助：伸向左下的探头',
+    weights: { [P]: 0.74, [S]: 0.26 },
+    draw(g) {
+      const { s, h } = g, c = [15, 9], L = 17, w = 7, a = Math.SQRT1_2, e = L / 2 - h;
+      return [
+        line(g.seg(c[0] - e * a, c[1] + e * a, 2 + h, 22 - h), { n: 'probe', role: S }),
+        shell(g.rot(c[0], c[1], L - s, w - s, -45, (w - s) / 2), { n: 'body', role: P })
+      ];
+    },
+    // 量体温: the reading rises: the thermometer is shaken and settles
+    fx: { t: 'wiggle', on: 'all', o: [4, 20], deg: 6, hz: 2.6 }
+  },
+  'blood-bag': {
+    label: '血袋', key: 'portrait', fit: 'y',
+    plan: '主体：血袋（圆角矩形）；辅助：顶上的挂环和底部的输液管；细节：袋上的血滴（实心）',
+    weights: { [P]: 0.71, [S]: 0.17, [D]: 0.12 },
+    draw(g) {
+      const { h, s } = g, k = 1 - Math.max(0, s - 2) * 0.4;
+      return [
+        line(arch(10, 14, 2 + h, 5 + h) + g.seg(12, 17 - h, 12, 22 - h), { n: 'tube', role: S }),
+        shell(g.box(5, 5, 14, 12, 4), { n: 'bag', role: P }),
+        solid(drop(12, 12, 1.5 * k, 12 - 3.5 * k), { n: 'drop', role: D, on: 'bag' })
+      ];
+    },
+    light: ['drop'],
+    // 输血: the drop swells as it flows
+    fx: { t: 'keys', on: ['drop'], o: [12, 12], s: [1.3, 0.95], ms: 320 }
+  },
+  scalpel: {
+    label: '手术刀', key: 'live',
+    allow: { keyline: '斜放的细长器械，刀柄是一条线，不贴参考区域的四角', optical: '刀片在左下，刀柄只是一条线，按整体外框定位' },
+    plan: '主体：刀片（刀背平直、刀腹弧形，尖朝左下）；辅助：细长的刀柄（一条线）',
+    weights: { [P]: 0.56, [S]: 0.44 },
+    draw(g) {
+      const o = [9.5, 14.5], u = [-Math.SQRT1_2, Math.SQRT1_2], v = [Math.SQRT1_2, Math.SQRT1_2];
+      const at = (p, q) => [o[0] + u[0] * p + v[0] * q, o[1] + u[1] * p + v[1] * q];
+      return [
+        line(g.seg(...at(-0.5, 0), ...at(-15.5, 0)), { n: 'handle', role: S }),
+        shell(g.polygon([at(0, -1.75), at(10.5, -1.75), at(5, 2), at(0, 2)], [0.5, 1, 2, 0.5]), { n: 'blade', role: P })
+      ];
+    },
+    // 切口: the blade makes a short cut and lifts away
+    fx: { t: 'keys', on: 'all', x: [-0.8, 0.2], y: [0.8, -0.2], ms: 300 }
+  },
+  tweezers: {
+    label: '镊子', key: 'portrait', fit: 'y',
+    light: [],
+    plan: '主体：镊子的两条臂（顶上相连，向下张开，到下端再收拢成尖端）',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [line(`M10 ${n(22 - h)}L6.5 16L10 ${n(4 + h)}A2 2 0 0 1 14 ${n(4 + h)}L17.5 16L14 ${n(22 - h)}`, { n: 'arms', role: P })];
+    },
+    // 夹取: the tips pinch together and open
+    fx: { t: 'keys', on: 'all', o: [12, 2], sx: [0.8, 1.04], ms: 300 }
+  },
+  'x-ray': {
+    label: 'X 光片', key: 'square',
+    ends: 'in',
+    plan: '主体：片框（方形）；细节：脊柱和两对肋骨（随字重收拢）',
+    weights: { [P]: 0.6, [D]: 0.4 },
+    draw(g) {
+      const { s } = g, r = 1.5 - Math.max(0, s - 2);
+      const rib = (y, sg) => `M12 ${y}H${n(12 + sg * (4 - r))}A${n(r)} ${n(r)} 0 0 ${sg > 0 ? 1 : 0} ${n(12 + sg * 4)} ${n(y + r)}`;
+      return [
+        shell(g.box(3, 3, 18, 18, 4.5), { n: 'film', role: P }),
+        line(g.seg(12, 8, 12, 16), { n: 'spine', role: D, on: 'film' }),
+        line(rib(8, -1) + rib(13, -1), { n: 'ribL', role: D, on: 'film' }),
+        line(rib(8, 1) + rib(13, 1), { n: 'ribR', role: D, on: 'film' })
+      ];
+    },
+    // 拍片: the bones light up from the spine out
+    fx: { t: 'variable', on: ['spine', 'ribL', 'ribR'], mode: 'cumulative', step: 160 }
+  },
+  'face-mask': {
+    label: '口罩', key: 'live', fit: 'x',
+    plan: '主体：口罩面（圆角矩形）；辅助：两侧的耳绳（弧线）；细节：两道褶线',
+    weights: { [P]: 0.41, [S]: 0.29, [D]: 0.3 },
+    draw(g, ctx) {
+      // fill: the pleats move apart at the heavier weights, so the ink between them stays a stroke wide
+      // and stop a stroke inside the edges
+      const fill = ctx?.variant === 'fill', d = fill ? Math.max(0, g.s - 2) : 0, x0 = fill ? 6 + 1.5 * g.s : 6 + g.h, x1 = 24 - x0;
+      return [
+        line('M7 9A4 3 0 0 0 7 15M17 9A4 3 0 0 1 17 15', { n: 'loops', role: S, part: 'mask' }),
+        shell(g.box(6, 5, 12, 14, 4), { n: 'mask', role: P, part: 'mask' }),
+        line(g.seg(x0, 10 - d, x1, 10 - d) + g.seg(x0, 14 + d, x1, 14 + d), { n: 'pleats', role: D, on: 'mask', ends: 'keep' })
+      ];
+    },
+    // 戴口罩: the mask stretches over the face and settles
+    fx: { t: 'keys', on: 'all', o: [12, 12], sx: [1.06, 0.98], ms: 320 }
+  },
+  bone: {
+    label: '骨骼', key: 'landscape', fit: 'x',
+    plan: '主体：骨头（两端各两个圆鼓，中间一段骨干，一个闭合形）',
+    weights: { [P]: 1 },
+    draw(g) { return [shell(bone(g), { n: 'bone', role: P })]; },
+    // 骨骼: a little wobble
+    fx: { t: 'wiggle', on: 'all', o: [12, 12], deg: 8, hz: 2.4 }
+  },
+  'weight-scale': {
+    label: '体重秤', key: 'square',
+    plan: '主体：秤面（方形）；细节：上方的弧形刻度和指针（面性中刻度窗是一个半圆的镂空，不画指针：弧线和指针一起镂空会夹出细小的墨块）',
+    weights: { [P]: 0.74, [D]: 0.26 },
+    draw(g, ctx) {
+      const scale = shell(g.box(3, 3, 18, 18, 4.5), { n: 'scale', role: P });
+      if (ctx?.variant === 'fill') return [scale, solid(`M7.5 11.5A4.5 4.5 0 0 1 16.5 11.5Z`, { n: 'dial', role: D, on: 'scale' })];
+      return [
+        scale,
+        line(g.arc(12, 11.5, 3.5, 200, 340), { n: 'dial', role: D, on: 'scale' }),
+        line(g.seg(12, 13.5, 13.75, 8.47), { n: 'needle', role: D, on: 'scale' })
+      ];
+    },
+    // 称重: the needle swings to the reading and settles
+    fx: { t: 'keys', on: ['needle'], o: [12, 13.5], r: [-45, 12, -4], ms: 520 }
+  }
+});
+
+// Variants made by rule (kit.mjs): the medical cross in a circle and in a square.
+const base = (k) => ({ ...set[k], name: k });
+Object.assign(set, {
+  'hospital-cross-circle': { ...enclose(base('hospital-cross'), 'circle', { label: '医疗（圆形）', k: 0.56 }), fx: { t: 'beat', on: ['cross'], o: [12, 12], amp: 0.1 } },
+  'hospital-cross-square': { ...enclose(base('hospital-cross'), 'square', { label: '医疗（方形）', k: 0.56 }), fx: { t: 'beat', on: ['cross'], o: [12, 12], amp: 0.1 } }
+});
+
+// --- Body, mobility and rest ------------------------------------------------------------------
+Object.assign(set, {
+  inhaler: {
+    label: '吸入器', key: 'square',
+    allow: { optical: 'L 形外壳的分量在右侧的筒身，按外框定位' },
+    plan: '主体：L 形的外壳（竖直的筒身加向左伸出的吸嘴）；辅助：插在顶上的药罐',
+    weights: { [P]: 0.74, [S]: 0.26 },
+    draw(g) {
+      const { h } = g, t = 8 + h, b = 21 - h, l = 3 + h, r = 21 - h, m = 15 + h;
+      return [
+        shell(g.box(13, 3, 7, 6, 1.5), { n: 'can', role: S, part: 'inhaler' }),
+        shell(g.polygon([[12, t], [r, t], [r, b], [l, b], [l, m], [12, m]], [1.5, 1.5, 2, 1.5, 1.5, 0]), { n: 'boot', role: P, part: 'inhaler' })
+      ];
+    },
+    // 吸药: the canister is pressed down and springs back
+    fx: { t: 'keys', on: ['can'], y: [1, -0.2], ms: 260 }
+  },
+  'mortar-pestle': {
+    anchor: 'base',
+    label: '药房', key: 'square',
+    allow: { sliver: '研杵斜着切过钵口，切口两侧是斜角，与斜线变体的间隙同理；不是夹出来的碎块' },
+    plan: '主体：研钵（半圆的钵身，上沿一条直线）；辅助：斜插进钵里的研杵（压在钵身前面，留出间隙）',
+    weights: { [P]: 0.7, [S]: 0.3 },
+    draw(g) {
+      const { h } = g, y = 12;
+      return [
+        shell(`M${n(3 + h)} ${y}H${n(21 - h)}A${n(9 - h)} ${n(9 - h)} 0 0 1 ${n(3 + h)} ${y}Z`, { n: 'bowl', role: P }),
+        line(g.seg(19.5, 4, 13, 15), { n: 'pestle', role: S, gap: true })
+      ];
+    },
+    // 研药: the pestle grinds round in the bowl
+    fx: { t: 'orbit', on: ['pestle'], r: 0.9 }
+  },
+  'blood-pressure': {
+    label: '血压计', key: 'live',
+    plan: '主体：表盘（圆环）；辅助：输气管和右下的气囊（小圆环）；细节：指针',
+    weights: { [P]: 0.6, [S]: 0.28, [D]: 0.12 },
+    draw(g) {
+      const { h } = g, q = (3.2 - Math.max(0, g.s - 2) * 0.8) * Math.SQRT1_2;
+      return [
+        line(`M10 ${n(18 - h)}V18.5A1.5 1.5 0 0 0 11.5 20H${n(16 + h)}`, { n: 'tube', role: S }),
+        shell(g.ring(10, 10, 8), { n: 'dial', role: P }),
+        line(g.seg(10, 10, 10 + q, 10 - q), { n: 'needle', role: D, on: 'dial' }),
+        shell(g.ring(19, 19, 3), { n: 'bulb', role: S })
+      ];
+    },
+    // 量血压: the bulb is squeezed and the needle swings up
+    fx: [{ t: 'keys', on: ['bulb'], o: [19, 19], s: [0.8, 1.05], ms: 300 }, { t: 'keys', on: ['needle'], o: [10, 10], r: [40, -8], ms: 480 }]
+  },
+  bacteria: {
+    label: '细菌', key: 'live',
+    plan: '主体：杆状菌体（45° 斜放的圆头长条）；辅助：两端的鞭毛（短线）；细节：体内两个圆点（随字重缩小）',
+    weights: { [P]: 0.7, [S]: 0.2, [D]: 0.1 },
+    draw(g) {
+      const { s, h } = g, L = 17, w = 9, a = Math.SQRT1_2, e = L / 2 - h, f = 12.5, k = 0.6 - Math.max(0, s - 2) * 0.45;
+      return [
+        line(g.seg(12 - e * a, 12 + e * a, 12 - f * a, 12 + f * a) + g.seg(12 + e * a, 12 - e * a, 12 + f * a, 12 - f * a), { n: 'tails', role: S }),
+        shell(g.rot(12, 12, L - s, w - s, -45, (w - s) / 2), { n: 'body', role: P }),
+        solid(g.dot(12 - 2.75 * a, 12 + 2.75 * a, k) + g.dot(12 + 2.75 * a, 12 - 2.75 * a, k), { n: 'dots', role: D, on: 'body' })
+      ];
+    },
+    // 细菌: it wriggles
+    fx: { t: 'wiggle', on: 'all', o: [12, 12], deg: 10, hz: 3 }
+  },
+  lungs: {
+    label: '肺', key: 'square',
+    plan: '主体：左右两片肺叶（圆角形，外侧上角圆得多）；辅助：气管和两条支气管（一笔线条，伸进肺叶）',
+    weights: { [P]: 0.74, [S]: 0.26 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.box(3, 6, 7, 15, [4.5, 1.5, 2, 3]), { n: 'left', role: P, part: 'lungs' }),
+        shell(g.box(14, 6, 7, 15, [1.5, 4.5, 3, 2]), { n: 'right', role: P, part: 'lungs' }),
+        line(g.seg(12, 3 + h, 12, 10) + g.pl([[7, 13], [9.5, 13], [12, 10], [14.5, 13], [17, 13]]), { n: 'airway', role: S, part: 'lungs' })
+      ];
+    },
+    light: [],
+    // 呼吸: the lungs fill and empty
+    fx: { t: 'keys', on: ['left', 'right'], o: [12, 13], s: [1.06, 0.98], ms: 600 }
+  },
+  ear: {
+    label: '耳朵', key: 'portrait', fit: 'y',
+    light: ['fold'],
+    plan: '主体：耳廓（一笔线条：顶上的弧向右下收成 S 形，下面是耳垂）；细节：耳内的一道折线',
+    weights: { [P]: 0.72, [D]: 0.28 },
+    draw(g) {
+      return [
+        line('M6 9.5A6.5 6.5 0 1 1 19 9.5C19 14.5 13.5 14 13.5 17.5A3.5 3.5 0 0 1 6.5 17.5', { n: 'outer', role: P }),
+        line('M15 9.5A2.5 2.5 0 0 0 10 9.5V11A1.5 1.5 0 0 1 10 14', { n: 'fold', role: D })
+      ];
+    },
+    // 倾听: the ear tilts toward the sound
+    fx: { t: 'keys', on: 'all', o: [12, 20], r: [-8, 2], ms: 360 }
+  },
+  wheelchair: {
+    label: '轮椅', key: 'live',
+    allow: { optical: '大轮在左下，靠背和脚踏只是线条，按外框定位', sliver: '车架从轮子前面经过，间隙切开轮圈，与线性变体相同；不是镂空留下的碎块' },
+    plan: '主体：大轮（圆环；面性中仍是圆环）；辅助：靠背、座位和脚踏（一笔线条，压在轮子前面，留出间隙）。线条长，墨量超过轮子',
+    weights: { [P]: 0.42, [S]: 0.58 },
+    draw(g, ctx) {
+      const { h } = g;
+      return [
+        (ctx?.variant === 'fill' ? line : shell)(g.ring(9, 15, 7), { n: 'wheel', role: P }),
+        line(`M6 ${n(2 + h)}V12H16L19 19H${n(22 - h)}`, { n: 'frame', role: S, gap: true })
+      ];
+    },
+    // 推行: the wheel turns and the chair rolls forward
+    fx: { t: 'keys', on: 'all', x: [1.2, -0.3], ms: 360 }
+  },
+  crutch: {
+    label: '拐杖', key: 'portrait', fit: 'y',
+    allow: { optical: '腋托和两条侧杆在上，下面只是一根杆，按外框定位' },
+    light: [],
+    plan: '主体：两条侧杆收拢到下面一根杆；辅助：顶上的腋托（一条横线）；细节：中间的把手',
+    weights: { [P]: 0.66, [S]: 0.18, [D]: 0.16 },
+    draw(g) {
+      const { h } = g, at = (x0, y) => x0 + ((x0 < 12 ? 11 : 13) - x0) * (y - 3) / 13;
+      return [
+        line(g.span(6.5, 3, 17.5, 3), { n: 'pad', role: S }),
+        line(`M8.5 3L11 16H13L15.5 3` + g.seg(12, 16, 12, 22 - h), { n: 'rails', role: P }),
+        line(g.seg(at(8.5, 10), 10, at(15.5, 10), 10), { n: 'grip', role: D })
+      ];
+    },
+    // 拄拐: the crutch leans and steps
+    fx: { t: 'keys', on: 'all', o: [12, 22], r: [-8, 2], ms: 360 }
+  },
+  'hospital-bed': {
+    anchor: 'base',
+    label: '病床', key: 'square',
+    plan: '主体：床架（左边高的床头、右边矮的床尾，中间一条床面）；细节：床上方的十字',
+    weights: { [P]: 0.76, [D]: 0.24 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.seg(4, 5, 4, 21 - h) + g.seg(20, 10, 20, 21 - h) + g.seg(4, 14, 20, 14), { n: 'frame', role: P }),
+        line(plus(g, 12, 7, 3), { n: 'cross', role: D })
+      ];
+    },
+    light: ['cross'],
+    // 病床: the cross pulses like a heartbeat
+    fx: { t: 'beat', on: ['cross'], o: [12, 7], amp: 0.14 }
+  },
+  sleep: {
+    label: '睡眠', key: 'live',
+    light: [],
+    plan: '主体：左下的大 Z；辅助：右上的小 Z',
+    weights: { [P]: 0.64, [S]: 0.36 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.pl([[2 + h, 11], [13 - h, 11], [2 + h, 22 - h], [13 - h, 22 - h]]), { n: 'z1', role: P }),
+        line(g.pl([[15 + h, 2 + h], [22 - h, 2 + h], [15 + h, 9], [22 - h, 9]]), { n: 'z2', role: S })
+      ];
+    },
+    // 入睡: the Zs float up one after the other
+    fx: { t: 'keys', on: [['z1'], ['z2']], by: true, stagger: 160, y: [-1, 0.2], ms: 360 }
+  },
+  walker: {
+    anchor: 'base',
+    label: '助行器', key: 'square',
+    plan: '主体：框架（两条腿和顶上的把手，一笔线条）；辅助：中间的横杆和前脚的两个轮子（实心）',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M5 19V7A3 3 0 0 1 8 ${n(3 + h)}H16A3 3 0 0 1 19 7V19`, { n: 'frame', role: P }),
+        line(g.seg(5, 12, 19, 12), { n: 'bar', role: S }),
+        solid(g.dot(5, 19.5) + g.dot(19, 19.5), { n: 'wheels', role: S })
+      ];
+    },
+    // 行走: the walker is lifted forward and set down
+    fx: { t: 'keys', on: 'all', o: [12, 21], y: [-1, 0.2], r: [-3, 1], ms: 360 }
+  }
+});
+Object.assign(set, {
+  'ear-off': { ...off(slash(base('ear'), { label: '听力障碍' }), 'ear', { t: 'keys', on: ['outer', 'fold'], o: [12, 20], s: [0.9], ms: 240 }), allow: { sliver: '斜线的间隙以 45° 切过线条，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块' } }
+});
+
+export default set;

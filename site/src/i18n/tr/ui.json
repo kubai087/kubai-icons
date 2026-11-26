@@ -250,5 +250,11 @@
  "Solid": "Dolgu",
  "Solid tint": "Renkli dolgu",
  "Stroke width": "Çizgi kalınlığı",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Aynı simgeler, 24’lük ızgarada yuvarlak çizgilerle de çizildi: 0,25 ile 3 arasında her çizgi kalınlığı; çizgi, çift renk çizgi, dolgu ve renkli dolgu olarak. Her biri üzerine gelince yine hareket eder."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Aynı simgeler, 24’lük ızgarada yuvarlak çizgilerle de çizildi: 0,25 ile 3 arasında her çizgi kalınlığı; çizgi, çift renk çizgi, dolgu ve renkli dolgu olarak. Her biri üzerine gelince yine hareket eder.",
+ "Circle": "Daire",
+ "Square": "Kare",
+ "Dot": "Nokta",
+ "Edit": "Düzenle",
+ "Shield": "Kalkan",
+ "Drawn in the icon's own color": "Simgeyle aynı renkte"
 }

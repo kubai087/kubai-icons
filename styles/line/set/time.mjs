@@ -3,6 +3,9 @@
 // To draw: calendar-days calendar-week alarm-clock wristwatch history hourglass stopwatch timer metronome
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
 import { strap } from './devices.mjs';
+import { slash, badge } from '../kit.mjs';
+import { off, offFill, notched, lessDisc } from '../variants.mjs';
+import { gapOf } from '../kit.mjs';
 
 // The hands of the clock (icons.mjs) on a face of outer radius R centred on (cx, cy): the minute
 // hand straight up, the hour hand 0.9 as long at 30° below the right; both keep `gap` from the
@@ -24,7 +27,53 @@ function calendar(g) {
   };
 }
 
-export default {
+// The calendar and the clock of icons.mjs, as bases for the variants drawn here (icons.mjs keeps
+// the icons themselves). The clock's hour hand points to eight o'clock, clear of a corner badge.
+const CALENDAR = {
+  label: '日历', key: 'square',
+  plan: '主体：日历本（方形）；细节：表头线和两排日期点',
+  weights: { [P]: 0.64, [D]: 0.36 },
+  draw(g) {
+    const { s, h } = g, d = s - 2, band = 8 - d * 0.3, r = Math.min(g.dr * 0.7, 1.15), T = band + h, B = 21 - s, gap = (B - T - 4 * r) / 3, y1 = T + gap + r, y2 = B - gap - r, dots = [];
+    [y1, y2].forEach((y, j) => [8, 12, 16].forEach((x, i) => dots.push(solid(g.circ(x, y, r), { n: `d${j * 3 + i}`, role: D, on: 'box', vc: j * 3 + i }))));
+    return [shell(g.box(3, 3, 18, 18, 4.5), { n: 'box', role: P }), line(g.seg(3 + s, band, 21 - s, band), { n: 'band', role: D, only: 'outline' }), ...dots];
+  },
+  fx: { t: 'variable', on: ['d0', 'd1', 'd2', 'd3', 'd4', 'd5'], mode: 'cumulative', step: 110 }
+};
+const CLOCK = {
+  label: '时间', key: 'circle',
+  plan: '主体：表盘；细节：分针和时针',
+  weights: { [P]: 0.82, [D]: 0.18 },
+  draw(g) {
+    return [
+      shell(g.ring(12, 12, 10), { n: 'face', role: P }),
+      line(g.seg(12, 12, 12, 2 + g.s + 2 + g.h), { n: 'min', role: D, on: 'face' }),
+      line(g.seg(12, 12, 8.1, 14.25), { n: 'hour', role: D, on: 'face' })
+    ];
+  },
+  fx: { t: 'rotate', on: ['min'], deg: 360, o: [12, 12] }
+};
+// The calendar with a badge, fill: the dot below the middle one lies in the notch, so the three
+// that stay rise into the room the header line leaves (as calendar-plus in icons.mjs).
+const calendarDots = (L) => L.filter((l) => l.n !== 'd4').map((l) => (/^d[013]$/.test(l.n) ? { ...l, tf: 'translate(0 -2.5)' } : l));
+const calendarBadge = (mark, label) => notched(badge(CALENDAR, mark, { label, drop: ['d2', 'd5'] }), calendarDots);
+// The calendar's book and header line alone, for a calendar with a larger mark in its date area.
+function calendarBook(g) {
+  const { s, h } = g, band = 8 - (s - 2) * 0.3;
+  return { T: band + h, B: 21 - s, parts: [shell(g.box(3, 3, 18, 18, 4.5), { n: 'box', role: P }), line(g.seg(3 + s, band, 21 - s, band), { n: 'band', role: D, only: 'outline' })] };
+}
+// The face of a clock whose bottom-right quarter is left open for an arrow, with its hands.
+const openClock = (g) => [
+  line(g.arc(12, 12, 10 - g.h, 95, 345), { n: 'face', role: P }),
+  line(g.seg(12, 12, 12, 2 + g.s + 2 + g.h), { n: 'min', role: D }),
+  line(g.seg(12, 12, 8.1, 14.25), { n: 'hour', role: D })
+];
+// The clock with a badge, fill: the hands move up and left, so the ink between their hub and the
+// notch is a stroke wide or gone.
+const clockHands = (L) => L.map((l) => (l.n === 'min' || l.n === 'hour' ? { ...l, tf: 'translate(-1 -1)' } : l));
+const SLASHED = { sliver: '斜线的间隙以 45° 切过外形，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块' };
+
+const TIME = {
   'calendar-days': {
     label: '月历', key: 'square',
     plan: '主体：日历本（与日历相同）；细节：表头线和两排六个日期格（小方块，表示整月的格子）',
@@ -174,4 +223,151 @@ export default {
     // 摆杆左右摆动，慢慢停下
     fx: { t: 'wiggle', on: ['arm', 'weight'], o: [12, 17], deg: 18, hz: 2 }
   },
+  'calendar-check': { ...calendarBadge('check', '已安排'), fx: { t: 'draw', on: ['badge'] } },
+  'calendar-x': { ...calendarBadge('x', '取消日程'), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'calendar-minus': { ...calendarBadge('minus', '移除日程'), fx: { t: 'draw', on: ['badge'] } },
+  // the dates would sit on the slash: the slashed calendar is the book alone
+  'calendar-off': off({ ...offFill(slash({ ...CALENDAR, draw: (g) => calendarBook(g).parts }, { label: '无日程' })), allow: SLASHED }, 'calendar', { t: 'keys', on: ['box', 'band'], o: [12, 12], s: [0.9], ms: 240 }),
+  'calendar-clock': {
+    label: '日程时间', key: 'square',
+    plan: '主体：日历本（与日历相同，不画日期点）；辅助：右下角的时钟（挡住日历一角）；细节：表头线、时钟的指针',
+    weights: { [P]: 0.46, [S]: 0.38, [D]: 0.16 },
+    draw(g, ctx) {
+      const { s, h } = g, L = 6 - 1.5 * s - g.clear, [box, band] = calendarBook(g).parts;
+      // fill: the book is clipped where the clock's clear band runs out through its edge
+      const cut = ctx?.variant === 'fill' ? { ...box, d: lessDisc(box.d, 15, 15, 6 + gapOf(s) + h) } : box;
+      return [
+        cut, band,
+        shell(g.ring(15, 15, 6), { n: 'clock', role: S, occ: true, part: 'clock' }),
+        line(g.seg(15, 15, 15, 15 - L) + g.seg(15, 15, 15 + L * 0.9, 15), { n: 'hands', role: D, on: 'clock', part: 'clock' })
+      ];
+    },
+    fx: { t: 'rotate', on: ['hands'], deg: 360, o: [15, 15] }
+  },
+  'calendar-range': {
+    label: '日期范围', key: 'square',
+    plan: '主体：日历本（与日历相同）；细节：表头线、两排日期，选中的几天连成横线，跨过两行',
+    weights: { [P]: 0.64, [D]: 0.36 },
+    draw(g, ctx) {
+      const { s } = g, r = Math.min(g.dr * 0.7, 1.15);
+      // fill: the rows are holes, kept one stroke apart (spread out at heavy strokes)
+      const dy = ctx?.variant === 'fill' ? Math.max(4, 2 * s) : 4, y1 = 14 - dy / 2, y2 = 14 + dy / 2;
+      return [
+        ...calendarBook(g).parts,
+        solid(g.circ(8, y1, r), { n: 'd0', role: D, on: 'box' }),
+        line(g.seg(12, y1, 16, y1), { n: 'r1', role: D, on: 'box' }),
+        line(g.seg(8, y2, 12, y2), { n: 'r2', role: D, on: 'box' }),
+        solid(g.circ(16, y2, r), { n: 'd1', role: D, on: 'box' })
+      ];
+    },
+    fx: { t: 'draw', on: ['r1', 'r2'] }
+  },
+  'calendar-search': {
+    label: '搜索日程', key: 'square',
+    plan: '主体：日历本（与日历相同，不画日期点）；辅助：右下角的放大镜（挡住日历一角）；细节：表头线',
+    weights: { [P]: 0.5, [S]: 0.38, [D]: 0.12 },
+    draw(g, ctx) {
+      const { h } = g, k = Math.SQRT1_2, c = 14.5, R = 5.25, e = R - h, [box, band] = calendarBook(g).parts;
+      // fill: the book is clipped where the lens's clear band runs out through its edge
+      const cut = ctx?.variant === 'fill' ? { ...box, d: lessDisc(box.d, c, c, R + gapOf(g.s) + h) } : box;
+      return [
+        cut, band,
+        shell(g.ring(c, c, R), { n: 'lens', role: S, occ: true, part: 'glass' }),
+        line(g.seg(c + e * k, c + e * k, 21 - h * k - h, 21 - h * k - h), { n: 'handle', role: S, occ: true, part: 'glass' })
+      ];
+    },
+    fx: { t: 'orbit', on: ['lens', 'handle'], R: 0.9 }
+  },
+  'calendar-heart': {
+    label: '纪念日', key: 'square',
+    plan: '主体：日历本（与日历相同）；细节：表头线和日期区里的心形（实心，太小画不出线框）',
+    weights: { [P]: 0.66, [D]: 0.34 },
+    draw(g) {
+      const { T, B, parts } = calendarBook(g), top = T + g.clear + g.h, tip = B - g.clear;
+      return [...parts, solid(heart({ h: 0 }, { w: 2.1 * (tip - top) * 0.5 + 2.5, top, tip, R: (tip - top) * 0.3 }), { n: 'heart', role: D, on: 'box' })];
+    },
+    fx: { t: 'beat', on: ['heart'], o: [12, 14.5] }
+  },
+  'calendar-1': {
+    label: '今天', key: 'square',
+    plan: '主体：日历本（与日历相同）；细节：表头线和日期区里的数字 1',
+    weights: { [P]: 0.7, [D]: 0.3 },
+    draw(g) {
+      const { T, B, parts } = calendarBook(g), top = T + g.clear + g.h, bot = B - g.clear - g.h;
+      return [...parts, line(g.pl([[9.75, top + 1.25], [12, top], [12, bot]]), { n: 'one', role: D, on: 'box' })];
+    },
+    allow: { sliver: '数字 1 的斜笔和竖笔相交，夹角内侧是字形本身的细处，不是镂空切出来的' },
+    fx: { t: 'draw', on: ['one'] }
+  },
+  'clock-plus': { ...notched(badge(CLOCK, 'plus', { label: '添加时间' }), clockHands), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'clock-check': { ...notched(badge(CLOCK, 'check', { label: '准时' }), clockHands), fx: { t: 'draw', on: ['badge'] } },
+  'clock-alert': {
+    label: '超时提醒', key: 'landscape',
+    plan: '主体：表盘（左侧，直径 16）；辅助：右侧的感叹号（竖线和实心点）；细节：分针和时针（与时钟相同）',
+    weights: { [P]: 0.6, [S]: 0.24, [D]: 0.16 },
+    draw(g) {
+      const { s } = g, L = 8 - 1.5 * s - g.clear;
+      return [
+        shell(g.ring(10, 12, 8), { n: 'face', role: P }),
+        line(g.seg(10, 12, 10, 12 - L) + g.seg(10, 12, 10 + 0.9 * L * 0.866, 12 + 0.9 * L * 0.5), { n: 'hands', role: D, on: 'face' }),
+        line(g.span(21, 4, 21, 14.5), { n: 'bar', role: S, part: 'mark' }),
+        solid(g.dot(21, 18.5, 0.85), { n: 'dot', role: S, part: 'mark' })
+      ];
+    },
+    // 提醒：感叹号跳一下，表盘晃动
+    fx: [{ t: 'keys', on: ['bar', 'dot'], y: [-1.2, 0.3], ms: 260 }, { t: 'wiggle', on: ['face', 'hands'], o: [10, 12], deg: 6, hz: 4 }]
+  },
+  'clock-arrow-up': {
+    label: '时间升序', key: 'circle',
+    plan: '主体：表盘（右下留口的圆弧）；辅助：缺口里向上的箭头；细节：分针和时针（时针指向八点，避开箭头）',
+    weights: { [P]: 0.6, [S]: 0.26, [D]: 0.14 },
+    draw(g) {
+      const { h } = g;
+      return [...openClock(g), line(g.seg(18, 13, 18, 22 - h) + g.pl([[15, 16], [18, 13], [21, 16]]), { n: 'arrow', role: S })];
+    },
+    area: (g) => [{ n: 'face', d: g.circ(12, 12, 10 - g.h) }],
+    fx: { t: 'keys', on: ['arrow'], y: [-1.4, 0.3], ms: 260 }
+  },
+  'clock-arrow-down': {
+    label: '时间降序', key: 'circle',
+    plan: '同时间升序，箭头向下',
+    weights: { [P]: 0.6, [S]: 0.26, [D]: 0.14 },
+    draw(g) {
+      const { h } = g;
+      return [...openClock(g), line(g.seg(18, 13, 18, 22 - h) + g.pl([[15, 22 - h - 3], [18, 22 - h], [21, 22 - h - 3]]), { n: 'arrow', role: S })];
+    },
+    area: (g) => [{ n: 'face', d: g.circ(12, 12, 10 - g.h) }],
+    fx: { t: 'keys', on: ['arrow'], y: [1.2, -0.3], ms: 260 }
+  },
+};
+
+// The alarm clock and the timer with their hands turned away from a corner badge or a slash.
+const mirrorX = (d) => d.replace(/(-?[\d.]+) (-?[\d.]+)/g, (_, x, y) => `${n(24 - +x)} ${y}`);
+const turnHand = (icon, name) => ({ ...icon, draw: (g, ctx) => icon.draw(g, ctx).map((l) => (l.n === name ? { ...l, d: mirrorX(l.d) } : l)) });
+const ALARM = turnHand(TIME['alarm-clock'], 'hour');
+// fill: the hands move up and left, so the ink between their hub and the notch is a stroke wide
+const alarm = (mark, label) => notched(badge(ALARM, mark, { label }), (L) => L.map((l) => (l.n === 'min' || l.n === 'hour' ? { ...l, tf: 'translate(-1.5 -1.25)' } : l)));
+
+export default {
+  ...TIME,
+  'alarm-clock-plus': { ...alarm('plus', '添加闹钟'), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'alarm-clock-check': { ...alarm('check', '闹钟已设定'), fx: { t: 'draw', on: ['badge'] } },
+  'alarm-clock-minus': { ...alarm('minus', '删除闹钟'), fx: { t: 'draw', on: ['badge'] } },
+  'alarm-clock-off': off({ ...offFill(slash(ALARM, { label: '闹钟关闭' })), allow: SLASHED }, 'alarm-clock', { t: 'keys', on: ['bells'], o: [12, 13], s: [0.9], ms: 240 }),
+  timeline: {
+    nudge: [1, 0],
+    label: '时间线', key: 'square',
+    plan: '主体：竖线和三个节点（实心圆点压在竖线上）；细节：节点右侧的三行字（中间一行短）。节点和竖线在左侧，整体右移 1',
+    weights: { [P]: 0.5, [D]: 0.5 },
+    draw(g) {
+      const r = 1.25 * g.dr;
+      return [
+        line(g.span(6, 3, 6, 21), { n: 'axis', role: P, part: 'axis' }),
+        ...[5, 12, 19].map((y, i) => solid(g.circ(6, y, r), { n: `p${i}`, role: P, part: 'axis', vc: i })),
+        line(g.seg(11, 5, 22 - g.h, 5) + g.seg(11, 12, 18, 12) + g.seg(11, 19, 22 - g.h, 19), { n: 'text', role: D })
+      ];
+    },
+    fx: { t: 'variable', on: ['p0', 'p1', 'p2'], mode: 'cumulative', step: 140 }
+  },
+  'timer-off': off({ ...offFill(slash(turnHand(TIME.timer, 'hand'), { label: '计时关闭' })), allow: SLASHED }, 'timer', { t: 'keys', on: ['hand'], o: [12, 12], r: [-40], ms: 300 })
 };

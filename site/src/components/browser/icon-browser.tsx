@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { startTransition, useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { preload, preloadModule } from "react-dom";
-import { RiFileCopyLine, RiSearchLine } from "@remixicon/react";
+import { ArrowLeftIcon, CopyIcon, SearchIcon } from "@/components/kit/ui-icons";
 import { Search } from "kubai-icons-react";
 import { Search as SearchDuo } from "kubai-icons-react/duotone";
 import { copyText } from "@/components/copy-button";
@@ -12,13 +12,15 @@ import { Kbd } from "@/components/ui/kbd";
 import { Segmented } from "@/components/kit/segmented";
 import { SizeControl } from "@/components/kit/size-control";
 import { LineIcon } from "@/components/kit/line-icon";
+import { warmIcon } from "@/components/kit/icon-image";
 import { Swatches } from "@/components/kit/swatches";
 import { Glide } from "@/components/kit/glide";
 import { chip, navItem, tile as tileStyle } from "@/components/kit/styles";
 import { SetsEntry } from "@/learn/sets-entry";
+import { setPath, type BrowserSet } from "@/learn/set-paths";
 import { setLineSettings, useLineSettings } from "@/lib/line-settings";
 import { LINE_STROKE, LINE_STROKES, LINE_VARIANTS } from "@/lib/line";
-import { loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta, type IconStyle } from "@/lib/icons";
+import { loadIcon, loadIndex, loadKeywords, loadKeywordsLater, matchedKeyword, onKeywords, peekIcon, peekKeywords, prepare, searchObjects, type Category, type IconIndex, type IconMeta, type IconStyle, type Searchable } from "@/lib/icons";
 import { track } from "@/lib/analytics";
 import { markIconSeen, markNewSetSeen, useNewSetSeen } from "@/lib/seen-new";
 import { agentPrompt, asset, requestUrl } from "@/lib/site";
@@ -26,18 +28,23 @@ import { cn } from "@/lib/utils";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
 import { IconGrid } from "./icon-grid";
 import { IconDialog } from "./icon-dialog";
-import { MIXED, MIXED_FILL, STYLE_OPTIONS, SWATCHES, mixedColor, usePrefs } from "./prefs";
+import { StyleIndex } from "./style-index";
+import { MIXED, MIXED_FILL, STYLE_OPTIONS, SWATCHES, colorFor, mixedColor, mixedColors, usePrefs } from "./prefs";
 
+/** The prefix that marks an icon set among the sidebar entries; category ids never contain a colon. */
+const SET = "set:";
 const readUrl = () => {
   if (typeof window === "undefined") return { q: "", cat: "", icon: "", style: "" };
   const p = new URLSearchParams(window.location.search);
-  return { q: p.get("q") ?? "", cat: p.get("category") ?? "", icon: p.get("icon") ?? "", style: p.get("style") ?? "" };
+  const set = p.get("set");
+  return { q: p.get("q") ?? "", cat: set ? `${SET}${set}` : (p.get("category") ?? ""), icon: p.get("icon") ?? "", style: p.get("style") ?? "" };
 };
 const writeUrl = (s: { q: string; cat: string; icon: string; style: IconStyle }) => {
   const p = new URLSearchParams();
   if (s.style !== "layered") p.set("style", s.style);
   if (s.q) p.set("q", s.q);
-  if (s.cat) p.set("category", s.cat);
+  if (s.cat.startsWith(SET)) p.set("set", s.cat.slice(SET.length));
+  else if (s.cat) p.set("category", s.cat);
   if (s.icon) p.set("icon", s.icon);
   const qs = p.toString();
   window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
@@ -47,7 +54,23 @@ const noKeywords = () => null;
 /** The category entry that lists the icons marked new. */
 const NEW_CAT = "new";
 
-export function IconBrowser({ categories: cats, firstChunk }: { categories: Category[]; firstChunk?: string }) {
+/** The icons a sidebar entry shows: the new ones, an icon set's in the set's order, or a category's. */
+function iconsFor(all: Searchable[], query: string, cat: string, sets: BrowserSet[]) {
+  if (cat === NEW_CAT) return searchObjects(all.filter((i) => i.new), query);
+  if (cat.startsWith(SET)) {
+    const names = sets.find((x) => SET + x.id === cat)?.icons ?? [];
+    const byName = new Map(all.map((i) => [i.name, i]));
+    return searchObjects(names.flatMap((n) => byName.get(n) ?? []), query);
+  }
+  return searchObjects(all, query, cat);
+}
+
+/**
+ * `sets`: each style's icon sets, on the English and Chinese pages, which open in place.
+ * `footer`: the layered style's "All icons by category" section, shown under the browser while
+ * the layered style is on show; the other styles show their own in its place.
+ */
+export function IconBrowser({ categories: cats, firstChunk, sets, footer }: { categories: Category[]; firstChunk?: string; sets?: Record<IconStyle, BrowserSet[]>; footer?: React.ReactNode }) {
   // Both start downloading with the page instead of waiting for the app to start.
   preload(asset("/data/index.json"), { as: "fetch", crossOrigin: "anonymous" });
   if (firstChunk) preloadModule(asset(firstChunk), { as: "script" });
@@ -69,9 +92,12 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
   // Only a slider drag lets the grid trail the size; a saved size applies at once.
   const [sizing, setSizing] = useState(false);
   const [prefs, setPrefs] = usePrefs();
-  // The two-tone and line styles show their own, smaller sets; collections and the layered
-  // variants stay with the layered icons.
-  const duo = prefs.style !== "layered";
+  // The two-tone and line styles show their own, smaller lists, with their own icon sets and New
+  // category; the visitor's collection and the layered variants stay with the layered icons. The
+  // page follows the style on show (styleKey), which trails the one picked until its first
+  // screen is ready.
+  const duo = styleKey !== "layered";
+  const color = colorFor(prefs, styleKey);
   const lineSettings = useLineSettings();
   const query = useDeferredValue(q);
   const input = useRef<HTMLInputElement>(null);
@@ -87,18 +113,50 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
       else loadKeywordsLater(locale);
       setQ(u.q);
       setCat(u.cat);
-      if (u.style === "duotone" || u.style === "line") setPrefs({ style: u.style });
+      // A style in the address shows from the first render, with nothing to wait for. Links to a
+      // layered icon set name the layered style too, so a saved style doesn't hide the set.
+      if (u.style === "layered" || u.style === "duotone" || u.style === "line") { setPrefs({ style: u.style }); setStyleKey(u.style); }
       if (u.icon) setOpen(listOf(ix, u.style === "duotone" || u.style === "line" ? u.style : "layered").find((i) => i.name === u.icon) ?? null);
     }, () => setFailed(true));
   }, []);
   useEffect(load, [load]);
   useEffect(() => { if (index) writeUrl({ q, cat, icon: open?.name ?? "", style: prefs.style }); }, [q, cat, open, index, prefs.style]);
-  // The list follows the saved style once it is read; a switch closes an open icon of the other style.
+  // A switch closes an open icon of the other style.
   useEffect(() => {
-    setStyleKey(prefs.style);
     setOpen((o) => (o && (o.style ?? "layered") !== prefs.style ? null : o));
   }, [prefs.style]);
-  const styleCats = useMemo(() => (duo && index ? cats.filter((c) => listOf(index, prefs.style).some((i) => i.category === c.id)) : cats), [duo, index, cats, prefs.style]);
+  // The page shows a newly picked style only once the icons of its first screen are ready (data
+  // loaded, bitmaps drawn), then the sidebar, the toolbar and the grid change in one go: nothing
+  // shows empty tiles or a half-switched page in between. A slow network still switches in time.
+  const gridBox = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const target = prefs.style;
+    if (target === styleKey) return;
+    if (!index) { setStyleKey(target); return; }
+    let live = true;
+    const show = () => { if (live) startTransition(() => setStyleKey(target)); };
+    const timer = setTimeout(show, 800);
+    // The icons the new list puts where tiles are on screen now.
+    const box = gridBox.current, h = window.innerHeight;
+    const shown = box ? [...box.querySelectorAll<HTMLElement>("[data-index]")].filter((el) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < h; }).map((el) => Number(el.dataset.index)) : [];
+    const from = shown.length ? Math.min(...shown) : 0, to = shown.length ? Math.max(...shown) + 1 : 48;
+    const next = prepare(listOf(index, target), keywords ?? {}, locale);
+    const all = iconsFor(next, query, cat, sets?.[target] ?? []);
+    const metas = all.slice(from, to) as IconMeta[];
+    const cols = box ? Math.max(4, Math.floor((box.clientWidth + 10) / (tile + 10))) : 8;
+    const look = colorFor(prefs, target);
+    const mixed = look === MIXED ? mixedColors(all.map((m) => m.name), cols) : null;
+    Promise.all(metas.map((m) => loadIcon(m)))
+      .then(() => target === "line" ? undefined : Promise.all(metas.map((m, k) => {
+        const icon = peekIcon(m.name, m.style);
+        return icon ? warmIcon(icon, { color: mixed ? mixed[from + k] : look, variant: prefs.variant }, prefs.size) : undefined;
+      })))
+      .then(show, show);
+    return () => { live = false; clearTimeout(timer); };
+    // Only a new pick starts this; the rest is read as it is at that moment.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefs.style, index]);
+  const styleCats = useMemo(() => (duo && index ? cats.filter((c) => listOf(index, styleKey).some((i) => i.category === c.id)) : cats), [duo, index, cats, styleKey]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey))) && document.activeElement?.tagName !== "INPUT") {
@@ -110,13 +168,23 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const newSet = useMemo(() => list.filter((i) => i.new && !i.style).map((i) => i.name).join(","), [list]);
+  // The style on show has a New category only while some of its icons are new.
+  const newSet = useMemo(() => list.filter((i) => i.new).map((i) => i.name).join(","), [list]);
   const hasNew = newSet !== "";
+  // The icon sets of the style on show, and the one open in the grid.
+  const styleSets = useMemo(() => sets?.[styleKey] ?? [], [sets, styleKey]);
+  const openSet = cat.startsWith(SET) ? styleSets.find((x) => SET + x.id === cat) : undefined;
+  // The sets list in the sidebar stays open while one of them is on show, and opens and closes on its entry.
+  const [setsOpen, setSetsOpen] = useState(false);
+  useEffect(() => { if (openSet) setSetsOpen(true); }, [openSet]);
+  // An address asking for New in a style without new icons, or for a set the style doesn't have,
+  // shows all of them instead.
+  useEffect(() => { if (index && ((cat === NEW_CAT && !hasNew) || (cat.startsWith(SET) && !openSet))) setCat(""); }, [index, cat, hasNew, openSet]);
   const newSeen = useNewSetSeen(newSet);
   // Opening the New category, or an icon in it, retires its mark.
   useEffect(() => { if (hasNew && cat === NEW_CAT) markNewSetSeen(newSet); }, [hasNew, cat, newSet]);
   useEffect(() => { if (open?.new) markIconSeen(open.name); }, [open]);
-  const results = useMemo(() => (cat === NEW_CAT ? searchObjects(list.filter((i) => i.new), query) : searchObjects(list, query, cat)), [list, query, cat]);
+  const results = useMemo(() => iconsFor(list, query, cat, styleSets), [list, query, cat, styleSets]);
   const hits = useMemo(() => (query.trim() ? new Map(results.map((r) => [r.name, matchedKeyword(r, query)])) : undefined), [results, query]);
 
   // A new category or query starts from the top of the grid, not somewhere in the middle
@@ -185,6 +253,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
     </Button>
   );
   return (
+    <>
     <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
       <aside className="hidden lg:block">
         <nav className="isolate sticky top-[calc(var(--header)+var(--stick))] -me-2 max-h-[calc(100dvh-var(--header)-2*var(--stick))] space-y-0.5 overflow-y-auto pe-2 pb-6 [mask-image:linear-gradient(to_bottom,black_calc(100%-1.5rem),transparent)]">
@@ -192,13 +261,13 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           <button type="button" aria-current={!cat} onClick={() => pickCat("")} className={navItem({ active: !cat })}>
             <span className="truncate">{tr("All", "全部")}</span>
           </button>
-          {hasNew && !duo && (
+          {hasNew && (
             <button type="button" aria-current={cat === NEW_CAT} onClick={() => pickCat(NEW_CAT)} className={navItem({ active: cat === NEW_CAT })}>
               <span className="truncate">{tr("New", "新增")}</span>
               {!newSeen && <span aria-hidden className="size-1.5 shrink-0 rounded-pill bg-brand" />}
             </button>
           )}
-          {!duo && <SetsEntry as="nav" />}
+          <SetsEntry as="nav" style={styleKey} sets={styleSets} current={openSet?.id ?? ""} open={setsOpen} onToggle={() => setSetsOpen((v) => !v)} onPick={(e, id) => filterTo(e, SET + id)} />
           {styleCats.map((c) => (
             <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} onClick={(e) => filterTo(e, c.id)} className={navItem({ active: cat === c.id })}>
               <span className="truncate">{tr(c.en, c.zh ?? c.en)}</span>
@@ -214,7 +283,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           {/* Below the desktop layout only the search box stays in view. */}
           <div className="max-lg:sticky max-lg:top-header max-lg:z-30 max-lg:-mx-gutter max-lg:bg-background/80 max-lg:px-gutter max-lg:py-2 max-lg:backdrop-blur-xl">
           <div className="relative">
-            <RiSearchLine className="pointer-events-none absolute top-1/2 start-3.5 size-[18px] -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="pointer-events-none absolute top-1/2 start-3.5 size-[18px] -translate-y-1/2 text-muted-foreground" />
             <Input
               ref={input}
               value={q}
@@ -230,27 +299,30 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 max-lg:mt-2 max-lg:mb-3 max-lg:rounded-card max-lg:border max-lg:p-3">
             <Swatches
               className="w-full flex-nowrap justify-between overflow-x-auto sm:w-auto sm:flex-wrap sm:justify-start sm:overflow-visible"
-              value={prefs.color}
+              value={color}
               options={[
                 { value: MIXED, name: tr("Mixed", "多色"), fill: MIXED_FILL },
                 ...SWATCHES.map((s) => ({ value: s.value, name: s.name })),
               ]}
-              onChange={(color) => setPrefs({ color })}
+              onChange={(next) => setPrefs({ color: next, picked: true })}
               label={tr("Accent color", "主色")}
               customLabel={tr("Custom color", "自定义颜色")}
               hexLabel={tr("Hex color", "十六进制颜色")}
             />
-            {/* The style and its variants (彩色/柔和, or the line variants) stay on one row, also on phones. */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
+            {/* The style and its variants (彩色/柔和, or the line variants) share a row; on phones
+                each takes a full row, its items equally wide. */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-3 max-sm:w-full max-sm:flex-col max-sm:items-stretch">
             <Segmented
+              fill
               value={prefs.style}
-              onChange={(style) => { setSelecting(false); if (style !== "layered" && cat === NEW_CAT) setCat(""); setPrefs({ style }); track("switch_style", { style }); }}
+              onChange={(style) => { setSelecting(false); if ((cat === NEW_CAT && !(index && listOf(index, style).some((i) => i.new))) || (cat.startsWith(SET) && !sets?.[style]?.some((x) => SET + x.id === cat))) setCat(""); setPrefs({ style }); track("switch_style", { style }); }}
               label={tr("Style", "风格")}
               options={STYLE_OPTIONS.map((o) => ({ value: o.value, label: tr(o.en, o.zh) }))}
             />
-            {prefs.style === "line" && (
+            {styleKey === "line" && (
               // The four variants as small samples of themselves; their names show on hover.
               <Segmented
+                fill
                 value={lineSettings.variant}
                 onChange={(variant) => setLineSettings({ variant })}
                 label={tr("Variant", "变体")}
@@ -260,6 +332,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
             )}
             {!duo && (
               <Segmented
+                fill
                 value={prefs.variant}
                 onChange={(variant) => setPrefs({ variant })}
                 label={tr("Variant", "样式")}
@@ -270,7 +343,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
             {!duo && selectButton("max-lg:hidden")}
             {/* Size ends the first row, except in the line style, where it moves down beside the
                 stroke width so the two sit side by side (one per row only on narrow screens). */}
-            {prefs.style !== "line" && (
+            {styleKey !== "line" && (
               // Grows into whatever the first row has left; when it wraps it takes the whole row,
               // never sitting alone at one end.
               <SizeControl
@@ -288,7 +361,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
               />
             )}
             {/* The row opens and closes by its height, so the grid below slides instead of jumping. */}
-            <div aria-hidden={prefs.style !== "line"} inert={prefs.style !== "line"} className={cn("grid w-full basis-full transition-[grid-template-rows,margin] duration-200 ease-out motion-reduce:transition-none", prefs.style === "line" ? "grid-rows-[1fr]" : "-mt-3 grid-rows-[0fr]")}>
+            <div aria-hidden={styleKey !== "line"} inert={styleKey !== "line"} className={cn("grid w-full basis-full transition-[grid-template-rows,margin] duration-200 ease-out motion-reduce:transition-none", styleKey === "line" ? "grid-rows-[1fr]" : "-mt-3 grid-rows-[0fr]")}>
               <div className="min-h-0 overflow-hidden">
                 <div className="grid gap-x-8 gap-y-3 sm:grid-cols-2">
                   <SizeControl
@@ -325,9 +398,10 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
             <div className={cn("relative isolate flex min-w-0 flex-1 gap-0.5 overflow-x-auto ps-gutter pb-0.5", duo ? "pe-gutter" : "pe-3 [mask-image:linear-gradient(to_left,transparent,black_1.25rem)] rtl:[mask-image:linear-gradient(to_right,transparent,black_1.25rem)]")}>
               <Glide still selector="[aria-current=true]" className="rounded-control bg-muted" />
               <button type="button" aria-current={!cat} className={chip({ active: !cat })} onClick={() => pickCat("")}>{tr("All", "全部")}</button>
-              {hasNew && !duo && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
-              {!duo && <SetsEntry as="chip" />}
-              {styleCats.map((c) => (
+              {hasNew && <button type="button" aria-current={cat === NEW_CAT} className={chip({ active: cat === NEW_CAT })} onClick={() => pickCat(NEW_CAT)}>{tr("New", "新增")}</button>}
+              <SetsEntry as="chip" style={styleKey} sets={styleSets} current={openSet?.id ?? ""} open={setsOpen} onToggle={() => setSetsOpen((v) => !v)} onPick={(e, id) => filterTo(e, SET + id)} />
+              {/* An open sets list takes the place of the categories, which come back when it closes. */}
+              {!setsOpen && styleCats.map((c) => (
                 <a key={c.id} href={asset(loc(`/icons/category/${c.id}/`))} aria-current={cat === c.id} className={chip({ active: cat === c.id })} onClick={(e) => filterTo(e, c.id)}>{tr(c.en, c.zh ?? c.en)}</a>
               ))}
             </div>
@@ -336,6 +410,19 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
           </div>
         </div>
         <div className="min-h-dvh">
+          {openSet && (
+            // The set on show, with the way back to every icon and a link to the set's own page.
+            <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <Button variant="outline" size="sm" onClick={() => pickCat("")}>
+                <ArrowLeftIcon data-icon="inline-start" className="rtl:rotate-180" />{locale === "zh" ? "全部图标" : "All icons"}
+              </Button>
+              <h2 className="min-w-0 truncate font-heading text-subheading font-semibold">{openSet.title}</h2>
+              <span className="text-control text-muted-foreground">{locale === "zh" ? `${openSet.icons.length} 个图标` : `${openSet.icons.length} icons`}</span>
+              <a href={asset(loc(setPath(styleKey, openSet.id)))} className="text-control text-muted-foreground underline-offset-4 hover:text-foreground hover:underline sm:ms-auto">
+                {locale === "zh" ? "合集介绍和代码" : "About this set and its code"}
+              </a>
+            </div>
+          )}
           {failed ? (
             <div className="grid place-items-center gap-3 rounded-panel border border-dashed py-20 text-center">
               <p className="text-muted-foreground">{tr("The icons could not be loaded.", "图标加载失败")}</p>
@@ -345,9 +432,9 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
             <div className={"flex flex-col items-center px-4 py-20 text-center"} data-kubai-trigger>
               {/* drawn in the style being browsed, at its current line variant and stroke */}
               <div className={cn(tileStyle({ interactive: false }), "size-20")}>
-                {prefs.style === "line" ? (
+                {styleKey === "line" ? (
                   <LineIcon name="search" size={40} color="#5393FF" variant={lineSettings.variant} s={lineSettings.s} />
-                ) : prefs.style === "duotone" ? (
+                ) : styleKey === "duotone" ? (
                   <SearchDuo size={40} color="#5393FF" trigger="parent" />
                 ) : (
                   <Search size={40} color="#5393FF" trigger="parent" />
@@ -361,13 +448,15 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
                   {tr("Request this icon", "申请此图标")}
                 </a>
                 <Button variant="outline" onClick={() => { copyText(agentPrompt(query, locale)); track("request_icon", { q: query, via: "agent_prompt" }); }}>
-                  <RiFileCopyLine data-icon="inline-start" />
+                  <CopyIcon data-icon="inline-start" />
                   {tr("Copy agent prompt", "复制提示词")}
                 </Button>
               </div>
             </div>
           ) : (
-            <IconGrid icons={results} tile={tile} size={gridSize} color={prefs.color} variant={prefs.variant} selecting={selecting && !duo} hits={hits} onOpen={openIcon} />
+            <div ref={gridBox}>
+              <IconGrid icons={results} tile={tile} size={gridSize} color={color} variant={prefs.variant} selecting={selecting && !duo} hits={hits} onOpen={openIcon} />
+            </div>
           )}
         </div>
       </div>
@@ -375,7 +464,7 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
         meta={open}
         related={related}
         categories={index?.categories ?? []}
-        color={prefs.color === MIXED ? (openColor ?? mixedColor(open?.base ?? open?.name ?? "")) : prefs.color}
+        color={color === MIXED ? (openColor ?? mixedColor(open?.base ?? open?.name ?? "")) : color}
         variant={prefs.variant}
         badge={prefs.badge}
         onBadge={(badge) => setPrefs({ badge })}
@@ -385,5 +474,16 @@ export function IconBrowser({ categories: cats, firstChunk }: { categories: Cate
         onKeyword={(word) => { setQ(word); setCat(""); setOpen(null); setOpenColor(null); }}
       />
     </div>
+    {/* Follows the style on show, so it changes in the same render as the grid. */}
+    {footer && (styleKey === "layered" ? footer : (
+      <StyleIndex
+        style={styleKey}
+        icons={list}
+        categories={cats}
+        onCategory={filterTo}
+        onIcon={(e, m) => { if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); openIcon(m); }}
+      />
+    ))}
+    </>
   );
 }

@@ -26,7 +26,8 @@ From a CDN, with no build step:
 | `kubai-icons/dynamic` | `loadIcon(name)` and the list of names |
 | `kubai-icons/element` | The `<kubai-icon>` custom element |
 | `kubai-icons/icons.json` | Names, categories and tags |
+| `kubai-icons/duotone`, `kubai-icons/line` | The two-tone and line styles, with the same paths below them (`/icons/<name>`, `/dynamic`, `/icons.json`) |
 
-Options: `size`, `color` (defaults to currentColor), `variant` (`'color'` or `'soft'`), `badgeColor` (any colour or `'semantic'`; badges are black and white by default), `title`, `trigger` (`'hover'`, `'parent'` or `'none'`).
+Options: `size`, `color` (defaults to currentColor), `variant` (`'color'` or `'soft'`), `badgeColor` (any colour or `'semantic'`; badges are black and white by default), `title`, `trigger` (`'hover'`, `'parent'` or `'none'`). Line icons also take `strokeWidth` (any width above 0, default 2) and `variant` (`'outline'`, `'line-duo'`, `'fill'` or `'solid-tint'`); on the web component, `icon-style="line"` and `stroke-width`.
 
 [Documentation](https://icons.kubai.design/docs/javascript/) · MIT License

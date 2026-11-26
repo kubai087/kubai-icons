@@ -4,6 +4,8 @@ import { localize, type Locale } from "@/lib/i18n";
 import { asset } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import type { Collection } from "./collections";
+import { LinePreview } from "@/components/browser/line-look";
+import { previewPath, setPath, type SetStyle } from "./set-paths";
 
 /** A titled block of an icon or set page, so every block shares one heading and rhythm. */
 export function PageSection({ title, action, className, children }: { title: string; action?: ReactNode; className?: string; children: ReactNode }) {
@@ -43,19 +45,23 @@ export function Tags({ items }: { items: string[] }) {
 
 const card = "tap relative grid h-full content-start gap-3 rounded-card border p-5 transition-colors hover:bg-muted/50";
 
-/** Icon sets as cards: a row of their icons, the title and the count. */
-export function SetCards({ sets, locale, className }: { sets: Collection[]; locale: Locale; className?: string }) {
+/** Icon sets of one style as cards: a row of their icons, the title and the count. */
+export function SetCards({ sets, locale, style = "layered", className }: { sets: Collection[]; locale: Locale; style?: SetStyle; className?: string }) {
   const zh = locale === "zh";
   return (
     <ul className={cn("grid gap-3 sm:grid-cols-2 lg:grid-cols-3", className)}>
       {sets.map((c) => (
         <li key={c.id}>
-          <Link href={localize(`/icons/sets/${c.id}/`, locale)} prefetch={false} className={card}>
+          <Link href={localize(setPath(style, c.id), locale)} prefetch={false} className={card}>
             <span className="flex gap-2" aria-hidden>
-              {c.icons.slice(0, 6).map((n) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={n} src={asset(`/icons/${n}/preview.svg`)} alt="" width={32} height={32} loading="lazy" decoding="async" />
-              ))}
+              {c.icons.slice(0, 6).map((n) =>
+                style === "line" ? (
+                  <LinePreview key={n} name={n} size={32} src={previewPath(style, n)} />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={n} src={asset(previewPath(style, n))} alt="" width={32} height={32} loading="lazy" decoding="async" />
+                ),
+              )}
             </span>
             <span className="grid gap-0.5">
               <span className="font-medium">{zh ? c.zhTitle : c.title}</span>

@@ -250,5 +250,11 @@
  "Solid": "Заливка",
  "Solid tint": "Заливка с оттенком",
  "Stroke width": "Толщина линии",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Те же иконки, нарисованные и скруглёнными линиями на сетке 24: любая толщина линии от 0,25 до 3, в вариантах «линейный», «линейный двухцветный», «заливка» и «заливка с оттенком». Каждая по-прежнему двигается при наведении."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Те же иконки, нарисованные и скруглёнными линиями на сетке 24: любая толщина линии от 0,25 до 3, в вариантах «линейный», «линейный двухцветный», «заливка» и «заливка с оттенком». Каждая по-прежнему двигается при наведении.",
+ "Circle": "Круг",
+ "Square": "Квадрат",
+ "Dot": "Точка",
+ "Edit": "Изменить",
+ "Shield": "Щит",
+ "Drawn in the icon's own color": "В цвете самой иконки"
 }

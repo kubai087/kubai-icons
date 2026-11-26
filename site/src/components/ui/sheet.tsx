@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { useTr } from "@/lib/use-locale"
 
 import { Button } from "@/components/ui/button"
-import { RiCloseLine } from "@remixicon/react"
+import { XIcon } from "@/components/kit/ui-icons";
 
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -72,7 +72,7 @@ function SheetContent({
               />
             }
           >
-            <RiCloseLine
+            <XIcon
             />
             <span className="sr-only">{closeLabel}</span>
           </SheetPrimitive.Close>

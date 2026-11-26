@@ -9,7 +9,7 @@ import { quietLink } from "./kit/styles";
 import { GitHubStars } from "./github-stars";
 import { AuthorLink } from "./author-link";
 import { HeaderMenu } from "./header-menu";
-import { RiTwitterXLine } from "@remixicon/react";
+import { XBrandIcon } from "@/components/kit/ui-icons";
 import { MessageCircle } from "kubai-icons-react";
 import { Glide } from "./kit/glide";
 import { DocumentLanguage, LanguageSwitch } from "./language-switch";
@@ -70,7 +70,7 @@ export function SiteHeader() {
             <span>{tr("Feedback", "反馈")}</span>
           </FeedbackLink>
           <AuthorLink place="header" label={tr("Kubai087 on X", "Kubai087 的 X 主页")} className={cn("tap relative hidden size-8 place-items-center rounded-control hover:bg-muted lg:grid", quietLink)}>
-            <RiTwitterXLine className="size-4" />
+            <XBrandIcon className="size-4" />
           </AuthorLink>
           <LanguageSwitch className={cn("tap relative grid size-8 place-items-center rounded-control hover:bg-muted", quietLink)} iconOnly />
           <ThemeToggle className="max-lg:hidden" />

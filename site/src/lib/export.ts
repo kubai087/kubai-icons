@@ -19,6 +19,11 @@ export function resolvedSvg(icon: KubaiIconData, { color, variant, badgeColor, s
   host.innerHTML = toSvg(icon, { color, variant, badgeColor, size, id: `x${`${icon.name}${variant}${color}${badgeColor ?? ""}`.replace(/[^a-zA-Z0-9]/g, "")}` });
   document.body.append(host);
   const svg = host.querySelector("svg")!;
+  // Paint given as a CSS variable in an attribute (a badge's var(--ki-b, …)) is written out too.
+  for (const el of svg.querySelectorAll<SVGElement>("[fill*='var('], [stroke*='var(']")) {
+    const cs = getComputedStyle(el);
+    for (const p of ["fill", "stroke"]) if (el.getAttribute(p)?.includes("var(")) el.setAttribute(p, toHex(cs.getPropertyValue(p)));
+  }
   for (const el of svg.querySelectorAll<SVGElement>("[style]")) {
     const cs = getComputedStyle(el);
     for (const p of PROPS) {

@@ -14,6 +14,7 @@ import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
 import { useTr } from "@/lib/use-locale";
 import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
+import { LINE_SITE_STROKE } from "@/lib/line";
 
 const WALL = [Folder, Mail, Calendar, Lock, Settings, Trash, Bell, Camera, Bookmark, AlarmClock, Notebook, Compass, Download, CloudUpload, Gift, Package, Heart, Star, Key, Smartphone];
 /**
@@ -106,7 +107,7 @@ const WallTile = memo(function WallTile({ Icon, DuoIcon, LineIcon, style, color,
     >
       {/* A switch of style swaps each tile in turn, along the diagonals like their arrival. */}
       <span key={style} className="swap-pop grid place-items-center" style={{ animationDelay: `${((index % 5) + Math.floor(index / 5)) * 40}ms` }}>
-        {style === "duotone" ? <DuoIcon size={36} color={color} trigger="none" hover={hover} /> : style === "line" ? <LineIcon size={36} color={color} trigger="none" hover={hover} /> : <Icon size={36} color={color} trigger="none" hover={hover} active={toggles ? saved : undefined} />}
+        {style === "duotone" ? <DuoIcon size={36} color={color} trigger="none" hover={hover} /> : style === "line" ? <LineIcon size={36} color={color} strokeWidth={LINE_SITE_STROKE} trigger="none" hover={hover} /> : <Icon size={36} color={color} trigger="none" hover={hover} active={toggles ? saved : undefined} />}
       </span>
     </div>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { RiArrowRightSLine, RiTwitterXLine } from "@remixicon/react";
+import { ChevronRightIcon, XBrandIcon } from "@/components/kit/ui-icons";
 import { AuthorLink } from "@/components/author-link";
 import { JsonLd } from "@/components/json-ld";
 import { SkillPrompt } from "@/components/skill-prompt";
@@ -49,14 +49,14 @@ export function HomePage({ locale }: { locale: Locale }) {
             <p className="rise-in flex items-center gap-1.5 text-control text-muted-foreground [--i:2]">
               {pick(locale, "Designed by", "设计")}
               <AuthorLink place="home" className="tap relative inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline">
-                <RiTwitterXLine className="size-3.5" aria-hidden />{AUTHOR.name}
+                <XBrandIcon className="size-3.5" aria-hidden />{AUTHOR.name}
               </AuthorLink>
             </p>
           </div>
           <div className="rise-in flex flex-wrap gap-3 [--i:3]">
             <Link href={localize("/icons/", locale)} className={buttonVariants({ size: "xl" })}>
               {pick(locale, "Browse icons", "浏览图标")}
-              <RiArrowRightSLine data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 motion-reduce:transition-none" />
+              <ChevronRightIcon data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 motion-reduce:transition-none" />
             </Link>
             <AgentGuide />
             <Link href={localize("/docs/", locale)} className={buttonVariants({ size: "xl", variant: "ghost", className: "px-3 text-muted-foreground max-sm:hidden" })}>{pick(locale, "Documentation", "查看文档")}</Link>
@@ -71,7 +71,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       </section>
 
       <StyleBand className="reveal" />
-      <FeatureCards className="reveal mt-6" moduleBytes={moduleBytes(MODULE_DEMO)} />
+      <FeatureCards className="reveal mt-6" moduleBytes={{ layered: moduleBytes(MODULE_DEMO), duotone: moduleBytes(MODULE_DEMO, "duotone"), line: moduleBytes(MODULE_DEMO, "line") }} />
       <SkillPrompt className="reveal mt-6 rounded-panel px-panel py-5" />
     </Container>
   );

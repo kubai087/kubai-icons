@@ -147,6 +147,20 @@ export function prefetchIcon(icon: KubaiIconData, look: IconLook, size: number, 
   schedule();
 }
 
+/**
+ * Makes the bitmap a tile of `size` will show, and resolves once it is in the cache (or could
+ * not be made), so a whole screen of tiles can be drawn before it is shown.
+ */
+export function warmIcon(icon: KubaiIconData, look: IconLook, size: number, pose: Pose = "rest"): Promise<void> {
+  const px = Math.round((SIDE * size * dpr()) / 31);
+  const key = keyOf(icon, look, pose, px);
+  if (bitmaps.has(key)) return Promise.resolve();
+  return new Promise((resolve) => {
+    jobs.add({ el: document.body, key, run: () => makeBitmap(icon, look, pose, px), done: () => resolve() });
+    schedule();
+  });
+}
+
 /** A still icon, the same size and position as the live one. */
 export function IconImage({ icon, size, raster = size, pose = "rest", ...look }: IconLook & { icon: KubaiIconData; size: number; raster?: number; pose?: Pose }) {
   const ref = useRef<HTMLCanvasElement>(null);

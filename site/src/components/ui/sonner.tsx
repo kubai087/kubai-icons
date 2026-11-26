@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
-import { RiCheckboxCircleLine, RiInformationLine, RiAlertLine, RiCloseCircleLine, RiLoader4Line } from "@remixicon/react"
+import { CircleCheckIcon, CircleXIcon, InfoIcon, LoaderIcon, TriangleAlertIcon } from "@/components/kit/ui-icons";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme()
@@ -13,19 +13,19 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       icons={{
         success: (
-          <RiCheckboxCircleLine className="size-4" />
+          <CircleCheckIcon className="size-4" />
         ),
         info: (
-          <RiInformationLine className="size-4" />
+          <InfoIcon className="size-4" />
         ),
         warning: (
-          <RiAlertLine className="size-4" />
+          <TriangleAlertIcon className="size-4" />
         ),
         error: (
-          <RiCloseCircleLine className="size-4" />
+          <CircleXIcon className="size-4" />
         ),
         loading: (
-          <RiLoader4Line className="size-4 animate-spin" />
+          <LoaderIcon className="size-4 animate-spin" />
         ),
       }}
       style={

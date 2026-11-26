@@ -1,7 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { RiGithubLine } from "@remixicon/react";
+import { GithubIcon } from "@/components/kit/ui-icons";
 import { AuthorLink } from "@/components/author-link";
 import { FeedbackLink } from "@/components/feedback-link";
 import { Logo } from "@/components/logo";
@@ -72,7 +72,7 @@ export function SiteFooter() {
               <div key={p.name} className="flex items-center gap-1.5">
                 <a href={p.site} target="_blank" rel="noreferrer" className={link}>{p.name}</a>
                 <a href={p.repo} target="_blank" rel="noreferrer" aria-label={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} title={tr("{name} on GitHub", "{name} 的 GitHub 仓库", { name: p.name })} className={cn("grid size-5 place-items-center pointer-coarse:size-8", quietLink)}>
-                  <RiGithubLine className="size-3.5" />
+                  <GithubIcon className="size-3.5" />
                 </a>
               </div>
             ))}

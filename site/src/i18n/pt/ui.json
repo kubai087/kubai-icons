@@ -250,5 +250,11 @@
  "Solid": "Sólido",
  "Solid tint": "Sólido com tom",
  "Stroke width": "Espessura do traço",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Os mesmos ícones, também desenhados com linhas arredondadas em uma grade de 24: qualquer espessura de traço de 0,25 a 3, em linha, linha em duas cores, sólido e sólido com tom. Todos continuam se movendo ao passar o mouse."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Os mesmos ícones, também desenhados com linhas arredondadas em uma grade de 24: qualquer espessura de traço de 0,25 a 3, em linha, linha em duas cores, sólido e sólido com tom. Todos continuam se movendo ao passar o mouse.",
+ "Circle": "Círculo",
+ "Square": "Quadrado",
+ "Dot": "Ponto",
+ "Edit": "Editar",
+ "Shield": "Escudo",
+ "Drawn in the icon's own color": "Na mesma cor do ícone"
 }

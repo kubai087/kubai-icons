@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { RiFileCopyLine } from "@remixicon/react";
+import { CopyIcon } from "@/components/kit/ui-icons";
 import { copyText } from "@/components/copy-button";
 import { Segmented } from "@/components/kit/segmented";
 import { card } from "@/components/kit/styles";
@@ -51,7 +51,7 @@ export function AgentGuide() {
           ))}
         </div>
         <Button size="xl" onClick={copy}>
-          <RiFileCopyLine data-icon="inline-start" />
+          <CopyIcon data-icon="inline-start" />
           {tr("Copy prompt", "复制提示词")}
         </Button>
       </DialogContent>

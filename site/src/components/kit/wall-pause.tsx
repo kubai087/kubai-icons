@@ -1,7 +1,7 @@
 "use client";
 // The pause switch for the looping icon walls. One choice holds for every wall on the site
 // for the visit. With reduced motion the walls never loop, so the switch is hidden.
-import { RiPauseLine, RiPlayLine } from "@remixicon/react";
+import { PauseIcon, PlayIcon } from "@/components/kit/ui-icons";
 import { Button } from "@/components/ui/button";
 import { setWallsPaused, useWallsPaused } from "@/lib/wall-motion";
 import { useTr } from "@/lib/use-locale";
@@ -21,7 +21,7 @@ export function WallPause({ className }: { className?: string }) {
       onClick={() => setWallsPaused(!paused)}
       className={cn("text-muted-foreground hover:text-foreground aria-pressed:bg-muted aria-pressed:text-foreground motion-reduce:hidden pointer-coarse:size-9", className)}
     >
-      {paused ? <RiPlayLine aria-hidden /> : <RiPauseLine aria-hidden />}
+      {paused ? <PlayIcon aria-hidden /> : <PauseIcon aria-hidden />}
     </Button>
   );
 }

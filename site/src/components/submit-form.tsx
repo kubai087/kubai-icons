@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { RiAddLine, RiCloseLine, RiErrorWarningLine, RiExternalLinkLine, RiFileCodeLine, RiUploadLine } from "@remixicon/react";
+import { CircleAlertIcon, ExternalLinkIcon, FileCodeIcon, PlusIcon, UploadIcon, XIcon } from "@/components/kit/ui-icons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { copyText } from "@/components/copy-button";
@@ -102,7 +102,7 @@ export function SubmitForm() {
           </div>
         ) : (
           <div className="space-y-2 text-muted-foreground">
-            <RiUploadLine className="mx-auto size-6" />
+            <UploadIcon className="mx-auto size-6" />
             <p className="text-control text-foreground">{tr("Drop your SVG here", "拖入 SVG 文件")}</p>
             <p className="text-caption">{tr("or tap to choose a file", "或点击选择文件")}</p>
           </div>
@@ -122,14 +122,14 @@ export function SubmitForm() {
           <p className="text-caption font-medium text-muted-foreground">{tr("Motion source (optional)", "动效源码（可选）")}</p>
           {source ? (
             <div className="flex h-10 items-center gap-2 text-control">
-              <RiFileCodeLine className="size-4 shrink-0 text-muted-foreground" />
+              <FileCodeIcon className="size-4 shrink-0 text-muted-foreground" />
               <span className="min-w-0 truncate">{source.file}</span>
-              <Button variant="ghost" size="icon-sm" className="ms-auto text-muted-foreground" onClick={() => setSource(null)} aria-label={tr("Remove motion source", "移除动效源码")}><RiCloseLine /></Button>
+              <Button variant="ghost" size="icon-sm" className="ms-auto text-muted-foreground" onClick={() => setSource(null)} aria-label={tr("Remove motion source", "移除动效源码")}><XIcon /></Button>
             </div>
           ) : (
             <label className={cn(buttonVariants({ variant: "outline" }), "w-fit cursor-pointer has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-1 has-[:focus-visible]:outline-(--focus)")}>
               <input type="file" accept=".js,.mjs" className="sr-only" onChange={fromInput} aria-label={tr("Choose motion source", "选择动效源码")} />
-              <RiAddLine data-icon="inline-start" />{tr("Add .js file", "添加 .js 文件")}
+              <PlusIcon data-icon="inline-start" />{tr("Add .js file", "添加 .js 文件")}
             </label>
           )}
         </div>
@@ -137,7 +137,7 @@ export function SubmitForm() {
         {(error || problems.length > 0 || tooLarge) && (
           <ul className="space-y-1 text-control text-destructive">
             {[...(error ? [error] : []), ...problems, ...(tooLarge ? [tr("The files are larger than {size} KB in total.", `文件总大小超过 {size} KB`, { size: MAX_BYTES / 1000 })] : [])].map((p) => (
-              <li key={p} className="flex gap-1.5"><RiErrorWarningLine className="mt-0.5 size-4 shrink-0" />{p}</li>
+              <li key={p} className="flex gap-1.5"><CircleAlertIcon className="mt-0.5 size-4 shrink-0" />{p}</li>
             ))}
           </ul>
         )}
@@ -145,7 +145,7 @@ export function SubmitForm() {
 
         <div className="mt-auto space-y-3">
           <Button size="xl" className="w-full" disabled={!ready} onClick={send}>
-            {tr("Copy files and open GitHub", "复制文件并打开 GitHub")}<RiExternalLinkLine data-icon="inline-end" />
+            {tr("Copy files and open GitHub", "复制文件并打开 GitHub")}<ExternalLinkIcon data-icon="inline-end" />
           </Button>
           {sent ? (
             <p className="text-control text-muted-foreground">

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { RiTranslate2 } from "@remixicon/react";
+import { LanguagesIcon } from "@/components/kit/ui-icons";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { languageOf, LANGUAGES, localeOf, localize } from "@/lib/i18n";
 import { asset } from "@/lib/site";
@@ -63,7 +63,7 @@ export function LanguageSwitch({ className, iconOnly }: { className?: string; ic
   return (
     <DropdownMenu>
       <DropdownMenuTrigger aria-label={label} title={label} className={className}>
-        {iconOnly ? <RiTranslate2 className="size-4" /> : current}
+        {iconOnly ? <LanguagesIcon className="size-4" /> : current}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={8} className="max-h-[min(26rem,70svh)] w-44 overflow-y-auto p-1.5 max-lg:grid max-lg:max-h-none max-lg:w-72 max-lg:grid-cols-2">
         <LanguageItems links={links} />

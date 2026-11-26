@@ -61,8 +61,9 @@ function setup(getIcon) {
       role: p.title ? 'img' : undefined,
       'aria-hidden': p.title ? undefined : 'true',
       class: ['kubai-icon', icon.value.style === 'duotone' && 'kubai-duotone', icon.value.style === 'line' && 'kubai-line', `kubai-icon-${icon.value.name}`, attrs.class],
-      // Two-tone icons have their own two colours: no layered variant or badge ink.
-      style: icon.value.style === 'duotone' || icon.value.style === 'line' ? [p.color ? { color: p.color } : null, attrs.style] : [VARIANTS[p.variant], p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style],
+      // Two-tone and line icons have their own colours, so the layered variants don't apply; badge
+      // ink applies to the badges of every style.
+      style: icon.value.style === 'duotone' || icon.value.style === 'line' ? [p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style] : [VARIANTS[p.variant], p.color ? { color: p.color } : null, badgeStyle(icon.value, p.badgeColor), attrs.style],
       innerHTML: html.value
     });
   };

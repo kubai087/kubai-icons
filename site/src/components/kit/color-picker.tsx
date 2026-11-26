@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { RiAddLine } from "@remixicon/react";
+import { PlusIcon } from "@/components/kit/ui-icons";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -108,7 +108,7 @@ export function ColorPicker({ value, active, onChange, label, hexLabel }: {
         className={cn("focus-inset grid size-8 shrink-0 place-items-center rounded-pill text-muted-foreground ring-inset transition-shadow hover:ring-2 hover:ring-foreground/20 pointer-coarse:size-9", active && "ring-2 ring-foreground/60 hover:ring-foreground/60")}
       >
         <span className={cn("grid size-6 place-items-center rounded-pill pointer-coarse:size-7", !active && "border")} style={active ? { background: value } : undefined}>
-          {!active && <RiAddLine className="size-3.5" />}
+          {!active && <PlusIcon className="size-3.5" />}
         </span>
       </PopoverTrigger>
       <PopoverContent align="start" sideOffset={10} className="w-56 gap-3 rounded-card p-3">

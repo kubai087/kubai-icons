@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { RiGithubLine } from "@remixicon/react";
+import { GithubIcon } from "@/components/kit/ui-icons";
 import { Star } from "kubai-icons-react";
 import { buttonVariants } from "./ui/button";
 import { REPO, fetchStars } from "@/lib/site";
@@ -68,7 +68,7 @@ export function GitHubStars({ className }: { className?: string }) {
       className={cn(buttonVariants({ variant: "outline" }), "gap-0 ps-2 pe-2.5 text-muted-foreground tabular-nums", className)}
     >
       {/* Narrow bars keep the count, which says more than the logo does. */}
-      <RiGithubLine className="size-[18px] max-sm:hidden" />
+      <GithubIcon className="size-[18px] max-sm:hidden" />
       <span className="inline-flex h-4 items-center gap-1 sm:ms-2 sm:border-s sm:ps-2">
         <Star size={16} color="#F59E0B" trigger="parent" className="size-4" />
         {/* Three digits of room are held even before a count is known. */}

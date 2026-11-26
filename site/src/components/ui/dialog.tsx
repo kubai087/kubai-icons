@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { useTr } from "@/lib/use-locale"
 
 import { Button } from "@/components/ui/button"
-import { RiCloseLine } from "@remixicon/react"
+import { XIcon } from "@/components/kit/ui-icons";
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
@@ -74,7 +74,7 @@ function DialogContent({
               />
             }
           >
-            <RiCloseLine
+            <XIcon
             />
             <span className="sr-only">{closeLabel}</span>
           </DialogPrimitive.Close>

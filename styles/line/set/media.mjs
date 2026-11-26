@@ -2,6 +2,8 @@
 // media: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: images video film music headphones stop record fast-forward rewind skip-forward skip-back repeat shuffle eject playlist album radio equalizer audio-lines subtitles picture-in-picture aperture focus clapperboard live
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { slash, badge, enclose, circ, gapOf } from '../kit.mjs';
+import { off, notched } from '../variants.mjs';
 
 // Transport triangles share play's rounding (2.5 at every corner) and its proportion: the half
 // height is 0.615 of the length, as in play (9.6 / 15.6 on the centre line). A triangle is given
@@ -13,7 +15,7 @@ const mirror = (pts) => pts.map(([x, y]) => [24 - x, y]).reverse();
 // its points instead of blurring into a figure eight.
 const TRI_PAIR = 1.4;
 const tri = (g, pts, r = TRI_R) => g.polygon(pts, [r, r, r]);
-// Fast-forward: two triangles, the tip of the first just reaching the base of the second.
+// Fast-forward: two triangles; the second, in front, overlaps the tip of the first.
 const ffTris = (g) => { const W = 12.27, A = 7.32; return [triRight(g, 3, W, A), triRight(g, 11, W, A)]; };
 // Skip: a triangle as large as play's beside a bar at the far edge, 2 clear of the tip.
 const skipTri = (g) => { const W = 16.27, A = 9.78; return triRight(g, 3, W, A); };
@@ -21,6 +23,30 @@ const skipTri = (g) => { const W = 16.27, A = 9.78; return triRight(g, 3, W, A);
 const HEAD = 3;
 const headRight = (g, x, y) => g.pl([[x - HEAD, y - HEAD], [x, y], [x - HEAD, y + HEAD]]);
 const headLeft = (g, x, y) => g.pl([[x + HEAD, y - HEAD], [x, y], [x + HEAD, y + HEAD]]);
+// The sound waves of volume (icons.mjs): the first k of its three arcs, each where it is there.
+const waves = (g, k) => [3, 6.75, 10.5].slice(0, k).map((r, i) => line(g.arc(10.5, 12, r, -45, 45), { n: `w${i + 1}`, role: S, vc: i }));
+// Screens share monitor's outer corner radius.
+const SCR = 3;
+// The screen of monitor open at its top-right corner (screen-share), with monitor's stand.
+const openScreen = (g) => {
+  const { h } = g, c = SCR - h, t = 3 + h, b = 16 - h, r = 22 - h, l = 2 + h;
+  return [
+    line(`M12.5 ${n(t)}H${n(l + c)}A${n(c)} ${n(c)} 0 0 0 ${n(l)} ${n(t + c)}V${n(b - c)}A${n(c)} ${n(c)} 0 0 0 ${n(l + c)} ${n(b)}H${n(r - c)}A${n(c)} ${n(c)} 0 0 0 ${n(r)} ${n(b - c)}V12`, { n: 'screen', role: P }),
+    line(g.seg(12, 16 - h, 12, 20) + g.span(7, 20, 17, 20), { n: 'stand', role: P })
+  ];
+};
+// A badge of an arrow up or down (as kit.mjs badge, in its 8 box at the bottom-right corner of
+// the key shape, in a round notch).
+function arrowBadge(icon, up, label) {
+  return {
+    ...icon, label, base: icon.name, kind: 'badge', weights: null,
+    draw(g, ctx) {
+      const x = 18, y = 16, a = 4 - g.h, t = up ? -1 : 1, e = y + t * a;
+      const d = g.seg(x, y - t * a, x, e) + g.pl([[x - 2.5, e - t * 2.5], [x, e], [x + 2.5, e - t * 2.5]]);
+      return [...icon.draw(g, ctx), line(d, { n: 'badge', role: P, part: 'badge', cutD: circ(x, y, 4.4 + gapOf(g.s)), at: [x, y] })];
+    }
+  };
+}
 // A polyline whose inner corners are rounded with radius r (centre line).
 function rpl(pts, r) {
   let d = `M${n(pts[0][0])} ${n(pts[0][1])}`;
@@ -36,7 +62,7 @@ function rpl(pts, r) {
   return d + `L${n(e[0])} ${n(e[1])}`;
 }
 
-export default {
+const icons = {
   images: {
     label: '照片', key: 'landscape',
     plan: '主体：前面一张图片的画框；辅助：后面一张（被挡住，只露出上沿和右沿）；细节：山和太阳（同图片，缩小到前面的画框里）',
@@ -160,9 +186,10 @@ export default {
   'fast-forward': {
     allow: { keyline: '两个三角的圆角较小，尖端伸出参考线 1（尖角会显得小）' },
     label: '快进', key: 'square', fit: 'x',
-    plan: '主体：两个向右的三角，前一个的尖抵住后一个的底边。圆角与播放相同',
+    plan: '主体：两个向右的三角，后一个在前面，挡住前一个的尖（切出间隙）。圆角与播放相同',
     weights: { [P]: 1 },
-    draw(g) { const [a, b] = ffTris(g); return [shell(tri(g, a, TRI_PAIR), { n: 't1', role: P, part: 'tris' }), shell(tri(g, b, TRI_PAIR), { n: 't2', role: P, part: 'tris' })]; },
+    // the second triangle is in front: its clear band hides the tip of the first
+    draw(g) { const [a, b] = ffTris(g); return [shell(tri(g, a, TRI_PAIR), { n: 't1', role: P }), shell(tri(g, b, TRI_PAIR), { n: 't2', role: P, occ: true })]; },
     fx: { t: 'keys', on: [['t2'], ['t1']], by: true, x: [1.1], stagger: 70, ms: 360 }
   },
   rewind: {
@@ -170,7 +197,7 @@ export default {
     label: '快退', key: 'square', fit: 'x',
     plan: '同快进，方向向左',
     weights: { [P]: 1 },
-    draw(g) { const [a, b] = ffTris(g); return [shell(tri(g, mirror(a), TRI_PAIR), { n: 't1', role: P, part: 'tris' }), shell(tri(g, mirror(b), TRI_PAIR), { n: 't2', role: P, part: 'tris' })]; },
+    draw(g) { const [a, b] = ffTris(g); return [shell(tri(g, mirror(a), TRI_PAIR), { n: 't1', role: P }), shell(tri(g, mirror(b), TRI_PAIR), { n: 't2', role: P, occ: true })]; },
     fx: { t: 'keys', on: [['t2'], ['t1']], by: true, x: [-1.1], stagger: 70, ms: 360 }
   },
   'skip-forward': {
@@ -431,5 +458,278 @@ export default {
       ];
     },
     fx: { t: 'variable', on: ['dot', 'a1', 'a2'], mode: 'cumulative' }
+  },
+  'play-pause': {
+    label: '播放/暂停', key: 'landscape', fit: 'x',
+    plan: '主体：左边的播放三角（与快进的三角同圆角）和右边两根暂停竖线（细线，与三角留 2）',
+    weights: { [P]: 1 },
+    draw(g) {
+      return [
+        shell(tri(g, triRight(g, 2, 12, 7.38), TRI_PAIR), { n: 'tri', role: P }),
+        line(g.seg(17, 5, 17, 19), { n: 'p1', role: P }),
+        line(g.seg(21, 5, 21, 19), { n: 'p2', role: P })
+      ];
+    },
+    fx: [{ t: 'keys', on: ['tri'], x: [0.8], ms: 320 }, { t: 'keys', on: ['p1', 'p2'], by: true, o: [19, 12], sy: [0.8], ms: 320 }]
+  },
+  'repeat-1': {
+    label: '单曲循环', key: 'square',
+    light: ['one'],
+    plan: '主体：首尾相接的两支箭头（与循环播放同一做法，上下拉开到 6 和 18）；细节：圈里的数字 1（随字重缩短）',
+    allow: { keyline: '两支箭头上下拉开，箭头头部伸出方形参考线 1，给数字 1 留出位置' },
+    weights: { [P]: 0.88, [D]: 0.12 },
+    draw(g) {
+      const c = 3, y0 = 6 + g.s + g.clear, y1 = 18 - g.s - g.clear;
+      return [
+        line(`M4 11V${6 + c}A${c} ${c} 0 0 1 ${4 + c} 6H20` + headRight(g, 20, 6), { n: 'top', role: P }),
+        line(`M20 13V${18 - c}A${c} ${c} 0 0 1 ${20 - c} 18H4` + headLeft(g, 4, 18), { n: 'bottom', role: P }),
+        line(g.pl([[10.75, y0 + 1.25], [12, y0], [12, y1]]), { n: 'one', role: D })
+      ];
+    },
+    area: (g) => [{ n: 'top', d: g.rr(4, 6, 16, 12, [3, 0, 3, 0]) }],
+    // 单曲循环: the arrows turn half round, the 1 stays
+    fx: { t: 'rotate', on: ['top', 'bottom'], deg: 180, o: [12, 12] }
+  },
+  'volume-1': {
+    label: '音量低', key: 'landscape', fit: 'x',
+    plan: '同音量，只有最里面一道声波（位置不变）',
+    weights: { [P]: 0.82, [S]: 0.18 },
+    allow: { keyline: '只画一道声波，位置与音量相同，不放大', optical: '扬声器位置与音量相同，调节音量时不跳动' },
+    draw(g) { return [shell(speaker(g), { n: 'speaker', role: P }), ...waves(g, 1)]; },
+    fx: { t: 'variable', on: ['w1'], mode: 'iterative' }
+  },
+  'volume-2': {
+    label: '音量中', key: 'landscape', fit: 'x',
+    plan: '同音量，只有里面两道声波（位置不变）',
+    weights: { [P]: 0.62, [S]: 0.38 },
+    allow: { keyline: '只画两道声波，位置与音量相同，不放大', optical: '扬声器位置与音量相同，调节音量时不跳动' },
+    draw(g) { return [shell(speaker(g), { n: 'speaker', role: P }), ...waves(g, 2)]; },
+    fx: { t: 'variable', on: ['w1', 'w2'], mode: 'cumulative' }
+  },
+  'volume-x': {
+    allow: { optical: '扬声器位置与音量相同，切换时不跳动' },
+    label: '静音', key: 'landscape', fit: 'x',
+    plan: '主体：扬声器（与音量相同）；辅助：右侧的叉号（代替声波）',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) { return [shell(speaker(g), { n: 'speaker', role: P }), line(g.seg(15, 9, 21, 15) + g.seg(21, 9, 15, 15), { n: 'mark', role: S })]; },
+    fx: { t: 'rotate', on: ['mark'], deg: 90, o: [18, 12] }
+  },
+  'volume-plus': {
+    allow: { optical: '扬声器位置与音量相同，切换时不跳动' },
+    label: '音量加', key: 'landscape', fit: 'x',
+    plan: '主体：扬声器（与音量相同）；辅助：右侧的加号',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) { return [shell(speaker(g), { n: 'speaker', role: P }), line(g.seg(18, 8, 18, 16) + g.seg(14, 12, 22 - g.h, 12), { n: 'mark', role: S })]; },
+    fx: { t: 'keys', on: ['mark'], o: [18, 12], s: [1.25], ms: 300 }
+  },
+  'volume-minus': {
+    allow: { optical: '扬声器位置与音量相同，切换时不跳动' },
+    label: '音量减', key: 'landscape', fit: 'x',
+    plan: '主体：扬声器（与音量相同）；辅助：右侧的减号',
+    weights: { [P]: 0.75, [S]: 0.25 },
+    draw(g) { return [shell(speaker(g), { n: 'speaker', role: P }), line(g.seg(14, 12, 22 - g.h, 12), { n: 'mark', role: S })]; },
+    fx: { t: 'keys', on: ['mark'], o: [18, 12], sx: [0.6], ms: 300 }
+  },
+  'music-2': {
+    label: '音符', key: 'portrait', fit: 'y',
+    light: [], // one object (GUIDE.md §4.2)
+    plan: '主体：符头（圆环，与音乐同大）；辅助：符干和符尾（连成一笔）',
+    weights: { [P]: 0.5, [S]: 0.5 },
+    draw(g) {
+      const { h } = g, x = 13 - h;
+      return [line(g.pl([[x, 18], [x, 2 + h], [18, 6.5]]), { n: 'stem', role: S }), shell(g.ring(9, 18, 4), { n: 'head', role: P })];
+    },
+    fx: { t: 'wiggle', on: 'all', o: [9, 22], deg: 8, hz: 2.4 }
+  },
+  'list-video': {
+    label: '视频列表', key: 'square',
+    light: ['tri'],
+    plan: '主体：三行线（下两行短，让出右边的播放三角）；辅助：播放三角（实心，太小画不出线框）',
+    weights: { [P]: 0.7, [S]: 0.3 },
+    draw(g) {
+      return [
+        line(g.span(3, 4, 21, 4), { n: 'l0', role: P }),
+        line(g.span(3, 12, 12, 12), { n: 'l1', role: P }),
+        line(g.span(3, 20, 12, 20), { n: 'l2', role: P }),
+        solid(g.polygon([[15, 12], [21, 16], [15, 20]], [0.9, 0.9, 0.9]), { n: 'tri', role: S })
+      ];
+    },
+    fx: { t: 'keys', on: ['tri'], x: [0.8], ms: 320 }
+  },
+  'video-library': {
+    label: '视频库', key: 'square',
+    plan: '主体：前面的封套（与专辑相同）；辅助：后面一张（只露出上沿一条线）；细节：封套里的播放三角（实心，按重心居中，离封套内沿留 1.5，约占一成多）',
+    weights: { [P]: 0.71, [S]: 0.16, [D]: 0.13 },
+    draw(g) {
+      const A = 7 - g.s - g.clear, W = A / 0.615, x0 = Math.round(12 - W / 3), cy = 14;
+      return [
+        line(g.span(6, 4, 18, 4), { n: 'back', role: S }),
+        shell(g.box(3, 7, 18, 14, 4), { n: 'sleeve', role: P }),
+        solid(g.polygon([[x0, cy - A], [x0 + W, cy], [x0, cy + A]], [0.9, 0.9, 0.9]), { n: 'tri', role: D, on: 'sleeve' })
+      ];
+    },
+    fx: [{ t: 'keys', on: ['back'], y: [-1], ms: 260 }, { t: 'keys', on: ['tri'], x: [0.8], ms: 320 }]
+  },
+  'audio-waveform': {
+    label: '声波', key: 'square',
+    plan: '主体：一条上下起伏的声波线（转角圆角 2）',
+    weights: { [P]: 1 },
+    draw(g) { return [line(rpl([[4, 13], [4, 8], [8, 8], [8, 20], [12, 20], [12, 4], [16, 4], [16, 17], [20, 17], [20, 11]], 2), { n: 'wave', role: P })]; },
+    fx: { t: 'keys', on: 'all', o: [12, 12], sy: [0.7, 1.06], ms: 420 }
+  },
+  'live-photo': {
+    label: '实况照片', key: 'circle',
+    plan: '主体：中间的圆环；辅助：外面一圈圆环；细节：最外一圈 12 个小点（实心）。外圈最长，占一半多',
+    weights: { [P]: 0.22, [S]: 0.56, [D]: 0.22 },
+    draw(g) {
+      const dots = Array.from({ length: 12 }, (_, i) => { const a = (i * Math.PI) / 6; return g.dot(12 + 9.4 * Math.cos(a), 12 + 9.4 * Math.sin(a), 0.55); }).join('');
+      return [line(g.ring(12, 12, 3 - (g.s - 2) * 0.5), { n: 'core', role: P }), line(g.ring(12, 12, 6.5), { n: 'ring', role: S }), solid(dots, { n: 'dots', role: D })];
+    },
+    // 实况: the ring of dots turns one step, landing on itself
+    fx: { t: 'rotate', on: ['dots'], deg: 30, o: [12, 12] }
+  },
+  panorama: {
+    label: '全景照片', key: 'landscape', fit: 'x',
+    ends: 'in',
+    plan: '主体：全景画框（上下两边向里弯）；细节：框里的山峦（一条折线）',
+    weights: { [P]: 0.75, [D]: 0.25 },
+    draw(g) {
+      const { s, h } = g, w = 20 - s, R = ((w / 2) ** 2 + 1.5 ** 2) / 3, a = 2 + h, b = 22 - h;
+      return [
+        shell(`M${n(a)} ${n(4 + h)}A${n(R)} ${n(R)} 0 0 0 ${n(b)} ${n(4 + h)}V${n(20 - h)}A${n(R)} ${n(R)} 0 0 0 ${n(a)} ${n(20 - h)}Z`, { n: 'frame', role: P }),
+        // the hills flatten a little at heavy strokes, keeping clear of the curved edges
+        line(g.pl([[7, 14], [10, 10.5], [13, 13.5], [15, 11.5], [17, 14]].map(([x, y]) => [x, 12.25 + (y - 12.25) * (1 - Math.max(0, s - 2) * 0.5)])), { n: 'hills', role: D, on: 'frame' })
+      ];
+    },
+    // 全景: the view pans across
+    fx: { t: 'keys', on: ['hills'], x: [-1, 1, 0], ms: 700 }
+  },
+  slideshow: {
+    label: '幻灯片', key: 'landscape',
+    plan: '主体：画框；细节：框里的播放三角（实心，按重心居中）和下方三个页码点（实心）',
+    weights: { [P]: 0.81, [D]: 0.19 },
+    draw(g) {
+      const A = (13 - 2 * g.s - 2 * g.clear) / 2, W = A / 0.615, x0 = Math.round(12 - W / 3), cy = 10.5;
+      return [
+        shell(g.box(2, 4, 20, 13, 3.5), { n: 'frame', role: P }),
+        solid(g.polygon([[x0, cy - A], [x0 + W, cy], [x0, cy + A]], [0.9, 0.9, 0.9]), { n: 'tri', role: D, on: 'frame' }),
+        ...[8, 12, 16].map((x, i) => solid(g.dot(x, 20.5, 0.7), { n: `d${i}`, role: D, vc: i }))
+      ];
+    },
+    allow: { keyline: '页码点在画框下方，伸出横向参考线 1.5' },
+    // 播放幻灯片: the page dots light in turn
+    fx: { t: 'variable', on: ['d0', 'd1', 'd2'], mode: 'iterative' }
+  },
+  airplay: {
+    label: '无线投放', key: 'landscape', fit: 'x',
+    light: ['tri'],
+    plan: '主体：屏幕（下沿中间断开）；辅助：下方的三角（关键部件，伸进屏幕的缺口）',
+    weights: { [P]: 0.7, [S]: 0.3 },
+    draw(g) {
+      const { h } = g, c = 3 - h, b = 17 - h;
+      return [
+        line(`M5.5 ${n(b)}H${n(2 + h + c)}A${n(c)} ${n(c)} 0 0 1 ${n(2 + h)} ${n(b - c)}V${n(4 + h + c)}A${n(c)} ${n(c)} 0 0 1 ${n(2 + h + c)} ${n(4 + h)}H${n(22 - h - c)}A${n(c)} ${n(c)} 0 0 1 ${n(22 - h)} ${n(4 + h + c)}V${n(b - c)}A${n(c)} ${n(c)} 0 0 1 ${n(22 - h - c)} ${n(b)}H18.5`, { n: 'screen', role: P }),
+        shell(g.polygon([[12, 14], [17, 21 - h], [7, 21 - h]], [1.2, 1.2, 1.2]), { n: 'tri', role: S })
+      ];
+    },
+    area: (g) => [{ n: 'screen', d: g.rr(2 + g.h, 4 + g.h, 20 - g.s, 13 - g.s, 3 - g.h) }],
+    fx: { t: 'keys', on: ['tri'], y: [-1], ms: 300 }
+  },
+  'airplay-audio': {
+    label: '无线投放音频', key: 'live',
+    light: ['tri'],
+    plan: '主体：两道同心圆弧（下方断开，像向外传出的声波）；辅助：下方的三角（关键部件，伸进圆弧的缺口）',
+    weights: { [P]: 0.8, [S]: 0.2 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.arc(12, 12, 4, 150, 390), { n: 'a1', role: P, vc: 0 }),
+        line(g.arc(12, 12, 10 - h, 135, 405), { n: 'a2', role: P, vc: 1 }),
+        shell(g.polygon([[12, 16], [15.5, 22 - h], [8.5, 22 - h]], [1.2, 1.2, 1.2]), { n: 'tri', role: S })
+      ];
+    },
+    fx: { t: 'variable', on: ['a1', 'a2'], mode: 'cumulative' }
+  },
+  'screen-share': {
+    anchor: 'base',
+    label: '共享屏幕', key: 'landscape', fit: 'x',
+    light: ['arrow'],
+    plan: '主体：屏幕（右上角断开）和支架（与显示器相同）；辅助：从缺口指向右上的箭头（关键部件）',
+    weights: { [P]: 0.78, [S]: 0.22 },
+    draw(g) {
+      return [...openScreen(g), line(g.seg(15, 10, 21, 4) + g.pl([[17, 4], [21, 4], [21, 8]]), { n: 'arrow', role: S })];
+    },
+    area: (g) => [{ n: 'screen', d: g.rr(2 + g.h, 3 + g.h, 20 - g.s, 13 - g.s, SCR - g.h) }],
+    fx: { t: 'keys', on: ['arrow'], x: [0.8], y: [-0.8], ms: 320 }
+  },
+  'screen-share-off': {
+    anchor: 'base',
+    label: '停止共享屏幕', key: 'landscape', fit: 'x',
+    light: ['mark'],
+    plan: '主体：屏幕（右上角断开）和支架（与共享屏幕相同）；辅助：缺口处的叉号（关键部件）',
+    weights: { [P]: 0.78, [S]: 0.22 },
+    draw(g) { return [...openScreen(g), line(g.seg(16.5, 3.5, 21, 8) + g.seg(21, 3.5, 16.5, 8), { n: 'mark', role: S })]; },
+    area: (g) => [{ n: 'screen', d: g.rr(2 + g.h, 3 + g.h, 20 - g.s, 13 - g.s, SCR - g.h) }],
+    fx: { t: 'rotate', on: ['mark'], deg: 90, o: [18.75, 5.75] }
+  },
+};
+
+// Copies of icons.mjs bases (play, pause, camera, image) for the rule-made variants below: the
+// category files are loaded before icons.mjs, so they cannot take its icons.
+const BASE = {
+  play: {
+    label: '播放', key: 'square', weights: { [P]: 1 },
+    draw(g) { const { h } = g; return [shell(g.polygon([[5 + h, 1.4 + h], [22.6 - h, 12], [5 + h, 22.6 - h]], [2.5, 2.5, 2.5]), { n: 'tri', role: P })]; }
+  },
+  pause: {
+    label: '暂停', key: 'square', weights: { [P]: 1 },
+    // inside a circle or square the bars are too small to stay open as outlines: solid, as in SF Symbols
+    draw(g) { const w = 4 + (g.s - 2) * 0.6; return [solid(g.area(10 - w, 3, w, 18, w / 2), { n: 'p1', role: P }), solid(g.area(14, 3, w, 18, w / 2), { n: 'p2', role: P })]; }
+  },
+  camera: {
+    label: '相机', key: 'landscape', weights: { [P]: 0.77, [S]: 0.23 },
+    allow: { keyline: '顶部凸起高出横向参考线 1，给镜头留出位置' },
+    draw(g, ctx) {
+      const { h, s } = g, top = 3 + h, by = 6 + h, R0 = 3.5 - (s - 2) * 0.5, R = ctx?.variant === 'fill' ? Math.max(R0, 1.5 * s) : R0, cy = (6 + 20) / 2;
+      return [
+        shell(g.polygon([[2 + h, by], [6.6, by], [7.9, top], [16.1, top], [17.4, by], [22 - h, by], [22 - h, 20 - h], [2 + h, 20 - h]], [3.5 - h, 0.75, 1.3, 1.3, 0.75, 3.5 - h, 3.5 - h, 3.5 - h]), { n: 'body', role: P }),
+        line(g.ring(12, cy, R), { n: 'lens', role: S, on: 'body' })
+      ];
+    }
+  },
+  image: {
+    label: '图片', key: 'landscape', ends: 'in', weights: { [P]: 0.7, [S]: 0.23, [D]: 0.07 },
+    draw(g) {
+      const k = 1.05 - (g.s - 2) * 0.3, o = 2 + g.s + 2.4 + g.dr * k;
+      return [shell(g.box(2, 4, 20, 16, 4), { n: 'frame', role: P }), line(hill(g), { n: 'hill', role: S, on: 'frame' }), solid(g.dot(o, 4 + g.s + 2.4 + g.dr * k, k), { n: 'sun', role: D, on: 'frame' })];
+    }
   }
+};
+
+// Variants made by rule (kit.mjs) of the icons above.
+// image with a badge, fill: the hill's clear band would cross the notch's at a shallow angle and
+// leave a wedge, so the fill keeps the frame and the sun only.
+const noHill = (L) => L.filter((l) => l.n !== 'hill');
+const named = (k) => ({ ...(icons[k] ?? BASE[k]), name: k });
+const SLASH_CUT = { sliver: '斜线的间隙以 45° 切过外形，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块' };
+
+export default {
+  ...icons,
+  'circle-pause': { ...enclose(named('pause'), 'circle', { label: '暂停（圆形）', k: 0.5 }), fx: { t: 'keys', on: ['p1', 'p2'], by: true, sy: [0.8], o: [12, 12], ms: 420 } },
+  'circle-stop': { ...enclose(named('stop'), 'circle', { label: '停止（圆形）', k: 0.5 }), fx: { t: 'keys', on: ['sq'], o: [12, 12], s: [0.84], ms: 240 } },
+  'circle-fast-forward': { ...enclose(named('fast-forward'), 'circle', { label: '快进（圆形）', k: 0.5 }), fx: { t: 'keys', on: [['t2'], ['t1']], by: true, x: [0.9], stagger: 70, ms: 360 } },
+  'circle-rewind': { ...enclose(named('rewind'), 'circle', { label: '快退（圆形）', k: 0.5 }), fx: { t: 'keys', on: [['t2'], ['t1']], by: true, x: [-0.9], stagger: 70, ms: 360 } },
+  'square-play': { ...enclose(named('play'), 'square', { label: '播放（方形）', k: 0.5 }), fx: { t: 'keys', on: ['tri'], x: [0.9], ms: 420 } },
+  'music-off': off({ ...slash(named('music'), { label: '音乐关闭' }), allow: { ...SLASH_CUT, keyline: '音乐整体左移 1，斜线仍按方形参考线画' } }, 'music', { t: 'keys', on: ['stems', 'h1', 'h2'], o: [11, 21], s: [0.9], ms: 240 }),
+  'headphones-off': off({ ...slash(named('headphones'), { label: '耳机关闭' }), allow: SLASH_CUT }, 'headphones', { t: 'keys', on: ['band', 'c1', 'c2'], o: [12, 14], s: [0.92], ms: 240 }),
+  'video-off': off({ ...slash(named('video'), { label: '关闭摄像' }), allow: { ...SLASH_CUT, clear: '镜头在斜线左下一侧，这一侧斜线按规则与物体相连，细字重下贴近镜头的一角' } }, 'video', { t: 'keys', on: ['lens'], o: [19, 12], s: [0.8], ms: 240 }),
+  'square-pause': { ...enclose(named('pause'), 'square', { label: '暂停（方形）', k: 0.5 }), fx: { t: 'keys', on: ['p1', 'p2'], by: true, sy: [0.8], o: [12, 12], ms: 420 } },
+  'camera-off': off({ ...slash(named('camera'), { label: '关闭相机' }), allow: { ...SLASH_CUT, keyline: '顶部凸起高出横向参考线 1，给镜头留出位置' } }, 'camera', { t: 'keys', on: ['lens'], o: [12, 13], s: [0.55], ms: 260 }),
+  'image-off': off({ ...slash(named('image'), { label: '无图片' }), allow: SLASH_CUT }, 'image', { t: 'keys', on: ['sun'], y: [3.2], a: [0], ms: 300 }),
+  'image-plus': { ...notched(badge(named('image'), 'plus', { label: '添加图片' }), noHill), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'image-minus': { ...notched(badge(named('image'), 'minus', { label: '移除图片' }), noHill), fx: { t: 'keys', on: ['badge'], o: [18, 16], sx: [0.6], ms: 300 } },
+  'image-check': { ...notched(badge(named('image'), 'check', { label: '已选图片' }), noHill), fx: { t: 'draw', on: ['badge'] } },
+  'image-up': { ...notched(arrowBadge(named('image'), true, '上传图片'), noHill), fx: { t: 'keys', on: ['badge'], y: [-1], ms: 300 } },
+  'image-down': { ...notched(arrowBadge(named('image'), false, '下载图片'), noHill), fx: { t: 'keys', on: ['badge'], y: [1], ms: 300 } },
+  'captions-off': off({ ...slash(named('subtitles'), { label: '关闭字幕' }), allow: SLASH_CUT }, 'subtitles', { t: 'keys', on: ['r1', 'r2'], a: [0.3], ms: 260 }),
 };

@@ -17,24 +17,26 @@ export default function Page() {
       <DuotoneWall />
       <p>The icons play their motion in turn; an icon under the pointer holds its hover pose. To search, recolor and copy them, choose <strong>Two-tone</strong> in the <Link href="/icons/?style=duotone">icon browser</Link>.</p>
       <h2>Switch style by import path</h2>
-      <p>A two-tone icon has the same name and props as the layered one, so switching style is one import. Each package has a <code>duotone</code> path:</p>
+      <p>The library comes in three styles: layered, two-tone and line. An icon has the same name and props in every style that has it, so switching style is one import. Each package has a <code>duotone</code> and a <code>line</code> path:</p>
       <Code lang="tsx" code={`// Layered
 import { Folder, BellOff } from "kubai-icons-react";
 // Two-tone
 import { Folder, BellOff } from "kubai-icons-react/duotone";
+// Line
+import { Folder, BellOff } from "kubai-icons-react/line";
 
 <Folder size={24} color="#5A76F2" />`} />
       <table>
-        <thead><tr><th>Package</th><th>Two-tone</th></tr></thead>
+        <thead><tr><th>Package</th><th>Layered</th><th>Two-tone</th><th>Line</th></tr></thead>
         <tbody>
-          <tr><td>React</td><td><code>kubai-icons-react/duotone</code></td></tr>
-          <tr><td>Vue</td><td><code>kubai-icons-vue/duotone</code></td></tr>
-          <tr><td>JavaScript</td><td><code>kubai-icons/duotone</code></td></tr>
-          <tr><td>Web component</td><td><code>&lt;kubai-icon name=&quot;folder&quot; icon-style=&quot;duotone&quot;&gt;</code></td></tr>
-          <tr><td>Static SVG</td><td><code>kubai-icons-static/svg-duotone/folder.svg</code></td></tr>
+          <tr><td>React</td><td><code>kubai-icons-react</code></td><td><code>kubai-icons-react/duotone</code></td><td><code>kubai-icons-react/line</code></td></tr>
+          <tr><td>Vue</td><td><code>kubai-icons-vue</code></td><td><code>kubai-icons-vue/duotone</code></td><td><code>kubai-icons-vue/line</code></td></tr>
+          <tr><td>JavaScript</td><td><code>kubai-icons</code></td><td><code>kubai-icons/duotone</code></td><td><code>kubai-icons/line</code></td></tr>
+          <tr><td>Web component</td><td>no <code>icon-style</code></td><td><code>icon-style=&quot;duotone&quot;</code></td><td><code>icon-style=&quot;line&quot;</code></td></tr>
+          <tr><td>Static SVG</td><td><code>svg/folder.svg</code></td><td><code>svg-duotone/folder.svg</code></td><td><code>svg-line/folder.svg</code></td></tr>
         </tbody>
       </table>
-      <p>The two-tone set is smaller than the layered one. Most two-tone icons have a layered icon of the same name; a few exist only in this style. The full list is in <code>kubai-icons/duotone/icons.json</code>, where those few carry <code>only: true</code>.</p>
+      <p>The static files are in <code>kubai-icons-static</code>. The two-tone and line sets are smaller than the layered one. Most of their icons have a layered icon of the same name; a few exist only in one style. The full lists are in <code>kubai-icons/duotone/icons.json</code> and <code>kubai-icons/line/icons.json</code>, where those few carry <code>only: true</code>. Line icons also take a stroke width and four variants: see the <Link href="/docs/guides/line/">line style</Link>.</p>
       <h2>Colors</h2>
       <p>The accent follows <code>color</code>, or <code>currentColor</code> when no color is given. The light tone is the accent mixed at 40% with white. To choose it yourself, for example on a dark background, set <code>--kd-b</code>:</p>
       <Code lang="css" code={`.sidebar .kubai-duotone { --kd-b: #2B3566; }`} />

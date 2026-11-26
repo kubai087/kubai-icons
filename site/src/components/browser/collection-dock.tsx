@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { RiBookmarkFill, RiCloseLine, RiDownloadLine, RiLinkM } from "@remixicon/react";
+import { BookmarkFillIcon, DownloadIcon, LinkIcon, XIcon } from "@/components/kit/ui-icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { copyText } from "@/components/copy-button";
@@ -84,11 +84,11 @@ export function CollectionDock() {
           )}
         >
           <Button variant="ghost" className="rounded-pill" onClick={() => setOpen(true)}>
-            <RiBookmarkFill data-icon="inline-start" />
+            <BookmarkFillIcon data-icon="inline-start" />
             <span key={count} className="tabular-nums">{tr("{count} saved", "已收藏 {count} 个", { count })}</span>
           </Button>
           <Button className="rounded-pill" disabled={busy} onClick={save}>
-            <RiDownloadLine data-icon="inline-start" />
+            <DownloadIcon data-icon="inline-start" />
             {busy ? tr("Preparing", "准备中") : label}
           </Button>
         </div>
@@ -131,13 +131,13 @@ export function CollectionDock() {
                 <div className="flex items-center gap-2">
                   <Segmented value={format} onChange={setFormat} label={tr("File format", "文件格式")} options={[{ value: "svg", label: "SVG" }, { value: "png", label: "PNG" }]} />
                   <Button className="flex-1" disabled={busy} onClick={save}>
-                    <RiDownloadLine data-icon="inline-start" />
+                    <DownloadIcon data-icon="inline-start" />
                     {busy ? tr("Preparing", "准备中") : tr("Download ZIP", "下载 ZIP")}
                   </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => copyText(shareLink(items))} title={tr("Open this link on another device to add these icons there", "在其他设备上打开此链接，即可添加这些图标")}>
-                    <RiLinkM data-icon="inline-start" />{tr("Copy link", "复制链接")}
+                    <LinkIcon data-icon="inline-start" />{tr("Copy link", "复制链接")}
                   </Button>
                   <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={clear}>{tr("Clear", "清空")}</Button>
                 </div>
@@ -163,7 +163,7 @@ function SavedTile({ item, meta }: { item: SavedIcon; meta: IconMeta }) {
         aria-label={tr("Remove {name}", "移除 {name}", { name: local ?? item.name })}
         className="tap absolute top-0.5 end-0.5 grid size-5 place-items-center rounded-control text-muted-foreground transition-opacity hover:text-foreground focus-visible:opacity-100 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100"
       >
-        <RiCloseLine className="size-3.5" />
+        <XIcon className="size-3.5" />
       </button>
     </div>
   );

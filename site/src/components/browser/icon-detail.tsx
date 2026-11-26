@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ElementType, type ReactNode } from "react";
-import { RiArrowRightSLine, RiBookmarkFill, RiBookmarkLine, RiCheckLine, RiDownloadLine, RiFileCopyLine, RiGithubLine, RiPlayFill } from "@remixicon/react";
+import { BookmarkFillIcon, BookmarkIcon, CheckIcon, ChevronRightIcon, CopyIcon, DownloadIcon, GithubIcon, PlayFillIcon } from "@/components/kit/ui-icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -19,6 +19,7 @@ import { download, resolvedSvg, svgToPng } from "@/lib/export";
 import { track } from "@/lib/analytics";
 import { burst } from "@/lib/ceremony";
 import { REPO, asset } from "@/lib/site";
+import { iconLabel } from "@/lib/seo";
 import { languageOf } from "@/lib/i18n";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
@@ -65,7 +66,7 @@ const DONE_MS = 1600;
 const DoneIcon = ({ done, icon: Icon }: { done: boolean; icon: ElementType }) => (
   <span data-icon="inline-start" className="grid *:[grid-area:1/1] *:transition-[opacity,scale] *:duration-200 *:ease-out motion-reduce:*:transition-none">
     <Icon className={cn("size-4", done && "scale-50 opacity-0")} />
-    <RiCheckLine className={cn("size-4", !done && "scale-50 opacity-0")} />
+    <CheckIcon className={cn("size-4", !done && "scale-50 opacity-0")} />
   </span>
 );
 
@@ -128,31 +129,31 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
     if (line) {
       const v = lineVariant === "outline" ? "" : lineVariant;
       return {
-        react: `import { ${P} } from "kubai-icons-react/line";\n\n<${P} size={24} color="${color}" strokeWidth={${stroke}}${v ? ` variant="${v}"` : ""} />`,
-        vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue/line";\n</script>\n\n<template>\n  <${P} :size="24" color="${color}" :stroke-width="${stroke}"${v ? ` variant="${v}"` : ""} />\n</template>`,
-        html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" icon-style="line" size="24" color="${color}" stroke-width="${stroke}"${v ? ` variant="${v}"` : ""}></kubai-icon>`,
-        js: `import { createIcon, ${P} } from "kubai-icons/line";\n\ndocument.body.append(createIcon(${P}, { size: 24, color: "${color}", strokeWidth: ${stroke}${v ? `, variant: "${v}"` : ""} }));`,
+        react: `import { ${P} } from "kubai-icons-react/line";\n\n<${P} size={32} color="${color}" strokeWidth={${stroke}}${v ? ` variant="${v}"` : ""}${mainBc ? ' badgeColor="semantic"' : ""} />`,
+        vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue/line";\n</script>\n\n<template>\n  <${P} :size="32" color="${color}" :stroke-width="${stroke}"${v ? ` variant="${v}"` : ""}${mainBc ? ' badge-color="semantic"' : ""} />\n</template>`,
+        html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" icon-style="line" size="32" color="${color}" stroke-width="${stroke}"${v ? ` variant="${v}"` : ""}${mainBc ? ' badge-color="semantic"' : ""}></kubai-icon>`,
+        js: `import { createIcon, ${P} } from "kubai-icons/line";\n\ndocument.body.append(createIcon(${P}, { size: 32, color: "${color}", strokeWidth: ${stroke}${v ? `, variant: "${v}"` : ""}${mainBc ? ', badgeColor: "semantic"' : ""} }));`,
       };
     }
     // A two-tone icon has the same name and props, from the duotone path of each package.
     if (duo) return {
-      react: `import { ${P} } from "kubai-icons-react/duotone";\n\n<${P} size={24} color="${color}" />`,
-      vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue/duotone";\n</script>\n\n<template>\n  <${P} :size="24" color="${color}" />\n</template>`,
-      html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" icon-style="duotone" size="24" color="${color}"></kubai-icon>`,
-      js: `import { createIcon, ${P} } from "kubai-icons/duotone";\n\ndocument.body.append(createIcon(${P}, { size: 24, color: "${color}" }));`,
+      react: `import { ${P} } from "kubai-icons-react/duotone";\n\n<${P} size={32} color="${color}"${mainBc ? ' badgeColor="semantic"' : ""} />`,
+      vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue/duotone";\n</script>\n\n<template>\n  <${P} :size="32" color="${color}"${mainBc ? ' badge-color="semantic"' : ""} />\n</template>`,
+      html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" icon-style="duotone" size="32" color="${color}"${mainBc ? ' badge-color="semantic"' : ""}></kubai-icon>`,
+      js: `import { createIcon, ${P} } from "kubai-icons/duotone";\n\ndocument.body.append(createIcon(${P}, { size: 32, color: "${color}"${mainBc ? ', badgeColor: "semantic"' : ""} }));`,
     };
     const soft = (variant === "soft" ? ' variant="soft"' : "") + (mainBc ? ' badgeColor="semantic"' : "");
     return {
-      react: `import { ${P} } from "kubai-icons-react";\n\n<${P} size={24} color="${color}"${soft} />`,
-      vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue";\n</script>\n\n<template>\n  <${P} :size="24" color="${color}"${soft} />\n</template>`,
-      html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" size="24" color="${color}"${variant === "soft" ? ' variant="soft"' : ""}${mainBc ? ' badge-color="semantic"' : ""}></kubai-icon>`,
-      js: `import { createIcon, ${P} } from "kubai-icons";\n\ndocument.body.append(createIcon(${P}, { size: 24, color: "${color}"${variant === "soft" ? ', variant: "soft"' : ""}${mainBc ? ', badgeColor: "semantic"' : ""} }));`,
+      react: `import { ${P} } from "kubai-icons-react";\n\n<${P} size={32} color="${color}"${soft} />`,
+      vue: `<script setup>\nimport { ${P} } from "kubai-icons-vue";\n</script>\n\n<template>\n  <${P} :size="32" color="${color}"${soft} />\n</template>`,
+      html: `<script type="module" src="https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js"></script>\n\n<kubai-icon name="${meta.name}" size="32" color="${color}"${variant === "soft" ? ' variant="soft"' : ""}${mainBc ? ' badge-color="semantic"' : ""}></kubai-icon>`,
+      js: `import { createIcon, ${P} } from "kubai-icons";\n\ndocument.body.append(createIcon(${P}, { size: 32, color: "${color}"${variant === "soft" ? ', variant: "soft"' : ""}${mainBc ? ', badgeColor: "semantic"' : ""} }));`,
     };
   }, [meta, P, color, variant, mainBc, duo, line, lineVariant, stroke]);
   const source = duo ? `${REPO}/blob/master/icons-duotone/${meta.name}.json` : line ? `${REPO}/blob/master/icons-line/${meta.name}.json` : `${REPO}/blob/master/icons/${meta.base ?? meta.name}.js`;
 
   // A line file is drawn at 24 px, the grid its strokes sit on.
-  const svgText = () => (!icon ? "" : line && icon.line ? lineStill(icon.line, { s: stroke, variant: lineVariant, color: hex, size: 24 }) : resolvedSvg(icon, { color, variant, badgeColor: mainBc, size: 96 }));
+  const svgText = () => (!icon ? "" : line && icon.line ? lineStill(icon.line, { s: stroke, variant: lineVariant, color: hex, size: 32, ...(mainBc && icon.tone ? { badge: icon.tone } : {}) }) : resolvedSvg(icon, { color, variant, badgeColor: mainBc, size: 96 }));
   // The button shows a tick for a moment after a copy or a download. A copy also plays the
   // icon's motion and blooms sparks from the button.
   const [done, setDone] = useState<"copy" | "svg" | "png" | null>(null);
@@ -193,10 +194,12 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
   const root = related.find((r) => !r.base);
   const local = useLocalName(meta);
   const rootLocal = useLocalName(root);
-  // Pages in other languages lead with the local name and keep the code name beside it. On
-  // an icon's page the title names the family, so the code name shows which version is open.
-  const readable = heading ?? local;
-  const codeName = (locale !== "en" || (heading && meta.base)) && readable ? meta.name : null;
+  // The title is a readable name: the page's heading, the local name, or the code name written
+  // as words ("arrow-up" as "Arrow up"). The code name shows beside it when it reads differently,
+  // and on an icon's page, where the title names the family, so it shows which version is open.
+  const readable = heading ?? local ?? iconLabel(meta.name);
+  const plain = readable.toLowerCase().replace(/\s+/g, "-") === meta.name;
+  const codeName = locale !== "en" || (heading ? meta.base : !plain) ? meta.name : null;
 
   return (
     <div className="grid grid-cols-[minmax(0,1fr)] sm:grid-cols-[17rem_minmax(0,1fr)]">
@@ -210,15 +213,15 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           className="focus-area relative grid aspect-square w-32 shrink-0 place-items-center sm:aspect-auto sm:min-h-54 sm:w-full sm:flex-1 [&>span]:scale-[0.6] sm:[&>span]:scale-100"
           aria-label={tr("Play the hover motion", "播放悬停动效")}
         >
-          {line ? <LineIcon name={meta.name} size={PREVIEW_SIZE} color={color} hover={pinned} /> : icon ? <HoverIcon icon={icon} size={PREVIEW_SIZE} color={color} variant={variant} badgeColor={mainBc} hover={pinned} /> : placeholder}
+          {line ? <LineIcon name={meta.name} size={PREVIEW_SIZE} color={color} hover={pinned} badgeColor={mainBc} /> : icon ? <HoverIcon icon={icon} size={PREVIEW_SIZE} color={color} variant={variant} badgeColor={mainBc} hover={pinned} /> : placeholder}
           <small aria-hidden className={cn("absolute inset-x-0 bottom-2 hidden items-center justify-center gap-0.5 text-caption text-muted-foreground transition-opacity pointer-coarse:flex", pinned && "opacity-0")}>
-            <RiPlayFill className="size-3" />{tr("Tap to play", "点击播放")}
+            <PlayFillIcon className="size-3" />{tr("Tap to play", "点击播放")}
           </small>
         </button>
         <div className="flex flex-1 items-end justify-center gap-3 pe-12 pb-7 ps-3 max-[389px]:[&>:last-child]:hidden sm:flex-none sm:gap-4 sm:p-panel">
           {[16, 24, 32, 48].map((s) => (
             <div key={s} className="flex flex-col items-center gap-1.5">
-              {line ? <LineIcon name={meta.name} size={s} color={color} /> : icon ? <IconImage icon={icon} size={s} color={color} variant={variant} badgeColor={mainBc} /> : <span style={{ width: s, height: s }} />}
+              {line ? <LineIcon name={meta.name} size={s} color={color} badgeColor={mainBc} /> : icon ? <IconImage icon={icon} size={s} color={color} variant={variant} badgeColor={mainBc} /> : <span style={{ width: s, height: s }} />}
               <span className="text-caption text-muted-foreground tabular-nums">{s}</span>
             </div>
           ))}
@@ -235,21 +238,21 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
                 <a href={asset(loc(`/icons/category/${meta.category}/`))} onClick={(e) => { if (!e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); onCategory(meta.category); } }} className={cn("tap relative", quietLink, root && meta.base && "max-sm:hidden")}>{catName}</a>
                 {root && meta.base && (
                   <>
-                    <RiArrowRightSLine aria-hidden className="size-4 shrink-0 max-sm:hidden rtl:rotate-180" />
+                    <ChevronRightIcon aria-hidden className="size-4 shrink-0 max-sm:hidden rtl:rotate-180" />
                     <button type="button" onClick={() => onOpen(root)} className={cn("tap relative", quietLink)}>{rootLocal ?? root.name}</button>
                   </>
                 )}
-                <RiArrowRightSLine aria-hidden className="size-4 shrink-0 rtl:rotate-180" />
+                <ChevronRightIcon aria-hidden className="size-4 shrink-0 rtl:rotate-180" />
                 <span className="min-w-0 truncate text-foreground">{local && meta.base ? localBadgeName(meta, locale) : local ?? meta.name}</span>
               </>
             ) : null}
             {meta.by && <a href={`https://github.com/${meta.by}`} target="_blank" rel="noreferrer" className={cn("tap relative ms-2 shrink-0", quietLink)}>by @{meta.by}</a>}
           </Description>
           <div className="flex h-8 items-center gap-1">
-            <Title className={cn("min-w-0 truncate text-heading font-semibold", !readable && "font-mono", codeName && "shrink-0")}>{readable ?? meta.name}</Title>
+            <Title className={cn("min-w-0 truncate text-heading font-semibold", codeName && "shrink-0")}>{readable}</Title>
             {codeName && <span className="ms-1 min-w-0 truncate font-mono text-control text-muted-foreground">{codeName}</span>}
             <Button variant="ghost" size="icon-sm" className="shrink-0 text-muted-foreground" onClick={actions.copyName} aria-label={tr("Copy name", "复制英文名")} title={tr("Copy name", "复制英文名")}>
-              <RiFileCopyLine />
+              <CopyIcon />
             </Button>
             <button type="button" onClick={actions.copyColor} aria-label={tr("Copy color {hex}", "复制色值 {hex}", { hex })} title={tr("Copy color", "复制色值")} className={cn("tap absolute -top-1 end-0 flex h-7 shrink-0 items-center gap-1.5 rounded-control border px-2 font-mono text-caption sm:relative sm:top-0 sm:ms-auto", quietLink)}>
               <span aria-hidden className="size-3 rounded-pill" style={{ background: color }} />
@@ -260,20 +263,20 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
 
         <div className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 max-[359px]:grid-cols-2 max-[359px]:[&>*]:w-full sm:grid-cols-[1fr_auto_auto_auto_auto]">
           <Button size="xl" className="col-span-4 has-data-[icon=inline-start]:ps-5 max-[359px]:col-span-2 sm:col-span-1" onClick={actions.copySvg}>
-            <DoneIcon done={done === "copy"} icon={RiFileCopyLine} />
+            <DoneIcon done={done === "copy"} icon={CopyIcon} />
             <span key={done === "copy" ? "done" : "idle"} >{done === "copy" ? tr("Copied", "已复制") : tr("Copy SVG", "复制 SVG")}</span>
           </Button>
-          <Button size="xl" variant="outline" onClick={actions.svg}><DoneIcon done={done === "svg"} icon={RiDownloadLine} />SVG</Button>
-          <Button size="xl" variant="outline" onClick={actions.png}><DoneIcon done={done === "png"} icon={RiDownloadLine} />PNG</Button>
+          <Button size="xl" variant="outline" onClick={actions.svg}><DoneIcon done={done === "svg"} icon={DownloadIcon} />SVG</Button>
+          <Button size="xl" variant="outline" onClick={actions.png}><DoneIcon done={done === "png"} icon={DownloadIcon} />PNG</Button>
           <span className="sr-only" aria-live="polite">{done === "copy" ? tr("Copied", "已复制") : done ? tr("Downloaded", "已下载") : ""}</span>
           {/* Collections hold layered icons. */}
           {!duo && !line && (
             <Button size="icon-xl" variant="outline" onClick={() => toggleSaved({ name: meta.name, color, variant, badge: mainBc })} aria-pressed={saved} aria-label={tr("Save to collection", "加入收藏夹")} title={saved ? tr("Remove from collection", "移出收藏夹") : tr("Save to collection", "加入收藏夹")}>
-              {saved ? <RiBookmarkFill /> : <RiBookmarkLine />}
+              {saved ? <BookmarkFillIcon /> : <BookmarkIcon />}
             </Button>
           )}
           <a href={source} target="_blank" rel="noreferrer" className={buttonVariants({ size: "icon-xl", variant: "outline" })} aria-label={tr("View source on GitHub", "在 GitHub 上查看源码")} title={tr("View source on GitHub", "在 GitHub 上查看源码")}>
-            <RiGithubLine />
+            <GithubIcon />
           </a>
         </div>
     
@@ -281,7 +284,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
           <section className="space-y-3">
             <div className="flex items-center justify-between gap-2">
               <Label>{tr("Badges", "角标")}</Label>
-              {!duo && <Segmented
+              <Segmented
                 value={badge}
                 onChange={onBadge}
                 label={tr("Badge color", "角标颜色")}
@@ -289,7 +292,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
                   { value: "mono", label: tr("Mono", "单色") },
                   { value: "semantic", label: tr("Color", "彩色") },
                 ]}
-              />}
+              />
             </div>
             <div className="relative isolate flex flex-wrap gap-2">
               <Glide still selector="[aria-current=true]" className="rounded-card bg-surface-hover ring-1 ring-foreground/20" />
@@ -341,7 +344,7 @@ export function IconDetail({ meta, related, categories, color, variant, badge, o
             <div className="flex items-center justify-between gap-4">
             <button type="button" aria-expanded={showKeywords} onClick={() => setShowKeywords((v) => !v)} className={cn("tap relative flex items-center gap-0.5 text-caption font-medium", quietLink)}>
               {tr("Keywords", "关键词")}
-              <RiArrowRightSLine aria-hidden className={cn("size-4 transition-transform duration-200 motion-reduce:transition-none", showKeywords ? "rotate-90" : "rtl:rotate-180")} />
+              <ChevronRightIcon aria-hidden className={cn("size-4 transition-transform duration-200 motion-reduce:transition-none", showKeywords ? "rotate-90" : "rtl:rotate-180")} />
             </button>
             {footer}
             </div>
@@ -395,7 +398,7 @@ function VariantChip({ meta, active, color, variant, badge, onOpen }: { meta: Ic
       onPointerEnter={() => { if (icon) prefetchIcon(icon, { color, variant, badgeColor: badge }, PREVIEW_SIZE); }}
       className={cn(tile({ active }), "size-12 rounded-card")}
     >
-      {icon ? <HoverIcon icon={icon} size={28} color={color} variant={variant} badgeColor={badge} /> : null}
+      {meta.style === "line" ? <LineIcon name={meta.name} size={28} color={color} badgeColor={badge} /> : icon ? <HoverIcon icon={icon} size={28} color={color} variant={variant} badgeColor={badge} /> : null}
     </button>
   );
 }

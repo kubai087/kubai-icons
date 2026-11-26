@@ -70,6 +70,7 @@ const meta = icons.map((ic) => ({
 // follow the layered library where the object is the same, so an icon switches style by its
 // import path; such an icon takes its category and search words from the layered one.
 const DUO_MARKS = ['plus', 'minus', 'check', 'x', 'sparkle', 'off'];
+const DUO_TONES = { plus: '#16A34A', check: '#16A34A', minus: '#DC2626', x: '#DC2626', sparkle: '#7C3AED' };
 const duoDir = path.join(root, 'icons-duotone');
 const duoDefs = fs.existsSync(duoDir) ? fs.readdirSync(duoDir).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(fs.readFileSync(path.join(duoDir, f), 'utf8'))) : [];
 const duoNames = new Set(duoDefs.map((d) => d.name));
@@ -79,10 +80,13 @@ const duo = duoDefs.map((d) => {
   const badge = twin?.base ? { base: twin.base, badge: twin.badge } : DUO_MARKS.includes(mark) && duoNames.has(base) ? { base, badge: mark } : {};
   const category = twin?.category ?? d.category, tags = (twin?.tags ?? d.tags ?? []).filter((t) => !HAN.test(t));
   if (!categories.some((c) => c.id === category)) throw new Error(`icons-duotone/${d.name}.json: unknown category "${category}"`);
-  return { def: d, markup: duoMarkup(d), meta: { name: d.name, category, tags, ...badge, ...(twin ? {} : { only: true }) } };
+  // A badge drawn as its own layer takes the semantic colour of its mark (badgeColor="semantic"),
+  // as the layered badges do; a slash keeps the icon's colour there too.
+  const tone = badge.badge && d.layers.some((l) => l.part === 'badge') ? DUO_TONES[badge.badge] : undefined;
+  return { def: d, tone, markup: duoMarkup(d), meta: { name: d.name, category, tags, ...badge, ...(twin ? {} : { only: true }) } };
 });
 const duoMeta = duo.map((x) => x.meta);
-const duoModule = (x, kit) => `import{duo as i}from'${kit}';export default/*@__PURE__*/i(${JSON.stringify(x.def.name)},${JSON.stringify(x.markup)},${JSON.stringify(x.def.moves)}${x.def.ms ? `,${x.def.ms}` : ''});\n`;
+const duoModule = (x, kit) => `import{duo as i}from'${kit}';export default/*@__PURE__*/i(${JSON.stringify(x.def.name)},${JSON.stringify(x.markup)},${JSON.stringify(x.def.moves)}${x.def.ms || x.tone ? `,${x.def.ms || 0}` : ''}${x.tone ? `,${JSON.stringify(x.tone)}` : ''});\n`;
 console.log(`${duo.length} two-tone icons (${duo.filter((x) => x.meta.only).length} only in this style)`);
 
 // ---------- Line ----------
@@ -93,10 +97,13 @@ console.log(`${duo.length} two-tone icons (${duo.filter((x) => x.meta.only).leng
 const lineDir = path.join(root, 'icons-line');
 const lineDefs = fs.existsSync(lineDir) ? fs.readdirSync(lineDir).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(fs.readFileSync(path.join(lineDir, f), 'utf8'))) : [];
 const layeredNames = new Set(icons.map((ic) => ic.name));
+// A badged, slashed or framed line icon names its base (icons-line/*.json `base`, from the skill),
+// as the layered and two-tone ones do, so the detail panel lists it among the base's variants.
 const lineIcons = lineDefs.map((d) => {
   if (!categories.some((c) => c.id === d.category)) throw new Error(`icons-line/${d.name}.json: unknown category "${d.category}"`);
-  const { name, w, fx, enter } = d;
-  return { def: { name, w, fx, ...(enter ? { enter } : {}) }, meta: { name, category: d.category, tags: (d.tags || []).filter((t) => !HAN.test(t)), ...(layeredNames.has(name) ? {} : { only: true }) } };
+  const { name, w, fx, enter, tone } = d;  // base and badge go to the site's metadata only
+  const badge = d.base ? { base: d.base, badge: d.badge } : {};
+  return { def: { name, w, fx, ...(enter ? { enter } : {}), ...(tone ? { tone } : {}) }, meta: { name, category: d.category, tags: (d.tags || []).filter((t) => !HAN.test(t)), ...badge, ...(layeredNames.has(name) ? {} : { only: true }) } };
 });
 const lineMeta = lineIcons.map((x) => x.meta);
 const lineModule = (x, kit) => `import{line as i}from'${kit}';export default/*@__PURE__*/i(${JSON.stringify(x.def.name)},${JSON.stringify(x.def)});\n`;
@@ -408,7 +415,7 @@ New icons come out in new releases. Icons marked "since" a version need at least
 
 - [Next.js](${SITE}/docs/guides/nextjs/), [Nuxt](${SITE}/docs/guides/nuxt/), [Tailwind CSS](${SITE}/docs/guides/tailwind/), [shadcn/ui](${SITE}/docs/guides/shadcn-ui/), [no build step](${SITE}/docs/guides/no-build/): framework guides
 - [Play from a button](${SITE}/docs/guides/button-hover/), [colors and dark mode](${SITE}/docs/guides/colors-dark-mode/), [design tools](${SITE}/docs/guides/figma/): usage guides
-- [Lucide](${SITE}/docs/compare/lucide/), [Heroicons](${SITE}/docs/compare/heroicons/), [Phosphor](${SITE}/docs/compare/phosphor/): comparisons, with name tables for switching
+- [Lucide](${SITE}/docs/compare/lucide/), [Heroicons](${SITE}/docs/compare/heroicons/), [Phosphor](${SITE}/docs/compare/phosphor/), [Tabler Icons](${SITE}/docs/compare/tabler/), [Hugeicons](${SITE}/docs/compare/hugeicons/), [Material Symbols](${SITE}/docs/compare/material-symbols/), [Font Awesome](${SITE}/docs/compare/font-awesome/): comparisons, with name tables for switching
 - [Icon sets](${SITE}/icons/sets/): icons picked for one kind of product, such as dashboards, online stores, chat apps, media players and smart home apps
 
 ## Icons

@@ -2,7 +2,8 @@
 // commerce: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: basket store package wallet credit-card banknote coins coin piggy-bank receipt invoice tag tags badge-percent barcode currency-dollar currency-euro currency-yuan calculator briefcase landmark
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
-import { clearOf, gapOf } from '../kit.mjs';
+import { clearOf, gapOf, slash, badge, enclose } from '../kit.mjs';
+import { off, offFill, notched } from '../variants.mjs';
 
 // A price tag whose outer square is x0..x0+S, y0..y0+S: square corner with the hole at the top
 // left, the body running down to the right (centre line of the outline).
@@ -119,7 +120,55 @@ function seal(g, R = 10) {
   return g.polygon(pts, pts.map((_, i) => (i % 2 ? 1.6 : 2)));
 }
 
-export default {
+// The shopping cart and the shopping bag of icons.mjs, as bases for the variants drawn here
+// (icons.mjs keeps the icons themselves).
+const CART = {
+  label: '购物车', key: 'square',
+  plan: '主体：车筐（上沿和右沿，落在车架底杆上）；辅助：车架（把手、立杆、底杆）；细节：两个轮子（实心，太小画不出圆环）',
+  weights: { [P]: 0.4, [S]: 0.42, [D]: 0.18 },
+  draw(g) {
+    const { h } = g, fx = 6, bot = 15 - (g.s - 2) * 0.3, top = 6 + h, xr = 21 - h, c = 2.75 - h;
+    return [
+      line(`M${n(3 + h)} ${n(3 + h)}H${n(fx - 1.5)}A1.5 1.5 0 0 1 ${n(fx)} ${n(4.5 + h)}V${n(bot - 1.9)}A1.9 1.9 0 0 0 ${n(fx + 1.9)} ${n(bot)}H${n(xr)}`, { n: 'frame', role: S }),
+      line(`M${n(fx)} ${n(top)}H${n(xr - c)}A${n(c)} ${n(c)} 0 0 1 ${n(xr)} ${n(top + c)}V${n(bot)}`, { n: 'basket', role: P, only: 'outline' }),
+      shell(g.rr(fx, top, xr - fx, bot - top, [0, c, 0, 0]), { n: 'basket', role: P, only: 'fill' }),
+      solid(g.circ(8.4, 19.35, 1.8), { n: 'w1', role: D }),
+      solid(g.circ(18, 19.35, 1.8), { n: 'w2', role: D })
+    ];
+  },
+  fx: { t: 'keys', on: 'all', x: [1, -0.4] }
+};
+const BAG = {
+  anchor: 'base',
+  label: '购物袋', key: 'portrait',
+  light: [],
+  plan: '主体：袋身；辅助：提手',
+  weights: { [P]: 0.78, [S]: 0.22 },
+  draw(g) {
+    const { h } = g, by = 8;
+    return [line(arch(8 + h, 16 - h, 2 + h, by + h), { n: 'handle', role: S }), shell(g.box(4, by, 16, 14, 4), { n: 'bag', role: P })];
+  },
+  fx: { t: 'wiggle', on: 'all', o: [12, 2], deg: 7, hz: 2.4 }
+};
+// A convex polygon given by its outer edge, moved in by h to its centre line.
+function inset(pts, h) {
+  const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length, cy = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+  const edges = pts.map((p, i) => {
+    const q = pts[(i + 1) % pts.length], L = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    let nx = (q[1] - p[1]) / L, ny = (p[0] - q[0]) / L;
+    if ((cx - p[0]) * nx + (cy - p[1]) * ny < 0) { nx = -nx; ny = -ny; }
+    return [p[0] + nx * h, p[1] + ny * h, q[0] - p[0], q[1] - p[1]];
+  });
+  return edges.map((e, i) => {
+    const [x1, y1, dx1, dy1] = edges[(i - 1 + edges.length) % edges.length], [x2, y2, dx2, dy2] = e;
+    const t = ((x2 - x1) * dy2 - (y2 - y1) * dx2) / (dx1 * dy2 - dy1 * dx2);
+    return [x1 + dx1 * t, y1 + dy1 * t];
+  });
+}
+const SLASHED = { sliver: '斜线的间隙以 45° 切过外形，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块' };
+const plus = { t: 'rotate', on: ['badge'], deg: 90, oBadge: true }, drawBadge = { t: 'draw', on: ['badge'] };
+
+const COMMERCE = {
   basket: {
     anchor: 'base',
     label: '购物篮', key: 'landscape',
@@ -474,5 +523,308 @@ export default {
     },
     // 柱子从底座立起来
     fx: { t: 'keys', on: ['cols'], o: [12, 20], sy: [0.35, 1.04] }
+  },
+  percent: {
+    label: '百分比', key: 'square',
+    light: [],
+    plan: '主体：百分号（斜线和左上、右下两个小圆环，一个符号不分主次）',
+    weights: { [P]: 1 },
+    draw(g) {
+      return [
+        line(g.span(5, 19, 19, 5), { n: 'bar', role: P }),
+        shell(g.ring(6, 6, 3), { n: 'r0', role: P }),
+        shell(g.ring(18, 18, 3), { n: 'r1', role: P })
+      ];
+    },
+    fx: [{ t: 'draw', on: ['bar'] }, { t: 'keys', on: ['r0'], o: [6, 6], s: [1.2], ms: 240 }, { t: 'keys', on: ['r1'], o: [18, 18], s: [1.2], ms: 320 }]
+  },
+  'currency-pound': {
+    label: '英镑', key: 'portrait', fit: 'y',
+    plan: '主体：竖笔上接弯钩，一条横笔和底边。与美元、欧元、人民币同一套字形：字高 16（y 4..20），宽 12',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.arc(13.5, 8.5, 3.5, 180, 360) + g.seg(10, 8.5, 10, 20 - h), { n: 'stem', role: P }),
+        line(g.seg(7, 13, 14, 13), { n: 'cross', role: P }),
+        line(g.span(6, 20 - h, 18, 20 - h), { n: 'base', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['stem', 'cross', 'base'] },
+    allow: { keyline: '字高 16，与美元的 S 同高；字形本身窄，宽 12' }
+  },
+  'currency-rupee': {
+    nudge: [0, 1],
+    label: '卢比', key: 'portrait', fit: 'y',
+    plan: '主体：两条横笔、半圆的碗和斜向右下的腿。与美元同一套字形：字高 16，宽 12。横笔和碗在上，整体下移 1',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.seg(6 + h, 6, 18 - h, 6) + g.seg(6 + h, 10, 18 - h, 10), { n: 'bars', role: P }),
+        line(`M10 6A4 4 0 0 1 10 14H${n(6 + h)}L13.5 20.4`, { n: 'bowl', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['bars', 'bowl'] },
+    allow: { keyline: '字高 16，与美元的 S 同高；字形本身窄，宽 12' }
+  },
+  'currency-ruble': {
+    nudge: [0, 1],
+    label: '卢布', key: 'portrait', fit: 'y',
+    plan: '主体：竖笔、上方的碗（下沿向左伸出成横笔）和下方一条横笔。与美元同一套字形：字高 16，宽 12。碗在上，整体下移 1',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M${n(6 + h)} 13H13.5A3.5 3.5 0 0 0 13.5 6H9V${n(21 - h)}`, { n: 'p', role: P }),
+        line(g.seg(6 + h, 17, 14, 17), { n: 'bar', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['p', 'bar'] },
+    allow: { keyline: '字高 16，与美元的 S 同高；字形本身窄，宽 12' }
+  },
+  'currency-bitcoin': {
+    nudge: [1, 0],
+    label: '比特币', key: 'portrait', fit: 'y',
+    plan: '主体：字母 B（竖笔和上下两个碗）和上下各两根短竖。与美元同一套字形：B 高 12，短竖伸到 y 2..22。横笔伸在左侧，整体右移 1',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M6 6H14A3 3 0 0 1 14 12H8M8 12H15A3 3 0 0 1 15 18H6M8 6V18`, { n: 'b', role: P }),
+        line(g.span(10, 2, 10, 6 + h) + g.span(14, 2, 14, 6 + h) + g.span(10, 18 - h, 10, 22) + g.span(14, 18 - h, 14, 22), { n: 'ticks', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['b', 'ticks'] },
+    allow: { keyline: '字形本身窄，宽 13，与美元相近' }
+  },
+  'currency-won': {
+    label: '韩元', key: 'portrait', fit: 'y',
+    plan: '主体：字母 W 和两条横笔。字高 16，W 比其他字形宽',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.pl([[5, 4 + h], [8.5, 20 - h], [12, 8], [15.5, 20 - h], [19, 4 + h]]), { n: 'w', role: P }),
+        line(g.seg(4 + h, 10, 20 - h, 10) + g.seg(4 + h, 14, 20 - h, 14), { n: 'bars', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['w', 'bars'] },
+    allow: { keyline: '字高 16，与美元的 S 同高' }
+  },
+  'currency-cent': {
+    label: '美分', key: 'portrait', fit: 'y',
+    plan: '主体：开口向右的 c 和穿过它的竖笔。字高 16（竖笔），c 比大写字母小',
+    weights: { [P]: 1 },
+    draw(g) {
+      return [line(g.arc(13, 12, 5, 45, 315), { n: 'c', role: P }), line(g.span(12, 4, 12, 20), { n: 'bar', role: P })];
+    },
+    fx: { t: 'draw', on: ['c', 'bar'] },
+    allow: { keyline: '小写字母，宽约 10' }
+  },
+  'qr-code': {
+    label: '二维码', key: 'square',
+    plan: '主体：三个定位框（左上、右上、左下）；细节：右下角的三个小方块（实心，太小画不出线框）',
+    weights: { [P]: 0.84, [D]: 0.16 },
+    draw(g) {
+      return [
+        ...[[3, 3], [14, 3], [3, 14]].map(([x, y], i) => shell(g.box(x, y, 7, 7, 1.75), { n: `f${i}`, role: P })),
+        ...[[14, 14], [19, 14], [14, 19], [19, 19]].filter((_, i) => i !== 1).map(([x, y], i) => solid(g.area(x, y, 2, 2, 0.4), { n: `b${i}`, role: D, vc: i }))
+      ];
+    },
+    fx: { t: 'variable', on: ['b0', 'b1', 'b2'], mode: 'iterative', step: 130 }
+  },
+  banknotes: {
+    label: '一叠纸币', key: 'live', fit: 'x',
+    plan: '主体：前面的纸币（同纸币，窄一些）；辅助：后面纸币露出的上沿和右沿；细节：前面纸币中间的圆环',
+    weights: { [P]: 0.55, [S]: 0.33, [D]: 0.12 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M5 ${n(3 + h)}H19A2.5 2.5 0 0 1 ${n(22 - h)} 6.5V16`, { n: 'back', role: S }),
+        shell(g.box(2, 7, 16, 13, 2.5), { n: 'note', role: P }),
+        shell(g.ring(10, 13.5, 2.75), { n: 'ring', role: D, on: 'note' })
+      ];
+    },
+    // 数钱：前面的纸币抽出来再放回
+    fx: { t: 'keys', on: ['note', 'ring'], x: [-1.2, 0.3], y: [0.6, 0], ms: 320 }
+  },
+  gem: {
+    nudge: [0, 1],
+    label: '宝石', key: 'live', fit: 'x',
+    ends: 'in',
+    plan: '主体：宝石外形（上平下尖，斜边是宝石需要的）；细节：腰线和腰线下的两条刻面线（面性中只留腰线，两条刻面线在尖端夹出细角）。上宽下尖，整体下移 1',
+    weights: { [P]: 0.58, [D]: 0.42 },
+    draw(g) {
+      const { h } = g, T = inset([[6.5, 3], [17.5, 3], [22, 9.2], [12, 23.2], [2, 9.2]], h), side = (y, k) => T[k][0] + ((T[(k + 1) % 5][0] - T[k][0]) * (y - T[k][1])) / (T[(k + 1) % 5][1] - T[k][1]);
+      return [
+        shell(g.polygon(T, [1, 1, 1, 1.5, 1]), { n: 'gem', role: P }),
+        line(g.seg(side(9, 4), 9, side(9, 1), 9), { n: 'girdle', role: D, on: 'gem' }),
+        line(g.pl([[8.5, 9], [12, 16.5], [15.5, 9]]), { n: 'facets', role: D, on: 'gem', only: 'outline' })
+      ];
+    },
+    // 宝石转过一点，闪一下
+    fx: { t: 'keys', on: 'all', o: [12, 12], r: [-8, 4], s: [1.04] }
+  },
+  'credit-cards': {
+    label: '多张银行卡', key: 'live', fit: 'x',
+    ends: 'out',
+    plan: '主体：前面的银行卡（同银行卡，窄一些）；辅助：后面卡片露出的上沿和右沿（同一叠纸币）；细节：磁条',
+    weights: { [P]: 0.5, [S]: 0.33, [D]: 0.17 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M5 ${n(3 + h)}H19A2.5 2.5 0 0 1 ${n(22 - h)} 6.5V16`, { n: 'back', role: S }),
+        shell(g.box(2, 7, 16, 13, 3), { n: 'card', role: P }),
+        line(g.seg(2 + h, 12, 18 - h, 12), { n: 'stripe', role: D, on: 'card' })
+      ];
+    },
+    fx: { t: 'keys', on: ['card', 'stripe'], x: [-1.2, 0.3], y: [0.6, 0], ms: 320 }
+  },
+  'currency-franc': {
+    label: '法郎', key: 'portrait', fit: 'y',
+    plan: '主体：字母 F（竖笔和两条横笔）和穿过竖笔下部的一条短横。与美元同一套字形：字高 16',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M17 5H9V${n(20 - h)}M9 11H15`, { n: 'f', role: P }),
+        line(g.seg(6 + h, 16, 13, 16), { n: 'bar', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['f', 'bar'] },
+    allow: { keyline: '字高 16，与美元的 S 同高；字形本身窄，宽 11' }
+  },
+  atm: {
+    label: '取款机', key: 'live', fit: 'x',
+    plan: '主体：机身（横向）；辅助：从下方吐出的纸币；细节：机身上的出钞口（横线）',
+    weights: { [P]: 0.56, [S]: 0.32, [D]: 0.12 },
+    draw(g) {
+      return [
+        shell(g.box(2, 3, 20, 10, 3), { n: 'body', role: P }),
+        line(g.seg(7, 8, 17, 8), { n: 'slot', role: D, on: 'body' }),
+        shell(g.box(6, 15, 12, 7, 2), { n: 'bill', role: S })
+      ];
+    },
+    // 吐钞：纸币向下伸出再收回
+    fx: { t: 'keys', on: ['bill'], y: [1, -0.2], ms: 300 }
+  },
+  'pos-terminal': {
+    label: '刷卡机', key: 'portrait',
+    plan: '主体：机身（同计算器：一条显示屏线和一排按键）；辅助：从顶部插进去的银行卡（被机身挡住下半）；细节：显示屏和按键',
+    weights: { [P]: 0.62, [S]: 0.14, [D]: 0.24 },
+    draw(g, ctx) {
+      const { s, h } = g, e = 4 + s + clearOf(s) + h, r = Math.min(g.dr * 0.7, 1);
+      const d = ctx?.variant === 'fill' ? Math.max(3.5 - (s - 2) * 0.5, 2 * r + s) : 3.5 - (s - 2) * 0.5;
+      return [
+        shell(g.box(8, 2, 8, 10, 1.5), { n: 'card', role: S }),
+        shell(g.box(4, 7, 16, 15, 4), { n: 'body', role: P, occ: true, part: 'body' }),
+        line(g.seg(e, 12, 24 - e, 12), { n: 'screen', role: D, on: 'body', part: 'body' }),
+        ...[-1, 0, 1].map((k, i) => solid(g.circ(12 + k * d, 16.5, r), { n: `k${i}`, role: D, on: 'body', part: 'body' }))
+      ];
+    },
+    // 插卡：卡片往下按一下，按键依次亮起
+    fx: [{ t: 'keys', on: ['card'], y: [1.2, -0.2], ms: 260 }, { t: 'variable', on: ['k0', 'k1', 'k2'], mode: 'iterative', step: 120 }]
+  },
+  safe: {
+    anchor: 'base',
+    label: '保险箱', key: 'square',
+    plan: '主体：箱体；辅助：两只脚；细节：密码盘（圆环）和把手（竖线）',
+    weights: { [P]: 0.62, [S]: 0.08, [D]: 0.3 },
+    draw(g, ctx) {
+      // fill: the handle moves right at heavy strokes, so the ink between it and the dial stays a stroke wide
+      const { h, s } = g, x = ctx?.variant === 'fill' ? Math.max(16, 13.25 + 1.5 * s) : 16;
+      return [
+        shell(g.box(3, 3, 18, 16, 3.5), { n: 'body', role: P }),
+        line(g.seg(7, 19 - h, 7, 21 - h) + g.seg(17, 19 - h, 17, 21 - h), { n: 'feet', role: S }),
+        shell(g.ring(10, 11, 3.25), { n: 'dial', role: D, on: 'body' }),
+        line(g.seg(x, 8.5, x, 13.5), { n: 'handle', role: D, on: 'body' })
+      ];
+    },
+    // 转动把手开门
+    fx: { t: 'keys', on: ['handle'], o: [16, 11], r: [90, 80], ms: 420 }
+  },
+  'gift-card': {
+    label: '礼品卡', key: 'landscape', fit: 'x',
+    ends: 'out',
+    light: ['ribbon', 'ribbon-h'],
+    plan: '主体：卡片（同银行卡）；细节：十字丝带（一竖一横，横贯卡面）',
+    weights: { [P]: 0.66, [D]: 0.34 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.box(2, 5, 20, 14, 3.5), { n: 'card', role: P }),
+        line(g.seg(8, 5 + h, 8, 19 - h), { n: 'ribbon', role: D, on: 'card', part: 'ribbon' }),
+        line(g.seg(2 + h, 12, 22 - h, 12), { n: 'ribbon-h', role: D, on: 'card', part: 'ribbon' })
+      ];
+    },
+    fx: { t: 'draw', on: ['ribbon', 'ribbon-h'] }
+  },
+  'gift-bag': {
+    anchor: 'base',
+    label: '礼品袋', key: 'portrait',
+    ends: 'out',
+    light: ['bow', 'ribbon'],
+    plan: '主体：袋身（同购物袋）；辅助：提手；细节：袋身上的蝴蝶结（两个半圆环）和垂下的丝带',
+    weights: { [P]: 0.6, [S]: 0.16, [D]: 0.24 },
+    draw(g) {
+      const { h } = g, by = 8, y = 14.5, r = 2;
+      return [
+        line(arch(8 + h, 16 - h, 2 + h, by + h), { n: 'handle', role: S }),
+        shell(g.box(4, by, 16, 14, 4), { n: 'bag', role: P }),
+        line(g.seg(12, y, 12, 22 - h), { n: 'ribbon', role: D, on: 'bag' }),
+        line(`M${n(12 - 2 * r)} ${y}A${r} ${r} 0 0 1 12 ${y}A${r} ${r} 0 0 1 ${n(12 + 2 * r)} ${y}`, { n: 'bow', role: D, on: 'bag', ends: 'keep' })
+      ];
+    },
+    allow: { sliver: '蝴蝶结的两个半圆环在中心相接，夹角内侧是形状本身的细处，不是镂空切出来的' },
+    fx: { t: 'wiggle', on: 'all', o: [12, 2], deg: 7, hz: 2.4 }
+  },
+  scale: {
+    anchor: 'base',
+    label: '天平', key: 'live', fit: 'x',
+    plan: '主体：横梁、立柱和底座（连成一体）；辅助：两侧挂着的秤盘（吊线和半圆的盘）。两只秤盘的墨量多于立柱，但层级靠后',
+    weights: { [P]: 0.36, [S]: 0.64 },
+    draw(g) {
+      const { h } = g, pan = (x) => line(g.pl([[x - 3, 13], [x, 6], [x + 3, 13]]) + `M${n(x - 3)} 13A3 3 0 0 0 ${n(x + 3)} 13Z`, { n: `pan${x}`, role: S });
+      return [
+        line(g.seg(6, 6, 18, 6) + g.seg(12, 6, 12, 21 - h) + g.span(7, 21 - h, 17, 21 - h), { n: 'stand', role: P }),
+        pan(6), pan(18)
+      ];
+    },
+    // 称重：两只秤盘一上一下，再回到平衡
+    fx: [{ t: 'keys', on: ['pan6'], y: [1.2, -0.4], ms: 420 }, { t: 'keys', on: ['pan18'], y: [-1.2, 0.4], ms: 420 }]
   }
+};
+
+const cart = (mark, label) => notched(badge(CART, mark, { label, drop: ['w2'] }));
+// The card with a badge or a slash: the number would come within a stroke of the notch (in
+// fill) or of the slash, so it is left out there; in the fill of a badge the stripe moves down
+// until the notch meets it at a steep angle, so no thin wedge is left between them.
+const noNumber = { ...COMMERCE['credit-card'], draw: (g, ctx) => COMMERCE['credit-card'].draw(g, ctx).filter((l) => l.n !== 'number') };
+const card = (mark, label) => notched(badge(COMMERCE['credit-card'], mark, { label }), (L, g, { y, R }) => L.filter((l) => l.n !== 'number').map((l) => {
+  if (l.n !== 'stripe') return l;
+  const sy = y - R + 2.5 + g.h;
+  return { ...l, d: g.seg(2 + g.h, sy, 22 - g.h, sy) };
+}));
+// The yuan inside a circle, fill: it keeps its lower bar, so no scrap of ink is left between the
+// bars and the arms.
+const yuan = { ...COMMERCE['currency-yuan'], draw: (g, ctx) => COMMERCE['currency-yuan'].draw(g, ctx).map((l) => (ctx?.variant === 'fill' && l.n === 'bars' ? { ...l, d: g.seg(8, 17, 16, 17) } : l)) };
+// The invoice with a badge, fill: the middle line would come within a stroke of the notch, so
+// the fill keeps the heading line only (as file-x in icons.mjs).
+const invoice = (mark, label) => notched(badge(COMMERCE.invoice, mark, { label, drop: ['l3'] }), (L) => L.filter((l) => l.n !== 'l2'));
+
+export default {
+  ...COMMERCE,
+  'shopping-cart-plus': { ...cart('plus', '加入购物车'), fx: plus },
+  'shopping-cart-minus': { ...cart('minus', '移出购物车'), fx: drawBadge },
+  'shopping-cart-check': { ...cart('check', '已加入购物车'), fx: drawBadge },
+  'shopping-bag-plus': { ...notched(badge(BAG, 'plus', { label: '加入购物袋' })), fx: plus },
+  'shopping-bag-check': { ...notched(badge(BAG, 'check', { label: '已购买' })), fx: drawBadge },
+  'invoice-check': { ...invoice('check', '已付款'), fx: drawBadge },
+  'invoice-x': { ...invoice('x', '作废发票'), fx: plus },
+  'credit-card-plus': { ...card('plus', '添加银行卡'), fx: plus },
+  'credit-card-check': { ...card('check', '支付成功'), fx: drawBadge },
+  'credit-card-x': { ...card('x', '支付失败'), fx: plus },
+  'credit-card-off': off({ ...offFill(slash(noNumber, { label: '停用银行卡' })), allow: SLASHED }, 'credit-card', { t: 'keys', on: ['card', 'stripe'], o: [12, 12], s: [0.92], ms: 240 }),
+  'circle-yuan': { ...enclose(yuan, 'circle', { label: '人民币（圆形）', k: 0.63 }), allow: { sliver: '两条斜笔在中线相交，夹角内侧是字形本身的细处，不是镂空切出来的' }, fx: { t: 'draw', on: ['y', 'bars'] } }
 };

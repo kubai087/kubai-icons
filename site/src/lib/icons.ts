@@ -192,6 +192,11 @@ const BADGE_NAME: Record<string, string> = {
   bolt: msg("Bolt"),
   sparkle: msg("Sparkle"),
   off: msg("Off"),
+  circle: msg("Circle"),
+  square: msg("Square"),
+  dot: msg("Dot"),
+  pen: msg("Edit"),
+  shield: msg("Shield"),
 };
 
 const BADGE_NAME_ZH: Record<string, string> = {
@@ -214,6 +219,11 @@ const BADGE_NAME_ZH: Record<string, string> = {
   bolt: "闪电",
   sparkle: "星光",
   off: "禁用",
+  circle: "圆形",
+  square: "方形",
+  dot: "圆点",
+  pen: "编辑",
+  shield: "盾牌",
 };
 
 export const localBadgeName = (meta: IconMeta, locale: Locale) => pick(locale, BADGE_NAME[meta.badge ?? "off"], BADGE_NAME_ZH[meta.badge ?? "off"]);

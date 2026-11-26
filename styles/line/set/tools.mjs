@@ -2,6 +2,8 @@
 // tools: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: hammer wrench screwdriver toolbox scissors ruler paintbrush palette paint-bucket pen-tool crop magnet flashlight wand pipette nut-bolt drill ladder
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { slash } from '../kit.mjs';
+import { off, offFill } from '../variants.mjs';
 
 // Long tools lie at 45°, working end at the bottom left, like pencil (icons.mjs): u runs along
 // the tool from that end toward the top right, v across it (+v toward the bottom right).
@@ -28,7 +30,7 @@ function sparkle(g, cx, cy, R, k = 0.34) {
   return g.polygon(pts, pts.map((_, i) => (i % 2 ? 0 : 0.8)));
 }
 
-export default {
+const SET = {
   hammer: {
     nudge: [-0.6, 0.6],
     label: '锤子', key: 'live',
@@ -345,5 +347,387 @@ export default {
     },
     // 攀爬: the rungs light up from the bottom
     fx: { t: 'variable', on: ['r0', 'r1', 'r2', 'r3'], mode: 'cumulative', step: 130 }
-  }
+  },
+  axe: {
+    nudge: [2.5, 1],
+    label: '斧头', key: 'live', fit: 'y',
+    plan: '主体：斧头（横在柄的上端，向左上张开成扇形，刃口和柄平行）；辅助：斧柄（斜放的线，和锤子同一个方向）。斧头在左上，整体向右下移 2.5 和 1',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    light: [],
+    draw(g) {
+      const { h } = g, T = diag(h, [2.5, 1]);
+      const head = [[13.2, 2.4 - h], [17.2, 2.4 - h], [17.2, -2.6], [19.8, -9 + h], [10.6, -9 + h], [13.2, -2.6]].map(T);
+      return [
+        line(g.pl([[1.2, 0], [19.8, 0]].map(T)), { n: 'handle', role: S }),
+        shell(g.polygon(head, [0.8, 0.8, 0, 1.4, 1.4, 0]), { n: 'head', role: P })
+      ];
+    },
+    // 劈: the axe is raised, then chops past rest and settles
+    fx: { t: 'keys', on: 'all', o: [6, 21], r: [-7, 4], ms: 360 }
+  },
+  shovel: {
+    nudge: [0.8, -0.8],
+    label: '铲子', key: 'live',
+    plan: '主体：铲头（尖头朝左下的五边形）；辅助：铲柄（斜放的线）和柄端的横把。铲头重，整体向右上移 0.8',
+    weights: { [P]: 0.5, [S]: 0.5 },
+    light: [],
+    draw(g) {
+      const { h } = g, T = diag(h, [0.8, -0.8]), W = 3.8;
+      const blade = [[0.4, 0], [3.4, -W + h], [9 - h, -W + h], [9 - h, W - h], [3.4, W - h]].map(T);
+      return [
+        line(g.pl([[9 - h, 0], [22.6, 0]].map(T)) + g.pl([[22.6, -3.2], [22.6, 3.2]].map(T)), { n: 'handle', role: S }),
+        shell(g.polygon(blade, [0.9, 1.2, 1, 1, 1.2]), { n: 'blade', role: P })
+      ];
+    },
+    // 铲: the shovel digs in toward its tip and lifts back
+    fx: { t: 'keys', on: 'all', x: [-0.7, 0.2], y: [0.7, -0.2], ms: 420 }
+  },
+  pickaxe: {
+    nudge: [-0.6, 0.6],
+    label: '镐', key: 'live',
+    plan: '主体：镐头（横在柄端的月牙形，两头尖）；辅助：镐柄（斜放的线）。镐头重，整体向左下移 0.6',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    light: [],
+    draw(g) {
+      const { h } = g, T = diag(h, [-0.6, 0.6]), c = 10.5, R = 12 - h, r = 9 + h;
+      const head = [...arcPts(c, 0, R, -52, 52, 18), ...arcPts(c, 0, r, 44, -44, 14)].map(T);
+      const rad = head.map((_, i) => (i === 0 || i === 18 || i === 19 || i === head.length - 1 ? 0.7 : 0));
+      return [
+        line(g.pl([[1.2, 0], [c + r, 0]].map(T)), { n: 'handle', role: S }),
+        shell(g.polygon(head, rad), { n: 'head', role: P })
+      ];
+    },
+    // 挖: the pick swings down and settles
+    fx: { t: 'keys', on: 'all', o: [4, 20], r: [-10, 6], ms: 360 }
+  },
+  'paint-roller': {
+    nudge: [0, 1],
+    label: '滚刷', key: 'live',
+    plan: '主体：滚筒（横放的圆角长条）；辅助：从滚筒右端绕下来的支架和下方的握把（圆角竖条）。滚筒在上偏重，整体下移 1',
+    weights: { [P]: 0.48, [S]: 0.52 },
+    light: [],
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M${n(18 - h)} 6H19A2 2 0 0 1 21 8V11A2 2 0 0 1 19 13H14A2 2 0 0 0 12 15V16`, { n: 'arm', role: S }),
+        shell(g.box(10, 16, 4, 7, 2), { n: 'grip', role: S }),
+        shell(g.box(2, 3, 16, 6, 2.5), { n: 'roller', role: P })
+      ];
+    },
+    // 刷墙: the roller runs left and right along the wall
+    fx: { t: 'keys', on: 'all', x: [-1.2, 1, 0], ms: 560 }
+  },
+  'spray-can': {
+    nudge: [-1, 0],
+    label: '喷漆', key: 'square',
+    plan: '主体：罐身（斜肩的圆角长条）；辅助：顶上的喷头（小方块）；细节：喷头左边喷出的三个点。罐身在右偏重，整体左移 1',
+    weights: { [P]: 0.6, [S]: 0.24, [D]: 0.16 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.polygon([[13 + h, 10 + h], [18 - h, 10 + h], [20 - h, 12.5], [20 - h, 21 - h], [11 + h, 21 - h], [11 + h, 12.5]], [1, 1, 0.8, 2, 2, 0.8]), { n: 'can', role: P }),
+        shell(g.box(13, 3, 5, 5, 1.5), { n: 'cap', role: S }),
+        solid(g.dot(8.5, 6.5, 0.8), { n: 'd0', role: D }),
+        solid(g.dot(3.3, 4.3, 0.8), { n: 'd1', role: D }),
+        solid(g.dot(3.3, 9.1, 0.8), { n: 'd2', role: D })
+      ];
+    },
+    // 喷: the cap is pressed and the paint comes out, dot by dot
+    fx: [{ t: 'keys', on: ['cap'], y: [0.7, 0], ms: 300 }, { t: 'keys', on: ['d0', 'd1', 'd2'], by: true, a: [0.15, 1], stagger: 90 }]
+  },
+  'swatch-book': {
+    label: '色卡', key: 'square',
+    plan: '主体：竖放的第一张色卡（底端圆，有穿孔）；辅助：转开 45° 的第二张和横放的第三张（只露出外沿）；细节：穿孔（实心点）',
+    weights: { [P]: 0.46, [S]: 0.46, [D]: 0.08 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line('M11 9L13.6 6.4A2.4 2.4 0 0 1 17 6.4L18.6 8A2.4 2.4 0 0 1 18.6 11.4L11 19', { n: 'card2', role: S }),
+        line(`M17 13H${n(21 - h - 2)}A2 2 0 0 1 ${n(21 - h)} 15V${n(21 - h - 2)}A2 2 0 0 1 ${n(21 - h - 2)} ${n(21 - h)}H11`, { n: 'card3', role: S }),
+        shell(g.box(3, 3, 9, 18, [2.5, 2.5, 4.5, 4.5]), { n: 'card1', role: P }),
+        // the pin shrinks at heavy weights to keep its space from the card's sides
+        solid(g.circ(7.5, 16.5, 0.9 - Math.max(0, g.s - 2) * 0.6), { n: 'hole', role: D, on: 'card1' })
+      ];
+    },
+    // 展开: the cards fan out about the pin and close again
+    fx: [{ t: 'keys', on: ['card2'], o: [7.5, 16.5], r: [-8, 2], ms: 340 }, { t: 'keys', on: ['card3'], o: [7.5, 16.5], r: [-4, 1], ms: 340 }]
+  },
+  stamp: {
+    label: '印章', key: 'portrait',
+    plan: '主体：印面（宽的圆角块）；辅助：上面的握柄（细颈和圆头，一笔）和下方的纸面（横线）',
+    weights: { [P]: 0.46, [S]: 0.54 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.span(4, 22 - h, 20, 22 - h), { n: 'paper', role: S }),
+        line('M10 12V10C10 8.5 9 8 9 6A3 3 0 0 1 15 6C15 8 14 8.5 14 10V12', { n: 'handle', role: S, part: 'stamp' }),
+        shell(g.box(4, 12, 16, 6, [2.5, 2.5, 1, 1]), { n: 'pad', role: P, part: 'stamp' })
+      ];
+    },
+    // 盖章: the stamp presses down onto the paper and lifts
+    fx: { t: 'keys', on: ['handle', 'pad'], y: [1.2, -0.3], ms: 260 }
+  },
+  'pencil-ruler': {
+    label: '铅笔和尺子', key: 'live',
+    ends: 'in',
+    plan: '主体：铅笔（和编辑的笔同样斜放，压在尺子前面）；辅助：尺子（沿另一条对角线）；细节：尺子两端的刻度（面性中不画，铅笔前后的尺子太短）',
+    weights: { [P]: 0.66, [S]: 0.24, [D]: 0.1 },
+    draw(g) {
+      const { h } = g, L = 26.3, W = 6.4, tipL = 5.2, T = diag(h);
+      const body = [[0, 0], [tipL, -W / 2 + h], [L - h * 1.4, -W / 2 + h], [L - h * 1.4, W / 2 - h], [tipL, W / 2 - h]].map(T);
+      // the ruler along the other diagonal: w along it, z across (+z toward the top right)
+      const R = ([w, z]) => [12 + (w + z) * Math.SQRT1_2, 12 + (w - z) * Math.SQRT1_2];
+      const a = 9.7, b = 3;
+      return [
+        shell(g.polygon([[-a + h, -b + h], [a - h, -b + h], [a - h, b - h], [-a + h, b - h]].map(R), 1.2 - h * 0.5), { n: 'ruler', role: S }),
+        line(g.pl([[-6.5, b - h], [-6.5, b - h - 2.2]].map(R)) + g.pl([[6.5, b - h], [6.5, b - h - 2.2]].map(R)), { n: 'ticks', role: D, on: 'ruler', only: 'outline' }),
+        shell(g.polygon(body, [0.9, 0, 1.8, 1.8, 0]), { n: 'pencil', role: P, occ: true })
+      ];
+    },
+    // 画线: the pencil traces a small loop, as pencil does
+    fx: { t: 'orbit', on: ['pencil'], R: 0.8 }
+  },
+  'triangle-ruler': {
+    nudge: [1, -1],
+    label: '三角尺', key: 'square',
+    plan: '主体：直角三角板（直角在左下）；细节：中间的三角形孔（三边离外沿一样远）。分量在直角一侧，整体向右上移 1',
+    weights: { [P]: 0.8, [D]: 0.2 },
+    draw(g, ctx) {
+      const { h } = g, k = 1 + Math.SQRT2;
+      // the hole: each side parallel to the board's, d in from its centre line
+      const d = ctx?.variant === 'fill' ? 2 * g.s + 0.75 : g.s + g.clear + 0.25, x0 = 4 + h + d, y1 = 20 - h - d;
+      // the sharp corners are drawn out by what their rounding takes back
+      const e = 1.6 * (1 / Math.sin(Math.PI / 8) - 1) * 0.85;
+      return [
+        shell(g.polygon([[4 + h, 2 + h - e], [22 - h + e, 20 - h], [4 + h, 20 - h]], [1.6, 1.6, 1.2]), { n: 'board', role: P }),
+        shell(g.polygon([[x0, 2 + h + d * k], [22 - h - d * k, y1], [x0, y1]], 0.6), { n: 'hole', role: D, on: 'board' })
+      ];
+    },
+    // 画线: the set square slides along its long edge and back
+    fx: { t: 'keys', on: 'all', x: [-1, 0.3], y: [-1, 0.3], ms: 360 }
+  },
+  protractor: {
+    label: '量角器', key: 'landscape', fit: 'x',
+    ends: 'in',
+    plan: '主体：半圆的量角器（平边在下）；细节：中心的半圆孔和弧边上的三道刻度（面性中不画刻度，弧边太窄）',
+    weights: { [P]: 0.66, [D]: 0.34 },
+    draw(g) {
+      const { h } = g, cy = 16, R = 10 - h, r = 2.25;
+      const tick = (deg) => { const a = (deg * Math.PI) / 180; return g.seg(12 + R * Math.cos(a), cy + R * Math.sin(a), 12 + (R - 2) * Math.cos(a), cy + (R - 2) * Math.sin(a)); };
+      return [
+        shell(`M${n(2 + h)} ${n(cy + 1 - h)}V${cy}A${n(R)} ${n(R)} 0 0 1 ${n(22 - h)} ${cy}V${n(cy + 1 - h)}Z`, { n: 'body', role: P }),
+        line(g.arc(12, cy + 1, r + h, 180, 360), { n: 'hole', role: D, on: 'body', only: 'outline' }),
+        // filled, the hole is cut out whole, through the flat edge
+        shell(`M${n(12 - r)} ${n(cy + 1 + g.s)}V${cy + 1}A${r} ${r} 0 0 1 ${n(12 + r)} ${cy + 1}V${n(cy + 1 + g.s)}Z`, { n: 'hole', role: D, on: 'body', only: 'fill' }),
+        line(tick(-145) + tick(-90) + tick(-35), { n: 'ticks', role: D, on: 'body', only: 'outline' })
+      ];
+    },
+    // 量角: the ticks are drawn round the arc
+    fx: { t: 'draw', on: ['ticks'] }
+  },
+  'compass-drawing': {
+    label: '圆规', key: 'square',
+    plan: '主体：顶端的铰链（圆环）和两条腿；辅助：两腿之间的弧（调节杆，两端接在腿上）',
+    weights: { [P]: 0.72, [S]: 0.28 },
+    draw(g) {
+      const { h } = g, c = [12, 6], R = 2.75, at = (x) => { const dx = x - c[0], dy = 21 - h - c[1], L = Math.hypot(dx, dy); return [c[0] + (dx * (R - h)) / L, c[1] + (dy * (R - h)) / L]; };
+      const l = at(3 + h), r = at(21 - h), deg = (x) => (Math.atan2(21 - h - c[1], x - c[0]) * 180) / Math.PI;
+      return [
+        line(g.seg(r[0], r[1], 21 - h, 21 - h), { n: 'right', role: P, part: 'legs' }),
+        line(g.arc(12, 6, 9.5, deg(21 - h), deg(3 + h)), { n: 'bar', role: S, part: 'legs' }),
+        line(g.seg(l[0], l[1], 3 + h, 21 - h), { n: 'left', role: P, part: 'legs' }),
+        shell(g.ring(c[0], c[1], R), { n: 'hinge', role: P, part: 'legs' })
+      ];
+    },
+    // 画圆: the legs open out about the hinge and close again
+    fx: { t: 'rotate', on: 'all', deg: 9, o: [12, 6] }
+  },
+  'tape-measure': {
+    anchor: 'base', nudge: [1, 0],
+    label: '卷尺', key: 'landscape', fit: 'x',
+    plan: '主体：尺盒（圆角方块）；辅助：从盒底拉出的尺带（末端一个钩）；细节：盒中的转轴（圆环）。尺盒在左偏重，整体右移 1',
+    weights: { [P]: 0.6, [S]: 0.2, [D]: 0.2 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M12 ${n(20 - h)}H${n(23 - h)}V14`, { n: 'tape', role: S, part: 'case' }),
+        shell(g.box(3, 5, 14, 15, 4.5), { n: 'case', role: P, part: 'case' }),
+        shell(g.ring(10, 12.5, 3.5 - (g.s - 2) * 0.5), { n: 'hub', role: D, on: 'case' })
+      ];
+    },
+    // 收卷: the tape is drawn back into the case and runs out again
+    fx: { t: 'keys', on: ['tape'], x: [-2.4, 0], ms: 420 }
+  },
+  'spirit-level': {
+    label: '水平仪', key: 'landscape', fit: 'x',
+    ends: 'in',
+    plan: '主体：尺身（横放的圆角长条）；细节：中间的水泡管（两道竖线，面性中不画）和水泡（实心点）',
+    weights: { [P]: 0.8, [D]: 0.2 },
+    draw(g) {
+      // the vial's ends keep a clear space from the edges at every weight
+      const y0 = 6 + g.s + g.clear + g.h;
+      return [
+        shell(g.box(2, 6, 20, 12, 3), { n: 'body', role: P }),
+        line(g.seg(8, y0, 8, 24 - y0) + g.seg(16, y0, 16, 24 - y0), { n: 'vial', role: D, on: 'body', only: 'outline' }),
+        solid(g.dot(12, 12, 0.85 - Math.max(0, g.s - 2) * 0.3), { n: 'bubble', role: D, on: 'body' })
+      ];
+    },
+    // 找平: the bubble drifts to one side, then the other, and settles in the middle
+    fx: { t: 'keys', on: ['bubble'], x: [-1.3, 1, 0], ms: 640 }
+  },
+  nail: {
+    nudge: [-0.6, 0.6],
+    label: '钉子', key: 'live',
+    light: [],
+    plan: '主体：钉身（斜放的线，尖朝左下，和其他工具同一个方向）和钉帽（横在上端的实心短条，比钉身宽）。钉帽重，整体向左下移 0.6',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, T = diag(h, [-0.6, 0.6]), u0 = 21, u1 = 23.6, w = 4.6;
+      return [
+        line(g.pl([[0.6, 0], [u0, 0]].map(T)), { n: 'shank', role: P, part: 'nail' }),
+        solid(g.polygon([[u0, -w], [u1, -w], [u1, w], [u0, w]].map(T), 1.2), { n: 'head', role: P, part: 'nail' })
+      ];
+    },
+    // 钉入: the nail is struck toward its point twice
+    fx: { t: 'keys', on: 'all', x: [-0.8, 0, -0.8], y: [0.8, 0, 0.8], ms: 460 }
+  },
+
+  hook: {
+    nudge: [-1, 0],
+    label: '吊钩', key: 'live', fit: 'y',
+    plan: '主体：钩子（竖杆和下面的 J 形弯钩，一笔）；辅助：顶上的吊环（圆环）。吊环在右，整体左移 1',
+    weights: { [P]: 0.74, [S]: 0.26 },
+    light: [],
+    draw(g) {
+      const { h } = g, R = 2.75, r = 5.5;
+      return [
+        line(`M16 ${n(5 + R - h)}V15.5A${r} ${r} 0 0 1 5 15.5V12`, { n: 'hook', role: P, part: 'hook' }),
+        shell(g.ring(16, 5, R), { n: 'eye', role: S, part: 'hook' })
+      ];
+    },
+    // 吊起: the hook swings on its eye
+    fx: { t: 'wiggle', on: 'all', o: [16, 3], deg: 9, hz: 2.4 }
+  },
+  trowel: {
+    nudge: [0.8, -0.8],
+    label: '抹刀', key: 'live',
+    plan: '主体：刀片（尖头朝左下的菱形）；辅助：颈和握把（圆角长条，斜放，和其他工具同一个方向）。刀片重，整体向右上移 0.8',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    light: [],
+    draw(g) {
+      const { h } = g, T = diag(h, [0.8, -0.8]), W = 5.6;
+      const blade = [[0.2, 0], [8, -W + h], [13 - h, 0], [8, W - h]].map(T);
+      const grip = [[16.5 + h, -2 + h], [26.6 - h * 1.4, -2 + h], [26.6 - h * 1.4, 2 - h], [16.5 + h, 2 - h]].map(T);
+      return [
+        line(g.pl([[13 - h, 0], [16.5 + h, 0]].map(T)), { n: 'neck', role: S, part: 't' }),
+        shell(g.polygon(grip, 2 - h), { n: 'grip', role: S, part: 't' }),
+        shell(g.polygon(blade, [0.9, 1.4, 1.4, 1.4]), { n: 'blade', role: P, part: 't' })
+      ];
+    },
+    // 抹平: the trowel smooths back and forth
+    fx: { t: 'keys', on: 'all', x: [-0.8, 0.8, 0], y: [0.8, -0.8, 0], ms: 560 }
+  },
+  'hard-hat': {
+    anchor: 'base',
+    label: '安全帽', key: 'landscape', fit: 'x',
+    ends: 'in',
+    plan: '主体：帽顶（半圆拱）；辅助：下面的帽檐（横线，比帽顶宽）；细节：帽顶中间的加强筋',
+    weights: { [P]: 0.64, [S]: 0.24, [D]: 0.12 },
+    draw(g) {
+      const { h } = g, R = 8 - h;
+      return [
+        shell(`M${n(4 + h)} ${n(16 - h)}V13A${n(R)} ${n(R)} 0 0 1 ${n(20 - h)} 13V${n(16 - h)}Z`, { n: 'dome', role: P }),
+        line(g.seg(12, 5 + h, 12, 11), { n: 'ridge', role: D, on: 'dome' }),
+        line(g.span(2, 19, 22, 19), { n: 'brim', role: S })
+      ];
+    },
+    // 戴上: the hat drops into place
+    fx: { t: 'bounce', on: 'all', o: [12, 20], amp: 1.2 }
+  },
+
+  lasso: {
+    label: '套索', key: 'live', fit: 'x',
+    light: [],
+    plan: '主体：绳圈（横放的椭圆，左下留口）；辅助：绳结（小圆环）和垂下的绳尾',
+    weights: { [P]: 0.72, [S]: 0.28 },
+    draw(g) {
+      const { h } = g, cx = 12, cy = 9.5, rx = 10 - h, ry = 7 - h, at = (deg) => [cx + rx * Math.cos((deg * Math.PI) / 180), cy + ry * Math.sin((deg * Math.PI) / 180)];
+      const p0 = at(152), p1 = at(118), k = [5.4, 15.6], R = 2.25;
+      return [
+        line(`M${g.pt(...p0)}A${n(rx)} ${n(ry)} 0 1 1 ${g.pt(...p1)}`, { n: 'loop', role: P, part: 'rope' }),
+        shell(g.ring(k[0], k[1], R), { n: 'knot', role: S, part: 'rope' }),
+        line(`M${k[0]} ${n(k[1] + R - h)}Q${k[0]} 20 ${n(k[0] + 2.6)} ${n(22 - h)}`, { n: 'tail', role: S, part: 'rope' })
+      ];
+    },
+    // 套: the lasso swings about its knot
+    fx: { t: 'wiggle', on: 'all', o: [5.4, 15.6], deg: 7, hz: 2.4 }
+  },
+  spline: {
+    label: '曲线', key: 'square',
+    plan: '主体：曲线（圆弧，凸向左上）；辅助：两端的锚点（圆环）',
+    weights: { [P]: 0.42, [S]: 0.58 },
+    draw(g) {
+      const R = 2.75, A = 13, d = ((R + g.clear + g.h) / A) * (180 / Math.PI);
+      return [
+        line(g.arc(18.5, 18.5, A, 180 + d, 270 - d), { n: 'curve', role: P }),
+        shell(g.ring(5.5, 18.5, R), { n: 'a', role: S }),
+        shell(g.ring(18.5, 5.5, R), { n: 'b', role: S })
+      ];
+    },
+    // 绘制路径: the curve is drawn from one anchor to the other
+    fx: { t: 'draw', on: ['curve'] }
+  },
+
+  'tape-roll': {
+    label: '胶带', key: 'live', fit: 'x',
+    plan: '主体：胶带卷（大圆环）；辅助：从卷底拉出的一段胶带（横线）；细节：中间的纸芯（圆环）',
+    weights: { [P]: 0.6, [S]: 0.16, [D]: 0.24 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M10.5 ${n(20 - h)}H${n(22 - h)}`, { n: 'tape', role: S, part: 'roll' }),
+        shell(g.ring(10.5, 11.5, 8.5), { n: 'roll', role: P, part: 'roll' }),
+        shell(g.ring(10.5, 11.5, 4 - (g.s - 2) * 0.4), { n: 'core', role: D, on: 'roll' })
+      ];
+    },
+    // 拉出: the tape is pulled out further and runs back
+    fx: { t: 'keys', on: ['tape'], x: [1.2, 0], ms: 400 }
+  },
+  rake: {
+    label: '耙子', key: 'live',
+    plan: '主体：耙头（横在柄端的横梁和向外伸出的四根耙齿）；辅助：耙柄（斜放的线，和锤子同一个方向）',
+    weights: { [P]: 0.56, [S]: 0.44 },
+    light: [],
+    draw(g) {
+      const { h } = g, T = diag(h), u = 16.8, w = 5.6, t = 20.4;
+      return [
+        line(g.pl([[1.2, 0], [u, 0]].map(T)), { n: 'handle', role: S, part: 'rake' }),
+        line(g.pl([[u, -w], [u, w]].map(T)) + [-w, -w / 3, w / 3, w].map((v) => g.pl([[u, v], [t, v]].map(T))).join(''), { n: 'head', role: P, part: 'rake' })
+      ];
+    },
+    // 耙地: the rake is drawn back toward its handle and pushed out again
+    fx: { t: 'keys', on: 'all', x: [-1, 0.2], y: [1, -0.2], ms: 380 }
+  },
+  anvil: {
+    anchor: 'base', nudge: [0, -1],
+    label: '铁砧', key: 'landscape', fit: 'x',
+    plan: '主体：铁砧（左边伸出尖角的砧面、收窄的腰和外撇的底座，一个闭合形）。整体上移 1',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g;
+      const pts = [[1.6 + h, 7], [7.5, 6 + h], [22 - h, 6 + h], [22 - h, 11 - h], [16.5, 11 - h], [15.5, 14.5], [18.5 - h, 17.5], [18.5 - h, 20 - h], [5.5 + h, 20 - h], [5.5 + h, 17.5], [8.5, 14.5], [7.5, 11 - h]].map(([x, y]) => [x, y - 1]);
+      return [shell(g.polygon(pts, [0.3, 1.2, 1, 1, 0.6, 0.6, 0.8, 0.8, 0.8, 0.8, 0.6, 0.8]), { n: 'anvil', role: P })];
+    },
+    // 锻打: the anvil takes a blow and rings
+    fx: { t: 'keys', on: 'all', o: [12, 19], sy: [0.92], ms: 200 }
+  },
+  //NEW
+};
+
+// Variants made by rule (kit.mjs) of the icons above.
+export default {
+  ...SET,
+
+  'flashlight-off': off({ ...offFill(slash(SET.flashlight, { label: '手电筒关闭' })), allow: { sliver: '斜线的间隙以 45° 切过外形，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块' } }, 'flashlight', { t: 'keys', on: ['rays'], a: [0.1], ms: 260 }),
+  //VAR
 };

@@ -3,10 +3,15 @@ import { useLayoutEffect, useState, useSyncExternalStore } from "react";
 import type { IconStyle } from "@/lib/icons";
 
 export type Badge = "mono" | "semantic";
-export type Prefs = { color: string; variant: "color" | "soft"; badge: Badge; size: number; style: IconStyle };
+/** `picked`: the colour was chosen by the visitor; until then each style shows its own default. */
+export type Prefs = { color: string; picked: boolean; variant: "color" | "soft"; badge: Badge; size: number; style: IconStyle };
 /** The `color` preference that gives each icon in the grid its own colour. */
 export const MIXED = "mixed";
-export const DEFAULT_PREFS: Prefs = { color: MIXED, variant: "color", badge: "mono", size: 32, style: "layered" };
+export const DEFAULT_PREFS: Prefs = { color: MIXED, picked: false, variant: "color", badge: "mono", size: 32, style: "layered" };
+/** The line style's default colour: one slate ink, which suits strokes better than the mixed colours. */
+export const LINE_COLOR = "#64748B";
+/** The colour a style shows: the visitor's choice, else the style's default. */
+export const colorFor = (p: Prefs, style: IconStyle) => (p.picked ? p.color : style === "line" ? LINE_COLOR : p.color);
 export { SWATCHES, MIXED_FILL, mixedColor, mixedColors } from "@/lib/palette";
 
 export const PREVIEW_SIZE = 128;
@@ -19,7 +24,8 @@ export function usePrefs() {
   useLayoutEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "null");
-      if (saved) setPrefs((p) => ({ ...p, color: saved.color ?? p.color, variant: saved.variant ?? p.variant, badge: saved.badge ?? p.badge, size: saved.size ?? p.size, style: saved.style === "duotone" || saved.style === "line" ? saved.style : p.style }));
+      // A colour saved before `picked` existed counts as chosen unless it is the mixed default.
+      if (saved) setPrefs((p) => ({ ...p, color: saved.color ?? p.color, picked: saved.picked ?? (saved.color != null && saved.color !== MIXED), variant: saved.variant ?? p.variant, badge: saved.badge ?? p.badge, size: saved.size ?? p.size, style: saved.style === "duotone" || saved.style === "line" ? saved.style : p.style }));
     } catch {
       // Storage may be blocked; defaults are fine.
     }

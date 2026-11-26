@@ -7,12 +7,12 @@ export const metadata = pageMeta({ title: "Icon design language", path: "/docs/d
 export default function Page() {
   return (
     <Prose>
-      <Title lead={"The canvas, layers, outlines, color, marks and motion shared by all icons. Measurements are in canvas units."}>
+      <Title lead={"The canvas, layers, outlines, color, marks and motion of the layered icons. Measurements are in canvas units. The two-tone and line styles have their own grids, described in their guides."}>
         Design language
       </Title>
       <div className="my-5 space-y-5">
           <h2>Canvas</h2>
-          <p>Icons are drawn on a canvas of 31×29 units, with the artwork centered on (15.5, 12.5). Four keylines, which are guide shapes that keep icons the same visual size, set the outer bounds: a circle 23 units across, a 20.6-unit square, a 23×18.4 landscape rectangle and an 18.4×23 portrait rectangle. Icons are centered, not bottom-aligned.</p>
+          <p>Every layered icon is a square of 31×31 units, with the artwork centered in it. Four keylines, which are guide shapes that keep icons the same visual size, set the outer bounds: a circle 23 units across, a 20.6-unit square, a 23×18.4 landscape rectangle and an 18.4×23 portrait rectangle. Icons are centered, not bottom-aligned.</p>
           <h2>Layers</h2>
           <p>An icon has a mid-tone back piece with a drop shadow, and usually a lighter front piece with a soft highlight along its top edge. White content, such as a symbol or lines, can sit between the two. An icon with no front piece has white content large enough to form a second layer. The top corners of the front piece are rounded separately, which exposes the back piece at the corners.</p>
           <h2>Outlines and corners</h2>

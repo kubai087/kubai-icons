@@ -1,5 +1,5 @@
 "use client";
-import { RiTwitterXLine } from "@remixicon/react";
+import { XBrandIcon } from "@/components/kit/ui-icons";
 import { quietLink } from "@/components/kit/styles";
 import { asset, SPONSOR, SPONSOR_POST } from "@/lib/site";
 import { useLocale, useTr } from "@/lib/use-locale";
@@ -31,7 +31,7 @@ export function SponsorSlot({ className }: { className?: string }) {
       <span aria-hidden className="size-4 shrink-0 rounded-sm border border-dashed border-current opacity-60" />
       {tr("Your product here", "虚位以待")}
       <span className="flex items-center gap-1 font-medium text-[#5393FF]">
-        <RiTwitterXLine aria-hidden className="size-3 shrink-0" />
+        <XBrandIcon aria-hidden className="size-3 shrink-0" />
         {tr("Message on X", "在 X 上联系")}
       </span>
     </a>

@@ -6,6 +6,7 @@ export interface KubaiIconProps {
   color?: string;
   /** Layered: 'color' | 'soft'. Line icons (kubai-icons-vue/line): 'outline' (default), 'line-duo', 'fill' or 'solid-tint'. */
   variant?: 'color' | 'soft' | 'outline' | 'line-duo' | 'fill' | 'solid-tint';
+  /** Ink of the badge, in every style: any CSS colour, or 'semantic' for its own colour. */
   badgeColor?: string;
   /** Line icons only: the stroke width, any width above 0. Default 2. */
   strokeWidth?: number | string;

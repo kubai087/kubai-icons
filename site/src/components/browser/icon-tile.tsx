@@ -1,6 +1,6 @@
 "use client";
 import { memo, useEffect, useState, useSyncExternalStore } from "react";
-import { RiBookmarkFill, RiBookmarkLine, RiCheckboxBlankCircleLine, RiCheckboxCircleFill } from "@remixicon/react";
+import { BookmarkFillIcon, BookmarkIcon, CircleCheckFillIcon, CircleIcon } from "@/components/kit/ui-icons";
 import { HoverIcon, prefetchIcon } from "@/components/kit/icon-image";
 import { LineIcon } from "@/components/kit/line-icon";
 import { PREVIEW_SIZE } from "./prefs";
@@ -72,7 +72,7 @@ export const IconTile = memo(function IconTile({ meta, size, raster, color, vari
       </button>
       {meta.style ? null : selecting ? (
         <span aria-hidden className="pointer-events-none absolute top-2 end-2">
-          {saved ? <RiCheckboxCircleFill className="size-4 text-foreground" /> : <RiCheckboxBlankCircleLine className="size-4 text-muted-foreground/50" />}
+          {saved ? <CircleCheckFillIcon className="size-4 text-foreground" /> : <CircleIcon className="size-4 text-muted-foreground/50" />}
         </span>
       ) : (
         // Keyboard users save from the select mode or the detail panel, so tiles stay one tab stop.
@@ -88,7 +88,7 @@ export const IconTile = memo(function IconTile({ meta, size, raster, color, vari
             saved ? "text-foreground" : "pointer-events-none text-muted-foreground opacity-0 group-hover/tile:pointer-events-auto group-hover/tile:opacity-100",
           )}
         >
-          {saved ? <RiBookmarkFill className="size-3.5" /> : <RiBookmarkLine className="size-3.5" />}
+          {saved ? <BookmarkFillIcon className="size-3.5" /> : <BookmarkIcon className="size-3.5" />}
         </button>
       )}
     </div>

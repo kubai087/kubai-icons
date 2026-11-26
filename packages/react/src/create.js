@@ -65,7 +65,7 @@ export const KubaiIcon = forwardRef(function KubaiIcon(
     role: title ? 'img' : undefined,
     'aria-hidden': title ? undefined : true,
     className: ['kubai-icon', icon.style === 'duotone' && 'kubai-duotone', line && 'kubai-line', `kubai-icon-${icon.name}`, className].filter(Boolean).join(' '),
-    style: { ...(duo ? null : VARIANTS[variant]), ...(color ? { color } : null), ...(duo ? null : badgeStyle(icon, badgeColor)), ...style },
+    style: { ...(duo ? null : VARIANTS[variant]), ...(color ? { color } : null), ...badgeStyle(icon, badgeColor), ...style },
     dangerouslySetInnerHTML: inner,
     ...rest
   });

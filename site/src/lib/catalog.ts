@@ -19,10 +19,11 @@ export const duotoneCount = () => index().duotone?.length ?? 0;
 export const lineCount = () => index().line?.length ?? 0;
 
 /** The gzipped size in bytes of each named icon's ES module, or 0 if it is not built. */
-export const moduleBytes = (names: string[]) =>
+/** Gzipped size of each icon's module in a style ("layered" reads the main icons). */
+export const moduleBytes = (names: string[], style: "layered" | "duotone" | "line" = "layered") =>
   names.map((name) => {
     try {
-      return gzipSync(fs.readFileSync(path.join(process.cwd(), "../packages/core/dist/icons", `${name}.js`))).length;
+      return gzipSync(fs.readFileSync(path.join(process.cwd(), "../packages/core/dist", style === "layered" ? "icons" : `${style}/icons`, `${name}.js`))).length;
     } catch {
       return 0;
     }
@@ -54,6 +55,9 @@ export const allCategories = (): Category[] => {
 };
 export const categoryById = (id: string) => allCategories().find((c) => c.id === id);
 export const iconsIn = (category: string) => baseIcons().filter((i) => i.category === category);
+
+/** The base icons of the two-tone or the line style, each marked with its style. */
+export const styleIcons = (style: "duotone" | "line"): IconMeta[] => (index()[style] ?? []).filter((i) => !i.base).map((i) => ({ ...i, style }));
 
 /** Icons to suggest beside one: most shared tags first, then others from its category. */
 export function relatedTo(meta: IconMeta, limit = 12) {

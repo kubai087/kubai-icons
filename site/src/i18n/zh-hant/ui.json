@@ -250,5 +250,11 @@
  "Solid": "面性",
  "Solid tint": "面性填充",
  "Stroke width": "粗細",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "同一套圖示新增線性畫法：24 網格，粗細可在 0.25 到 3 之間調整，提供線性、線性雙色、面性和面性填充四種變體，懸停時同樣播放動效。"
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "同一套圖示新增線性畫法：24 網格，粗細可在 0.25 到 3 之間調整，提供線性、線性雙色、面性和面性填充四種變體，懸停時同樣播放動效。",
+ "Circle": "圓形",
+ "Square": "方形",
+ "Dot": "圓點",
+ "Edit": "編輯",
+ "Shield": "盾牌",
+ "Drawn in the icon's own color": "角標與圖示同色"
 }

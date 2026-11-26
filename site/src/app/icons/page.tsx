@@ -4,6 +4,7 @@ import { IconIndex } from "@/components/browser/icon-index";
 import { Container } from "@/components/kit/layout";
 import { allCategories, firstChunk } from "@/lib/catalog";
 import { pageMeta } from "@/lib/seo";
+import { browserSets } from "@/learn/style-sets";
 
 export const metadata: Metadata = pageMeta({
   title: "Search animated SVG icons",
@@ -15,8 +16,7 @@ export default function IconsPage() {
   return (
     <Container className="pt-8 lg:pt-stick">
       <h1 className="sr-only">Search animated SVG icons</h1>
-      <IconBrowser categories={allCategories()} firstChunk={firstChunk()} />
-      <IconIndex />
+      <IconBrowser categories={allCategories()} firstChunk={firstChunk()} sets={browserSets("en")} footer={<IconIndex />} />
     </Container>
   );
 }

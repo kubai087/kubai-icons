@@ -20,4 +20,16 @@ import { Folder, CalendarCheck, Bookmark } from 'kubai-icons-react';
 
 Props: `size`, `color`, `variant`, `badgeColor`, `trigger`, `hover`, `active` / `defaultActive` / `onActiveChange`, `title`, plus any SVG prop. `DynamicIcon` from `kubai-icons-react/dynamic` loads an icon by name.
 
+## Styles
+
+Three styles share the same names where an icon exists in more than one:
+
+| Style | Import from |
+| --- | --- |
+| Layered (default) | `kubai-icons-react` |
+| Two-tone | `kubai-icons-react/duotone` |
+| Line | `kubai-icons-react/line` |
+
+Line icons also take `strokeWidth` (any width above 0, default 2) and `variant` (`outline`, `line-duo`, `fill` or `solid-tint`).
+
 [Documentation](https://icons.kubai.design/docs/react/) · MIT License

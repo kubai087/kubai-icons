@@ -10,4 +10,6 @@ export const LINE_VARIANTS: { value: LineVariant; en: string; zh: string }[] = [
 ];
 /** The stroke range the browser offers, and the common widths marked on it. */
 export const LINE_STROKE = { min: 0.25, max: 3, step: 0.25, regular: 2 };
-export const LINE_STROKES = [1.5, 2, 2.25, 2.5];
+export const LINE_STROKES = [1.5, 1.75, 2, 2.5];
+/** The stroke the site draws line icons at until a visitor picks one. */
+export const LINE_SITE_STROKE = 1.75;

@@ -36,7 +36,7 @@ import { Lock, Camera } from "kubai-icons-react/line";
       </table>
       <p>大部分线性图标都有同名的分层图标，少数只在线性风格中提供。完整列表见 <code>kubai-icons/line/icons.json</code>，其中只有线性版的图标带有 <code>only: true</code>。</p>
       <h2>粗细</h2>
-      <p><code>strokeWidth</code> 可取大于 0 的任意值，默认为 2；本站的图标浏览器提供 0.25 到 3。建议与旁边文字的字重对应：细体用 1.5，常规用 2，中等用 2.25，粗体用 2.5。在 Vue 中写作 <code>:stroke-width</code>，在 Web Component 上写作 <code>stroke-width</code>。</p>
+      <p><code>strokeWidth</code> 可取大于 0 的任意值，默认为 2；本站的图标浏览器提供 0.25 到 3，初始为 1.75。建议与旁边文字的字重对应：细体用 1.5，常规用 2，中等用 2.25，粗体用 2.5。在 Vue 中写作 <code>:stroke-width</code>，在 Web Component 上写作 <code>stroke-width</code>。</p>
       <p>在 24 像素、粗细为 2 时，所有边缘都落在整像素上。外轮廓按外边缘定位，所以图标在任何粗细下都保持同样的尺寸，内部细节会随粗细调整位置以保持间距。1.5 到 2.5 之间的粗细逐个图标检查过，其他粗细使用最接近的已检查几何绘制。</p>
       <h2>变体</h2>
       <table>
@@ -50,12 +50,28 @@ import { Lock, Camera } from "kubai-icons-react/line";
       </table>
       <p>同一物体始终只用一种色调：<code>line-duo</code> 的浅色标记的是一个完整部件，例如相机的镜头，不会把一个图形拆成两半。</p>
       <h2>颜色</h2>
-      <p>描边颜色跟随 <code>color</code>，未设置时使用 <code>currentColor</code>。浅色是该颜色向白色混合 42%，填充色是 20%。在深色背景上，可以把 <code>--kl-bg</code> 设为背景色，让浅色向背景混合；也可以直接设置 <code>--kl-light</code> 和 <code>--kl-fill</code>：</p>
+      <p>线性图标最多用三种颜色：线条、浅色和填充色。各变体用到哪几种：</p>
+      <table>
+        <thead><tr><th><code>variant</code></th><th>线条和形状</th><th>浅色</th><th>填充色</th></tr></thead>
+        <tbody>
+          <tr><td><code>outline</code></td><td>所有线条</td><td>–</td><td>–</td></tr>
+          <tr><td><code>line-duo</code></td><td>外侧线条</td><td>内部和关键部件</td><td>–</td></tr>
+          <tr><td><code>fill</code></td><td>所有形状，实心</td><td>–</td><td>–</td></tr>
+          <tr><td><code>solid-tint</code></td><td>所有线条</td><td>–</td><td>围合的区域</td></tr>
+        </tbody>
+      </table>
+      <p>设置颜色有四种方法，由简到繁：</p>
+      <ol>
+        <li><strong>只给一个颜色。</strong>设置 <code>color</code>；不设置时跟随文字颜色（<code>currentColor</code>）。线条用这个颜色，浅色是它向白色混合 42%，填充色是 20%，一个颜色就得到一整套配色。</li>
+        <li><strong>向背景混合。</strong>在深色或彩色背景上，把 <code>--kl-bg</code> 设为背景色，浅色和填充色就向它混合，而不是向白色。</li>
+        <li><strong>单独指定浅色和填充色。</strong><code>--kl-light</code> 设置 <code>line-duo</code> 的浅色，<code>--kl-fill</code> 设置 <code>solid-tint</code> 的填充色，例如线条用中性色、浅色和填充用品牌色。</li>
+        <li><strong>写死在文件里。</strong><code>lineStill()</code> 输出一个独立的 SVG，三种颜色直接写在文件里，适合设计工具和不能用 CSS 的地方。</li>
+      </ol>
       <Code lang="css" code={`.dark .kubai-line { --kl-bg: #0B0D14; }
 .sidebar .kubai-line { --kl-light: #BDC8FA; --kl-fill: #E8ECFD; }`} />
       <p>分层图标的 <code>badgeColor</code> 参数在这里不生效。<code>svg-line/</code> 中的文件为线性变体、粗细 2、颜色为 <code>currentColor</code>。</p>
       <h2>动效</h2>
-      <p>每个图标在悬停时播放动效，<code>trigger</code>、<code>hover</code> 和 <code>title</code> 参数与其他风格相同。动效尽量表现状态变化：锁的锁梁抬起打开，书签丝带向下长出，垃圾桶的盖子抬起，斜线沿着要关闭的图标画出。动效保持平面，不使用看起来像 3D 的翻转。开启减少动态效果后，图标保持静止。</p>
+      <p>每个图标在悬停时播放动效，<code>trigger</code>、<code>hover</code> 和 <code>title</code> 参数与其他风格相同。动效尽量表现状态变化：锁的锁梁抬起打开，书签丝带向下长出，垃圾桶的盖子抬起，斜线沿着要关闭的图标画出。有些动效让部件在空间里运动，外轮廓保持不动：地球的经线绕球转动，打开的书一页页翻过，笔记本电脑的屏幕绕铰链合上；整个过程中线宽不变。开启减少动态效果后，图标保持静止。</p>
       <h2>绘制更多图标</h2>
       <p>线性图标使用 <Link href="/zh/skill/">kubai-line Skill</Link> 绘制，它遵循同样的网格、描边和布局规则，每个图标在加入图标库前都会在各个粗细下检查。用它为你自己的产品绘制的图标归你所有。</p>
       <Faq

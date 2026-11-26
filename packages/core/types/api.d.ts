@@ -11,7 +11,7 @@ export declare function badgeStyle(icon: KubaiIconData, badgeColor?: string): Re
 export declare function toSvg(icon: KubaiIconData, options?: KubaiSvgOptions): string;
 export declare function animate(svg: Element, icon: KubaiIconData, options?: { state?: Record<string, unknown>; variant?: string }): KubaiController;
 /** A standalone line SVG in fixed colours (the light tones mixed over white from a hex color), without motion tags. */
-export declare function lineStill(line: NonNullable<KubaiIconData["line"]>, options?: { s?: number; variant?: KubaiLineVariant; color?: string; size?: number; id?: string }): string;
+export declare function lineStill(line: NonNullable<KubaiIconData["line"]>, options?: { s?: number; variant?: KubaiLineVariant; color?: string; size?: number; id?: string; /** The badge's colour, e.g. the icon's tone for badgeColor "semantic". */ badge?: string }): string;
 /** The four variants of the line style. */
 export declare const LINE_VARIANTS: KubaiLineVariant[];
 /** The stroke widths the line style is drawn for (0.25 to 3 in steps of 0.25) and the regular one; any width above 0 is drawn. */

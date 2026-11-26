@@ -1,7 +1,9 @@
 // Copyright (c) 2026 Kubai087. Licensed under the Kubai Icons License; see LICENSE.
 // files: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: file folder-open folders files archive clipboard clipboard-check file-image file-audio file-video file-code file-spreadsheet file-archive file-chart notebook newspaper sticky-note cloud-upload certificate scroll
-import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid, geo } from '../parts.mjs';
+import { badge, keyBox } from '../kit.mjs';
+import { notched } from '../variants.mjs';
 
 // The page every file-* icon starts from: the outline of file-text (icons.mjs), 4..20 x 2..22.
 const page = (g) => shell(g.box(4, 2, 16, 20, 4), { n: 'page', role: P });
@@ -40,7 +42,7 @@ function cloudTop(g, circles, a0, a1) {
 // runs past its radius) it ends round and meets the band square. off: how far the front is set
 // from the back.
 const backCorner = (g, off, c = 3.25) => Math.min(c, 0.7 * (off - g.g));
-export default {
+const set = {
   file: {
     label: '文档', key: 'portrait',
     plan: '主体：纸页（与文本文档同一个外框），一个闭合形',
@@ -422,3 +424,224 @@ function sealCut(g, cx, cy, Rb, c = CORNER) {
   }
   return g.circ(cx, cy, Rb) + g.circ(cx - dx, 17, r) + g.circ(right[0], right[1], r);
 }
+
+// A mark drawn inside a page (file-* icons): from regular up it is drawn smaller about the page's
+// middle, keeping 1.5 clear of the page's inner edge as the page's stroke grows; it is drawn with
+// the stroke widened by 1/k, so it shows the same stroke as the page (as enclose in kit.mjs).
+function inPage(g, draw, c = [12, 12]) {
+  const k = n(1 - 0.3 * Math.max(g.s - 2, 0));
+  if (k === 1) return draw(g);
+  const tf = `translate(${c[0]} ${c[1]}) scale(${k}) translate(${-c[0]} ${-c[1]})`;
+  return draw(geo(g.s / k)).map((l) => ({ ...l, tf, sc: k }));
+}
+// The text document (file-text in icons.mjs): the page and three lines, the last short. Badges
+// are added to it, as file-x.
+const fileText = {
+  name: 'file-text', label: '文档', key: 'portrait',
+  draw(g, ctx) {
+    const { s, h } = g, a = 4 + s + 2 + h, b = 20 - s - 2 - h, sp = ctx?.variant === 'fill' ? Math.max(4, 2 * s) : 4;
+    return [
+      shell(g.box(4, 2, 16, 20, 4), { n: 'page', role: P }),
+      line(g.seg(a, 12 - sp, b, 12 - sp), { n: 'l1', role: D, on: 'page' }),
+      line(g.seg(a, 12, b, 12), { n: 'l2', role: D, on: 'page' }),
+      line(g.seg(a, 12 + sp, a + (b - a) * 0.55, 12 + sp), { n: 'l3', role: D, on: 'page' })
+    ];
+  }
+};
+// fill: the second line would come within a stroke of the notch, so only the first stays (as file-x).
+const firstLine = (L) => L.filter((l) => l.n !== 'l2');
+// A file with a mark inside: plan, the mark's layers, its weight and its motion.
+const fileWith = (label, plan, mark, w, fx, more = {}) => ({
+  label, key: 'portrait',
+  plan: `主体：纸页；细节：${plan}`,
+  weights: { [P]: 1 - w, [D]: w },
+  draw(g, ctx) { return [page(g), ...inPage(g, (q) => mark(q, ctx))]; },
+  fx, ...more
+});
+
+const more = {
+  'file-search': fileWith('搜索文件', '放大镜（与搜索同形，缩小，镜片挖空）', (g) => {
+    const c = 11.5, R = 3.75, k = (R - g.h) / Math.SQRT2;
+    return [shell(g.ring(c, c, R), { n: 'lens', role: D, on: 'page' }), line(g.seg(c + k, c + k, 15.5, 15.5), { n: 'handle', role: D, on: 'page' })];
+  }, 0.26, { t: 'orbit', on: ['lens', 'handle'], R: 0.7 }),
+  'file-lock': fileWith('加密文件', '小锁（锁梁和锁体，与锁定同形，缩小；面性里锁梁里面也挖空）', (g, ctx) => [
+    line(arch(10, 14, 7, 10 + g.h), { n: 'shackle', role: D, on: 'page', part: 'lock' }),
+    ...(ctx?.variant === 'fill' ? [solid(arch(10, 14, 7, 10 + g.h) + 'Z', { n: 'inside', role: D, on: 'page', part: 'lock' })] : []),
+    shell(g.box(8, 10, 8, 6, 1.75), { n: 'body', role: D, on: 'page', part: 'lock' })
+  ], 0.26, { t: 'keys', on: ['shackle', 'inside'], y: [-1.2, 0.3], ms: 260 }),
+  'file-down': fileWith('下载文件', '向下的箭头（面性里箭头头部是实心的，不留夹角）', (g, ctx) => [
+    line(g.seg(12, 7, 12, 16.5) + g.pl([[8.5, 13], [12, 16.5], [15.5, 13]]), { n: 'arrow', role: D, on: 'page', part: 'arrow' }),
+    ...(ctx?.variant === 'fill' ? [solid(g.polygon([[8.5, 13 - g.h], [12, 16.5], [15.5, 13 - g.h]]), { n: 'tip', role: D, on: 'page', part: 'arrow' })] : [])
+  ], 0.22, { t: 'keys', on: ['arrow', 'tip'], y: [1.2, -0.3], ms: 300 }),
+  'file-up': fileWith('上传文件', '向上的箭头（面性里箭头头部是实心的，不留夹角）', (g, ctx) => [
+    line(g.seg(12, 17, 12, 7.5) + g.pl([[8.5, 11], [12, 7.5], [15.5, 11]]), { n: 'arrow', role: D, on: 'page', part: 'arrow' }),
+    ...(ctx?.variant === 'fill' ? [solid(g.polygon([[8.5, 11 + g.h], [12, 7.5], [15.5, 11 + g.h]]), { n: 'tip', role: D, on: 'page', part: 'arrow' })] : [])
+  ], 0.22, { t: 'keys', on: ['arrow', 'tip'], y: [-1.2, 0.3], ms: 300 }),
+  'file-diff': fileWith('文件对比', '上面的加号和下面的减号（新增和删除），两者间隔至少一个线宽', (g) => {
+    const a = 3, gap = Math.max(2, g.s), yp = (24 - g.s - gap) / 2, ym = yp + a + g.s + gap;
+    return [
+      line(g.seg(12 - a, yp, 12 + a, yp) + g.seg(12, yp - a, 12, yp + a), { n: 'plus', role: D, on: 'page' }),
+      line(g.seg(12 - a, ym, 12 + a, ym), { n: 'minus', role: D, on: 'page' })
+    ];
+  }, 0.2, { t: 'draw', on: ['plus', 'minus'] }),
+  'file-type': fileWith('字体文件', '字母 T（横和竖）', (g) => [
+    line(g.seg(8.5, 7, 15.5, 7) + g.seg(12, 7, 12, 15.5), { n: 'T', role: D, on: 'page' })
+  ], 0.2, { t: 'draw', on: ['T'] }),
+  'file-heart': fileWith('收藏的文件', '心形（挖空）', (g) => [
+    shell(heart(g, { w: 8.5, top: 8, tip: 16.5, R: 2.5 }), { n: 'heart', role: D, on: 'page' })
+  ], 0.22, { t: 'beat', on: ['heart'], o: [12, 12.5] }),
+  'file-warning': fileWith('文件异常', '感叹号（竖和点；面性里两者至少隔一个线宽）', (g, ctx) => {
+    const yd = 14.9, gap = ctx?.variant === 'fill' ? Math.max(1.5, g.s) : 1.5, y1 = yd - g.dr - gap - g.h;
+    return [line(g.seg(12, 6.5, 12, y1), { n: 'stem', role: D, on: 'page' }), solid(g.dot(12, yd), { n: 'dot', role: D, on: 'page' })];
+  }, 0.1, { t: 'shake', on: ['stem', 'dot'], x: 0.8 })
+};
+
+// The mark in clipboard-x and clipboard-plus sits where clipboard-check's tick does.
+const clipMark = (label, plan, mark, ext, y0, fx) => ({
+  label, key: 'portrait',
+  plan: `主体：夹板；辅助：顶部的夹子；细节：${plan}（在夹子下方的空间居中）`,
+  weights: { [P]: 0.66, [S]: 0.2, [D]: 0.14 },
+  draw(g, ctx) {
+    // fill: the mark keeps one stroke of board below the clip's clear band
+    const k = 0.94 - 0.3 * (g.s - 2), cy = ctx?.variant === 'fill' ? Math.max(y0, clipBottom(g) + g.g + 1.5 * g.s + ext * k) : y0;
+    return [...board(g, ctx), line(mark(g, 12, cy, k), { n: 'mark', role: D, on: 'board' })];
+  },
+  fx
+});
+Object.assign(more, {
+  'file-terminal': fileWith('脚本文件', '命令提示符（右尖括号和下划线光标）', (g) => [
+    line(g.pl([[8.5, 6.5], [11.5, 9.5], [8.5, 12.5]]), { n: 'prompt', role: D, on: 'page' }),
+    line(g.seg(13, 15, 15.5, 15), { n: 'cursor', role: D, on: 'page' })
+  ], 0.14, { t: 'keys', on: ['cursor'], a: [0.15, 1, 0.15], ms: 720 }),
+  'file-pie-chart': fileWith('分析报告', '饼图（圆挖空，两条半径把右上的一块分出来）', (g) => [
+    shell(g.ring(12, 12, 4.25), { n: 'pie', role: D, on: 'page' }),
+    line(g.seg(12, 8.75, 12, 12) + g.seg(12, 12, 15.25, 12), { n: 'slice', role: D, on: 'pie' })
+  ], 0.24, { t: 'rotate', on: ['slice'], deg: 90, o: [12, 12] }),
+  contract: fileWith('合同', '一行条款和下方的一笔签名', (g) => [
+    line(g.seg(8.5, 8, 15.5, 8), { n: 'l1', role: D, on: 'page' }),
+    line(`M8.5 15C10.5 12 13.5 17.5 15.5 13.5`, { n: 'sign', role: D, on: 'page' })
+  ], 0.2, { t: 'draw', on: ['sign'] }),
+  notepad: {
+    label: '记事本', key: 'portrait',
+    plan: '主体：便笺本；辅助：顶部的三个线圈（短竖线，从本子上沿伸出）；细节：两行字（末行短）',
+    weights: { [P]: 0.62, [S]: 0.14, [D]: 0.24 },
+    draw(g, ctx) {
+      const { s, h } = g, a = 4 + s + 2 + h, b = 20 - s - 2 - h, sp = ctx?.variant === 'fill' ? Math.max(4, 2 * s) : 4;
+      return [
+        shell(g.box(4, 4, 16, 18, 3.5), { n: 'pad', role: P }),
+        line([8, 12, 16].map((x) => g.span(x, 2, x, 6)).join(''), { n: 'rings', role: S }),
+        line(g.seg(a, 11, b, 11), { n: 'l1', role: D, on: 'pad' }),
+        line(g.seg(a, 11 + sp, a + (b - a) * 0.55, 11 + sp), { n: 'l2', role: D, on: 'pad' })
+      ];
+    },
+    fx: { t: 'draw', on: ['l1', 'l2'] }
+  },
+  'filing-cabinet': {
+    label: '文件柜', key: 'portrait',
+    ends: 'out',
+    plan: '主体：柜体；辅助：中间的分隔线（分出上下两个抽屉，面性里把柜体切成两块）；细节：两个抽屉把手（短横线）',
+    weights: { [P]: 0.7, [S]: 0.16, [D]: 0.14 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.box(4, 2, 16, 20, 3.5), { n: 'cabinet', role: P }),
+        line(g.seg(4 + h, 12, 20 - h, 12), { n: 'split', role: S, on: 'cabinet' }),
+        line(g.seg(10, 7, 14, 7), { n: 'h1', role: D, on: 'cabinet', ends: 'keep' }),
+        line(g.seg(10, 17, 14, 17), { n: 'h2', role: D, on: 'cabinet', ends: 'keep' })
+      ];
+    },
+    // the top drawer slides out and back
+    fx: { t: 'keys', on: ['h1'], y: [1, 0], ms: 300 }
+  },
+  'sticky-notes': {
+    label: '便签组', key: 'square',
+    plan: '主体：前面一张便签（右下角斜切，带折角）；辅助：后面一张（被挡住，与复制同一种叠放）',
+    weights: { [P]: 0.66, [S]: 0.34 },
+    draw(g, ctx) {
+      const { h } = g, c = 3.25, fill = ctx?.variant === 'fill', e = fill ? Math.min(c, 5 - g.g) : c, f = 16;
+      return [
+        shell(g.box(3, 3, 13, 13, [c, e, c, e]), { n: 'back', role: S }),
+        shell(g.polygon([[8 + h, 8 + h], [21 - h, 8 + h], [21 - h, f], [f, 21 - h], [8 + h, 21 - h]], [c - h, c - h, 0.9, 0.9, c - h]), { n: 'front', role: P, occ: true }),
+        ...(fill ? [] : [line(`M${f} ${n(21 - h)}V18A2 2 0 0 1 18 ${f}H${n(21 - h)}`, { n: 'fold', role: P, on: 'front' })])
+      ];
+    },
+    light: [],
+    fx: [{ t: 'keys', on: ['front', 'fold'], x: [1], y: [1] }, { t: 'keys', on: ['back'], x: [-0.9], y: [-0.9] }]
+  },
+  'clipboard-x': clipMark('清单未通过', '叉号', (g, x, y, k) => { const a = 2.6 * k; return g.seg(x - a, y - a, x + a, y + a) + g.seg(x + a, y - a, x - a, y + a); }, 2.6, 14.5, { t: 'rotate', on: ['mark'], deg: 90, o: [12, 14.5] }),
+  'clipboard-minus': clipMark('移除记录', '减号', (g, x, y, k) => g.seg(x - 3.2 * k, y, x + 3.2 * k, y), 0, 14, { t: 'keys', on: ['mark'], o: [12, 14], sx: [0.5], ms: 260 }),
+  'clipboard-plus': clipMark('添加记录', '加号', (g, x, y, k) => { const a = 3.2 * k; return g.seg(x - a, y, x + a, y) + g.seg(x, y - a, x, y + a); }, 3.2, 14, { t: 'rotate', on: ['mark'], deg: 90, o: [12, 14] })
+});
+
+// The folder (folder in icons.mjs): the outline with its tab, and the front line in the outline.
+const folderBase = {
+  name: 'folder', label: '文件夹', key: 'landscape',
+  draw(g) {
+    const { h, s } = g, t = 4 + h, b = 7 + h;
+    return [
+      shell(g.polygon([[2 + h, t], [9.2, t], [11.4, b], [22 - h, b], [22 - h, 20 - h], [2 + h, 20 - h]], [2 - h * 0.5, 1.4, 0.9, 3.5 - h, 4 - h, 4 - h]), { n: 'folder', role: P }),
+      line(g.seg(2 + s + 3.4, b + s + 2, 22 - s - 3.4, b + s + 2), { n: 'front', role: D, only: 'outline' })
+    ];
+  }
+};
+// A badge with its own mark (a lens, a lock, an arrow) in place of a plus or a check: the same
+// corner, the same round notch and the same fill handling as badge in kit.mjs. mark(g, x, y) is
+// the mark's path about the badge's centre.
+function markBadge(icon, label, mark) {
+  return notched({
+    ...icon, label, base: icon.name, kind: 'badge', weights: null,
+    draw(g, ctx) {
+      const [, , x1, y1] = keyBox(icon.key), x = x1 - 4, y = y1 - 4;
+      return [...icon.draw(g, ctx), line(mark(g, x, y), { n: 'badge', role: P, part: 'badge', cutD: g.circ(x, y, 4.4 + g.g), at: [x, y] })];
+    }
+  });
+}
+Object.assign(more, {
+  'cloud-check': {
+    label: '已同步到云端', key: 'landscape', fit: 'x',
+    plan: '主体：云（与上传的云同样的圆，底边闭合）；细节：云里的对勾',
+    weights: { [P]: 0.8, [D]: 0.2 },
+    draw(g) {
+      const C = [[7.1, 13.9, 5.1], [12.6, 9.65, 6.9], [17.6, 14.6, 4.4]], k = 1 - 0.5 * Math.max(g.s - 2, 0);
+      const Pt = ([x, y]) => [12.3 + (x - 12.3) * k, 13.3 + (y - 13.3) * k];
+      return [shell(cloud(g, C, 19), { n: 'cloud', role: P }), line(g.pl([[9.6, 12.2], [11.4, 14], [14.6, 10.8]].map(Pt)), { n: 'check', role: D, on: 'cloud' })];
+    },
+    fx: { t: 'draw', on: ['check'] }
+  },
+  'cloud-download': {
+    label: '从云端下载', key: 'landscape', fit: 'x',
+    plan: '主体：向下的箭头（说明动作，伸出云的下方）；辅助：云（与上传的云相同）',
+    weights: { [P]: 0.35, [S]: 0.65 },
+    draw(g, ctx) {
+      // fill: a smaller head, and the cloud's base is higher, so the clear band round the head
+      // crosses the base where it meets the puffs at a wide angle and leaves no thin point
+      const { h } = g, C = [[7.1, 13.9, 5.1], [12.6, 9.65, 6.9], [17.6, 14.6, 4.4]], fill = ctx?.variant === 'fill';
+      const L = fill ? 2.5 : 4, tip = 22 - h;
+      return [
+        line(cloudTop(g, C, 150, 30), { n: 'cloud', role: S, only: 'outline' }),
+        shell(cloud(g, C, 17), { n: 'cloud', role: S, only: 'fill' }),
+        line(g.seg(12, 10, 12, tip) + g.pl([[12 - L, tip - L], [12, tip], [12 + L, tip - L]]), { n: 'arrow', role: P, gap: true })
+      ];
+    },
+    light: ['arrow'],
+    fx: { t: 'keys', on: ['arrow'], y: [1.2, -0.3] }
+  }
+});
+
+// Variants made by rule (GUIDE.md §4.4) of icons drawn in this file.
+const variants = {
+  'folder-minus': { ...notched(badge(folderBase, 'minus', { label: '移除文件夹' })), swap: 'folder', fx: { t: 'keys', on: ['badge'], sx: [0.5], oBadge: true, ms: 260 } },
+  'folder-check': { ...notched(badge(folderBase, 'check', { label: '文件夹已同步' })), fx: { t: 'draw', on: ['badge'] } },
+  'folder-x': { ...notched(badge(folderBase, 'x', { label: '删除文件夹' })), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'folder-search': { ...markBadge(folderBase, '搜索文件夹', (g, x, y) => { const c = [x - 1, y - 1], r = 2.25 - g.h * 0.5, k = r / Math.SQRT2; return g.circ(c[0], c[1], r) + g.seg(c[0] + k, c[1] + k, x + 4 - g.h, y + 4 - g.h); }), fx: { t: 'orbit', on: ['badge'], R: 0.6 } },
+  'folder-lock': { ...markBadge(folderBase, '加密文件夹', (g, x, y) => arch(x - 2, x + 2, y - 4 + g.h, y) + g.box(x - 3, y - 1, 6, 5, 1.25)), fx: { t: 'keys', on: ['badge'], y: [-0.8, 0.2], ms: 260 } },
+  'folder-up': { ...markBadge(folderBase, '上传到文件夹', (g, x, y) => g.seg(x, y + 4 - g.h, x, y - 4 + g.h) + g.pl([[x - 3, y - 1 + g.h], [x, y - 4 + g.h], [x + 3, y - 1 + g.h]])), fx: { t: 'keys', on: ['badge'], y: [-0.8, 0.2], ms: 260 } },
+  'folder-down': { ...markBadge(folderBase, '下载到文件夹', (g, x, y) => g.seg(x, y - 4 + g.h, x, y + 4 - g.h) + g.pl([[x - 3, y + 1 - g.h], [x, y + 4 - g.h], [x + 3, y + 1 - g.h]])), fx: { t: 'keys', on: ['badge'], y: [0.8, -0.2], ms: 260 } },
+  // fill: the slot would come within a stroke of the notch, so the fill leaves it out
+  'archive-x': { ...notched(badge({ ...set.archive, name: 'archive' }, 'x', { label: '删除归档' }), (L) => L.filter((l) => l.n !== 'slot')), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'file-plus': { ...notched(badge(fileText, 'plus', { label: '新建文档', drop: ['l3'] }), firstLine), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'file-minus': { ...notched(badge(fileText, 'minus', { label: '移除文档', drop: ['l3'] }), firstLine), fx: { t: 'keys', on: ['badge'], sx: [0.5], oBadge: true, ms: 260 } },
+  'file-check': { ...notched(badge(fileText, 'check', { label: '文档已完成', drop: ['l3'] }), firstLine), fx: { t: 'draw', on: ['badge'] } }
+};
+
+export default { ...set, ...more, ...variants };

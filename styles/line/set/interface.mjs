@@ -2,6 +2,9 @@
 // interface: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: check x plus minus filter sort star-half sparkles pin link-2 unlink paperclip circle-alert circle-help circle-minus triangle-alert ban checkbox toggle menu more-horizontal more-vertical maximize minimize zoom-in zoom-out loader command option cursor pointer mouse-pointer-click hand-grab
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { slash, badge, enclose } from '../kit.mjs';
+import { off, offFill, notched } from '../variants.mjs';
+import SHAPES, { ngon } from './shapes.mjs';
 
 // The marks of the circled icons in icons.mjs (circle-check, circle-plus, circle-x), so the
 // standalone marks and the ones in boxes and lenses have the same shape.
@@ -104,7 +107,74 @@ function linkHalves(g, f, { len = 20, ht = 10, ex = null } = {}) {
   };
 }
 
-export default {
+// The seal of badge-verified (security.mjs): sixteen corners, the eight points and the inner
+// corners rounded.
+function seal(g) {
+  const { h } = g, Ro = 10.8 - h, Ri = 8.4 - h, pts = [];
+  for (let i = 0; i < 16; i++) { const a = ((i * 22.5 - 90) * Math.PI) / 180, r = i % 2 ? Ri : Ro; pts.push([12 + r * Math.cos(a), 12 + r * Math.sin(a)]); }
+  return g.polygon(pts, pts.map((_, i) => (i % 2 ? 1.6 : 1.8)));
+}
+// The octagon of shapes.mjs: flat sides on 2 and 22.
+const octagon = (g) => ngon(g, 8, 10 / Math.cos(Math.PI / 8), 12, 12, -67.5, 2.5);
+// The diamond of shapes.mjs.
+const DIAMOND = (g) => ngon(g, 4, 11.95, 12, 12, -90, 3.5);
+// The marks of circle-plus and circle-x (icons.mjs), for the same marks in other outlines.
+const plusMark = (g, k = plusK(g)) => g.seg(12, 12 - k, 12, 12 + k) + g.seg(12 - k, 12, 12 + k, 12);
+const xMark = (g) => { const k = 3.75 - 0.6 * (g.s - 1.75); return g.seg(12 - k, 12 - k, 12 + k, 12 + k) + g.seg(12 + k, 12 - k, 12 - k, 12 + k); };
+// In a seal (inside its eight points) i sits shorter: the dot lower, the stem shorter.
+function infoMark(g, ctx, on) {
+  const d = g.s - 2, k = 1 - d * 0.27, r = g.dr * k, y0 = 12.25 + d * 1.5, top = y0 - g.h;
+  const cy0 = 8.1 + d * 1.2, cy = ctx?.variant === 'fill' ? Math.min(cy0, top - g.s - r) : cy0;
+  return [solid(g.dot(12, cy, k), { n: 'dot', role: P, on }), line(g.seg(12, y0, 12, 16.75 - d * 1.4), { n: 'stem', role: P, on })];
+}
+// A seal's marks stay clear of its inner corners: shorter arms than in a circle.
+const sealK = (g) => plusK(g) - 0.35 - Math.max(0, g.s - 2);
+// A circled icon's layers with its ring swapped for another outline d, named nm.
+const reshell = (L, d, nm) => L.map((l) => (l.n === 'ring' ? { ...l, d, n: nm } : l.on === 'ring' ? { ...l, on: nm } : l));
+// In a square (checkbox's box) the marks keep 1.5 clear of the sides: shorter than in a circle.
+const BOX = (g) => g.box(3, 3, 18, 18, 4.5);
+const plusSq = (g) => 8.95 - g.s - g.clear - g.h;
+// The selected dot of a radio button: solid, its meaning is a filled choice (as star-half's half).
+// In the fill the dot is the disc's own ink, set off by a ring cut round it.
+const radioDot = (g) => 3 + (g.s - 2) * 0.5;
+function radio(g, ctx, on) {
+  const r = radioDot(g);
+  return ctx?.variant === 'fill'
+    ? [line(g.circ(12, 12, n(r + g.h)), { n: 'hole', role: P, on })]
+    : [solid(g.circ(12, 12, n(r)), { n: 'dot', role: P, on })];
+}
+
+// Bases drawn in icons.mjs (bookmark, flag, star), repeated here with the same drawing for their
+// variants made by rule; set files cannot import icons.mjs, which imports them.
+const BOOKMARK = {
+  name: 'bookmark', label: '书签', key: 'portrait', fit: 'y',
+  plan: '主体：书签带，底部 V 形缺口，缺口顶点是尖的；两条尾巴的外角倒圆',
+  weights: { [P]: 1 },
+  draw(g) {
+    const { h } = g, x0 = 5 + h, x1 = 19 - h, y0 = 2 + h, yb = 22 - h, c = 3.5 - h, w = 3.6, dep = 3.4 + h * 0.4;
+    return [shell(g.polygon([[x0, y0], [x1, y0], [x1, yb], [12 + w, yb], [12, yb - dep], [12 - w, yb], [x0, yb]], [c, c, 1.4, 0.6, 0, 0.6, 1.4]), { n: 'bookmark', role: P })];
+  },
+  allow: { keyline: '书签本身窄，宽 14' }
+};
+const FLAG = {
+  name: 'flag', anchor: 'base', label: '标记', key: 'square',
+  plan: '主体：旗面（燕尾缺口）；辅助：旗杆（一条线，占一成）',
+  weights: { [P]: 0.89, [S]: 0.11 },
+  draw(g) { return [line(g.span(5, 3, 5, 21), { n: 'pole', role: S }), shell(flagCloth(g), { n: 'cloth', role: P })]; },
+  allow: { keyline: '旗杆立在左侧 5 处，旗面向右展开' }
+};
+const STAR = {
+  name: 'star', nudge: [0, -0.6], label: '收藏', key: 'circle',
+  plan: '主体：五角星，一个闭合形',
+  weights: { [P]: 1 },
+  draw(g) { return [shell(star(g), { n: 'star', role: P })]; }
+};
+const SLASHED = { sliver: '斜线的间隙以 45° 切过外形，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块' };
+// Marks in the bookmark's ribbon: centred above the notch, 1.5 clear of the sides.
+const RIB = 10;
+const ribbonK = (g) => 7 - g.s - g.h - g.clear;
+
+const SET = {
   check: {
     label: '对勾', key: 'square', fit: 'x',
     plan: '主体：对勾，与“完成”圆圈里的对勾同形，放大到方形参考线的宽度',
@@ -514,5 +584,398 @@ export default {
     },
     // 抓取: the hand closes a little and lets go
     fx: { t: 'keys', on: 'all', o: [12, 22], sy: [0.86], sx: [0.95], ms: 220 }
+  },
+  'circle-dot': {
+    label: '单选', key: 'circle',
+    light: ['dot'],
+    plan: '主体：选中点（实心，含义就是选中填满）；辅助：外圈。点随字重变大，离外圈至少 4',
+    weights: { [P]: 0.2, [S]: 0.8 },
+    draw(g, ctx) { return [shell(g.ring(12, 12, 10), { n: 'ring', role: S }), ...radio(g, ctx, 'ring')]; },
+    // 选中: the dot shrinks and pops back in
+    fx: { t: 'keys', on: ['dot', 'hole'], o: [12, 12], s: [0.35, 1.12], ms: 300 }
+  },
+  'circle-ellipsis': {
+    label: '更多（圆形）', key: 'circle',
+    plan: '主体：三个实心圆点（与更多同排）；辅助：外圈。圆点离外圈和彼此至少 1.5，粗字重下不再变大',
+    weights: { [P]: 0.17, [S]: 0.83 },
+    draw(g, ctx) {
+      const r = Math.min(g.dr, 1.6), sp0 = 4.8 - Math.max(0, g.s - 2) * 0.6;
+      // fill: the dots are holes; one stroke of ink stays between them
+      const sp = ctx?.variant === 'fill' ? Math.max(sp0, g.s + 2 * r) : sp0;
+      return [shell(g.ring(12, 12, 10), { n: 'ring', role: S }), ...[-1, 0, 1].map((k, i) => solid(g.circ(12 + k * sp, 12, n(r)), { n: `d${i}`, role: P, on: 'ring', vc: i }))];
+    },
+    fx: { t: 'variable', on: ['d0', 'd1', 'd2'], mode: 'iterative' }
+  },
+  'plus-square': {
+    label: '新增', key: 'square',
+    plan: '主体：加号；辅助：方框（与复选框同框）。加号离方框 1.5，比圆圈里的短一点',
+    weights: { [P]: 0.21, [S]: 0.79 },
+    draw(g) { return [shell(BOX(g), { n: 'box', role: S }), line(plusMark(g, plusSq(g)), { n: 'plus', role: P, on: 'box' })]; },
+    fx: { t: 'rotate', on: ['plus'], deg: 90, o: [12, 12] }
+  },
+  'square-minus': {
+    label: '移除（方形）', key: 'square',
+    plan: '主体：减号（与新增的横线同长）；辅助：方框',
+    weights: { [P]: 0.15, [S]: 0.85 },
+    draw(g) { const k = plusSq(g); return [shell(BOX(g), { n: 'box', role: S }), line(g.seg(12 - k, 12, 12 + k, 12), { n: 'minus', role: P, on: 'box' })]; },
+    fx: { t: 'draw', on: ['minus'] }
+  },
+  'square-x': {
+    label: '关闭（方形）', key: 'square',
+    plan: '主体：叉号（与关闭圆圈里的同大）；辅助：方框',
+    weights: { [P]: 0.25, [S]: 0.75 },
+    draw(g) { return [shell(BOX(g), { n: 'box', role: S }), line(xMark(g), { n: 'x', role: P, on: 'box' })]; },
+    fx: { t: 'rotate', on: ['x'], deg: 90, o: [12, 12] }
+  },
+  'square-dot': {
+    label: '选中（方形）', key: 'square',
+    light: ['dot'],
+    plan: '主体：选中点（与单选同大，实心）；辅助：方框',
+    weights: { [P]: 0.2, [S]: 0.8 },
+    draw(g, ctx) { return [shell(BOX(g), { n: 'box', role: S }), ...radio(g, ctx, 'box')]; },
+    fx: { t: 'keys', on: ['dot', 'hole'], o: [12, 12], s: [0.35, 1.12], ms: 300 }
+  },
+  badge: {
+    label: '认证', key: 'circle',
+    plan: '主体：花边徽章（与认证徽章同形，八个圆角尖）',
+    weights: { [P]: 1 },
+    draw(g) { return [shell(seal(g), { n: 'seal', role: P })]; },
+    // 徽章转过八分之一圈，正好转回原样
+    fx: [{ t: 'rotate', on: 'all', deg: 45 }, { t: 'keys', on: 'all', o: [12, 12], s: [0.9, 1.04] }]
+  },
+  'badge-plus': {
+    label: '添加徽章', key: 'circle',
+    plan: '主体：加号（避开徽章的内角，比添加的加号短一点）；辅助：花边徽章',
+    weights: { [P]: 0.25, [S]: 0.75 },
+    draw(g) { return [shell(seal(g), { n: 'seal', role: S }), line(plusMark(g, sealK(g)), { n: 'plus', role: P, on: 'seal' })]; },
+    fx: [{ t: 'rotate', on: ['seal'], deg: 45 }, { t: 'rotate', on: ['plus'], deg: 90, o: [12, 12] }]
+  },
+  'badge-minus': {
+    label: '移除徽章', key: 'circle',
+    plan: '主体：减号（与添加徽章的横线同长）；辅助：花边徽章',
+    weights: { [P]: 0.16, [S]: 0.84 },
+    draw(g) { const k = sealK(g); return [shell(seal(g), { n: 'seal', role: S }), line(g.seg(12 - k, 12, 12 + k, 12), { n: 'minus', role: P, on: 'seal' })]; },
+    fx: [{ t: 'rotate', on: ['seal'], deg: 45 }, { t: 'draw', on: ['minus'] }]
+  },
+  'badge-info': {
+    label: '徽章信息', key: 'circle',
+    plan: '主体：字母 i（与信息同形，避开徽章的内角，比信息的矮一点）；辅助：花边徽章',
+    weights: { [P]: 0.15, [S]: 0.85 },
+    allow: { primary: '徽章的内角收进来，i 只能这么大，约占一成半；层级仍是最高' },
+    draw(g, ctx) { return [shell(seal(g), { n: 'seal', role: S }), ...infoMark(g, ctx, 'seal')]; },
+    fx: [{ t: 'rotate', on: ['seal'], deg: 45 }, { t: 'bounce', on: ['dot', 'stem'], by: true, amp: 1.1, o: [12, 17.5] }]
+  },
+  'octagon-alert': {
+    label: '错误', key: 'circle',
+    plan: '主体：感叹号（与提醒同形）；辅助：八边形（与八边形同形，像停止标志）',
+    weights: { [P]: 0.17, [S]: 0.83 },
+    draw(g, ctx) { return reshell(SET['circle-alert'].draw(g, ctx), octagon(g), 'oct'); },
+    fx: { t: 'shake', on: ['stem', 'dot'], x: 0.8 }
+  },
+  'octagon-x': {
+    label: '停止', key: 'circle',
+    plan: '主体：叉号（与关闭的叉号同大）；辅助：八边形',
+    weights: { [P]: 0.27, [S]: 0.73 },
+    draw(g) { return [shell(octagon(g), { n: 'oct', role: S }), line(xMark(g), { n: 'x', role: P, on: 'oct' })]; },
+    fx: { t: 'rotate', on: ['x'], deg: 90, o: [12, 12] }
+  },
+  'octagon-minus': {
+    label: '禁止通行', key: 'circle',
+    plan: '主体：减号（与移除的减号同长）；辅助：八边形',
+    weights: { [P]: 0.16, [S]: 0.84 },
+    draw(g) { const k = plusK(g); return [shell(octagon(g), { n: 'oct', role: S }), line(g.seg(12 - k, 12, 12 + k, 12), { n: 'minus', role: P, on: 'oct' })]; },
+    fx: { t: 'draw', on: ['minus'] }
+  },
+  'toggle-left': {
+    label: '开关（关）', key: 'landscape', fit: 'x',
+    plan: '主体：滑钮（圆环，在左表示关）；辅助：胶囊形外框。与切换开关同形，滑钮在左端',
+    weights: { [P]: 0.25, [S]: 0.75 },
+    draw(g) { return [shell(g.box(2, 5, 20, 14, 7), { n: 'track', role: S }), shell(g.ring(9, 12, 3.5 - (g.s - 2) * 0.5), { n: 'knob', role: P, on: 'track' })]; },
+    // 打开: the knob slides to on and springs back off
+    fx: { t: 'keys', on: ['knob'], x: [6, 6, 0] },
+    swap: 'toggle'
+  },
+  'loader-circle': {
+    label: '加载中', key: 'circle',
+    plan: '主体：缺一段的圆弧（与圆形同大，缺口 60° 在右上），转动表示进行中',
+    weights: { [P]: 1 },
+    draw(g) { return [line(g.arc(12, 12, 10 - g.h, -15, 285), { n: 'arc', role: P })]; },
+    fx: { t: 'rotate', on: 'all', deg: 360, o: [12, 12] }
+  },
+  'check-check': {
+    label: '已读', key: 'square', fit: 'x',
+    light: [],
+    plan: '主体：两个并排的对勾（与对勾同形）。后一个的短边收短，离前一个的长边留出间距',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, k = 1.05, B1 = [3 + h + 3.3 * k, 16], C1 = [B1[0] + 6.1 * k, B1[1] - 6.7 * k];
+      const dx = 21 - h - C1[0], B2 = [B1[0] + dx, B1[1]];
+      // the second check's short arm stops a stroke and a clear gap from the first one's long arm
+      const nx = 6.7 / Math.hypot(6.1, 6.7), t = Math.max(0, (dx * nx - g.s - g.clear) / (nx + 6.1 / Math.hypot(6.1, 6.7)));
+      return [
+        line(g.pl([[B1[0] - 3.3 * k, B1[1] - 3.3 * k], B1, C1]), { n: 'c1', role: P }),
+        line(g.pl([[B2[0] - t, B2[1] - t], B2, [C1[0] + dx, C1[1]]]), { n: 'c2', role: P })
+      ];
+    },
+    fx: { t: 'draw', on: ['c1', 'c2'], stagger: 140 }
+  },
+  'search-check': {
+    label: '搜索完成', key: 'square',
+    light: ['check'],
+    plan: '主体：镜片里的对勾（与完成的对勾同形，缩小）；辅助：放大镜（与搜索同形）',
+    weights: { [P]: 0.13, [S]: 0.87 },
+    allow: { primary: '镜片里放不下大的对勾，墨量本来就少；层级仍是最高' },
+    draw(g) {
+      const { c } = LENS, f = (LENS.R - g.s - g.clear - g.h - 0.1) / 5.26;
+      return [...lens(g), line(g.pl(CHECK.map(([x, y]) => [c + (x - 12) * f, c + 0.3 + (y - 12.2) * f])), { n: 'check', role: P, on: 'lens' })];
+    },
+    fx: [{ t: 'orbit', on: ['lens', 'handle', 'check'], R: 0.9 }, { t: 'draw', on: ['check'] }]
+  },
+  'search-x': {
+    label: '清除搜索', key: 'square',
+    light: ['x'],
+    plan: '主体：镜片里的叉号；辅助：放大镜（与搜索同形）',
+    weights: { [P]: 0.15, [S]: 0.85 },
+    draw(g) {
+      const { c } = LENS, k = (LENS.R - g.s - g.clear - g.h) / Math.SQRT2;
+      return [...lens(g), line(g.seg(c - k, c - k, c + k, c + k) + g.seg(c + k, c - k, c - k, c + k), { n: 'x', role: P, on: 'lens' })];
+    },
+    fx: { t: 'rotate', on: ['x'], deg: 90, o: [10, 10] }
+  },
+  'search-slash': {
+    label: '无搜索结果', key: 'square',
+    light: ['bar'],
+    plan: '主体：镜片里的斜杠（与手柄垂直）；辅助：放大镜（与搜索同形）',
+    weights: { [P]: 0.1, [S]: 0.9 },
+    allow: { primary: '镜片里只有一条短斜线，墨量本来就少；层级仍是最高' },
+    draw(g) {
+      const { c } = LENS, k = lensMark(g) / Math.SQRT2;
+      return [...lens(g), line(g.seg(c + k, c - k, c - k, c + k), { n: 'bar', role: P, on: 'lens' })];
+    },
+    fx: [{ t: 'orbit', on: ['lens', 'handle'], R: 0.9 }, { t: 'draw', on: ['bar'] }]
+  },
+  funnel: {
+    nudge: [0, 1],
+    label: '漏斗筛选', key: 'square',
+    plan: '主体：漏斗（上宽下窄的斗和竖直的颈，一个闭合形）。斗口与方形参考线同宽，颈宽 6。斗口宽，分量在上，整体下移 1',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, t = 4 + h, b = 22 - h, neck = 11.5, xn = 15 - h, r = 1.5;
+      // the mouth's sharp corners are drawn out sideways until their rounding reaches the keyline
+      let x1 = 21 - h;
+      for (let i = 0; i < 8; i++) x1 = 21 - h + r * (1 / Math.tan(Math.atan2(neck - t, x1 - xn) / 2) - 1);
+      return [shell(g.polygon([[24 - x1, t], [x1, t], [xn, neck], [xn, b], [24 - xn, b], [24 - xn, neck]], [r, r, 0, 1, 1, 0]), { n: 'funnel', role: P })];
+    },
+    // 筛选: the funnel's mouth narrows and opens again
+    fx: { t: 'keys', on: 'all', o: [12, 12], sx: [0.86, 1.03], ms: 260 }
+  },
+  'sliders-vertical': {
+    label: '竖向调节', key: 'square',
+    plan: '主体：两个滑钮；辅助：两条竖向滑轨（被滑钮切开）。调节转 90°',
+    weights: { [P]: 0.7, [S]: 0.3 },
+    draw(g) {
+      return [
+        line(g.span(7, 3, 7, 21), { n: 't1', role: S }),
+        line(g.span(17, 3, 17, 21), { n: 't2', role: S }),
+        shell(g.ring(7, 8, 3.75), { n: 'k1', role: P, occ: true }),
+        shell(g.ring(17, 16, 3.75), { n: 'k2', role: P, occ: true })
+      ];
+    },
+    fx: [{ t: 'keys', on: ['k1'], y: [7.7, 7.7, 0] }, { t: 'keys', on: ['k2'], y: [-7.7, -7.7, 0] }]
+  },
+  crosshair: {
+    label: '十字准星', key: 'circle',
+    plan: '主体：圆环（直径 20，线条，不是面）；辅助：从圆环向内的四道短线',
+    weights: { [P]: 0.67, [S]: 0.33 },
+    draw(g) {
+      const { h } = g, a = 2 + h, b = 7.5;
+      return [
+        line(g.ring(12, 12, 10), { n: 'ring', role: P }),
+        line(g.seg(12, a, 12, b) + g.seg(12, 24 - a, 12, 24 - b) + g.seg(a, 12, b, 12) + g.seg(24 - a, 12, 24 - b, 12), { n: 'ticks', role: S })
+      ];
+    },
+    // 瞄准: the ring closes in, then turns a quarter (landing on itself)
+    fx: [{ t: 'keys', on: 'all', o: [12, 12], s: [0.86, 1.03], ms: 360 }, { t: 'rotate', on: 'all', deg: 90 }]
+  },
+  'eye-closed': {
+    label: '闭眼', key: 'landscape', fit: 'x',
+    light: [], // one object (GUIDE.md §4.2): lid and lashes keep one tone
+    plan: '主体：闭上的眼睑（与眼睛的眼眶同半径的一段弧）；辅助：向外的四根睫毛（与眼睑相连）。四根睫毛加起来和眼睑差不多长，各占约一半',
+    weights: { [P]: 0.52, [S]: 0.48 },
+    draw(g) {
+      const { h } = g, ch = 20 - g.s, sag = 7 - h, R = (ch * ch / 4 + sag * sag) / (2 * sag), top = 8, cy = top + sag - R;
+      const lash = (deg) => { const a = (deg * Math.PI) / 180; return g.seg(12 + R * Math.sin(a), cy + R * Math.cos(a), 12 + (R + 2.75) * Math.sin(a), cy + (R + 2.75) * Math.cos(a)); };
+      return [
+        line(`M${n(2 + h)} ${top}A${n(R)} ${n(R)} 0 0 0 ${n(22 - h)} ${top}`, { n: 'lid', role: P }),
+        line(lash(-45) + lash(-15) + lash(15) + lash(45), { n: 'lashes', role: S })
+      ];
+    },
+    // 闭眼: the lid squeezes shut a little tighter and relaxes
+    fx: { t: 'keys', on: 'all', o: [12, 8], sy: [0.7, 1.04], ms: 260 },
+    swap: 'eye'
+  },
+  'flag-triangle': {
+    anchor: 'base',
+    label: '三角旗', key: 'square',
+    plan: '主体：三角形旗面（尖角朝右）；辅助：旗杆（一条线）。三角形的分量靠近旗杆，旗杆放在 7，尖角到 22，按光学中心左右摆放',
+    weights: { [P]: 0.76, [S]: 0.24 },
+    draw(g) {
+      const { h } = g, top = 3 + h, bot = 15 - h, tip = 22 - h;
+      return [line(g.span(7, 3, 7, 21), { n: 'pole', role: S }), shell(g.polygon([[7, top], [tip, (top + bot) / 2], [7, bot]], [0.75, 1.5, 0.75]), { n: 'cloth', role: P })];
+    },
+    fx: { t: 'keys', on: ['cloth'], o: [7, 9], sx: [0.84, 1.05, 0.96] },
+    allow: { keyline: '旗杆立在左侧 7 处，三角旗面向右展开' }
+  },
+  sparkle: {
+    label: '闪光', key: 'live',
+    plan: '主体：四角星（与智能生成的大星同形，放大到可用区域）',
+    weights: { [P]: 1 },
+    draw(g) { return [shell(sparkle(g, 12, 12, 10), { n: 'spark', role: P })]; },
+    // 闪光: the star turns a quarter (landing on itself) as it pops
+    fx: [{ t: 'rotate', on: 'all', deg: 90 }, { t: 'keys', on: 'all', o: [12, 12], s: [0.82, 1.06] }]
+  },
+  'hand-tap': {
+    label: '轻点', key: 'live', fit: 'y',
+    plan: '主体：竖起食指的手（与手型同形，食指矮一点）；辅助：指尖上方的一道弧，表示点按；细节：手指之间的两道短线',
+    weights: { [P]: 0.74, [S]: 0.14, [D]: 0.12 },
+    draw(g, ctx) {
+      const H = hand(g, [8, 12, 16, 20], [6, 9.5, 10.5], 15.5, ctx?.variant === 'fill'), r = 2.5 + g.s + g.clear;
+      return [
+        shell(H.d, { n: 'hand', role: P }), (H.solid ? solid : line)(H.slits, { n: 'slits', role: D, on: 'hand' }),
+        line(g.arc(10, 8 + g.h, r, 215, 325), { n: 'ripple', role: S })
+      ];
+    },
+    // 轻点: the finger taps down and the ripple spreads
+    fx: [{ t: 'keys', on: ['hand', 'slits'], o: [12, 22], s: [0.92], y: [0.4], ms: 200 }, { t: 'keys', on: ['ripple'], o: [10, 9], s: [0.8, 1.12], a: [0.4, 1], ms: 320 }]
+  },
+  'bookmark-plus': {
+    label: '添加书签', key: 'portrait', fit: 'y',
+    plan: '主体：书签带里的加号；辅助：书签（与书签同形）。符号放在缺口以上的带子中间，离两边 1.5',
+    weights: { [P]: 0.18, [S]: 0.82 },
+    draw(g) { return [...BOOKMARK.draw(g).map((l) => ({ ...l, role: S })), line(g.seg(12, RIB - ribbonK(g), 12, RIB + ribbonK(g)) + g.seg(12 - ribbonK(g), RIB, 12 + ribbonK(g), RIB), { n: 'plus', role: P, on: 'bookmark' })]; },
+    fx: { t: 'rotate', on: ['plus'], deg: 90, o: [12, RIB] },
+    allow: BOOKMARK.allow
+  },
+  'bookmark-minus': {
+    label: '移除书签', key: 'portrait', fit: 'y',
+    plan: '主体：书签带里的减号（与添加书签的横线同长）；辅助：书签',
+    weights: { [P]: 0.1, [S]: 0.9 },
+    draw(g) { const k = ribbonK(g); return [...BOOKMARK.draw(g).map((l) => ({ ...l, role: S })), line(g.seg(12 - k, RIB, 12 + k, RIB), { n: 'minus', role: P, on: 'bookmark' })]; },
+    fx: { t: 'draw', on: ['minus'] },
+    allow: { ...BOOKMARK.allow, primary: '书签带窄，减号只能这么长，墨量本来就少；层级仍是最高' }
+  },
+  'bookmark-check': {
+    label: '已加书签', key: 'portrait', fit: 'y',
+    plan: '主体：书签带里的对勾（与完成的对勾同形，缩小）；辅助：书签',
+    weights: { [P]: 0.14, [S]: 0.86 },
+    draw(g) {
+      const f = (2 * (7 - g.s - g.clear) - g.s) / 9.4;
+      return [...BOOKMARK.draw(g).map((l) => ({ ...l, role: S })), line(g.pl(CHECK.map(([x, y]) => [12 + (x - 12) * f, RIB + 0.3 + (y - 12.35) * f])), { n: 'check', role: P, on: 'bookmark' })];
+    },
+    fx: { t: 'draw', on: ['check'] },
+    allow: { ...BOOKMARK.allow, primary: '书签带窄，对勾只能这么大，墨量本来就少；层级仍是最高' }
+  },
+  'bookmark-x': {
+    label: '删除书签', key: 'portrait', fit: 'y',
+    plan: '主体：书签带里的叉号；辅助：书签',
+    weights: { [P]: 0.15, [S]: 0.85 },
+    draw(g) { const k = ribbonK(g) * 0.85; return [...BOOKMARK.draw(g).map((l) => ({ ...l, role: S })), line(g.seg(12 - k, RIB - k, 12 + k, RIB + k) + g.seg(12 + k, RIB - k, 12 - k, RIB + k), { n: 'x', role: P, on: 'bookmark' })]; },
+    fx: { t: 'rotate', on: ['x'], deg: 90, o: [12, RIB] },
+    allow: BOOKMARK.allow
+  },
+  'circle-slash': {
+    label: '无', key: 'circle',
+    plan: '主体：从左下到右上的短斜线（不碰外圈，与禁止的斜杠方向相反）；辅助：外圈',
+    weights: { [P]: 0.17, [S]: 0.83 },
+    draw(g) { const k = plusK(g) / Math.SQRT2; return [shell(g.ring(12, 12, 10), { n: 'ring', role: S }), line(g.seg(12 - k, 12 + k, 12 + k, 12 - k), { n: 'bar', role: P, on: 'ring' })]; },
+    fx: { t: 'draw', on: ['bar'] }
+  },
+  appearance: {
+    label: '外观', key: 'circle',
+    light: [], // one sign: the dark half is the meaning, not an inner detail
+    plan: '主体：中间的分界线和左半边的三道横线（深色模式和浅色模式各占一半，横线代表深色的一半，保持线性）；辅助：外圈。面性中左半边实心、右半边镂空',
+    weights: { [P]: 0.48, [S]: 0.52 },
+    draw(g, ctx) {
+      const r = 10 - g.h, ri = 10 - g.s;
+      if (ctx?.variant === 'fill') return [shell(g.ring(12, 12, 10), { n: 'ring', role: S }), solid(`M12 ${n(12 - ri)}A${n(ri)} ${n(ri)} 0 0 1 12 ${n(12 + ri)}Z`, { n: 'half', role: P, on: 'ring' })];
+      // the dark half as hatching: the divider and three lines on whole pixels, each running from
+      // the divider to the ring
+      const edge = (y) => 12 - Math.sqrt(r * r - (y - 12) ** 2);
+      const hatch = [8, 12, 16].map((y) => g.seg(edge(y), y, 12, y)).join('');
+      return [shell(g.ring(12, 12, 10), { n: 'ring', role: S }), line(g.seg(12, 12 - r, 12, 12 + r) + hatch, { n: 'half', role: P })];
+    },
+    // 切换外观: the disc turns a full turn, dark and light trading sides on the way
+    fx: { t: 'rotate', on: 'all', deg: 360 }
+  },
+  delete: {
+    label: '删除键', key: 'landscape', fit: 'x',
+    plan: '主体：键里的叉号；辅助：向左的键形（左端是尖角，与 ⌫ 相同）。叉号放在尖角以右的方形部分中间',
+    weights: { [P]: 0.22, [S]: 0.78 },
+    draw(g) {
+      const { h } = g, t = 5 + h, b = 19 - h, xr = 22 - h, xs = 8.5, cx = 14.75, k = 7 - g.s - g.h - g.clear;
+      // the sharp left point is drawn out until its rounding (1.2) reaches x 2
+      const c = Math.cos(Math.atan2(12 - t, xs - 2)), tip = 2 + 2 * h - h / c - 1.2 * (1 / c - 1);
+      return [
+        shell(g.polygon([[tip, 12], [xs, t], [xr, t], [xr, b], [xs, b]], [1.2, 1, 3.5 - h, 3.5 - h, 1]), { n: 'key', role: S }),
+        line(g.seg(cx - k, 12 - k, cx + k, 12 + k) + g.seg(cx + k, 12 - k, cx - k, 12 + k), { n: 'x', role: P, on: 'key' })
+      ];
+    },
+    // 退格: the key pushes left and the x turns
+    fx: [{ t: 'keys', on: 'all', x: [-1, 0.2], ms: 220 }, { t: 'rotate', on: ['x'], deg: 90, o: [14.75, 12] }]
+  },
+  'circle-dot-dashed': {
+    label: '进行中', key: 'circle',
+    light: ['dot'],
+    plan: '主体：选中点（与单选同大）；辅助：虚线圆（与虚线圆同形），表示还没完成',
+    weights: { [P]: 0.22, [S]: 0.78 },
+    draw(g) { return [...SHAPES['circle-dashed'].draw(g).map((l) => ({ ...l, n: 'ring', role: S })), ...radio(g)]; },
+    area: (g) => [{ n: 'ring', d: g.circ(12, 12, 10 - g.h) }],
+    fx: [{ t: 'rotate', on: ['ring'], deg: 45 }, { t: 'keys', on: ['dot'], o: [12, 12], s: [0.35, 1.12], ms: 300 }]
+  },
+  'square-slash': {
+    label: '无（方形）', key: 'square',
+    plan: '主体：从左下到右上的短斜线（与无的斜线同长）；辅助：方框',
+    weights: { [P]: 0.16, [S]: 0.84 },
+    draw(g) { const k = plusK(g) / Math.SQRT2; return [shell(BOX(g), { n: 'box', role: S }), line(g.seg(12 - k, 12 + k, 12 + k, 12 - k), { n: 'bar', role: P, on: 'box' })]; },
+    fx: { t: 'draw', on: ['bar'] }
+  },
+  'diamond-plus': {
+    label: '添加（菱形）', key: 'live',
+    plan: '主体：加号（与添加的加号同大，臂指向四个尖角）；辅助：菱形（与菱形同形）',
+    weights: { [P]: 0.24, [S]: 0.76 },
+    draw(g) { return [shell(DIAMOND(g), { n: 'dia', role: S }), line(plusMark(g), { n: 'plus', role: P, on: 'dia' })]; },
+    fx: { t: 'rotate', on: ['plus'], deg: 90, o: [12, 12] },
+    allow: { keyline: '菱形的四个尖角各伸出可用区域约 0.5' }
+  },
+  'diamond-minus': {
+    label: '移除（菱形）', key: 'live',
+    plan: '主体：减号（与移除的减号同长）；辅助：菱形',
+    weights: { [P]: 0.15, [S]: 0.85 },
+    draw(g) { const k = plusK(g); return [shell(DIAMOND(g), { n: 'dia', role: S }), line(g.seg(12 - k, 12, 12 + k, 12), { n: 'minus', role: P, on: 'dia' })]; },
+    fx: { t: 'draw', on: ['minus'] },
+    allow: { keyline: '菱形的四个尖角各伸出可用区域约 0.5' }
+  },
+  'diamond-alert': {
+    label: '提醒（菱形）', key: 'live',
+    plan: '主体：感叹号（与提醒同形）；辅助：菱形',
+    weights: { [P]: 0.16, [S]: 0.84 },
+    draw(g, ctx) {
+      // the stem's top stays clear of the diamond's upper edges at heavy weights: it starts a little lower
+      const dy = Math.max(0, g.s - 2) * 0.6, top = (d) => d.replace(/^M12 (-?[\d.]+)/, (_, y) => `M12 ${n(+y + dy)}`);
+      return reshell(SET['circle-alert'].draw(g, ctx), DIAMOND(g), 'dia').map((l) => (l.n === 'stem' ? { ...l, d: top(l.d) } : l));
+    },
+    fx: { t: 'shake', on: ['stem', 'dot'], x: 0.8 },
+    allow: { keyline: '菱形的四个尖角各伸出可用区域约 0.5' }
   }
 };
+
+// Variants made by rule (GUIDE.md §4.4): slashes of the bases above and in this file.
+Object.assign(SET, {
+  'bookmark-off': off({ ...slash(BOOKMARK, { label: '书签关闭' }), allow: { ...BOOKMARK.allow, ...SLASHED } }, 'bookmark', { t: 'keys', on: ['bookmark'], o: [12, 2], sy: [0.82], ms: 260 }),
+  'flag-off': off({ ...slash(FLAG, { label: '取消标记' }), allow: { ...FLAG.allow, ...SLASHED } }, 'flag', { t: 'keys', on: ['cloth'], o: [5, 9], sx: [0.72], ms: 260 }),
+  'star-off': off({ ...slash(STAR, { label: '取消收藏' }), allow: SLASHED }, 'star', { t: 'keys', on: ['star'], o: [12, 12.25], s: [0.86], ms: 240 }),
+  'star-circle': { ...enclose(STAR, 'circle', { label: '收藏（圆形）', k: 0.56 }), swap: undefined, enter: undefined, fx: [{ t: 'rotate', on: ['star'], deg: 72, o: [12, 12.14] }, { t: 'keys', on: ['star'], o: [12, 12.14], s: [0.84, 1.08] }] },
+  'pin-off': off({ ...slash(SET.pin, { label: '取消固定' }), allow: SLASHED }, 'pin', { t: 'keys', on: ['head', 'needle'], y: [-1.2], ms: 260 }),
+});
+
+export default SET;

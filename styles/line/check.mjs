@@ -3,7 +3,8 @@
 // check-out/:
 //   sheet.png      every icon over the keylines, five weights, fill, modes, 24/16px
 //   keylines.png   every icon over the keylines with its parts coloured by role
-//   frames.png     every hover motion as ten frames (bold, the heaviest case)
+//   frames.png     every hover motion as ten frames (bold, the heaviest case); frames-1.png ...
+//                  for more icons than fit one page
 //   findings.md    what can be measured, then the planned and measured weights of every icon:
 //     keyline  the outline (regular) misses its key shape by more than 0.4 on an axis it must
 //              fill (fit: both, or only x / y for objects long in life), after taking off the
@@ -187,11 +188,18 @@ for (const f of slivers(names, STROKES)) {
 }
 
 // motion: filmstrips and reach
-// the filmstrip page measures only the icons asked for
-const framesHtml = (onlyArg ? `<script>globalThis.FRAMES_ONLY = ${JSON.stringify(onlyArg)};</script>` : '') + fs.readFileSync(path.join(out, 'frames.html'), 'utf8');
-const reach = evaluate(framesHtml);
-for (const r of reach) if (names.includes(r.name) && !(ALL[r.name].allow || {}).reach) find.push(`- \`${r.name}\` **reach**: 动效中超出画布 ${r.out}`);
-screenshot(framesHtml, path.join(out, 'frames.png'), { width: 800, height: 24 + names.filter((n) => ALL[n].fx).length * 55 * 1.4 });
+// The filmstrip page measures only the icons asked for, at most FRAME_PAGE at a time: one page of
+// a full set would be taller than Chrome can capture (frames-1.png, frames-2.png ... then).
+const FRAME_PAGE = 240;
+const moving = names.filter((n) => ALL[n].fx);
+const framePages = Array.from({ length: Math.max(1, Math.ceil(moving.length / FRAME_PAGE)) }, (_, i) => moving.slice(i * FRAME_PAGE, (i + 1) * FRAME_PAGE));
+const framesPage = fs.readFileSync(path.join(out, 'frames.html'), 'utf8');
+framePages.forEach((list, i) => {
+  const html = `<script>globalThis.FRAMES_ONLY = ${JSON.stringify(list.join(','))};</script>` + framesPage;
+  for (const r of evaluate(html)) if (names.includes(r.name) && !(ALL[r.name].allow || {}).reach) find.push(`- \`${r.name}\` **reach**: 动效中超出画布 ${r.out}`);
+  const file = framePages.length > 1 ? `frames-${i + 1}.png` : 'frames.png';
+  screenshot(html, path.join(out, file), { width: 800, height: 24 + list.length * 55 * 1.4 });
+});
 
 fs.writeFileSync(path.join(out, 'findings.md'), `# Findings\n\n${find.length ? find.join('\n') : '无'}\n\n## 权重（预设 / 实测，%）\n\n| 图标 | 主体 | 辅助 | 细节 |\n| --- | --- | --- | --- |\n${weightsTable.join('\n')}\n`);
 console.log(find.length ? find.join('\n') : 'Findings: 无');

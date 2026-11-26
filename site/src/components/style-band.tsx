@@ -4,7 +4,7 @@
 // wall; an icon under the pointer holds its hover pose.
 import { memo, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { RiArrowRightSLine } from "@remixicon/react";
+import { ChevronRightIcon } from "@/components/kit/ui-icons";
 import {
   Bell, Calendar, Camera, Folder, Gift, Home, Lightbulb, Lock, Mail, Mic, Music, Settings, ShoppingCart, Trash, Wifi,
 } from "kubai-icons-react";
@@ -28,6 +28,10 @@ import { cn } from "@/lib/utils";
 import { STYLE_OPTIONS } from "@/components/browser/prefs";
 import { useOnScreen, useWallLoop } from "@/lib/wall-motion";
 import { useLocale, useLocalize, useTr } from "@/lib/use-locale";
+import { LINE_VARIANTS, type LineVariant } from "@/lib/line";
+import { setLineSettings, useLineSettings } from "@/lib/line-settings";
+import { setBandStyle, useBandStyle } from "@/lib/band-style";
+import { LineIcon } from "@/components/kit/line-icon";
 
 /** Fifteen objects every style draws, each as [layered, two-tone, line], mixed so neighbours differ. */
 const SETS = [
@@ -48,7 +52,7 @@ const PERIOD = SETS.length * PER_TILE;
 /** Steps through the slots by 7: on five columns, touching tiles play at least a third of a loop apart. */
 const offsetOf = (i: number) => ((i * 7) % SETS.length) * PER_TILE;
 
-const BandTile = memo(function BandTile({ Icon, style, offset, running }: { Icon: IconComponent; style: IconStyle; offset: number; running: boolean }) {
+const BandTile = memo(function BandTile({ Icon, style, variant, stroke, offset, running }: { Icon: IconComponent; style: IconStyle; variant: LineVariant; stroke: number; offset: number; running: boolean }) {
   const [turn, setTurn] = useState(false);
   const [held, setHeld] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -71,9 +75,9 @@ const BandTile = memo(function BandTile({ Icon, style, offset, running }: { Icon
       onPointerEnter={(e) => e.pointerType === "mouse" && setHeld(true)}
       onPointerLeave={(e) => e.pointerType === "mouse" && setHeld(false)}
     >
-      {/* Keyed by style, so a switch fades the new drawing in. */}
-      <span key={style} className="swap-pop grid">
-        <Icon size={36} color={COLOR} trigger="none" hover={turn || held} />
+      {/* Keyed by style and line variant, so a switch fades the new drawing in. */}
+      <span key={style === "line" ? `line-${variant}` : style} className="swap-pop grid">
+        <Icon size={36} color={COLOR} trigger="none" hover={turn || held} {...(style === "line" ? { strokeWidth: stroke, variant } : {})} />
       </span>
     </div>
   );
@@ -85,7 +89,9 @@ export function StyleBand({ className }: { className?: string }) {
   const loc = useLocalize();
   const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
-  const [style, setStyle] = useState<IconStyle>("line");
+  // Shared with the feature cards below, which follow it; line draws at the browser's variant and stroke.
+  const style = useBandStyle();
+  const line = useLineSettings();
   // The loop runs only while the icons are on screen, unless paused or with reduced motion.
   const running = useWallLoop(ref);
 
@@ -104,19 +110,29 @@ export function StyleBand({ className }: { className?: string }) {
             )}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Segmented
             value={style}
-            onChange={setStyle}
+            onChange={setBandStyle}
             label={tr("Style", "风格")}
             options={STYLE_OPTIONS.map((o) => ({ value: o.value, label: tr(o.en, o.zh) }))}
           />
+          {style === "line" && (
+            // The four line variants as small samples of themselves; their names show on hover.
+            <Segmented
+              value={line.variant}
+              onChange={(variant) => setLineSettings({ variant })}
+              label={tr("Variant", "变体")}
+              dense
+              options={LINE_VARIANTS.map((o) => ({ value: o.value, title: tr(o.en, o.zh), label: <span className="pointer-events-none"><LineIcon name="camera" size={18} color="currentColor" variant={o.value} s={2} /><span className="sr-only">{tr(o.en, o.zh)}</span></span> }))}
+            />
+          )}
           <WallPause />
         </div>
         <div className="flex flex-wrap gap-3">
           <Button size="lg" nativeButton={false} render={<Link href={loc(`/icons/?style=${style === "layered" ? "line" : style}`)} />}>
             {style === "duotone" ? tr("Browse two-tone icons", "浏览双色图标") : tr("Browse line icons", "浏览线性图标")}
-            <RiArrowRightSLine data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 motion-reduce:transition-none" />
+            <ChevronRightIcon data-icon="inline-end" className="rtl:rotate-180 transition-[translate] duration-200 group-hover/button:translate-x-0.5 motion-reduce:transition-none" />
           </Button>
           {/* The guide is written in English and Simplified Chinese only. */}
           {hasIconPages(locale) && (
@@ -128,7 +144,7 @@ export function StyleBand({ className }: { className?: string }) {
       </div>
       <div ref={ref} className="grid grid-cols-5 gap-tiles">
         {SETS.map((set, i) => (
-          <BandTile key={i} Icon={set[SLOT[style]]} style={style} offset={offsetOf(i)} running={running} />
+          <BandTile key={i} Icon={set[SLOT[style]]} style={style} variant={line.variant} stroke={line.s} offset={offsetOf(i)} running={running} />
         ))}
       </div>
     </section>

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { RiArrowRightSLine } from "@remixicon/react";
+import { ChevronRightIcon } from "@/components/kit/ui-icons";
 import { quietLink } from "@/components/kit/styles";
 import { hasIconPages, localize } from "@/lib/i18n";
 import type { IconMeta } from "@/lib/icons";
@@ -14,7 +14,7 @@ export function IconPageLink({ meta }: { meta: IconMeta }) {
   return (
     <Link href={localize(`/icons/${meta.base ?? meta.name}/`, locale)} className={cn("tap relative flex items-center gap-0.5 text-caption font-medium", quietLink)}>
       {locale === "zh" ? "图标详情页" : "Icon page"}
-      <RiArrowRightSLine aria-hidden className="size-4 rtl:rotate-180" />
+      <ChevronRightIcon aria-hidden className="size-4 rtl:rotate-180" />
     </Link>
   );
 }

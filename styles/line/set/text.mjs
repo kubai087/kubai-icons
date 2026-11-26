@@ -2,6 +2,8 @@
 // text: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: pen eraser highlighter table languages align-left align-center align-right align-justify bold italic underline strikethrough heading type text-size list-ordered list-checks indent outdent quote text-cursor clipboard-paste
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { slash } from '../kit.mjs';
+import { off, offFill } from '../variants.mjs';
 
 // Text-formatting icons (align, indent, ordered and checked lists) share one grid: four rows on
 // whole pixels, 5 apart; a long line fills the square (3..21) and a short one is 10 long. Lists
@@ -23,7 +25,7 @@ const tilt = (o, deg) => { const a = (deg * Math.PI) / 180, c = Math.cos(a), s0 
 const reason = { keyline: '四行字线行距 5 落在整像素上，高 17，比方框矮 1；首行是长线，整体下移半格让重心居中' };
 const listReason = { keyline: '四行字线行距 5 落在整像素上，高 17，比方框矮 1；各行等长，整体上移半格让重心居中' };
 
-export default {
+const set = {
   pen: {
     label: '钢笔', key: 'portrait', fit: 'y',
     ends: 'in',
@@ -95,20 +97,27 @@ export default {
     fx: { t: 'draw', on: ['r1', 'r2', 'c1'] }
   },
   languages: {
-    label: '翻译', key: 'landscape',
-    plan: '主体：字母 A（说明是文字）；辅助：对话框（同消息的对话框）。A 离框内沿 1.5',
-    weights: { [P]: 0.26, [S]: 0.74 },
-    draw(g, ctx) {
-      const { s, h } = g, d = s - 2, top = 8.5 + d, base = 15.5 - d, w = 3.9 - d * 0.6;
-      const lx = (y) => 12 - (w * (y - top)) / (base - top), cy = 13;
-      const A = line(g.pl([[12 - w, base], [12, top], [12 + w, base]]) + g.seg(lx(cy), cy, 24 - lx(cy), cy), { n: 'A', role: P, on: 'bubble' });
-      // fill: the counter of the A would be a small triangle of ink with sharp points; it is
-      // knocked out with the letter (a triangle on the centre lines, inside the strokes)
-      const counter = solid(g.polygon([[12, top], [24 - lx(cy), cy], [lx(cy), cy]]), { n: 'counter', role: P, on: 'bubble', part: 'A' });
-      return [shell(g.box(2, 4, 20, 16, [4.5, 4.5, 4.5, 1]), { n: 'bubble', role: S }), A, ...(ctx?.variant === 'fill' ? [counter] : [])];
+    label: '翻译', key: 'live',
+    plan: '主体：右下的字母 A（译成的语言）；辅助：左上的汉字"文"（原来的语言：点立在横上，撇从横的右段落下、向左下弯出，捺从撇的左上方起笔、穿过撇落到右下）。两字大小相近，沿对角线排开，横画伸到 A 的尖顶上方',
+    weights: { [P]: 0.42, [S]: 0.58 },
+    draw(g) {
+      const { s, h } = g, bar = 6;
+      const wen = { role: S, part: 'wen' };
+      // ㇏ keeps clear of the bar at every weight, and stops short of the A
+      const na = [[5.75, bar + s + 1.5], [11, 14.75]];
+      // A: feet on the bottom edge, the crossbar on a whole pixel
+      const top = 11, base = 22 - h, xl = 12.5, xr = 21, cx = (xl + xr) / 2, cy = 17;
+      const lx = (y) => cx - ((cx - xl) * (y - top)) / (base - top);
+      return [
+        line(g.seg(9, 2 + h, 9, bar), { n: 'dot', ...wen }),
+        line(g.span(2, bar, 16, bar), { n: 'bar', ...wen }),
+        line(`M12.5 ${bar}C11 9.5 8 13.6 3.25 16.5`, { n: 'pie', ...wen }),
+        line(g.seg(...na[0], ...na[1]), { n: 'na', ...wen }),
+        line(g.pl([[xl, base], [cx, top], [xr, base]]) + g.seg(lx(cy), cy, 2 * cx - lx(cy), cy), { n: 'A', role: P })
+      ];
     },
-    // 翻译: the letter turns over into the other language and back
-    fx: { t: 'keys', on: ['A', 'counter'], o: [12, 12], s: [0.5, 1.12], a: [0.2, 1] }
+    // 翻译: the character is written stroke by stroke, then the letter
+    fx: { t: 'draw', on: ['dot', 'bar', 'pie', 'na', 'A'], stagger: 110 }
   },
   'align-left': {
     label: '左对齐', key: 'square',
@@ -347,3 +356,533 @@ function clipCut(g, x0, x1, yb) {
   const w = g.g, xl = x0 - w, xr = x1 + w, yc = 8 - Math.sqrt(Math.max(0, 16 - (8 - xl) ** 2)), r = 0.5 * g.s;
   return g.area(xl, 0, xr - xl, yb + w, [0, 0, 2 + w, 2 + w]) + g.circ(xl, yc, r) + g.circ(xr, yc, r);
 }
+
+// Letters and digits beside a main letter (headings, super- and subscript, cases), by centre
+// line. A heading's H stands on the cap height (CAP) with its stems at 4 and 11; its digit fills
+// the box x 15..20, y 10..20, so it stands on the same base line.
+const H = (g, dx = 0) => g.seg(4 + dx, CAP[0], 4 + dx, CAP[1]) + g.seg(11 + dx, CAP[0], 11 + dx, CAP[1]) + g.seg(4 + dx, 12, 11 + dx, 12);
+const DIGIT = {
+  1: (g, dx = 0) => `M${15.5 + dx} 12.5L${18 + dx} 10V20`,
+  2: (g, y0 = 10, y1 = 20) => g.arc(17.5, y0 + 2.5, 2.5, 180, 360) + `L15 ${y1}H20`,
+  3: () => `M15.15 11.64A2.5 2.5 0 1 1 17.5 15A2.5 2.5 0 1 1 15.15 18.36`,
+  4: () => `M15 10V16H20M19 10V20`,
+  5: () => `M20 10H15V14H17A3 3 0 0 1 17 20H15`,
+  6: (g) => `M19.5 10A7.5 7.5 0 0 0 15 17.5` + g.circ(17.5, 17.5, 2.5)
+};
+const heading = (k, label, dx = 0) => ({
+  label, key: 'square', fit: 'y',
+  plan: `主体：字母 H（与标题同一字高，变窄）；辅助：右下的数字 ${k}（与 H 同一基线，高 10）`,
+  weights: { [P]: 0.7, [S]: 0.3 },
+  draw(g) { return [line(H(g, dx), { n: 'H', role: P }), line(k === 1 ? DIGIT[1](g, dx) : DIGIT[k](g), { n: 'num', role: S })]; },
+  // the level number is written beside the letter
+  fx: { t: 'draw', on: ['num'] }
+});
+// Upper-case A by centre line: feet at x0 and x1 on the base line, apex at top, bar at barY.
+const letterA = (g, x0, x1, top, base, barY) => {
+  const m = (x0 + x1) / 2, at = (y) => ((m - x0) * (base - y)) / (base - top);
+  return g.pl([[x0, base], [m, top], [x1, base]]) + g.seg(m - at(barY), barY, m + at(barY), barY);
+};
+// Lower-case a: a ring of outer radius R and its stem down the right side.
+const letterLowA = (g, cx, cy, R) => g.circ(cx, cy, R - g.h) + g.seg(cx + R - g.h, cy - R + g.h, cx + R - g.h, cy + R - g.h);
+// Pilcrow by centre line: a bowl of radius r hangs left of the stem x0 from the top bar; a second
+// stem at x1; both stems run from top down to bottom.
+const pilcrowPath = (g, x0, x1, top, bottom, r) => `M${n(x1 + 1)} ${n(top)}H${n(x0 - r)}A${n(r)} ${n(r)} 0 0 0 ${n(x0 - r)} ${n(top + 2 * r)}H${n(x0)}` + g.seg(x0, top, x0, bottom) + g.seg(x1, top, x1, bottom);
+const pilcrowArea = (x0, x1, top, r) => `M${n(x0)} ${n(top)}H${n(x0 - r)}A${n(r)} ${n(r)} 0 0 0 ${n(x0 - r)} ${n(top + 2 * r)}H${n(x0)}Z`;
+// Pilcrow with an arrow under it for the writing direction (dir 1 right, -1 left).
+// The fill variant fills the bowl, so no island of ink is left inside it.
+const bowl = (g, ctx, d) => (ctx?.variant === 'fill' ? [solid(d, { n: 'bowl', role: P, part: 'mark' })] : []);
+const pilcrowDir = (dir, label) => ({
+  label, key: 'square',
+  plan: `主体：段落标记（缩小，放在上方）；辅助：下方指向${dir > 0 ? '右' : '左'}的箭头，表示书写方向`,
+  weights: { [P]: 0.58, [S]: 0.42 },
+  draw(g, ctx) {
+    const x0 = 12, x1 = 16, L = 2, y = 18, a = dir > 0 ? 20 : 4;
+    return [
+      line(pilcrowPath(g, x0, x1, 4, 13, 3), { n: 'mark', role: P, part: 'mark' }),
+      ...bowl(g, ctx, pilcrowArea(x0, x1, 4, 3)),
+      line(g.seg(4, y, 20, y) + g.pl([[a - dir * L, y - L], [a, y], [a - dir * L, y + L]]), { n: 'arrow', role: S })
+    ];
+  },
+  area: () => [{ n: 'mark', d: pilcrowArea(12, 16, 4, 3) }],
+  fx: { t: 'keys', on: ['arrow'], x: [dir * 1.5, 0], ms: 300 }
+});
+const more = {
+  // the narrow 1 leaves the right side light: the whole letter group moves right by 1
+  'heading-1': { ...heading(1, '一级标题', 1), allow: { keyline: '数字 1 本身窄，整体右移 1 后左侧比方框少 1' } },
+  'heading-2': heading(2, '二级标题'),
+  'heading-3': heading(3, '三级标题'),
+  'heading-4': heading(4, '四级标题'),
+  'heading-5': heading(5, '五级标题'),
+  'heading-6': { ...heading(6, '六级标题'), allow: { optical: '数字 6 的圆在下方，与其他标题的数字同一基线' } },
+  superscript: {
+    label: '上标', key: 'square',
+    plan: '主体：字母 x（两条斜线，占左下）；辅助：右上的小数字 2',
+    weights: { [P]: 0.52, [S]: 0.48 },
+    draw(g) {
+      return [
+        line(g.seg(4, 13, 11, 20) + g.seg(11, 13, 4, 20), { n: 'x', role: P }),
+        line(DIGIT[2](g, 4, 11), { n: 'num', role: S })
+      ];
+    },
+    // the small figure rises into place above the line
+    fx: { t: 'from', on: ['num'], y: 5, a: 0 }
+  },
+  subscript: {
+    label: '下标', key: 'square',
+    plan: '主体：字母 x（两条斜线，占左上）；辅助：右下的小数字 2',
+    weights: { [P]: 0.52, [S]: 0.48 },
+    draw(g) {
+      return [
+        line(g.seg(4, 4, 11, 11) + g.seg(11, 4, 4, 11), { n: 'x', role: P }),
+        line(DIGIT[2](g, 13, 20), { n: 'num', role: S })
+      ];
+    },
+    // the small figure drops into place below the line
+    fx: { t: 'from', on: ['num'], y: -5, a: 0 }
+  },
+  'case-sensitive': {
+    label: '区分大小写', key: 'square', fit: 'x',
+    plan: '主体：大写 A；辅助：小写 a（圆环和右侧竖线，与 A 同一基线）',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      return [
+        line(letterA(g, 4, 10, 5, 18, 14), { n: 'A', role: P }),
+        line(letterLowA(g, 17.5, 15.5, 3.5), { n: 'a', role: S })
+      ];
+    },
+    // the small letter grows to the size of the capital and back
+    fx: { t: 'keys', on: ['a'], o: [17.5, 18.5], s: [1.3], ms: 300 }
+  }
+};
+
+more.pilcrow = {
+  label: '段落标记', key: 'square', fit: 'y',
+  plan: '主体：段落标记（左上的字碗、两条竖线，与其他字母同一字高）',
+  weights: { [P]: 1 },
+  draw(g, ctx) { return [line(pilcrowPath(g, 13, 17, CAP[0], CAP[1], 4.5), { n: 'mark', role: P, part: 'mark' }), ...bowl(g, ctx, pilcrowArea(13, 17, CAP[0], 4.5))]; },
+  allow: { optical: '字碗在左上是段落标记的字形，与其他字母同一字高' },
+  area: () => [{ n: 'mark', d: pilcrowArea(13, 17, CAP[0], 4.5) }],
+  fx: { t: 'draw', on: ['mark'] }
+};
+more['pilcrow-left'] = pilcrowDir(-1, '从右到左');
+more['pilcrow-right'] = pilcrowDir(1, '从左到右');
+more['case-upper'] = {
+  label: '大写', key: 'square', fit: 'x',
+  plan: '主体：大写 A 和 B，同一字高和基线',
+  weights: { [P]: 1 },
+  draw(g) {
+    return [
+      line(letterA(g, 4, 10, 5, 18, 14), { n: 'A', role: P }),
+      line(`M14 11H16.5A3 3 0 0 0 16.5 5H14V18H16.5A3.5 3.5 0 0 0 16.5 11H14`, { n: 'B', role: P })
+    ];
+  },
+  fx: { t: 'bounce', on: [['A'], ['B']], by: true, o: [12, 19], amp: 1 }
+};
+more['case-lower'] = {
+  label: '小写', key: 'square', fit: 'x',
+  plan: '主体：小写 a 和 b（圆环加竖线；b 的竖线高出到字高）',
+  weights: { [P]: 1 },
+  draw(g) {
+    const { h } = g, R = 4, cy = 14.5;
+    return [
+      line(letterLowA(g, 7, cy, R), { n: 'a', role: P }),
+      line(g.circ(17, cy, R - h) + g.seg(17 - R + h, 3 + h, 17 - R + h, cy + R - h), { n: 'b', role: P })
+    ];
+  },
+  fx: { t: 'bounce', on: [['a'], ['b']], by: true, o: [12, 19], amp: 1 }
+};
+
+// A double-headed or single arrow head by centre line: the tip at (x, y), legs of L, pointing dx, dy.
+const head = (g, x, y, dx, dy, L) => g.pl([[x - dx * L - dy * L, y - dy * L - dx * L], [x, y], [x - dx * L + dy * L, y - dy * L + dx * L]]);
+Object.assign(more, {
+  'spell-check': {
+    label: '拼写检查', key: 'square',
+    plan: '主体：字母 A（占左上）；辅助：右下的对勾',
+    weights: { [P]: 0.66, [S]: 0.34 },
+    draw(g) {
+      return [line(letterA(g, 4, 12, 4, 14, 10), { n: 'A', role: P }), line(g.pl([[13.5, 17.5], [16, 20], [20, 15]]), { n: 'check', role: S })];
+    },
+    fx: { t: 'draw', on: ['check'] }
+  },
+  'wrap-text': {
+    label: '自动换行', key: 'square',
+    plan: '主体：折回的一行（到右边弯下来，箭头指回左边）；辅助：上面的长行和下面的短行',
+    weights: { [P]: 0.55, [S]: 0.45 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.span(3, 4, 21, 4) + g.span(3, 18, 10, 18), { n: 'rows', role: S }),
+        line(`M${n(3 + h)} 11H16.5A3.5 3.5 0 0 1 16.5 18H14` + head(g, 14, 18, -1, 0, 2.25), { n: 'wrap', role: P })
+      ];
+    },
+    light: ['rows'],
+    fx: { t: 'draw', on: ['wrap'] }
+  },
+  'remove-formatting': {
+    label: '清除格式', key: 'square',
+    plan: '主体：带衬线的 T（与字体同形，缩到左上）；辅助：右下的叉号',
+    weights: { [P]: 0.75, [S]: 0.25 },
+    draw(g) {
+      const k = 2.6 - g.h * 0.7;
+      return [
+        line(`M4 7V4H16V7` + g.seg(10, 4, 10, 20), { n: 'T', role: P }),
+        line(g.seg(17.5 - k, 17.5 - k, 17.5 + k, 17.5 + k) + g.seg(17.5 + k, 17.5 - k, 17.5 - k, 17.5 + k), { n: 'x', role: S })
+      ];
+    },
+    fx: { t: 'rotate', on: ['x'], deg: 90, o: [17.5, 17.5] },
+    allow: { keyline: '叉号是两条斜线，与角标的叉号同大，右下角不顶到方框' }
+  },
+  'whole-word': {
+    label: '全字匹配', key: 'square',
+    plan: '主体：小写 a 和 b（与小写同形，缩小）；辅助：下面托住整个词的括号',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const { h } = g, R = 3.5, cy = 10.5;
+      return [
+        line(letterLowA(g, 7.5, cy, R), { n: 'a', role: P }),
+        line(g.circ(16.5, cy, R - h) + g.seg(14, 3 + h, 14, cy + R - h), { n: 'b', role: P }),
+        line(`M4 17V18A2 2 0 0 0 6 20H18A2 2 0 0 0 20 18V17`, { n: 'bracket', role: S })
+      ];
+    },
+    fx: { t: 'draw', on: ['bracket'] }
+  },
+  baseline: {
+    label: '文字颜色', key: 'square', fit: 'y',
+    plan: '主体：字母 A；辅助：下面的色条（与下划线的横线同长同位置）',
+    weights: { [P]: 0.66, [S]: 0.34 },
+    draw(g) {
+      const { h } = g;
+      return [line(letterA(g, 6, 18, 4, 16, 12), { n: 'A', role: P }), line(g.span(5, 21 - h, 19, 21 - h), { n: 'rule', role: S })];
+    },
+    light: ['rule'],
+    fx: { t: 'draw', on: ['rule'] }
+  },
+  overline: {
+    label: '上划线', key: 'square', fit: 'y',
+    plan: '主体：字母 O（圆环）；辅助：上面的横线（与下划线的横线同长）',
+    weights: { [P]: 0.68, [S]: 0.32 },
+    draw(g) {
+      const { h } = g;
+      return [line(g.span(5, 3 + h, 19, 3 + h), { n: 'rule', role: S }), line(g.ring(12, 14.5, 6.5), { n: 'O', role: P })];
+    },
+    light: ['rule'],
+    fx: { t: 'draw', on: ['rule'] }
+  },
+  'line-height': {
+    label: '行高', key: 'square',
+    plan: '主体：右侧三行字线；辅助：左侧上下双向箭头（表示行与行的距离）',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const { h } = g, t = 3 + h, b = 21 - h;
+      return [
+        line(g.seg(6, t, 6, b) + head(g, 6, t, 0, -1, 2) + head(g, 6, b, 0, 1, 2), { n: 'arrow', role: S }),
+        ...[5, 12, 19].map((y, i) => line(g.span(11, y, 21, y), { n: `l${i}`, role: P }))
+      ];
+    },
+    light: ['arrow'],
+    // the lines move apart and close up again
+    fx: [{ t: 'keys', on: ['l0'], y: [-1], ms: 300 }, { t: 'keys', on: ['l2'], y: [1], ms: 300 }]
+  },
+  'letter-spacing': {
+    label: '字间距', key: 'square',
+    plan: '主体：字母 A（居中，与其他字母同高）；辅助：两侧向外的短箭头（表示字与字的距离）',
+    weights: { [P]: 0.66, [S]: 0.34 },
+    draw(g) {
+      const { h } = g, l = 3 + h, r = 21 - h, y = 12;
+      return [
+        line(letterA(g, 9, 15, CAP[0], CAP[1], 15), { n: 'A', role: P }),
+        line(g.seg(l, y, 6, y) + head(g, l, y, -1, 0, 2), { n: 'left', role: S }),
+        line(g.seg(18, y, r, y) + head(g, r, y, 1, 0, 2), { n: 'right', role: S })
+      ];
+    },
+    light: ['left', 'right'],
+    // the arrows push outward, opening the space round the letter
+    fx: [{ t: 'keys', on: ['left'], x: [-0.8, 0], ms: 300 }, { t: 'keys', on: ['right'], x: [0.8, 0], ms: 300 }]
+  },
+  'a-arrow-up': {
+    label: '增大字号', key: 'landscape',
+    allow: { keyline: '字母按常规大写的比例画（宽 9、高 12），不为填满关键形状拉高；箭头与字母同高' },
+    plan: '主体：字母 A（宽 9、高 12 的常规大写，不拉长）；辅助：右侧向上的箭头，与 A 同高',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(letterA(g, 3, 12, 6, 18, 14), { n: 'A', role: P }),
+        line(g.seg(18, 18, 18, 6 + h) + head(g, 18, 6 + h, 0, -1, 3), { n: 'arrow', role: S })
+      ];
+    },
+    light: ['arrow'],
+    fx: { t: 'keys', on: ['arrow'], y: [-1.2, 0.3], ms: 300 }
+  },
+  'a-arrow-down': {
+    label: '减小字号', key: 'landscape',
+    allow: { keyline: '字母按常规大写的比例画（宽 9、高 12），不为填满关键形状拉高；箭头与字母同高' },
+    plan: '主体：字母 A（宽 9、高 12 的常规大写，不拉长）；辅助：右侧向下的箭头，与 A 同高',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(letterA(g, 3, 12, 6, 18, 14), { n: 'A', role: P }),
+        line(g.seg(18, 6, 18, 18 - h) + head(g, 18, 18 - h, 0, 1, 3), { n: 'arrow', role: S })
+      ];
+    },
+    light: ['arrow'],
+    fx: { t: 'keys', on: ['arrow'], y: [1.2, -0.3], ms: 300 }
+  },
+  signature: {
+    anchor: 'base',
+    label: '签名', key: 'square',
+    plan: '主体：一笔连写的签名（带一个圈）；辅助：下面的签名横线',
+    weights: { [P]: 0.66, [S]: 0.34 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(`M4 15C6.5 15 8.5 2.57 11.5 4.27C14 5.73 9.5 15.57 12.5 15C14.5 14.66 15 10.48 17 11.05C18.5 11.61 18 14.43 20 14.43`, { n: 'sign', role: P }),
+        line(g.span(3, 21 - h, 21, 21 - h), { n: 'rule', role: S })
+      ];
+    },
+    light: ['rule'],
+    fx: { t: 'draw', on: ['sign'] }
+  },
+  'text-select': {
+    label: '选择文本', key: 'square',
+    plan: '主体：虚线选框（四个角和四边中段）；细节：框里的两行字（末行短）',
+    weights: { [P]: 0.7, [D]: 0.3 },
+    draw(g) {
+      const { h } = g, a = 3 + h, b = 21 - h, c = 3, r = 2.5 - h * 0.5, m = [11, 13];
+      const corner = (x, y, sx, sy) => `M${n(x)} ${n(y + sy * c)}V${n(y + sy * r)}A${n(r)} ${n(r)} 0 0 ${sx * sy > 0 ? 1 : 0} ${n(x + sx * r)} ${n(y)}H${n(x + sx * c)}`;
+      const dashes = [
+        corner(a, a, 1, 1), g.seg(m[0], a, m[1], a), corner(b, a, -1, 1), g.seg(b, m[0], b, m[1]),
+        corner(b, b, -1, -1), g.seg(m[1], b, m[0], b), corner(a, b, 1, -1), g.seg(a, m[1], a, m[0])
+      ];
+      return [
+        ...dashes.map((d, i) => line(d, { n: `d${i}`, role: P, vc: i })),
+        line(g.seg(8, 10, 16, 10), { n: 'l1', role: D }),
+        line(g.seg(8, 14, 12.5, 14), { n: 'l2', role: D })
+      ];
+    },
+    // the selection marches round the text
+    fx: { t: 'variable', on: ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'], mode: 'iterative', step: 90 }
+  },
+  'text-search': {
+    label: '查找文本', key: 'square',
+    plan: '主体：放大镜（与搜索同形，缩到右下）；辅助：左侧三行字（首行长，后两行短，让出放大镜）',
+    weights: { [P]: 0.52, [S]: 0.48 },
+    draw(g) {
+      const { h } = g, c = 15.5, R = 4.5, k = (R - h) / Math.SQRT2;
+      return [
+        line(g.span(3, 4, 21, 4) + g.span(3, 11, 9, 11) + g.span(3, 18, 9, 18), { n: 'rows', role: S }),
+        shell(g.ring(c, c, R), { n: 'lens', role: P }),
+        line(g.seg(c + k, c + k, 21 - h, 21 - h), { n: 'handle', role: P })
+      ];
+    },
+    light: ['rows'],
+    fx: { t: 'orbit', on: ['lens', 'handle'], R: 0.8 }
+  },
+  'text-quote': {
+    label: '块引用', key: 'square',
+    plan: '主体：三行字（首行长，后两行缩进）；辅助：缩进处的竖条（表示引用）',
+    weights: { [P]: 0.78, [S]: 0.22 },
+    draw(g) {
+      return [
+        line(g.span(3, 4, 21, 4), { n: 'l0', role: P }),
+        line(g.span(9, 12, 21, 12), { n: 'l1', role: P }),
+        line(g.span(9, 20, 21, 20), { n: 'l2', role: P }),
+        line(g.span(4, 11, 4, 21), { n: 'bar', role: S })
+      ];
+    },
+    light: ['bar'],
+    fx: { t: 'draw', on: ['bar'] }
+  }
+});
+
+// A pencil at 45°, tip at bottom left, as pencil in icons.mjs: o is the tip, L the length, W the
+// width, tipL the length of the cone; the band sits back from the end.
+function pencilAt(g, o, L, W, tipL, back) {
+  const { h } = g, a = -Math.PI / 4, Pt = ([u, v]) => [o[0] + u * Math.cos(a) - v * Math.sin(a), o[1] + u * Math.sin(a) + v * Math.cos(a)];
+  const body = [[0, 0], [tipL, -W / 2 + h], [L - h * 1.4, -W / 2 + h], [L - h * 1.4, W / 2 - h], [tipL, W / 2 - h]].map(Pt);
+  return { body: g.polygon(body, [0.9, 0, 1.8, 1.8, 0]), band: g.pl([[L - back, -W / 2 + h], [L - back, W / 2 - h]].map(Pt)) };
+}
+// List rows with a mark at the right of the middle row (list-plus, list-minus, list-x,
+// list-check): the outer rows stop at 15 and the middle one at 11, so the mark (8 across, centred
+// on 17, 12) keeps 2 clear of them.
+const listMark = (label, plan, mark, fx, w = 0.32, allow) => ({
+  label, key: 'square',
+  plan: `主体：左侧三行字线（中间一行短，让出标记）；辅助：右侧的${plan}`,
+  weights: { [P]: 1 - w, [S]: w },
+  ...(allow ? { allow } : {}),
+  draw(g) {
+    return [
+      line(g.span(3, 4, 15, 4) + g.span(3, 12, 11, 12) + g.span(3, 20, 15, 20), { n: 'rows', role: P }),
+      line(mark(g), { n: 'mark', role: S })
+    ];
+  },
+  light: ['mark'],
+  fx
+});
+Object.assign(more, {
+  'text-cursor-input': {
+    label: '输入框', key: 'landscape', fit: 'x',
+    plan: '主体：输入框（横向圆角框，被光标切开）；辅助：工字形光标（与文本光标同形，缩小，穿过输入框）',
+    weights: { [P]: 0.62, [S]: 0.38 },
+    draw(g) {
+      const r = 2, x = 9, t = 3 + g.h, b = 21 - g.h;
+      return [
+        shell(g.box(2, 7, 20, 10, 2.5), { n: 'field', role: P }),
+        line(`M${x + r + 0.5} ${n(t)}H${x + r}A${r} ${r} 0 0 0 ${x} ${n(t + r)}V${n(b - r)}A${r} ${r} 0 0 0 ${x + r} ${n(b)}H${x + r + 0.5}`
+          + `M${x - r - 0.5} ${n(t)}H${x - r}A${r} ${r} 0 0 1 ${x} ${n(t + r)}V${n(b - r)}A${r} ${r} 0 0 1 ${x - r} ${n(b)}H${x - r - 0.5}`, { n: 'beam', role: S, gap: true })
+      ];
+    },
+    light: ['beam'],
+    // the cursor blinks in the field
+    fx: { t: 'keys', on: ['beam'], a: [0.15, 1, 0.15], ms: 720 }
+  },
+  'text-initial': {
+    label: '首字下沉', key: 'square',
+    plan: '主体：左上的大写 T（占两行高）；辅助：右侧两行短字线和底部一整行',
+    weights: { [P]: 0.36, [S]: 0.64 },
+    draw(g) {
+      return [
+        line(g.span(3, 4, 11, 4) + g.seg(7, 4, 7, 12), { n: 'T', role: P }),
+        line(g.span(14, 4, 21, 4) + g.span(14, 12, 21, 12) + g.span(3, 20, 21, 20), { n: 'rows', role: S })
+      ];
+    },
+    light: ['rows'],
+    // the initial grows into place over two lines
+    fx: { t: 'from', on: ['T'], o: [7, 4], s: 0.6 }
+  },
+  'pencil-line': {
+    label: '书写', key: 'live',
+    ends: 'out',
+    plan: '主体：斜放的铅笔（与编辑同形）；辅助：右下的一条横线（写出的字迹）；细节：笔尾的箍',
+    weights: { [P]: 0.74, [S]: 0.16, [D]: 0.1 },
+    draw(g) {
+      const { h } = g, p = pencilAt(g, [1.7 + h * 0.8, 22.3 - h * 0.8], 26.3, 6.4, 5.2, 5.3);
+      return [
+        shell(p.body, { n: 'pencil', role: P }),
+        line(p.band, { n: 'band', role: D, on: 'pencil' }),
+        line(g.span(12, 21 - h, 21, 21 - h), { n: 'ink', role: S })
+      ];
+    },
+    light: ['ink'],
+    fx: [{ t: 'orbit', on: ['pencil', 'band'], R: 0.6, turns: 2 }, { t: 'draw', on: ['ink'] }]
+  },
+  'square-pen': {
+    label: '编写', key: 'square',
+    ends: 'out',
+    plan: '主体：斜放的铅笔（与编辑同形，缩短，笔尖落在框里）；辅助：方框（右上角被铅笔挡住）；细节：笔尾的箍',
+    weights: { [P]: 0.36, [S]: 0.56, [D]: 0.08 },
+    draw(g) {
+      const o = [10, 14], L = 14, W = 5.2, p = pencilAt(g, o, L, W, 4, 3.6);
+      // the clear band round the pencil runs on past its end, so the box's corner is cut away
+      // whole and no piece of it is left beyond the pencil
+      const e = W / 2 + g.g, c = Math.SQRT1_2, Pt = ([u, v]) => [o[0] + (u + v) * c, o[1] + (v - u) * c];
+      const cut = g.polygon([[-g.g, -e], [L + 10, -e], [L + 10, e], [-g.g, e]].map(Pt));
+      return [
+        shell(g.box(3, 3, 18, 18, 4.5), { n: 'box', role: S }),
+        shell(p.body, { n: 'pencil', role: P, cutD: cut }),
+        line(p.band, { n: 'band', role: D, on: 'pencil' })
+      ];
+    },
+    fx: { t: 'orbit', on: ['pencil', 'band'], R: 0.8, turns: 2 },
+    allow: { sliver: '铅笔的间隙以 45° 切过方框的两边，切口两侧是斜角；不是夹出来的碎块' }
+  },
+  'list-plus': listMark('添加到列表', '加号', (g) => g.span(13, 12, 21, 12) + g.span(17, 8, 17, 16), { t: 'rotate', on: ['mark'], deg: 90, o: [17, 12] }),
+  'list-minus': listMark('从列表移除', '减号', (g) => g.span(13, 12, 21, 12), { t: 'keys', on: ['mark'], o: [17, 12], sx: [0.5], ms: 260 }, 0.2, { optical: '减号只有一横，字线在左侧占多数' }),
+  'list-x': listMark('清空列表', '叉号', (g) => { const k = 3.4 - g.h; return g.seg(17 - k, 12 - k, 17 + k, 12 + k) + g.seg(17 + k, 12 - k, 17 - k, 12 + k); }, { t: 'rotate', on: ['mark'], deg: 90, o: [17, 12] }, 0.32, { keyline: '叉号是两条斜线，比加号小一圈，不顶到方框' }),
+  'list-check': listMark('列表已完成', '对勾', (g) => g.pl([[13.5 + g.h, 12.3], [16, 14.8 - g.h / 2], [21 - g.h, 9.8 + g.h / 2]]), { t: 'draw', on: ['mark'] }, 0.24),
+  'list-todo': {
+    label: '待办清单', key: 'square',
+    plan: '主体：四行字线（两项，每项两行，与任务清单同）；细节：第一项前的空方框，第二项前的对勾',
+    weights: { [P]: 0.62, [D]: 0.38 },
+    draw(g) {
+      return [
+        shell(g.box(3, 4, 6, 6, 1.5), { n: 'box', role: D }),
+        line(g.pl([[4, 17], [5.7, 18.7], [8.4, 14.8]]), { n: 'c2', role: D }),
+        ...LIST.map((y, i) => line(row(g, y, TX, LONG[1]), { n: `l${i}`, role: P }))
+      ];
+    },
+    fx: { t: 'draw', on: ['c2'] },
+    allow: listReason
+  },
+  'list-tree': {
+    label: '层级列表', key: 'square',
+    plan: '主体：三行字线（上面一行是父项，下面两行缩进）；辅助：从父项引出、接到两个子项的树枝线',
+    weights: { [P]: 0.62, [S]: 0.38 },
+    draw(g) {
+      return [
+        line(g.span(3, 4, 21, 4) + g.span(12, 12, 21, 12) + g.span(12, 20, 21, 20), { n: 'rows', role: P }),
+        line(`M5 4V10A2 2 0 0 0 7 12H9M5 10V18A2 2 0 0 0 7 20H9`, { n: 'tree', role: S })
+      ];
+    },
+    light: ['tree'],
+    fx: { t: 'draw', on: ['tree'] }
+  }
+});
+
+// Sort by letter: a down arrow on the left, two small letters stacked on the right (A over Z for
+// ascending). The letters stand in 14..20 across, 4..10 and 14..20 down.
+const smallA = (g, y) => letterA(g, 14, 20, y, y + 6, y + 4);
+const smallZ = (g, y) => `M14 ${y}H20L14 ${y + 6}H20`;
+const sortAZ = (asc, label) => ({
+  label, key: 'square',
+  plan: `主体：右侧上下两个小字母（${asc ? 'A 在上、Z 在下' : 'Z 在上、A 在下'}）；辅助：左侧向下的箭头`,
+  weights: { [P]: 0.55, [S]: 0.45 },
+  draw(g) {
+    const { h } = g;
+    return [
+      line(g.seg(7, 3 + h, 7, 21 - h) + head(g, 7, 21 - h, 0, 1, 3), { n: 'arrow', role: S }),
+      line(asc ? smallA(g, 4) : smallZ(g, 4), { n: 'top', role: P }),
+      line(asc ? smallZ(g, 14) : smallA(g, 14), { n: 'bottom', role: P })
+    ];
+  },
+  light: ['arrow'],
+  fx: { t: 'keys', on: ['arrow'], y: [1.2, -0.3], ms: 300 }
+});
+Object.assign(more, {
+  'table-of-contents': {
+    label: '目录', key: 'square',
+    plan: '主体：左侧三行标题（第一行是章，后两行缩进是节）；辅助：右侧对应的页码（短线）',
+    weights: { [P]: 0.64, [S]: 0.36 },
+    draw(g) {
+      return [
+        line(g.span(3, 4, 13, 4) + g.span(6, 12, 13, 12) + g.span(6, 20, 13, 20), { n: 'titles', role: P }),
+        line([4, 12, 20].map((y) => g.span(16, y, 21, y)).join(''), { n: 'pages', role: S })
+      ];
+    },
+    light: ['pages'],
+    fx: { t: 'draw', on: ['titles', 'pages'] }
+  },
+  space: {
+    label: '空格', key: 'square', fit: 'x',
+    plan: '主体：空格符（两端向上的长托架）',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, x0 = 3 + h, x1 = 21 - h, y0 = 9, yb = 15;
+      return [line(`M${n(x0)} ${y0}V${yb - 2}A2 2 0 0 0 ${n(x0 + 2)} ${yb}H${n(x1 - 2)}A2 2 0 0 0 ${n(x1)} ${yb - 2}V${y0}`, { n: 'bar', role: P })];
+    },
+    // the space bar is pressed and springs back
+    fx: { t: 'keys', on: 'all', y: [1.2, 0], ms: 240 }
+  },
+  'type-square': {
+    label: '文本框', key: 'square',
+    ends: 'in',
+    plan: '主体：框里的字母 T（容器加符号，墨少但层级最高）；辅助：方框',
+    weights: { [P]: 0.24, [S]: 0.76 },
+    draw(g) {
+      return [shell(g.box(3, 3, 18, 18, 4.5), { n: 'box', role: S }), line(g.seg(8, 8, 16, 8) + g.seg(12, 8, 12, 16), { n: 'T', role: P, on: 'box' })];
+    },
+    fx: { t: 'draw', on: ['T'] }
+  },
+  'arrow-down-a-z': sortAZ(true, '按字母升序'),
+  'arrow-down-z-a': sortAZ(false, '按字母降序')
+});
+
+// Variants made by rule (GUIDE.md §4.4) of icons drawn in this file.
+const named = (k) => ({ ...(set[k] ?? more[k]), name: k });
+const SLASH_CUT = '斜线的间隙以 45° 切过外形，切口两侧是斜角，与线性变体的斜线一致；不是夹出来的碎块';
+const variants = {
+  'pen-off': off({ ...offFill(slash(named('pen'), { label: '禁止编辑' })), allow: { ...set.pen.allow, sliver: SLASH_CUT } }, 'pen', { t: 'keys', on: ['barrel', 'nib', 'slit'], o: [12, 21], s: [0.88], ms: 240 }),
+};
+
+export default { ...set, ...more, ...variants };

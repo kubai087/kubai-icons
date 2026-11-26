@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { RiCheckLine, RiFileCopyLine } from "@remixicon/react";
+import { CheckIcon, CopyIcon } from "@/components/kit/ui-icons";
 import { Button } from "@/components/ui/button";
 import { browserLocale, pick } from "@/lib/i18n";
 import { useTr } from "@/lib/use-locale";
@@ -60,8 +60,8 @@ export function CopyButton({ text, className, onCopy }: { text: string; classNam
       }}
     >
       <span className="grid *:[grid-area:1/1] *:transition-[opacity,scale] *:duration-200 *:ease-out motion-reduce:*:transition-none">
-        <RiFileCopyLine className={cn("size-4", done && "scale-50 opacity-0")} />
-        <RiCheckLine className={cn("size-4 text-positive", !done && "scale-50 opacity-0")} />
+        <CopyIcon className={cn("size-4", done && "scale-50 opacity-0")} />
+        <CheckIcon className={cn("size-4 text-positive", !done && "scale-50 opacity-0")} />
       </span>
     </Button>
   );

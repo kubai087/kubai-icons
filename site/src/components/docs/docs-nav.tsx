@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItem } from "@/components/kit/styles";
+import { ClipTip } from "@/components/kit/clip-tip";
 import { Glide } from "@/components/kit/glide";
 import { cn } from "@/lib/utils";
 import { hasIconPages } from "@/lib/i18n";
@@ -39,6 +40,11 @@ export function useDocs() {
   return hasIconPages(useLocale()) ? withLearnPages(DOCS) : DOCS;
 }
 
+/** A page in the nav: a long title ends in an ellipsis and shows in full in a tooltip. */
+function NavLink({ href, active, label }: { href: string; active: boolean; label: string }) {
+  return <ClipTip label={label} row={<Link href={href} aria-current={active ? "page" : undefined} className={cn(navItem({ active }), "w-auto shrink-0 whitespace-nowrap pointer-coarse:py-2.5 md:w-full")} />} />;
+}
+
 export function DocsNav() {
   const path = usePathname();
   const tr = useTr();
@@ -51,14 +57,7 @@ export function DocsNav() {
         <div key={g.group} className="contents md:block md:space-y-1">
           <p className="hidden px-2.5 pb-1 text-control font-semibold text-foreground md:block">{tr(g.group, g.zh)}</p>
           {g.items.map((i) => (
-            <Link
-              key={i.href}
-              href={loc(i.href)}
-              aria-current={norm(path ?? "") === norm(loc(i.href)) ? "page" : undefined}
-              className={cn(navItem({ active: norm(path ?? "") === norm(loc(i.href)) }), "w-auto shrink-0 whitespace-nowrap pointer-coarse:py-2.5 md:w-full")}
-            >
-              {tr(i.label, i.zh)}
-            </Link>
+            <NavLink key={i.href} href={loc(i.href)} active={norm(path ?? "") === norm(loc(i.href))} label={tr(i.label, i.zh)} />
           ))}
         </div>
       ))}

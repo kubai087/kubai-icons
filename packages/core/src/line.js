@@ -47,7 +47,12 @@ export function lineMarkup(def, { s = LINE_STROKE.regular, variant = 'outline', 
   const fill = variant === 'fill', duo = variant === 'solid-tint', two = variant === 'line-duo';
   const L = fill ? snap.f : snap.o;
   const dark = colors?.dark ?? 'currentColor', light = colors?.light ?? LIGHT, area = colors?.fill ?? FILL;
-  const ink = (l) => (two && l.lit ? light : dark);
+  // A badge follows --ki-b when it is set (badgeColor), as on the layered icons; fixed colours don't.
+  const ink = (l) => {
+    const c = two && l.lit ? light : dark;
+    if (l.key !== 'badge') return c;
+    return colors ? colors.badge ?? c : `var(--ki-b, ${c})`;
+  };
   const byName = {};
   for (const l of L) if (!/^\d+$/.test(l.key)) byName[l.key] = l;
   const depth = (j, i) => {
@@ -67,6 +72,30 @@ export function lineMarkup(def, { s = LINE_STROKE.regular, variant = 'outline', 
   };
   const tagged = (l, svg) => `<g data-l="${l.key}"${l.ghost ? ' opacity="0"' : ''}>${svg}</g>`;
   const box = 'maskUnits="userSpaceOnUse" x="-6" y="-6" width="36" height="36"><rect x="-6" y="-6" width="36" height="36" fill="#fff"/>';
+  const byKey = {};
+  for (const l of L) byKey[l.key] = l;
+  // The clear bands parts in front cut round them out of layer i (gap, occ, cutD, cut), in ink.
+  const bands = (i, ink) => {
+    const l = L[i], B = [];
+    L.forEach((m, j) => {
+      if (j <= i || m.part === l.part || depth(m, l)) return;
+      if (m.cutD) B.push(tagged(m, `<path d="${m.cutD}" fill="${ink}"${m.tf ? ` transform="${m.tf}"` : ''}/>`));
+      else if (m.cut) B.push(tagged(m, `<path d="${m.cut.d}" fill="none" stroke="${ink}" stroke-width="${n(m.cut.w)}" stroke-linecap="round" pathLength="1"/>`));
+      else if (m.gap || m.occ) B.push(tagged(m, shape(m, ink, 2 * gapOf(s), m.occ ? true : solidForm(m))));
+    });
+    return B;
+  };
+  // line-duo: a light part loses the far half of each dark stroke it reaches under (l.clip, worked
+  // out by the skill), so it does not show through that stroke's outer edge: a band round the dark
+  // layer, less the side the light part keeps (or the strips given); where the dark layer is itself
+  // cut away (its bands, in white) the light part stays.
+  const clipMask = ([key, k, d]) => {
+    const m = byKey[key], t = m.tf ? ` transform="${m.tf}"` : '';
+    if (k === 'strip') return tagged(m, `<path d="${d}" fill="#000"${t}/>`) + bands(L.indexOf(m), '#fff').join('');
+    const keep = k === 'in' ? m.d : k === 'out' ? `M-12 -12H36V36H-12Z${m.d}` : d;
+    return tagged(m, `<path d="${m.d}" fill="none" stroke="#000" stroke-width="${n((2 * s + 0.5) / (m.sc ?? 1))}" stroke-linecap="round" stroke-linejoin="round"${t}/>`)
+      + tagged(m, `<path d="${keep}" fill="#fff" fill-rule="evenodd"${t}/>`) + bands(L.indexOf(m), '#fff').join('');
+  };
   const defs = [], out = [], under = [], back = [];
   L.forEach((l, i) => {
     const c = ink(l);
@@ -79,12 +108,7 @@ export function lineMarkup(def, { s = LINE_STROKE.regular, variant = 'outline', 
       const d = depth(m, l);
       if (d) cuts.push(tagged(m, shape(m, d % 2 ? '#000' : '#fff')));
     });
-    L.forEach((m, j) => {
-      if (j <= i || m.part === l.part || depth(m, l)) return;
-      if (m.cutD) cuts.push(tagged(m, `<path d="${m.cutD}" fill="#000"${m.tf ? ` transform="${m.tf}"` : ''}/>`));
-      else if (m.cut) cuts.push(tagged(m, `<path d="${m.cut.d}" fill="none" stroke="#000" stroke-width="${n(m.cut.w)}" stroke-linecap="round" pathLength="1"/>`));
-      else if (m.gap || m.occ) cuts.push(tagged(m, shape(m, '#000', 2 * gapOf(s), m.occ ? true : solidForm(m))));
-    });
+    cuts.push(...bands(i, '#000'));
     if (skip) return;
     if (duo && l.tint) {
       const holes = L.filter((m, j) => j > i && m.on === l.key && m.k !== 'line').map((m) => tagged(m, shape(m, '#000', 0, true)));
@@ -100,6 +124,10 @@ export function lineMarkup(def, { s = LINE_STROKE.regular, variant = 'outline', 
       defs.push(`<mask id="__K__-m${i}" ${box}${cuts.join('')}</mask>`);
       piece = `<g mask="url(#__K__-m${i})">${piece}</g>`;
     }
+    if (two && l.lit && l.clip) l.clip.forEach((c, j) => {
+      defs.push(`<mask id="__K__-c${i}-${j}" ${box}${clipMask(c)}</mask>`);
+      piece = `<g mask="url(#__K__-c${i}-${j})">${piece}</g>`;
+    });
     (two && l.lit ? back : out).push(piece);
   });
   if (duo) for (const l of [...(snap.x || []), ...(snap.a || [])]) under.push(`<g data-l="${l.key}"><path d="${l.d}" fill="${area}"${l.tf ? ` transform="${l.tf}"` : ''}/></g>`);
@@ -123,8 +151,8 @@ const mix = (c, share) => {
  * light tone and fill are that colour over white; otherwise every part is in that colour (or
  * currentColor), as in the outline files of kubai-icons-static.
  */
-export function lineStill(def, { s = LINE_STROKE.regular, variant = 'outline', color = 'currentColor', size = 24, id = def.name } = {}) {
-  const colors = { dark: color, light: mix(color, 0.42) ?? color, fill: mix(color, 0.2) ?? 'none' };
+export function lineStill(def, { s = LINE_STROKE.regular, variant = 'outline', color = 'currentColor', size = 24, id = def.name, badge } = {}) {
+  const colors = { dark: color, light: mix(color, 0.42) ?? color, fill: mix(color, 0.2) ?? 'none', ...(badge ? { badge } : {}) };
   const m = lineMarkup(def, { s, variant, colors }).replace(/ pathLength="1"/g, '').replace(/__K__/g, id);
   const stack = [];
   let hide = 0;
@@ -142,7 +170,7 @@ export function lineStill(def, { s = LINE_STROKE.regular, variant = 'outline', c
 }
 
 /** A built line icon: the shape every icon module exports, with its layers kept for redrawing. */
-export const line = (name, def) => ({ name, viewBox: LINE_VIEWBOX, style: 'line', line: def, markup: lineMarkup(def), tap: false });
+export const line = (name, def) => ({ name, viewBox: LINE_VIEWBOX, style: 'line', line: def, markup: lineMarkup(def), tap: false, ...(def.tone ? { tone: def.tone } : {}) });
 
 /** The markup of a line icon for the given options (stroke width and variant). */
 export const lineIconMarkup = (ic, { strokeWidth, variant } = {}) =>

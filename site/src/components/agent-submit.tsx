@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { RiFileCopyLine } from "@remixicon/react";
+import { CopyIcon } from "@/components/kit/ui-icons";
 import { copyText } from "@/components/copy-button";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
@@ -21,7 +21,7 @@ export function AgentSubmit() {
       <div className="flex flex-wrap gap-2">
         <Link href={loc("/skill/")} className={buttonVariants({ variant: "outline" })}>{tr("Install the skill", "安装 Skill")}</Link>
         <Button variant="outline" onClick={() => { copyText(submitPrompt(locale)); track("icon_submit", { via: "agent_prompt" }); }}>
-          <RiFileCopyLine data-icon="inline-start" />
+          <CopyIcon data-icon="inline-start" />
           {tr("Copy submit prompt", "复制提交提示词")}
         </Button>
       </div>

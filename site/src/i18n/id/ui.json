@@ -250,5 +250,11 @@
  "Solid": "Padat",
  "Solid tint": "Padat berwarna lembut",
  "Stroke width": "Ketebalan garis",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Ikon yang sama, kini juga digambar dengan garis membulat pada kisi 24: ketebalan garis berapa pun dari 0,25 hingga 3, dalam gaya garis, garis dua warna, padat, dan padat berwarna lembut. Setiap ikon tetap bergerak saat diarahkan kursor."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "Ikon yang sama, kini juga digambar dengan garis membulat pada kisi 24: ketebalan garis berapa pun dari 0,25 hingga 3, dalam gaya garis, garis dua warna, padat, dan padat berwarna lembut. Setiap ikon tetap bergerak saat diarahkan kursor.",
+ "Circle": "Lingkaran",
+ "Square": "Persegi",
+ "Dot": "Titik",
+ "Edit": "Edit",
+ "Shield": "Perisai",
+ "Drawn in the icon's own color": "Dengan warna ikon itu sendiri"
 }

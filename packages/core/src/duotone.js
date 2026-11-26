@@ -23,7 +23,8 @@ export function duoMarkup(def, { colors } = {}) {
   const k = FIT[def.key] || 1, id = '__K__';
   const still = Boolean(colors);
   const layers = still ? def.layers.filter((l) => !/^[ca]\d+$/.test(String(l.n))) : def.layers;
-  const paint = (l) => (colors ? (l.tone === 'b' ? colors.b : colors.a) : l.tone === 'b' ? null : 'currentColor');
+  // A badge drawn in the main colour follows --ki-b when it is set (badgeColor), as on the layered icons.
+  const paint = (l) => (colors ? (l.tone === 'b' ? colors.b : colors.a) : l.tone === 'b' ? null : l.part === 'badge' ? 'var(--ki-b, currentColor)' : 'currentColor');
   const defs = [];
   const shape = (s, ink, extra = 0, dash = false) => {
     // The light tone is set as a style, so --kd-b and color-mix() resolve per instance.
@@ -68,7 +69,7 @@ export function duoMarkup(def, { colors } = {}) {
 }
 
 /** A built two-tone icon: the same shape as a layered one, with its motion as moves. */
-export const duo = (name, markup, moves, ms) => ({ name, markup, viewBox: DUO_VIEWBOX, style: 'duotone', moves, ...(ms ? { ms } : {}), tap: false });
+export const duo = (name, markup, moves, ms, tone) => ({ name, markup, viewBox: DUO_VIEWBOX, style: 'duotone', moves, ...(ms ? { ms } : {}), ...(tone ? { tone } : {}), tap: false });
 
 // ---------- Motion ----------
 // Hover: 480ms on cubic-bezier(.34, 1.56, .64, 1), a small overshoot, to a pose held while

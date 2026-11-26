@@ -1,7 +1,9 @@
 // Copyright (c) 2026 Kubai087. Licensed under the Kubai Icons License; see LICENSE.
 // people: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: user-round users-round user-group id-badge hand thumbs-up thumbs-down smile frown meh accessibility baby person-standing person-walking crown
-import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid, geo } from '../parts.mjs';
+import { corner, notch, MARKS, MARK_FX, xform } from './communication.mjs';
+import { shieldPath } from './security.mjs';
 
 // The two points where circle (ax, ay, ar) meets circle (bx, by, br), left one first.
 function meet([ax, ay, ar], [bx, by, br]) {
@@ -35,6 +37,33 @@ function frownArc(g, y, w, up) {
   return g.arc(c[0], c[1], r * k, 270 - a, 270 + a);
 }
 
+// A copy of icons.mjs's user, the base of its variants here.
+const USER = {
+  label: '用户', key: 'square',
+  allow: { keyline: '人的肩宽 16，比方框窄；放宽会显得胖' },
+  draw: (g) => [shell(g.ring(12, 7.5, 4.875), { n: 'head', role: P }), shell(g.box(4, 14, 16, 7, [6.25, 6.25, 2.5, 2.5]), { n: 'body', role: S })]
+};
+// Small objects for the corner of a person (corner(), communication.mjs), about (x, y): a cog, a
+// star and a shield are the set's own shapes drawn small at the same stroke; a pen.
+const small = (k, reach, shape, at) => ({ draw: (g, x, y) => [shell(xform(shape(geo(g.s / k)), k, x, y))], reach: () => reach, at });
+const COG = small(0.5, 5, (g) => gear(g));
+const STAR = small(0.46, 4.3, (g) => star(g));
+// three eighths of the shield, placed so its straight sides and top stay on whole pixels
+const SHIELD = small(0.375, 4.4, (g) => shieldPath(g), [17, 16.75]);
+// a pencil from its tip at the bottom left up to the top right, as one outline
+const PEN = {
+  draw(g, x, y) {
+    const a = [Math.SQRT1_2, -Math.SQRT1_2], b = [Math.SQRT1_2, Math.SQRT1_2], o = [x - 3, y + 3], w = 1.5 - (g.s - 2) * 0.3;
+    const P0 = (u, v) => [o[0] + a[0] * u + b[0] * v, o[1] + a[1] * u + b[1] * v];
+    return [shell(g.polygon([P0(0.4, 0), P0(2.6, -w), P0(8.2, -w), P0(8.2, w), P0(2.6, w)], [0.6, 0.3, 0.8, 0.8, 0.3]))];
+  },
+  reach: () => 5
+};
+// Points along an arc by its centre line, from angle a0 to a1 (degrees, clockwise), for outlines
+// built as one polygon.
+const arcPts = (cx, cy, r, a0, a1, k = 8) => Array.from({ length: k + 1 }, (_, i) => { const a = ((a0 + ((a1 - a0) * i) / k) * Math.PI) / 180; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; });
+const userMark = (mark, label, fx) => ({ ...notch(corner(USER, mark, { label })), fx: fx ?? MARK_FX[mark] });
+
 // Stick figures (accessibility, person-standing, person-walking): a solid head and one line.
 const headDot = (g, x, y, r) => solid(g.circ(x, y, n(r)), { n: 'head', role: S });
 
@@ -51,7 +80,7 @@ function thumb(g, flip) {
   ];
 }
 
-export default {
+const SET = {
   'user-round': {
     label: '头像', key: 'circle',
     allow: { sliver: '面性中肩膀切出圆的下沿，与圆边相交处是切口的锐角，不是碎块' },
@@ -312,5 +341,240 @@ export default {
     },
     // 皇冠: lifted and set back down on the base
     fx: { t: 'keys', on: ['crown'], y: [-1.6, 0.3], ms: 300 }
+  },
+  'user-square': {
+    label: '方形头像', key: 'square',
+    plan: '主体：人像（头和肩，肩线两端接到方框底边，像被方框裁切）；辅助：方框。与头像同一种裁切，换成方框',
+    weights: { [P]: 0.37, [S]: 0.63 },
+    allow: { sliver: '面性中肩膀切出方框的下沿，与下沿相交处是切口的锐角，不是碎块（与头像相同）' },
+    draw(g, ctx) {
+      // Filled, the shoulders are cut out whole through the frame's bottom edge (as user-round),
+      // and the head keeps a stroke clear of them.
+      const { h, s } = g, d = s - 2, R = 3.5 - d * 0.5, r = 6, cy = 22, yb = 21 - h, a = (Math.asin((yb - cy) / r) * 180) / Math.PI, fill = ctx?.variant === 'fill';
+      const hy = fill ? Math.min(10 + d * 0.25, cy - r - h - s - R) : 10 + d * 0.25;
+      return [
+        shell(g.box(3, 3, 18, 18, 4.25), { n: 'frame', role: S }),
+        shell(g.ring(12, hy, R), { n: 'head', role: P, on: 'frame' }),
+        fill ? shell(g.ring(12, cy, r + h), { n: 'body', role: P, on: 'frame' }) : line(g.arc(12, cy, r, 180 - a, 360 + a), { n: 'body', role: P, on: 'frame' })
+      ];
+    },
+    fx: { t: 'bounce', on: ['head'], o: [12, 13], amp: 1.1 }
+  },
+  contact: {
+    label: '联系人', key: 'landscape',
+    plan: '主体：卡片；辅助：人像（头和肩，居中，肩线接到卡片底边）。与工牌同一张卡片，不带字线',
+    weights: { [P]: 0.66, [S]: 0.34 },
+    allow: { sliver: '面性中肩膀切出卡片的下沿，与下沿相交处是切口的锐角，不是碎块（与头像相同）' },
+    draw(g, ctx) {
+      // filled, the shoulders are cut out whole through the bottom edge, as in user-square
+      const { h, s } = g, d = s - 2, R = 2.75 - d * 0.5, r = 5, cy = 21, yb = 20 - h, a = (Math.asin((yb - cy) / r) * 180) / Math.PI, fill = ctx?.variant === 'fill';
+      const hy = fill ? Math.min(10.5 + d * 0.25, cy - r - h - s - R) : 10.5 + d * 0.25;
+      return [
+        shell(g.box(2, 4, 20, 16, 4), { n: 'card', role: P }),
+        shell(g.ring(12, hy, R), { n: 'head', role: S, on: 'card' }),
+        fill ? shell(g.ring(12, cy, r + h), { n: 'body', role: S, on: 'card' }) : line(g.arc(12, cy, r, 180 - a, 360 + a), { n: 'body', role: S, on: 'card' })
+      ];
+    },
+    fx: { t: 'bounce', on: ['head', 'body'], o: [12, 20], amp: 0.9 }
+  },
+  angry: {
+    label: '生气', key: 'circle',
+    plan: '主体：脸（圆）；细节：两只斜向中间压低的眼睛（短斜线）和下垂的嘴',
+    weights: { [P]: 0.72, [D]: 0.28 },
+    draw(g, ctx) {
+      // the eyes' inner ends keep a stroke of ink between them in the fill
+      const k = 1 - (g.s - 2) * 0.3, Pt = ([x, y]) => [12 + (x - 12) * k, 12 + (y - 12) * k], o = Pt([8, 8.5]), i = Pt([10, 10]);
+      const m = ctx?.variant === 'fill' ? Math.max(12 - i[0], g.s) : 12 - i[0];
+      return [
+        faceRing(g),
+        line(g.pl([o, [12 - m, i[1]]]) + g.pl([[24 - o[0], o[1]], [12 + m, i[1]]]), { n: 'eyes', role: D, on: 'face' }),
+        line(frownArc(g, 16.25, 3.5, 1.75), { n: 'mouth', role: D, on: 'face' })
+      ];
+    },
+    // 生气: the face shakes
+    fx: { t: 'shake', on: 'all', x: 0.8 }
+  },
+  laugh: {
+    label: '大笑', key: 'circle',
+    plan: '主体：脸（圆）；细节：两只眼睛和张开的嘴（半圆，闭合）',
+    weights: { [P]: 0.7, [D]: 0.3 },
+    draw(g, ctx) {
+      // fill: the eyes rise so a stroke of ink stays between them and the mouth
+      const { h, s } = g, k = 1 - (s - 2) * 0.3, r = 5 * k - h, y = 13, ey = ctx?.variant === 'fill' ? Math.min(8.75, y - h - s - g.dr * (1 - (s - 2) * 0.2)) : 8.75;
+      return [
+        faceRing(g),
+        eyes(g, { y: ey }),
+        shell(`M${n(12 - r)} ${y}H${n(12 + r)}A${n(r)} ${n(r)} 0 0 1 ${n(12 - r)} ${y}Z`, { n: 'mouth', role: D, on: 'face' })
+      ];
+    },
+    // 大笑: the face bobs with laughter
+    fx: { t: 'keys', on: 'all', o: [12, 22], y: [-0.8, 0, -0.6, 0], ms: 520 }
+  },
+  wink: {
+    label: '眨眼', key: 'circle',
+    plan: '主体：脸（圆）；细节：左眼（实心点）、右眼（闭上的弧线）和上扬的嘴',
+    weights: { [P]: 0.72, [D]: 0.28 },
+    draw(g, ctx) {
+      // the closed eye moves in with the weight, and in the fill also apart from the open one
+      const d = Math.max(0, g.s - 2), k = 1 - (g.s - 2) * 0.2, w = ctx?.variant === 'fill' ? d * 2.6 : 0;
+      return [
+        faceRing(g),
+        solid(g.dot(FACE.ex - w, FACE.ey, k), { n: 'eye', role: D, on: 'face' }),
+        line(g.arc(15 - 0.2 * d, 10 + 0.4 * d, 1.75 - 0.7 * d, 200, 340), { n: 'shut', role: D, on: 'face' }),
+        line(g.arc(12, 10.5, 5, 36.87 + w * 14, 143.13 - w * 14), { n: 'mouth', role: D, on: 'face' })
+      ];
+    },
+    // 眨眼: the open eye closes for a moment
+    fx: { t: 'keys', on: ['eye'], o: [FACE.ex, FACE.ey], sy: [0.2, 1], ms: 260 }
+  },
+  annoyed: {
+    label: '不满', key: 'circle',
+    plan: '主体：脸（圆）；细节：两只眯成横线的眼睛和平直的嘴',
+    weights: { [P]: 0.72, [D]: 0.28 },
+    draw(g, ctx) {
+      const k = 1 - (g.s - 2) * 0.3, X = (x) => 12 + (x - 12) * k, m = ctx?.variant === 'fill' ? Math.max(2 * k, g.s) : 2 * k;
+      return [faceRing(g), line(g.seg(X(7.5), 9, 12 - m, 9) + g.seg(12 + m, 9, X(16.5), 9), { n: 'eyes', role: D, on: 'face' }), line(g.seg(8.5, 15, 15.5, 15), { n: 'mouth', role: D, on: 'face' })];
+    },
+    fx: { t: 'keys', on: ['eyes'], x: [-0.8, 0.8, 0] }
+  },
+  mars: {
+    label: '男性', key: 'square',
+    light: [], // one glyph
+    plan: '主体：圆环和指向右上的箭头（一个符号）',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, c = [10, 14], R = 7, e = (R - h) * Math.SQRT1_2, tip = [21 - h, 3 + h];
+      return [
+        line(g.ring(...c, R), { n: 'ring', role: P }), // a glyph: no part of it fills
+        line(g.seg(c[0] + e, c[1] - e, ...tip) + g.pl([[tip[0] - 5, tip[1]], tip, [tip[0], tip[1] + 5]]), { n: 'arrow', role: P })
+      ];
+    },
+    fx: { t: 'keys', on: ['arrow'], x: [1, -0.2], y: [-1, 0.2] }
+  },
+  venus: {
+    label: '女性', key: 'square', fit: 'y',
+    light: [], // one glyph
+    plan: '主体：圆环和下面的十字（一个符号）',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, R = 6.5;
+      return [line(g.ring(12, 9.5, R), { n: 'ring', role: P }), line(g.seg(12, 16 - h, 12, 21 - h) + g.span(8, 18, 16, 18), { n: 'cross', role: P })];
+    },
+    fx: { t: 'wiggle', on: 'all', o: [12, 9.5], deg: 10 },
+    allow: { keyline: '符号本身窄' }
+  },
+  ghost: {
+    label: '幽灵', key: 'portrait',
+    plan: '主体：幽灵（圆顶，下沿是三个尖的波边，一个闭合形）；细节：两只眼睛',
+    weights: { [P]: 0.88, [D]: 0.12 },
+    draw(g, ctx) {
+      const { h } = g, R = 8 - h, yb = 22 - h;
+      const pts = [...arcPts(12, 10, R, 180, 360, 12), [20 - h, yb], [17.33, yb - 2.5], [14.67, yb], [12, yb - 2.5], [9.33, yb], [6.67, yb - 2.5], [4 + h, yb]];
+      const rad = pts.map((_, i) => (i <= 12 ? 0 : i % 2 ? 1 : 0.8));
+      // fill: the eyes keep a stroke of ink between them
+      const k = 1 - (g.s - 2) * 0.2, dx = ctx?.variant === 'fill' ? Math.max(2.5, g.dr * k + g.h) : 2.5;
+      return [shell(g.polygon(pts, rad), { n: 'ghost', role: P }), solid(g.dot(12 - dx, 10.5, k) + g.dot(12 + dx, 10.5, k), { n: 'eyes', role: D, on: 'ghost' })];
+    },
+    // 飘: the ghost floats up and down
+    fx: { t: 'keys', on: 'all', y: [-1.2, 0.2, -0.8, 0], ms: 700 }
+  },
+  glasses: {
+    label: '眼镜', key: 'landscape', fit: 'x',
+    light: [], // one object
+    plan: '主体：两片圆镜框；辅助：中间的鼻梁（拱形）',
+    weights: { [P]: 0.73, [S]: 0.27 },
+    draw(g) {
+      const { h } = g, y = 13, R = 4.25;
+      return [
+        shell(g.ring(2 + R, y, R), { n: 'l', role: P }),
+        shell(g.ring(22 - R, y, R), { n: 'r', role: P }),
+        line(g.arc(12, y, 6.25 - R + h + 1.75 - h, 180, 360), { n: 'bridge', role: S })
+      ];
+    },
+    fx: { t: 'keys', on: 'all', y: [-1, 0.2], ms: 300 }
+  },
+  'person-running': {
+    anchor: 'base',
+    label: '跑步', key: 'portrait', fit: 'y',
+    light: [], // one object (GUIDE.md §4.2)
+    plan: '主体：身体（前倾的躯干、弯曲的手臂、大步迈开的腿）；辅助：头（实心圆点，在身体前上方）。以脚底定位',
+    weights: { [P]: 0.82, [S]: 0.18 },
+    draw(g) {
+      const r = 2.25 + (g.s - 2) * 0.3, N = [13, 9], H = [10.5, 14.5];
+      return [
+        headDot(g, 15.5, 2 + r, r),
+        line(g.pl([[6.5, 10.5], [9, 8.5], N, [15.5, 11.5], [18.5, 10]]) + g.pl([N, H]) + g.pl([[5.5, 17.5], [8.5, 18], H, [14.5, 17], [13.5, 21]]), { n: 'body', role: P })
+      ];
+    },
+    fx: { t: 'keys', on: 'all', x: [1.5, -0.4], y: [-0.8, 0], ms: 380 },
+    allow: { keyline: '跑步的人本身窄' }
+  },
+  'person-waving': {
+    anchor: 'base',
+    label: '挥手', key: 'portrait', fit: 'y',
+    light: [], // one object (GUIDE.md §4.2)
+    plan: '主体：身体（与站立的人相同，右臂举起）；辅助：头（实心圆点）。以脚底定位',
+    weights: { [P]: 0.78, [S]: 0.22 },
+    draw(g) {
+      const r = 2.25 + (g.s - 2) * 0.3;
+      return [
+        headDot(g, 12, 2 + r, r),
+        line(g.pl([[8, 14], [12, 10], [16.5, 7.5]]) + g.seg(16.5, 7.5, 17.5, 3.5), { n: 'arm', role: P }),
+        line(g.seg(12, 10, 12, 15) + g.pl([[8.5, 21], [12, 15], [15.5, 21]]), { n: 'body', role: P })
+      ];
+    },
+    // 挥手: the raised arm waves
+    fx: { t: 'wiggle', on: ['arm'], o: [12, 10], deg: 10, hz: 3 },
+    allow: { keyline: '人本身窄' }
+  },
+  balloon: {
+    label: '气球', key: 'portrait', fit: 'y',
+    plan: '主体：气球（圆）；辅助：下面的结和弯曲的绳子',
+    weights: { [P]: 0.86, [S]: 0.14 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.ring(12, 10, 7), { n: 'balloon', role: P }),
+        solid(g.polygon([[10.4, 18.6], [12, 16.4], [13.6, 18.6]], [0.4, 0.4, 0.4]), { n: 'knot', role: S, part: 'string' }),
+        line(`M12 18.6C10.6 19.6 13.4 20.6 12 ${n(22 - h)}`, { n: 'string', role: S, part: 'string' })
+      ];
+    },
+    // 飘: the balloon sways on its string
+    fx: { t: 'wiggle', on: 'all', o: [12, 22], deg: 7, hz: 1.6 },
+    allow: { keyline: '气球本身窄' }
+  },
+  shirt: {
+    label: '衣服', key: 'square',
+    plan: '主体：T 恤（领口、两只短袖和衣身，一个闭合形）',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, t = 3 + h, sl = 10;
+      const pts = [[3 + h, 6], [8.5, t], ...arcPts(12, t, 3.5, 180, 0, 6).slice(1, -1), [15.5, t], [21 - h, 6], [21 - h, sl], [17, sl], [17, 21 - h], [7, 21 - h], [7, sl], [3 + h, sl]];
+      const rad = pts.map((p, i) => (i === 0 || i === pts.length - 1 ? 1 : i === 1 || i === pts.length - 13 ? 1.2 : 0.8));
+      return [shell(g.polygon(pts, rad), { n: 'shirt', role: P })];
+    },
+    fx: { t: 'wiggle', on: 'all', o: [12, 3], deg: 6 }
   }
+};
+
+const ROUND = { label: '头像', key: 'circle', draw: (...a) => SET['user-round'].draw(...a), allow: SET['user-round'].allow };
+export default {
+  ...SET,
+  'user-plus': userMark('plus', '添加用户'),
+  'user-minus': userMark('minus', '移除用户'),
+  'user-x': userMark('x', '删除用户'),
+  'user-search': userMark('search', '查找用户'),
+  'user-cog': userMark(COG, '用户设置', { t: 'rotate', on: ['badge'], deg: 45, oBadge: true }),
+  'user-lock': userMark('lock', '用户锁定', { t: 'keys', on: ['badge1'], y: [-1, 0.3], ms: 260 }),
+  'user-pen': userMark(PEN, '编辑用户', { t: 'orbit', on: ['badge'], R: 0.7 }),
+  'user-shield': userMark(SHIELD, '管理员', { t: 'keys', on: ['badge'], oBadge: true, s: [0.85, 1.06], ms: 300 }),
+  'user-star': userMark(STAR, '关注的人', { t: 'rotate', on: ['badge'], deg: 72, oBadge: true }),
+  'user-round-plus': { ...notch(corner(ROUND, 'plus', { label: '添加头像' })), fx: MARK_FX.plus },
+  'user-round-check': { ...notch(corner(ROUND, 'check', { label: '头像已认证' })), fx: MARK_FX.check },
+  'user-round-x': { ...notch(corner(ROUND, 'x', { label: '移除头像' })), fx: MARK_FX.x },
+  'user-round-minus': { ...notch(corner(ROUND, 'minus', { label: '移除头像' })), fx: MARK_FX.minus },
+  'user-round-search': { ...notch(corner(ROUND, 'search', { label: '查找成员' })), fx: MARK_FX.search },
+  'user-round-pen': { ...notch(corner(ROUND, PEN, { label: '编辑资料' })), allow: { ...SET['user-round'].allow, keyline: '笔斜放在右下角，笔尾伸出圆一点' }, fx: { t: 'orbit', on: ['badge'], R: 0.7 } },
+  'user-round-lock': { ...notch(corner(ROUND, 'lock', { label: '账户锁定' })), fx: MARK_FX.lock },
+  'user-round-cog': { ...notch(corner(ROUND, COG, { label: '账户设置' })), allow: { ...SET['user-round'].allow, keyline: '齿轮比加号大，伸出圆一点' }, fx: { t: 'rotate', on: ['badge'], deg: 45, oBadge: true } }
 };

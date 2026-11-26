@@ -6,7 +6,7 @@ import {
   PlayingCards, Kite, Pinwheel, RollerSkate, Trophy, FerrisWheel, HotAirBalloon, Lighthouse, Windmill, Castle, Campfire,
   Magnet, Wand, Bomb, PiggyBank, Gift, Cake, Donut, IceCream, Popcorn, Sushi, Watermelon, Cat, Dog, Bee, Butterfly, Whale,
 } from "kubai-icons-react";
-import { RiTwitterXLine } from "@remixicon/react";
+import { XBrandIcon } from "@/components/kit/ui-icons";
 import { tile } from "@/components/kit/styles";
 import { WallPause } from "@/components/kit/wall-pause";
 import { cn } from "@/lib/utils";
@@ -169,7 +169,7 @@ function OpenCard({ title, action, href, style }: { title: string; action: strin
     >
       <span className="truncate text-control font-semibold">{title}</span>
       <span className="flex items-center gap-1 truncate text-caption font-medium text-[#5393FF]">
-        <RiTwitterXLine aria-hidden className="size-3 shrink-0" />
+        <XBrandIcon aria-hidden className="size-3 shrink-0" />
         {action}
       </span>
     </a>

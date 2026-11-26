@@ -1,6 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
-import { RiContrast2Line } from "@remixicon/react";
+import { SunMoonIcon } from "@/components/kit/ui-icons";
 import { Moon, Sun } from "kubai-icons-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -23,7 +23,7 @@ export function ThemeMenuItem({ className }: { className?: string }) {
   const tr = useTr();
   return (
     <DropdownMenuItem className={className} onClick={toggle} closeOnClick={false}>
-      <RiContrast2Line />{tr("Toggle dark mode", "切换深色模式")}
+      <SunMoonIcon />{tr("Toggle dark mode", "切换深色模式")}
     </DropdownMenuItem>
   );
 }

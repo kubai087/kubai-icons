@@ -14,7 +14,9 @@ Each file includes a margin for the drop shadow, so a 28px image matches a live 
 
 - `svg/`: the default blue (#5393FF)
 - `svg-soft/`: the soft variant on blue-grey
-- `icons.json`, `categories.json`: metadata
+- `svg-duotone/`: the two-tone style
+- `svg-line/`: the line style, 2px strokes in `currentColor`
+- `icons.json`, `duotone.json`, `line.json`, `categories.json`: metadata
 
 For any other color, request `https://icons.kubai.design/api/icon/folder.svg?color=EC4899`, or open an icon on the [website](https://icons.kubai.design/icons/) and download it in the color you pick.
 

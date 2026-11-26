@@ -2,6 +2,8 @@
 // education: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: book book-open book-marked graduation-cap award backpack whiteboard library
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { badge } from '../kit.mjs';
+import { notched } from '../variants.mjs';
 
 // A point on an axis turned by deg about o (a leaning book).
 const tilt = (o, deg) => { const a = (deg * Math.PI) / 180, c = Math.cos(a), s0 = Math.sin(a); return ([u, v]) => [o[0] + u * c - v * s0, o[1] + u * s0 + v * c]; };
@@ -26,7 +28,7 @@ const openBook = (g) => {
   return { book: `M12 ${n(yt + 3)}` + right + left, page: `M12 ${n(yt + 3)}` + right, spine: g.seg(12, yt + 3, 12, dip) };
 };
 
-export default {
+const SET = {
   book: {
     label: '书本', key: 'portrait',
     plan: '主体：封面；细节：底部书页（一条线从右边进来，绕过左下角的圆角）',
@@ -152,12 +154,136 @@ export default {
     draw(g) {
       const { h } = g, W = 6, H = 15, Pt = tilt([15.1, 21], -9.5), c = 2 - h;
       return [
-        shell(g.box(3, 3, 6, 18, 2), { n: 'b1', role: P, part: 'up' }),
-        shell(g.box(7, 7, 6, 14, 2), { n: 'b2', role: P, part: 'up' }),
+        // the two upright books share one straight edge: square corners where they meet, so no
+        // rounded corner of one pokes into the other
+        shell(g.polygon([[3 + h, 3 + h], [9 - h, 3 + h], [9 - h, 21 - h], [3 + h, 21 - h]], [c, c, 0, c]), { n: 'b1', role: P, part: 'up' }),
+        shell(g.polygon([[9 - h, 7 + h], [13 - h, 7 + h], [13 - h, 21 - h], [9 - h, 21 - h]], [0, c, c, 0]), { n: 'b2', role: P, part: 'up' }),
         shell(g.polygon([[h, -h], [W - h, -h], [W - h, -H + h], [h, -H + h]].map(Pt), c), { n: 'b3', role: S, occ: true })
       ];
     },
     // the leaning book tips upright and falls back against the others
     fx: { t: 'keys', on: ['b3'], o: [15.1, 21], r: [7, -1.5], ms: 360 }
-  }
+  },
+  'book-text': {
+    label: '文本书', key: 'portrait',
+    plan: '主体：封面；细节：底部书页和封面上两行字（第二行短）',
+    weights: { [P]: 0.66, [D]: 0.34 },
+    draw(g, ctx) {
+      // fill: at heavy weights the two lines move apart, a stroke of ink between them
+      const e = ctx?.variant === 'fill' ? Math.max(0, g.s - 2) : 0;
+      return [cover(g), pages(g, ctx), line(g.seg(9, 7 - e, 15, 7 - e), { n: 'l1', role: D, on: 'cover' }), line(g.seg(9, 11 + e, 13, 11 + e), { n: 'l2', role: D, on: 'cover' })];
+    },
+    // 阅读: the lines are written on the cover
+    fx: { t: 'draw', on: ['l1', 'l2'] }
+  },
+
+  'book-stack': {
+    anchor: 'base',
+    label: '书堆', key: 'square',
+    plan: '主体：三本平放叠起来的书（书脊朝外的圆角长条，长短不一，相邻两本共用一条边）',
+    weights: { [P]: 1 },
+    light: [],
+    draw(g, ctx) {
+      // filled, the books stand a stroke apart
+      const e = ctx?.variant === 'fill' ? g.h : 0;
+      return [
+        shell(g.box(3, 15 + e, 18, 6 - e, 1.5), { n: 'b1', role: P, part: 'stack' }),
+        shell(g.box(5, 9 + e, 15, 6 - 2 * e, 1.5), { n: 'b2', role: P, part: 'stack' }),
+        shell(g.box(4, 3, 14, 6 - e, 1.5), { n: 'b3', role: P, part: 'stack' })
+      ];
+    },
+    // 放上: the top book slides into place on the stack
+    fx: { t: 'keys', on: ['b3'], x: [1.6, -0.2], ms: 320 }
+  },
+
+
+  'school-bell': {
+    label: '上课铃', key: 'portrait', fit: 'y',
+    plan: '主体：铃身（圆顶，下沿外撇）；辅助：顶上的握柄（实心短条）和下面的铃锤（实心点）',
+    weights: { [P]: 0.76, [S]: 0.24 },
+    draw(g) {
+      const { h } = g, r = 6 - h;
+      return [
+        solid(g.area(10, 2, 4, 5, 1.6), { n: 'handle', role: S, part: 'bell' }),
+        shell(`M${n(4 + h)} ${n(17 - h)}L${n(6 + h)} 14.5V12A${n(r)} ${n(r)} 0 0 1 ${n(18 - h)} 12V14.5L${n(20 - h)} ${n(17 - h)}Z`, { n: 'bell', role: P, part: 'bell' }),
+        solid(g.dot(12, 20.25), { n: 'clapper', role: S })
+      ];
+    },
+    // 摇铃: the bell swings by its handle
+    fx: { t: 'wiggle', on: 'all', o: [12, 3], deg: 12, hz: 3 }
+  },
+  'pencil-case': {
+    label: '笔袋', key: 'landscape', fit: 'x',
+    plan: '主体：袋身（横放的圆角长条）；细节：上部的拉链线（切开袋身）和拉链头（短竖线）',
+    weights: { [P]: 0.74, [D]: 0.26 },
+    draw(g) {
+      const { h } = g;
+      return [
+        shell(g.box(2, 6, 20, 13, 4.5), { n: 'pouch', role: P }),
+        line(g.seg(2 + h, 11, 22 - h, 11), { n: 'zip', role: D, on: 'pouch', ends: 'out' }),
+        line(g.seg(16, 11, 16, 14.5), { n: 'pull', role: D, on: 'pouch', ends: 'in' })
+      ];
+    },
+    // 拉开: the zip pull slides along and back
+    fx: { t: 'keys', on: ['pull'], x: [-7, 0], ms: 520 }
+  },
+
+  locker: {
+    label: '储物柜', key: 'portrait',
+    ends: 'in',
+    plan: '主体：柜门（竖放的圆角长方形）；细节：上部两道通风口（横线）和右下的把手（实心圆点）',
+    weights: { [P]: 0.76, [D]: 0.24 },
+    draw(g, ctx) {
+      // fill: at heavy weights the lower vent moves down, a stroke of ink between the two
+      const e = ctx?.variant === 'fill' ? Math.max(0, g.s - 2) : 0;
+      return [
+        shell(g.box(4, 2, 16, 20, 3.5), { n: 'door', role: P }),
+        line(g.seg(9, 7, 15, 7) + g.seg(9, 11 + e, 15, 11 + e), { n: 'vents', role: D, on: 'door' }),
+        solid(g.dot(14.5, 16.5, 0.8), { n: 'handle', role: D, on: 'door' })
+      ];
+    },
+    // 开柜: the handle is pulled and the door rattles
+    fx: { t: 'shake', on: 'all', x: 0.4, ms: 420 }
+  },
+  'pencil-cup': {
+    anchor: 'base',
+    label: '笔筒', key: 'portrait',
+    plan: '主体：笔筒（上宽下窄的圆角杯）；辅助：插在里面的三支笔（从杯口伸出，向两侧散开）',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const { h } = g;
+      return [
+        line(g.seg(8.5, 11, 6, 3.5) + g.seg(12, 11, 12, 2 + h) + g.seg(15.5, 11, 18, 4.5), { n: 'pens', role: S }),
+        shell(g.polygon([[4 + h, 11 + h], [20 - h, 11 + h], [18.5 - h, 22 - h], [5.5 + h, 22 - h]], [1, 1, 2.4, 2.4]), { n: 'cup', role: P })
+      ];
+    },
+    // 取笔: the pens lift out of the cup and drop back
+    fx: { t: 'keys', on: ['pens'], y: [-1.5, 0.2], ms: 320 }
+  },
+  'globe-stand': {
+    anchor: 'base',
+    label: '地球仪', key: 'live', fit: 'y',
+    plan: '主体：球体（圆环）；辅助：从右上绕到左下的半圆支架、竖杆和底座（一个整体）',
+    weights: { [P]: 0.42, [S]: 0.58 },
+    draw(g) {
+      const { h } = g, c = [11, 9], R = 9;
+      return [
+        line(g.arc(c[0], c[1], R, -45, 135) + g.seg(c[0], c[1] + R, c[0], 22 - h) + g.span(6, 22 - h, 16, 22 - h), { n: 'stand', role: S }),
+        shell(g.ring(c[0], c[1], 6.5), { n: 'globe', role: P })
+      ];
+    },
+    // 转动: the globe and its frame turn a little on the stand and settle
+    fx: { t: 'keys', on: 'all', o: [11, 21], r: [-6, 3], ms: 400 }
+  },
+  //NEW
+};
+
+// Variants made by rule (kit.mjs) of the icons above.
+export default {
+  ...SET,
+  'book-check': { ...notched(badge(SET.book, 'check', { label: '已读' })), fx: { t: 'draw', on: ['badge'] } },
+  'book-plus': { ...notched(badge(SET.book, 'plus', { label: '添加书籍' })), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  'book-minus': { ...notched(badge(SET.book, 'minus', { label: '移除书籍' })), fx: { t: 'keys', on: ['badge'], oBadge: true, sx: [0.2], ms: 260 } },
+  'book-x': { ...notched(badge(SET.book, 'x', { label: '删除书籍' })), fx: { t: 'rotate', on: ['badge'], deg: 90, oBadge: true } },
+  //VAR
 };

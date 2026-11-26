@@ -17,24 +17,26 @@ export default function Page() {
       <DuotoneWall />
       <p>图标会依次播放动效，鼠标悬停时停在悬停姿态。如需搜索、换色或复制代码，在<Link href="/zh/icons/?style=duotone">图标库</Link>中选择<strong>双色</strong>。</p>
       <h2>通过 import 路径切换风格</h2>
-      <p>双色图标与分层图标的名称和参数相同，切换风格只需修改一行 import。每个软件包都提供 <code>duotone</code> 路径：</p>
+      <p>图标库有三种风格：分层、双色和线性。同一个图标在各风格中的名称和参数相同，切换风格只需修改一行 import。每个软件包都提供 <code>duotone</code> 和 <code>line</code> 路径：</p>
       <Code lang="tsx" code={`// 分层
 import { Folder, BellOff } from "kubai-icons-react";
 // 双色
 import { Folder, BellOff } from "kubai-icons-react/duotone";
+// 线性
+import { Folder, BellOff } from "kubai-icons-react/line";
 
 <Folder size={24} color="#5A76F2" />`} />
       <table>
-        <thead><tr><th>软件包</th><th>双色</th></tr></thead>
+        <thead><tr><th>软件包</th><th>分层</th><th>双色</th><th>线性</th></tr></thead>
         <tbody>
-          <tr><td>React</td><td><code>kubai-icons-react/duotone</code></td></tr>
-          <tr><td>Vue</td><td><code>kubai-icons-vue/duotone</code></td></tr>
-          <tr><td>JavaScript</td><td><code>kubai-icons/duotone</code></td></tr>
-          <tr><td>Web Component</td><td><code>&lt;kubai-icon name=&quot;folder&quot; icon-style=&quot;duotone&quot;&gt;</code></td></tr>
-          <tr><td>静态 SVG</td><td><code>kubai-icons-static/svg-duotone/folder.svg</code></td></tr>
+          <tr><td>React</td><td><code>kubai-icons-react</code></td><td><code>kubai-icons-react/duotone</code></td><td><code>kubai-icons-react/line</code></td></tr>
+          <tr><td>Vue</td><td><code>kubai-icons-vue</code></td><td><code>kubai-icons-vue/duotone</code></td><td><code>kubai-icons-vue/line</code></td></tr>
+          <tr><td>JavaScript</td><td><code>kubai-icons</code></td><td><code>kubai-icons/duotone</code></td><td><code>kubai-icons/line</code></td></tr>
+          <tr><td>Web Component</td><td>不写 <code>icon-style</code></td><td><code>icon-style=&quot;duotone&quot;</code></td><td><code>icon-style=&quot;line&quot;</code></td></tr>
+          <tr><td>静态 SVG</td><td><code>svg/folder.svg</code></td><td><code>svg-duotone/folder.svg</code></td><td><code>svg-line/folder.svg</code></td></tr>
         </tbody>
       </table>
-      <p>双色图标的数量少于分层图标。大部分双色图标有同名的分层图标，少数只有双色版本。完整列表见 <code>kubai-icons/duotone/icons.json</code>，仅有双色版本的图标标有 <code>only: true</code>。</p>
+      <p>静态文件在 <code>kubai-icons-static</code> 中。双色和线性图标的数量少于分层图标，大部分有同名的分层图标，少数只有其中一种风格。完整列表见 <code>kubai-icons/duotone/icons.json</code> 和 <code>kubai-icons/line/icons.json</code>，只有一种风格的图标标有 <code>only: true</code>。线性图标还可以调整粗细，有四种变体，见<Link href="/zh/docs/guides/line/">线性风格</Link>。</p>
       <h2>颜色</h2>
       <p>主色取 <code>color</code>，未设置时取 <code>currentColor</code>。浅色由主色以 40% 与白色混合得到。如需自行指定浅色（例如在深色背景上），设置 <code>--kd-b</code>：</p>
       <Code lang="css" code={`.sidebar .kubai-duotone { --kd-b: #2B3566; }`} />

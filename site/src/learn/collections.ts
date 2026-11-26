@@ -281,12 +281,3 @@ export const collectionById = (id: string) => COLLECTIONS.find((c) => c.id === i
 /** The collections an icon appears in. */
 export const collectionsWith = (name: string) => COLLECTIONS.filter((c) => c.icons.includes(name));
 
-/** Other collections that share the most icons with one. */
-export function relatedCollections(collection: Collection, limit = 4) {
-  const own = new Set(collection.icons);
-  return COLLECTIONS.filter((c) => c.id !== collection.id)
-    .map((c) => ({ c, shared: c.icons.filter((i) => own.has(i)).length }))
-    .sort((a, b) => b.shared - a.shared)
-    .slice(0, limit)
-    .map(({ c }) => c);
-}

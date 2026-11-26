@@ -2,6 +2,7 @@
 // arrows: icons of this catalogue category (catalog.mjs), drawn by the rules in GUIDE.md.
 // To draw: arrow-up arrow-down arrow-left arrow-right arrow-up-right arrow-up-left arrow-down-right arrow-down-left arrow-up-down arrow-left-right chevron-up chevron-down chevron-left chevron-right chevrons-up chevrons-down corner-down-right corner-up-left expand shrink external-link log-in log-out redo undo rotate-ccw sync merge split move import export
 import { n, P, S, D, cup, arch, heart, pin, cloud, hill, flagCloth, star, gear, speaker, shell, line, solid } from '../parts.mjs';
+import { enclose } from '../kit.mjs';
 
 // --- Arrow family -------------------------------------------------------------------------------
 // A straight arrowhead is two legs at 90°, each reaching L back along the shaft and L across it
@@ -165,6 +166,235 @@ function hump(back, label) {
     allow: { keyline: '圆弧与刷新同径 17.5，头部在弧端向下伸出' }
   };
 }
+
+// --- Arrows to and from a line, chevron pairs -----------------------------------------------------
+// A drawing made pointing up, turned to face another way about the centre.
+const TURN = { up: ([x, y]) => [x, y], right: ([x, y]) => [24 - y, x], down: ([x, y]) => [24 - x, 24 - y], left: ([x, y]) => [y, 24 - x] };
+/** A chevron with its vertex at V, pointing along u, legs L along and across (CV, the one shape). */
+const chev = (V, u, L = CV) => { const v = [-u[1], u[0]], B = [V[0] - u[0] * L, V[1] - u[1] * L]; return `M${n(B[0] + v[0] * L)} ${n(B[1] + v[1] * L)}L${n(V[0])} ${n(V[1])}L${n(B[0] - v[0] * L)} ${n(B[1] - v[1] * L)}`; };
+// Two chevrons facing on one axis share the box: their legs are 5, as two arrows take a shorter head.
+const CV2 = 5;
+
+// An arrow up to a bar (to-line) or up from a bar (from-line), drawn pointing up and turned. The
+// bar is 16 long, a little wider than the head; 4 lies between the bar and the arrow (centre lines).
+function barArrow(dir, to, label) {
+  const T = TURN[dir], u = DIRS[dir];
+  // to: the bar and the head both sit at the front, so the whole moves 1 back toward the tail
+  const d = to ? 1 : 0;
+  return {
+    label, key: 'square', fit: u[0] ? 'x' : 'y', ...(to ? { nudge: [-u[0] * d, -u[1] * d] } : {}),
+    plan: to ? '主体：箭头（头部与单支箭头相同），指向前方的横线；辅助：横线，比箭头头部略宽。箭头尖与横线相距 4；横线和头部都在前端，整体向尾部挪 1'
+      : '主体：箭头（头部与单支箭头相同），从横线出发；辅助：箭尾后方的横线，比箭头头部略宽。箭尾与横线相距 4',
+    weights: to ? { [P]: 0.66, [S]: 0.34 } : { [P]: 0.64, [S]: 0.36 },
+    draw(g) {
+      const { h } = g, by = to ? 3 + h + d : 21 - h, tip = to ? by + 4 : 3 + h, tail = to ? 21 - h + d : by - 4;
+      const [b0, b1] = [T([4, by]), T([20, by])];
+      return [line(g.span(b0[0], b0[1], b1[0], b1[1]), { n: 'bar', role: S }), line(arrow(g, T([12, tail]), T([12, tip]), L1), { n: 'arrow', role: P })];
+    },
+    light: ['arrow'],
+    // to: the arrow darts at the bar; from: it leaves the bar and springs back
+    fx: { t: 'keys', on: ['arrow'], x: [u[0] * (to ? 1.2 : 1.6), -u[0] * 0.25], y: [u[1] * (to ? 1.2 : 1.6), -u[1] * 0.25] }
+  };
+}
+
+// Two chevrons on one axis, pointing apart (open) or toward each other (closed), legs CV2. The
+// vertices (open) or the leg ends (closed) stay at 4 and 20 at every weight; 6 lies between them.
+function chevPair(vertical, open, label) {
+  const T = vertical ? (p) => p : ([x, y]) => [y, x];
+  return {
+    label, key: 'square', fit: vertical ? 'y' : 'x',
+    plan: open ? '主体：两个相背的折角，尖端在两端，中间相距 6；两个折角对放时腿短一些（各 5），像两支箭头并用时头部短一些'
+      : '主体：两个相向的折角，尖端在中间相对，相距 6，开口朝外；腿各 5，与上下折角相同',
+    weights: { [P]: 1 },
+    draw() {
+      const a = open ? 4 : 4 + CV2, b = open ? 20 : 20 - CV2, ua = T(open ? [0, -1] : [0, 1]), ub = T(open ? [0, 1] : [0, -1]);
+      return [line(chev(T([12, a]), ua, CV2), { n: 'c1', role: P }), line(chev(T([12, b]), ub, CV2), { n: 'c2', role: P })];
+    },
+    // the two move apart (open) or close in (closed) and spring back
+    fx: [{ t: 'keys', on: ['c1'], ...(vertical ? { y: [open ? -1.2 : 1.2, 0] } : { x: [open ? -1.2 : 1.2, 0] }) }, { t: 'keys', on: ['c2'], ...(vertical ? { y: [open ? 1.2 : -1.2, 0] } : { x: [open ? 1.2 : -1.2, 0] }) }],
+    allow: { keyline: '对放的折角腿各 5，宽 12' }
+  };
+}
+
+// A chevron against a bar: to the first (left) or the last (right). The bar is as tall as the
+// chevron and 4 from its vertex.
+function chevEnd(last, label) {
+  const M = last ? ([x, y]) => [24 - x, y] : (p) => p;
+  return {
+    label, key: 'square',
+    plan: '主体：折角（与单个折角同形），指向一侧；辅助：折角尖前方的竖线，与折角同高，相距 4',
+    weights: { [P]: 0.6, [S]: 0.4 },
+    draw(g) {
+      const [bx] = M([7, 0]), V = M([11, 12]);
+      return [line(g.seg(bx, 6, bx, 18), { n: 'bar', role: S }), line(chev(V, [last ? 1 : -1, 0]), { n: 'chev', role: P })];
+    },
+    fx: { t: 'keys', on: ['chev'], x: [last ? 1.2 : -1.2, last ? -0.2 : 0.2] },
+    allow: { keyline: '折角本身小，与单个折角同高 14' }
+  };
+}
+
+
+// --- Block arrows, arrows at a dot, turns, double-headed arrows -----------------------------------
+/** A clockwise polygon given by its outer edge, moved in by d along every edge (its centre line). */
+function inset(pts, d) {
+  const N = pts.length, off = pts.map((p, i) => {
+    const q = pts[(i + 1) % N], [ux, uy] = unit(q[0] - p[0], q[1] - p[1]);
+    return [[p[0] - uy * d, p[1] + ux * d], [ux, uy]];
+  });
+  return off.map((_, i) => {
+    const [a, u] = off[(i + N - 1) % N], [b, v] = off[i], det = u[0] * v[1] - u[1] * v[0];
+    if (Math.abs(det) < 1e-9) return b;
+    const t = ((b[0] - a[0]) * v[1] - (b[1] - a[1]) * v[0]) / det;
+    return [a[0] + u[0] * t, a[1] + u[1] * t];
+  });
+}
+// The block arrow, pointing up, by its outer edge: a head with 45° sides from the tip down to its
+// base at y hb, and a shaft x 8..16 down to y sb (straight edges on whole pixels). The rounded tip
+// takes back 0.85, so the tip is drawn out to 2.15 and its ink reaches 3.
+const blockPts = (hb, sb) => { const t = 2.15, w = hb - t; return [[12, t], [12 + w, hb], [16, hb], [16, sb], [8, sb], [8, hb], [12 - w, hb]]; };
+const BLOCK_R = [1.1, 1, 0, 1.75, 1.75, 0, 1];
+const block = (g, T, hb, sb) => g.polygon(inset(blockPts(hb, sb), g.h).map(T), BLOCK_R);
+
+function big(dir, label) {
+  const T = TURN[dir], u = DIRS[dir];
+  return {
+    label, key: 'square', fit: u[0] ? 'x' : 'y',
+    plan: '主体：空心的粗箭头（一个闭合外形）：45° 斜边的头部高 9、宽 14，杆宽 8；尖角圆角 1，凹角为 0',
+    weights: { [P]: 1 },
+    draw(g) { return [shell(block(g, T, 12, 21), { n: 'arrow', role: P })]; },
+    fx: { t: 'keys', on: 'all', x: [u[0] * 1.4, -u[0] * 0.3], y: [u[1] * 1.4, -u[1] * 0.3] }
+  };
+}
+// The block arrow shortened, with a dash behind its tail, as wide as the shaft.
+function bigDash(dir, label) {
+  const T = TURN[dir], u = DIRS[dir];
+  return {
+    label, key: 'square', fit: u[0] ? 'x' : 'y',
+    plan: '主体：空心的粗箭头（与粗箭头同形，头部矮一些、宽 12，杆短一些）；辅助：杆尾后方的一条短横线，与杆同宽，相距 2',
+    weights: { [P]: 0.84, [S]: 0.16 },
+    draw(g) {
+      const a = T([8, 20]), b = T([16, 20]);
+      return [shell(block(g, T, 11, 17), { n: 'arrow', role: P }), line(g.span(a[0], a[1], b[0], b[1]), { n: 'dash', role: S })];
+    },
+    fx: { t: 'keys', on: ['arrow'], x: [u[0] * 1.3, -u[0] * 0.25], y: [u[1] * 1.3, -u[1] * 0.25] }
+  };
+}
+
+// An arrow leaving a dot (from: drawn up from a dot below) or arriving at it (to: drawn up to a
+// dot above), turned to face dir. The dot is larger than a list dot, as it is half the sign; 2 lies between it and the
+// shaft at every weight.
+function dotArrow(dir, from, label) {
+  const T = TURN[dir], u = DIRS[dir];
+  return {
+    label, key: 'square', fit: u[0] ? 'x' : 'y', ...(from ? { nudge: [-u[0] * 0.5, -u[1] * 0.5] } : {}),
+    plan: from ? '主体：箭头（头部与单支箭头相同），从圆点出发；辅助：箭尾后方的实心圆点（比列表圆点大，是符号的一半），相距 2。头部在前端，整体向尾部挪 0.5'
+      : '主体：箭头（头部与单支箭头相同），指向前方的实心圆点；辅助：圆点，相距 2',
+    weights: { [P]: 0.8, [S]: 0.2 },
+    draw(g) {
+      const { h } = g, R = g.dr * 1.25;
+      // the to-drawing is the from-drawing turned half round, its arrow reversed
+      const W = from ? ([x, y]) => T([x, y + 0.5]) : (p) => TURN.down(T(p));
+      const end = 21 - 2 * R - 2 - h, dc = W([12, 21 - R]);
+      return [solid(g.circ(dc[0], dc[1], n(R)), { n: 'dot', role: S }), line(from ? arrow(g, W([12, end]), W([12, 3 + h]), L1) : arrow(g, W([12, 3 + h]), W([12, end]), L1), { n: 'arrow', role: P })];
+    },
+    light: ['arrow'],
+    fx: { t: 'keys', on: ['arrow'], x: [u[0] * 1.4, -u[0] * 0.25], y: [u[1] * 1.4, -u[1] * 0.25] }
+  };
+}
+
+// The turn of corner-down-right (down the left, round a corner, out to the right) mapped by m;
+// a reflection (det -1) reverses the arc.
+function turnAs(m, flip, label) {
+  return {
+    label, key: 'square',
+    plan: '主体：转弯的箭头（竖段、圆角、横段和头部一笔画成），与向右下转弯同形，转到另一个方向',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, x0 = 4, y0 = 15, r = 5, tip = [21 - h, y0];
+      const [a, b, c, d] = [[x0, 3 + h], [x0, y0 - r], [x0 + r, y0], tip].map(m);
+      const hd = headPts(tip, [1, 0], L1).map(m);
+      return [line(`M${n(a[0])} ${n(a[1])}L${n(b[0])} ${n(b[1])}A${r} ${r} 0 0 ${flip ? 1 : 0} ${n(c[0])} ${n(c[1])}L${n(d[0])} ${n(d[1])}` + g.pl(hd), { n: 'arrow', role: P })];
+    },
+    // the arrow pushes on the way its head points
+    fx: (() => { const o = m([0, 0]), e = m([1, 0]), dx = e[0] - o[0], dy = e[1] - o[1]; return { t: 'keys', on: 'all', x: [dx * 1.4, -dx * 0.25], y: [dy * 1.4, -dy * 0.25] }; })()
+  };
+}
+
+// One line with a head at each end: across (horizontal), up and down, or along a diagonal.
+function twoWay(kind, label) {
+  const D2 = { h: [1, 0], v: [0, 1], d: [1, -1], d2: [1, 1] }[kind], diag = kind[0] === 'd';
+  return {
+    label, key: diag ? 'square' : 'live', ...(diag ? {} : { fit: kind === 'h' ? 'x' : 'y' }),
+    plan: diag ? '主体：一条斜线，两端各一个箭头头部（与斜向箭头同法，腿落在横竖方向）；两个头时头部短一些'
+      : '主体：一条直线，两端各一个箭头头部；两个头时头部短一些（腿各 4）',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, u = unit(D2[0], D2[1]);
+      // straight: ends at 2..22 by the ink; diagonal: tips in the corners of the square 3..21
+      const r = diag ? 9 - h : 10 - h, A = diag ? [12 - D2[0] * r, 12 - D2[1] * r] : [12 - u[0] * r, 12 - u[1] * r], B = diag ? [12 + D2[0] * r, 12 + D2[1] * r] : [12 + u[0] * r, 12 + u[1] * r];
+      return [line(g.seg(A[0], A[1], B[0], B[1]) + g.pl(headPts(B, u, L2)) + g.pl(headPts(A, [-u[0], -u[1]], L2)), { n: 'arrow', role: P })];
+    },
+    // 移动: slides one way, then the other, and settles
+    fx: { t: 'keys', on: 'all', x: [D2[0] * 1.1, -D2[0] * 1.1, 0], y: [D2[1] * 1.1, -D2[1] * 1.1, 0] }
+  };
+}
+
+
+// --- U-turns, folds, enclosed arrows --------------------------------------------------------------
+// A U-turn: the head points back along the top line (y 9), which turns down round a half circle
+// of radius 5.5 on the right and comes back along the bottom (y 20). back: the head on the left.
+function uTurn(back, label) {
+  const M = back ? (p) => p : ([x, y]) => [24 - x, y];
+  return {
+    label, key: 'square', light: [],
+    plan: '主体：掉头的箭头（上横段、右侧半圆、下横段和头部一笔画成），头部与单支箭头相同',
+    weights: { [P]: 1 },
+    draw(g) {
+      const { h } = g, r = 5.5, x1 = 21 - h - r, tip = M([3 + h, 9]), [a, b, c] = [[x1, 9], [x1, 9 + 2 * r], [10, 9 + 2 * r]].map(M);
+      return [line(`M${n(tip[0])} ${n(tip[1])}L${n(a[0])} ${n(a[1])}A${r} ${r} 0 0 ${back ? 1 : 0} ${n(b[0])} ${n(b[1])}L${n(c[0])} ${n(c[1])}` + g.pl(headPts(tip, [back ? -1 : 1, 0], L1)), { n: 'arrow', role: P })];
+    },
+    fx: { t: 'keys', on: 'all', x: [back ? -1.4 : 1.4, back ? 0.25 : -0.25] }
+  };
+}
+
+// Folding or unfolding about a dashed line across the middle: two arrows point at it (fold) or
+// away from it (unfold), with the shorter head of two arrows. Drawn for the vertical fold and
+// turned a quarter for the horizontal one.
+function fold(vertical, closing, label) {
+  const T = vertical ? (p) => p : ([x, y]) => [y, x];
+  return {
+    label, key: 'live',
+    plan: closing ? '主体：上下两支箭头，指向中间；辅助：中间的虚线（三段短线，约占四分之一），表示折线。两支并用，头部用短的一种'
+      : '主体：上下两支箭头，从中间指向两端；辅助：中间的虚线（三段短线，约占四分之一），表示折线。两支并用，头部用短的一种',
+    weights: { [P]: 0.75, [S]: 0.25 },
+    draw(g) {
+      const { h } = g, far = 2 + h, near = 8;
+      const one = (sg) => { const F = T([12, 12 + sg * (12 - far)]), N = T([12, 12 + sg * (12 - near)]); return closing ? arrow(g, F, N, L2) : arrow(g, N, F, L2); };
+      const dash = [[2, 6], [10, 14], [18, 22]].map(([a, b]) => { const A = T([a, 12]), B = T([b, 12]); return g.span(A[0], A[1], B[0], B[1]); }).join('');
+      return [line(dash, { n: 'line', role: S }), line(one(-1), { n: 'a1', role: P }), line(one(1), { n: 'a2', role: P })];
+    },
+    light: ['line'],
+    fx: (() => { const k = closing ? 1.2 : -1.2, ax = vertical ? 'y' : 'x'; return [{ t: 'keys', on: ['a1'], [ax]: [k, 0] }, { t: 'keys', on: ['a2'], [ax]: [-k, 0] }]; })()
+  };
+}
+
+// Arrows and chevrons in a circle or a rounded square (kit.mjs enclose): the symbol moves the
+// way it points.
+const encl = (icon, name, shape, label, k, u, on) => ({ ...enclose({ ...icon, name }, shape, { label, k }), fx: { t: 'keys', on, x: [u[0] * 1.1, -u[0] * 0.2], y: [u[1] * 1.1, -u[1] * 0.2] } });
+// An arrow knocked out of a disc or a square (fill) would leave thin wedges of ink between the
+// legs of its head and the shaft: in the fill the head is knocked out whole, a triangle squared
+// off half a stroke behind the leg ends.
+const solidHead = (icon) => ({
+  ...icon,
+  draw(g, ctx) {
+    const L = icon.draw(g, ctx);
+    const [a, t, b] = L.find((l) => l.n === 'arrow').d.match(/M[^M]*$/)[0].match(/-?[\d.]+/g).map(Number).reduce((r, v, i) => (i % 2 ? (r[r.length - 1].push(v), r) : [...r, [v]]), []);
+    const [bx, by] = unit((a[0] + b[0]) / 2 - t[0], (a[1] + b[1]) / 2 - t[1]), k = g.h;
+    // the other variants keep it hidden (ghost), so the motion finds it in every variant
+    return [...L, solid(g.pl([t, a, [a[0] + bx * k, a[1] + by * k], [b[0] + bx * k, b[1] + by * k], b], true), { n: 'head', role: P, ...(ctx?.variant === 'fill' ? {} : { ghost: true }) })];
+  }
+});
+
 
 export default {
   'arrow-up': straight('up', '向上箭头'),
@@ -336,5 +566,63 @@ export default {
     area: (g) => { const { h } = g, x0 = 3 + h, x1 = 14 - h, y0 = 2 + h, y1 = 22 - h, c = 3 - h; return [{ n: 'page', d: `M${n(x1)} ${n(y0 + 4)}L${n(x1 - 4)} ${n(y0)}H${n(x0 + c)}A${n(c)} ${n(c)} 0 0 0 ${n(x0)} ${n(y0 + c)}V${n(y1 - c)}A${n(c)} ${n(c)} 0 0 0 ${n(x0 + c)} ${n(y1)}H${n(x1 - c)}A${n(c)} ${n(c)} 0 0 0 ${n(x1)} ${n(y1 - c)}Z` }]; },
     light: ['arrow'],
     fx: { t: 'keys', on: ['arrow'], x: [1.2, -0.2] }
-  }
+  },
+  'chevrons-left': chevrons('left', '双左折角'),
+  'chevrons-right': chevrons('right', '双右折角'),
+  'chevrons-up-down': chevPair(true, true, '上下折角'),
+  'chevrons-down-up': chevPair(true, false, '上下收拢'),
+  'chevrons-left-right': chevPair(false, true, '左右折角'),
+  'chevrons-right-left': chevPair(false, false, '左右收拢'),
+  'chevron-first': chevEnd(false, '到最前'),
+  'chevron-last': chevEnd(true, '到最后'),
+  'arrow-up-to-line': barArrow('up', true, '移到顶部'),
+  'arrow-down-to-line': barArrow('down', true, '移到底部'),
+  'arrow-left-to-line': barArrow('left', true, '移到最左'),
+  'arrow-right-to-line': barArrow('right', true, '移到最右'),
+  'arrow-up-from-line': barArrow('up', false, '从底部向上'),
+  'arrow-down-from-line': barArrow('down', false, '从顶部向下'),
+  'arrow-left-from-line': barArrow('left', false, '从右侧向左'),
+  'arrow-right-from-line': barArrow('right', false, '从左侧向右'),
+  'arrow-big-up': big('up', '粗向上箭头'),
+  'arrow-big-down': big('down', '粗向下箭头'),
+  'arrow-big-left': big('left', '粗向左箭头'),
+  'arrow-big-right': big('right', '粗向右箭头'),
+  'arrow-big-up-dash': bigDash('up', '粗向上箭头（横线）'),
+  'arrow-big-down-dash': bigDash('down', '粗向下箭头（横线）'),
+  'arrow-up-from-dot': dotArrow('up', true, '从圆点向上'),
+  'arrow-down-to-dot': dotArrow('down', false, '向下到圆点'),
+  'corner-down-left': turnAs(([x, y]) => [24 - x, y], true, '换行'),
+  'corner-up-right': turnAs(([x, y]) => [x, 24 - y], true, '向右上转弯'),
+  'corner-right-down': turnAs(([x, y]) => [y, x], true, '向右下折返'),
+  'corner-left-down': turnAs(([x, y]) => [24 - y, x], false, '向左下转弯'),
+  'corner-right-up': turnAs(([x, y]) => [y, 24 - x], false, '向右上折返'),
+  'corner-left-up': turnAs(([x, y]) => [24 - y, 24 - x], true, '向左上折返'),
+  'move-horizontal': twoWay('h', '左右移动'),
+  'move-vertical': twoWay('v', '上下移动'),
+  'move-diagonal': twoWay('d', '斜向移动'),
+  'move-diagonal-2': twoWay('d2', '反斜向移动'),
+  'undo-2': uTurn(true, '返回'),
+  'redo-2': uTurn(false, '前进'),
+  'fold-vertical': fold(true, true, '上下折叠'),
+  'unfold-vertical': fold(true, false, '上下展开'),
+  'fold-horizontal': fold(false, true, '左右折叠'),
+  'unfold-horizontal': fold(false, false, '左右展开'),
+  'circle-arrow-up': encl(solidHead(straight('up', '向上箭头')), 'arrow-up', 'circle', '圆形向上箭头', 0.5, DIRS.up, ['arrow', 'head']),
+  'circle-arrow-down': encl(solidHead(straight('down', '向下箭头')), 'arrow-down', 'circle', '圆形向下箭头', 0.5, DIRS.down, ['arrow', 'head']),
+  'circle-arrow-left': encl(solidHead(straight('left', '向左箭头')), 'arrow-left', 'circle', '圆形向左箭头', 0.5, DIRS.left, ['arrow', 'head']),
+  'circle-arrow-right': encl(solidHead(straight('right', '向右箭头')), 'arrow-right', 'circle', '圆形向右箭头', 0.5, DIRS.right, ['arrow', 'head']),
+  'circle-arrow-up-right': encl(solidHead(diagonal('up-right', '向右上箭头')), 'arrow-up-right', 'circle', '圆形右上箭头', 0.5, [0.75, -0.75], ['arrow', 'head']),
+  'square-arrow-up': encl(solidHead(straight('up', '向上箭头')), 'arrow-up', 'square', '方形向上箭头', 0.5, DIRS.up, ['arrow', 'head']),
+  'square-arrow-down': encl(solidHead(straight('down', '向下箭头')), 'arrow-down', 'square', '方形向下箭头', 0.5, DIRS.down, ['arrow', 'head']),
+  'square-arrow-left': encl(solidHead(straight('left', '向左箭头')), 'arrow-left', 'square', '方形向左箭头', 0.5, DIRS.left, ['arrow', 'head']),
+  'square-arrow-right': encl(solidHead(straight('right', '向右箭头')), 'arrow-right', 'square', '方形向右箭头', 0.5, DIRS.right, ['arrow', 'head']),
+  'square-arrow-up-right': encl(solidHead(diagonal('up-right', '向右上箭头')), 'arrow-up-right', 'square', '方形右上箭头', 0.5, [0.75, -0.75], ['arrow', 'head']),
+  'circle-chevron-up': encl(chevron('up', '向上折角'), 'chevron-up', 'circle', '圆形向上折角', 0.52, DIRS.up, ['chev']),
+  'circle-chevron-down': encl(chevron('down', '向下折角'), 'chevron-down', 'circle', '圆形向下折角', 0.52, DIRS.down, ['chev']),
+  'circle-chevron-left': encl(chevron('left', '向左折角'), 'chevron-left', 'circle', '圆形向左折角', 0.52, DIRS.left, ['chev']),
+  'circle-chevron-right': encl(chevron('right', '向右折角'), 'chevron-right', 'circle', '圆形向右折角', 0.52, DIRS.right, ['chev']),
+  'square-chevron-up': encl(chevron('up', '向上折角'), 'chevron-up', 'square', '方形向上折角', 0.52, DIRS.up, ['chev']),
+  'square-chevron-down': encl(chevron('down', '向下折角'), 'chevron-down', 'square', '方形向下折角', 0.52, DIRS.down, ['chev']),
+  'square-chevron-left': encl(chevron('left', '向左折角'), 'chevron-left', 'square', '方形向左折角', 0.52, DIRS.left, ['chev']),
+  'square-chevron-right': encl(chevron('right', '向右折角'), 'chevron-right', 'square', '方形向右折角', 0.52, DIRS.right, ['chev'])
 };

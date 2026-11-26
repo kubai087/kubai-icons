@@ -250,5 +250,11 @@
  "Solid": "مصمت",
  "Solid tint": "مصمت ملوّن",
  "Stroke width": "سماكة الخط",
- "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "الأيقونات نفسها، مرسومة أيضًا بخطوط مستديرة على شبكة 24: أي سماكة خط من 0.25 إلى 3، بأنماط خطي وخطي بلونين ومصمت ومصمت ملوّن. ولا تزال كل أيقونة تتحرك عند التمرير."
+ "The same icons, also drawn in rounded lines on a 24 grid: any stroke width from 0.25 to 3, in line, line two-tone, solid and solid tint. Each one still moves on hover.": "الأيقونات نفسها، مرسومة أيضًا بخطوط مستديرة على شبكة 24: أي سماكة خط من 0.25 إلى 3، بأنماط خطي وخطي بلونين ومصمت ومصمت ملوّن. ولا تزال كل أيقونة تتحرك عند التمرير.",
+ "Circle": "دائرة",
+ "Square": "مربع",
+ "Dot": "نقطة",
+ "Edit": "تعديل",
+ "Shield": "درع",
+ "Drawn in the icon's own color": "بلون الأيقونة نفسها"
 }

@@ -5,6 +5,8 @@
 //               fill below), the hierarchical and palette modes, and 24/16px at 1x
 // keylines.png  every icon at 120px over the keylines, its own key shape drawn heavier, with
 //               its parts coloured by role (primary ink, secondary blue, detail orange)
+// More than PAGE icons are split over sheet-1.png, sheet-2.png ... (and keylines-1.png ...): one
+// screenshot of a full set would be taller than Chrome can capture.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,6 +21,9 @@ const only = (opt('--only') || '').split(',').filter(Boolean);
 const out = path.resolve(opt('--out') || path.join(here, 'check-out'));
 fs.mkdirSync(out, { recursive: true });
 const names = only.length ? only : Object.keys(ALL);
+const PAGE = 240;
+const pages = Array.from({ length: Math.ceil(names.length / PAGE) }, (_, i) => names.slice(i * PAGE, (i + 1) * PAGE));
+const file = (base, i) => path.join(out, pages.length > 1 ? `${base}-${i + 1}.png` : `${base}.png`);
 let id = 0;
 const r = (n, o) => render(ALL[n], { id: `s${id++}`, color: '#1E2235', ...o });
 export const ROLE_INK = { primary: '#1E2235', secondary: '#3D6BFF', detail: '#F2853A' };
@@ -31,18 +36,18 @@ const row = (n) => `<div class="row"><div class="name">${n}<small>${ALL[n].label
   <div class="col small">${r(n, { size: 24 })}${r(n, { size: 16 })}<br>${r(n, { size: 24, variant: 'fill' })}${r(n, { size: 16, variant: 'fill' })}</div></div>`;
 const css = `body{margin:0;padding:16px;font:12px -apple-system,system-ui;background:#fff;color:#1E2235}
 .big{position:relative;flex:none}.big svg{position:absolute;left:0;top:0}.col svg{margin:2px 4px}`;
-const html = `<!doctype html><meta charset="utf-8"><style>${css}
+const html = (list) => `<!doctype html><meta charset="utf-8"><style>${css}
 .wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;width:1280px}
 .row{display:flex;align-items:center;gap:14px;border-bottom:1px solid #eef;padding:4px 0}
 .name{width:92px;font-weight:600}.name small{display:block;font-weight:400;color:#889}
-</style><div class="wrap">${names.map(row).join('')}</div>`;
-screenshot(html, path.join(out, 'sheet.png'), { width: 1312, height: 40 + Math.ceil(names.length / 2) * 112, scale: 1 });
+</style><div class="wrap">${list.map(row).join('')}</div>`;
+pages.forEach((list, i) => screenshot(html(list), file('sheet', i), { width: 1312, height: 40 + Math.ceil(list.length / 2) * 112, scale: 1 }));
 
 const card = (n) => `<div class="card">${over(n, 120, { roleColors: ROLE_INK })}<b>${n}</b><small>${ALL[n].key}${ALL[n].fit ? ` · 贴合 ${ALL[n].fit}` : ''}</small></div>`;
-const kl = `<!doctype html><meta charset="utf-8"><style>${css}
+const kl = (list) => `<!doctype html><meta charset="utf-8"><style>${css}
 .grid{display:grid;grid-template-columns:repeat(8,140px);gap:10px;width:1190px}
 .card{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0}.card b{font-size:11px}.card small{color:#889;font-size:10px}
 .legend{margin-bottom:10px}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 12px;vertical-align:-1px}
-</style><div class="legend">角色：<i style="background:${ROLE_INK.primary}"></i>主体<i style="background:${ROLE_INK.secondary}"></i>辅助<i style="background:${ROLE_INK.detail}"></i>细节</div><div class="grid">${names.map(card).join('')}</div>`;
-screenshot(kl, path.join(out, 'keylines.png'), { width: 1222, height: 60 + Math.ceil(names.length / 8) * 170, scale: 1 });
-console.log(`sheet.png, keylines.png: ${names.length} icons`);
+</style><div class="legend">角色：<i style="background:${ROLE_INK.primary}"></i>主体<i style="background:${ROLE_INK.secondary}"></i>辅助<i style="background:${ROLE_INK.detail}"></i>细节</div><div class="grid">${list.map(card).join('')}</div>`;
+pages.forEach((list, i) => screenshot(kl(list), file('keylines', i), { width: 1222, height: 60 + Math.ceil(list.length / 8) * 170, scale: 1 }));
+console.log(`${pages.length > 1 ? `sheet-1..${pages.length}.png, keylines-1..${pages.length}.png` : 'sheet.png, keylines.png'}: ${names.length} icons`);

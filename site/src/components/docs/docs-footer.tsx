@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { RiGithubLine, RiTwitterXLine } from "@remixicon/react";
+import { GithubIcon, XBrandIcon } from "@/components/kit/ui-icons";
 import { AuthorLink } from "@/components/author-link";
 import { useDocs } from "@/components/docs/docs-nav";
 import { FeedbackLink } from "@/components/feedback-link";
@@ -32,8 +32,8 @@ export function DocsFooter() {
       <aside className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-card border px-5 py-4">
         <p className="text-body">{tr("Have a question or a suggestion?", "使用中有问题或建议？")}</p>
         <div className="flex flex-wrap gap-2">
-          <FeedbackLink className={action}><RiGithubLine data-icon="inline-start" />{tr("Open an issue", "提交 Issue")}</FeedbackLink>
-          <AuthorLink place="docs_footer" className={action}><RiTwitterXLine data-icon="inline-start" />{tr("Message on X", "在 X 上联系")}</AuthorLink>
+          <FeedbackLink className={action}><GithubIcon data-icon="inline-start" />{tr("Open an issue", "提交 Issue")}</FeedbackLink>
+          <AuthorLink place="docs_footer" className={action}><XBrandIcon data-icon="inline-start" />{tr("Message on X", "在 X 上联系")}</AuthorLink>
         </div>
       </aside>
       <nav aria-label={tr("Previous and next pages", "上一页和下一页")} className="grid grid-cols-2 gap-3 pt-3">

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { RiFeedbackLine, RiGithubLine, RiLinksLine, RiMoreFill, RiTwitterXLine, RiUploadLine } from "@remixicon/react";
+import { GithubIcon, MessageIcon, MoreIcon, UploadIcon, Link2Icon, XBrandIcon } from "@/components/kit/ui-icons";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { track } from "@/lib/analytics";
@@ -23,24 +23,24 @@ export function HeaderMenu({ className }: { className?: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline" size="icon" aria-label={tr("More links", "更多链接")} className={className} />}>
-        <RiMoreFill className="size-[18px] text-muted-foreground" />
+        <MoreIcon className="size-[18px] text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={10} className="w-52 p-1.5">
         <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/icons/submit/")} />}>
-          <RiUploadLine />{tr("Submit an icon", "提交图标")}
+          <UploadIcon />{tr("Submit an icon", "提交图标")}
         </DropdownMenuItem>
         <DropdownMenuItem className={BAR_LG} render={<Link href={loc("/links/")} />}>
-          <RiLinksLine />{tr("Partners", "合作伙伴")}
+          <Link2Icon />{tr("Partners", "合作伙伴")}
         </DropdownMenuItem>
         <DropdownMenuSeparator className="lg:hidden" />
         <DropdownMenuItem className={BAR_LG} render={<a href={feedbackUrl(absolute(path))} target="_blank" rel="noreferrer" />} onClick={() => track("feedback_open")}>
-          <RiFeedbackLine />{tr("Feedback", "反馈")}
+          <MessageIcon />{tr("Feedback", "反馈")}
         </DropdownMenuItem>
         <DropdownMenuItem className={BAR_LG} render={<a href={REPO} target="_blank" rel="noreferrer" />}>
-          <RiGithubLine />GitHub
+          <GithubIcon />GitHub
         </DropdownMenuItem>
         <DropdownMenuItem className={BAR_LG} render={<a href={AUTHOR.x} target="_blank" rel="noreferrer" />} onClick={() => track("author_x_open", { place: "header_menu" })}>
-          <RiTwitterXLine />{tr("{name} on X", "{name} 的 X 主页", { name: AUTHOR.name })}
+          <XBrandIcon />{tr("{name} on X", "{name} 的 X 主页", { name: AUTHOR.name })}
         </DropdownMenuItem>
         <DropdownMenuSeparator className="lg:hidden" />
         <ThemeMenuItem className={BAR_LG} />

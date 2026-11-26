@@ -35,7 +35,7 @@ export interface KubaiSvgOptions {
   variant?: KubaiVariant | KubaiLineVariant;
   /** Line icons only: the stroke width, any width above 0. Default 2. */
   strokeWidth?: number;
-  /** Ink of the corner badge: any CSS colour, or 'semantic'. Default: black and white. */
+  /** Ink of the badge, in every style: any CSS colour, or 'semantic'. Default: black and white on layered icons, the icon's colour on two-tone and line icons. */
   badgeColor?: string;
   /** Accessible name. Without it the icon is aria-hidden. */
   title?: string;
