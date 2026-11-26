@@ -80,7 +80,7 @@
  "Hex color": "Цвет в hex",
  "Home": "Главная",
  "Home & Life": "Дом и быт",
- "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.": "Наведите курсор или коснитесь любой иконки, чтобы увидеть анимацию. Анимированные иконки с открытым кодом для React, Vue и веба.",
+ "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.": "Наведите курсор или коснитесь любой иконки, чтобы увидеть анимацию. Анимированные иконки с открытым кодом для React, Vue и чистого JavaScript.",
  "Hover or tap to play": "Наведите или коснитесь",
  "Icon categories": "Категории иконок",
  "Icon size": "Размер иконки",
@@ -126,7 +126,7 @@
  "Off": "Перечёркнуто",
  "Open an issue": "Создать issue",
  "Open this link on another device to add these icons there": "Откройте эту ссылку на другом устройстве, чтобы добавить эти иконки",
- "Open-source animated icons for React, Vue and the web.": "Анимированные иконки с открытым кодом для React, Vue и веба.",
+ "Open-source animated icons for React, Vue and plain JavaScript.": "Анимированные иконки с открытым кодом для React, Vue и чистого JavaScript.",
  "Open-source layered icons with hover motion for React, Vue, web components and static SVG. Folders open, bells ring and locks unlock.": "Многослойные иконки с открытым кодом и анимацией при наведении для React, Vue, веб-компонентов и статичного SVG. Папки открываются, колокольчики звенят, замки отпираются.",
  "Packages": "Пакеты",
  "Page not found.": "Страница не найдена.",
@@ -214,8 +214,8 @@
  "{count} icons": "Иконок: {count}",
  "{count} imported": "Импортировано: {count}",
  "{count} imported, {size} KB gzipped": "Импортировано: {count}, {size} КБ в gzip",
- "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "Иконок с открытым кодом: {count}. Для React, Vue и веба, у каждой своя анимация при наведении, есть и статичный SVG.",
- "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "Категория «{name}»: {count} иконок с открытым кодом для React, Vue и веба, у каждой своя анимация при наведении, есть и статичный SVG.",
+ "{count} open-source animated icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "Иконок с открытым кодом: {count}. Для React, Vue и чистого JavaScript, у каждой своя анимация при наведении, есть и статичный SVG.",
+ "{count} open-source animated {lower} icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "Категория «{name}»: {count} иконок с открытым кодом для React, Vue и чистого JavaScript, у каждой своя анимация при наведении, есть и статичный SVG.",
  "{count} saved": "Сохранено: {count}",
  "{count} stars on GitHub": "Звёзд на GitHub: {count}",
  "{items}, kept in this browser.": "{items}. Хранится в этом браузере.",
@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "Работа в дизайнерских инструментах",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} downloads": "{count} загрузок",
+ "{count} in the last 7 days": "{count} за последние 7 дней"
 }

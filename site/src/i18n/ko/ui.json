@@ -80,7 +80,7 @@
  "Hex color": "16진수 색상",
  "Home": "홈",
  "Home & Life": "집·생활",
- "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.": "아이콘에 마우스를 올리거나 탭해 움직임을 확인해 보세요. React, Vue 및 웹을 위한 오픈소스 애니메이션 아이콘입니다.",
+ "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.": "아이콘에 마우스를 올리거나 탭해 움직임을 확인해 보세요. React, Vue 및 순수 JavaScript를 위한 오픈소스 애니메이션 아이콘입니다.",
  "Hover or tap to play": "마우스를 올리거나 탭하여 재생",
  "Icon categories": "아이콘 카테고리",
  "Icon size": "크기",
@@ -126,7 +126,7 @@
  "Off": "해제",
  "Open an issue": "이슈 등록",
  "Open this link on another device to add these icons there": "다른 기기에서 이 링크를 열면 아이콘이 추가됩니다",
- "Open-source animated icons for React, Vue and the web.": "React, Vue 및 웹을 위한 오픈소스 애니메이션 아이콘입니다.",
+ "Open-source animated icons for React, Vue and plain JavaScript.": "React, Vue 및 순수 JavaScript를 위한 오픈소스 애니메이션 아이콘입니다.",
  "Open-source layered icons with hover motion for React, Vue, web components and static SVG. Folders open, bells ring and locks unlock.": "React, Vue, 웹 컴포넌트, 정적 SVG에서 쓸 수 있는 오픈소스 레이어드 아이콘으로, 마우스를 올리면 움직입니다. 폴더가 열리고, 종이 울리고, 자물쇠가 풀립니다.",
  "Packages": "패키지",
  "Page not found.": "페이지를 찾을 수 없습니다",
@@ -214,8 +214,8 @@
  "{count} icons": "아이콘 {count}개",
  "{count} imported": "{count}개 가져옴",
  "{count} imported, {size} KB gzipped": "{count}개 가져옴, gzip {size}KB",
- "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "오픈소스 애니메이션 아이콘 {count}개. React, Vue, 웹 컴포넌트와 정적 SVG로 제공하며, 모든 아이콘에 고유한 호버 모션이 있습니다.",
- "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "{name} 카테고리의 오픈소스 애니메이션 아이콘 {count}개. React, Vue, 웹 컴포넌트와 정적 SVG로 제공하며, 모든 아이콘에 고유한 호버 모션이 있습니다.",
+ "{count} open-source animated icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "오픈소스 애니메이션 아이콘 {count}개. React, Vue, 순수 JavaScript, 웹 컴포넌트와 정적 SVG로 제공하며, 모든 아이콘에 고유한 호버 모션이 있습니다.",
+ "{count} open-source animated {lower} icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "{name} 카테고리의 오픈소스 애니메이션 아이콘 {count}개. React, Vue, 순수 JavaScript, 웹 컴포넌트와 정적 SVG로 제공하며, 모든 아이콘에 고유한 호버 모션이 있습니다.",
  "{count} saved": "{count}개 저장됨",
  "{count} stars on GitHub": "GitHub 스타 수: {count}",
  "{items}, kept in this browser.": "{items}: 이 브라우저에 저장됩니다",
@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "디자인 도구에서 사용",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} downloads": "다운로드 {count}회",
+ "{count} in the last 7 days": "최근 7일 {count}회"
 }

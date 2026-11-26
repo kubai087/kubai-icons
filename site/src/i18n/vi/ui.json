@@ -80,7 +80,7 @@
  "Hex color": "Màu hex",
  "Home": "Trang chủ",
  "Home & Life": "Nhà cửa và đời sống",
- "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.": "Rê chuột hoặc chạm vào bất kỳ biểu tượng nào để xem chuyển động. Biểu tượng động mã nguồn mở cho React, Vue và web.",
+ "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.": "Rê chuột hoặc chạm vào bất kỳ biểu tượng nào để xem chuyển động. Biểu tượng động mã nguồn mở cho React, Vue và JavaScript thuần.",
  "Hover or tap to play": "Rê chuột hoặc chạm để phát",
  "Icon categories": "Danh mục biểu tượng",
  "Icon size": "Kích thước",
@@ -126,7 +126,7 @@
  "Off": "Tắt",
  "Open an issue": "Tạo issue",
  "Open this link on another device to add these icons there": "Mở liên kết này trên thiết bị khác để thêm các biểu tượng này vào đó",
- "Open-source animated icons for React, Vue and the web.": "Biểu tượng động mã nguồn mở cho React, Vue và web.",
+ "Open-source animated icons for React, Vue and plain JavaScript.": "Biểu tượng động mã nguồn mở cho React, Vue và JavaScript thuần.",
  "Open-source layered icons with hover motion for React, Vue, web components and static SVG. Folders open, bells ring and locks unlock.": "Biểu tượng nhiều lớp mã nguồn mở có chuyển động khi rê chuột, dùng cho React, Vue, web component và SVG tĩnh. Thư mục mở, chuông reo, khóa mở.",
  "Packages": "Gói",
  "Page not found.": "Không tìm thấy trang",
@@ -214,8 +214,8 @@
  "{count} icons": "{count} biểu tượng",
  "{count} imported": "Đã nhập {count}",
  "{count} imported, {size} KB gzipped": "Đã nhập {count}, {size} KB sau gzip",
- "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "{count} biểu tượng động mã nguồn mở cho React, Vue và web, mỗi biểu tượng có chuyển động riêng khi rê chuột và có sẵn dưới dạng SVG tĩnh.",
- "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "{count} biểu tượng động mã nguồn mở thuộc danh mục “{name}” cho React, Vue và web, mỗi biểu tượng có chuyển động riêng khi rê chuột và có sẵn dưới dạng SVG tĩnh.",
+ "{count} open-source animated icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "{count} biểu tượng động mã nguồn mở cho React, Vue và JavaScript thuần, mỗi biểu tượng có chuyển động riêng khi rê chuột và có sẵn dưới dạng SVG tĩnh.",
+ "{count} open-source animated {lower} icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "{count} biểu tượng động mã nguồn mở thuộc danh mục “{name}” cho React, Vue và JavaScript thuần, mỗi biểu tượng có chuyển động riêng khi rê chuột và có sẵn dưới dạng SVG tĩnh.",
  "{count} saved": "Đã lưu {count}",
  "{count} stars on GitHub": "Số sao trên GitHub: {count}",
  "{items}, kept in this browser.": "{items}, lưu trong trình duyệt này",
@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "Dùng trong công cụ thiết kế",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} downloads": "{count} lượt tải",
+ "{count} in the last 7 days": "{count} trong 7 ngày qua"
 }

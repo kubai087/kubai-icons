@@ -10,7 +10,7 @@ export const HOME_DESCRIPTION = msg("Open-source layered icons with hover motion
 /** The full address of a page, given its path with the trailing slash. */
 export const absolute = (path: string) => `${SITE_URL}${path}`;
 
-const IMAGE = { url: absolute("/assets/og.png"), width: 1200, height: 630, alt: "Kubai Icons: animated open-source icons for React, Vue and the web" };
+const IMAGE = { url: absolute("/assets/og.png"), width: 1200, height: 630, alt: "Kubai Icons: animated open-source icons for React, Vue and plain JavaScript" };
 
 /** Title, description, canonical address and social cards for one page. */
 export function pageMeta({ title, description, path, fullTitle }: { title?: string; description: string; path: string; fullTitle?: string }): Metadata {

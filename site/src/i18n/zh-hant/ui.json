@@ -80,7 +80,7 @@
  "Hex color": "十六進位色碼",
  "Home": "首頁",
  "Home & Life": "居家生活",
- "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.": "開源圖示庫，每個圖示都有專屬動態",
+ "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.": "開源圖示庫，每個圖示都有專屬動態",
  "Hover or tap to play": "滑過或點選即可播放",
  "Icon categories": "圖示分類",
  "Icon size": "尺寸",
@@ -126,7 +126,7 @@
  "Off": "關閉",
  "Open an issue": "提交 Issue",
  "Open this link on another device to add these icons there": "在其他裝置上開啟此連結，即可加入這些圖示",
- "Open-source animated icons for React, Vue and the web.": "開源圖示庫，每個圖示都有專屬動態",
+ "Open-source animated icons for React, Vue and plain JavaScript.": "開源圖示庫，每個圖示都有專屬動態",
  "Open-source layered icons with hover motion for React, Vue, web components and static SVG. Folders open, bells ring and locks unlock.": "適用於 React、Vue、Web Component 和靜態 SVG 的開源分層圖示，懸停時有動態效果。資料夾開啟、鈴鐺響起、鎖頭解開。",
  "Packages": "套件",
  "Page not found.": "找不到頁面",
@@ -214,8 +214,8 @@
  "{count} icons": "{count} 個圖示",
  "{count} imported": "已匯入 {count} 個",
  "{count} imported, {size} KB gzipped": "已匯入 {count} 個，gzip 後 {size} KB",
- "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "共 {count} 個開源圖示，提供 React、Vue 元件、Web Component 和靜態 SVG，每個圖示都有各自的懸停動態",
- "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "「{name}」分類共有 {count} 個開源圖示，提供 React、Vue 元件、Web Component 和靜態 SVG，每個圖示都有各自的懸停動態",
+ "{count} open-source animated icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "共 {count} 個開源圖示，提供 React、Vue 元件、Web Component 和靜態 SVG，每個圖示都有各自的懸停動態",
+ "{count} open-source animated {lower} icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "「{name}」分類共有 {count} 個開源圖示，提供 React、Vue 元件、Web Component 和靜態 SVG，每個圖示都有各自的懸停動態",
  "{count} saved": "已收藏 {count} 個",
  "{count} stars on GitHub": "GitHub 星號數：{count}",
  "{items}, kept in this browser.": "{items}，儲存在此瀏覽器中",
@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "在設計工具中使用",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} downloads": "累計下載 {count} 次",
+ "{count} in the last 7 days": "近 7 天 {count} 次"
 }

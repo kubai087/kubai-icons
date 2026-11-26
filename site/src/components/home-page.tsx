@@ -8,6 +8,7 @@ import { localize, pick, type Locale } from "@/lib/i18n";
 import { AUTHOR, authorName, MODULE_DEMO, REPO } from "@/lib/site";
 import { buttonVariants } from "@/components/ui/button";
 import { InstallTabs } from "@/components/install-tabs";
+import { NpmDownloads } from "@/components/npm-downloads";
 import { AgentGuide } from "@/components/agent-guide";
 import { Container } from "@/components/kit/layout";
 import { HeroWall } from "@/components/hero-wall";
@@ -44,7 +45,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             <div className="rise-in"><HeroBadge count={iconCount() + duotoneCount() + lineCount()} /></div>
             <HeroHeadline className="rise-in font-heading text-display font-semibold [--i:1]" />
             <p className="rise-in max-w-xl text-lead text-muted-foreground text-pretty [--i:2]">
-              {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.", "开源图标库，每个图标都有专属动效")}
+              {pick(locale, "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.", "开源图标库，每个图标都有专属动效")}
             </p>
             <p className="rise-in flex items-center gap-1.5 text-control text-muted-foreground [--i:2]">
               {pick(locale, "Designed by", "设计师")}
@@ -61,7 +62,10 @@ export function HomePage({ locale }: { locale: Locale }) {
             <AgentGuide />
             <Link href={localize("/docs/", locale)} className={buttonVariants({ size: "xl", variant: "ghost", className: "px-3 text-muted-foreground max-sm:hidden" })}>{pick(locale, "Documentation", "查看文档")}</Link>
           </div>
-          <div className="rise-in [--i:4]"><InstallTabs /></div>
+          <div className="rise-in space-y-2.5 [--i:4]">
+            <InstallTabs />
+            <NpmDownloads className="text-control" />
+          </div>
           <div className="rise-in flex flex-col gap-1 text-control [--i:5]">
             <span className="text-caption font-medium text-muted-foreground">{pick(locale, "Sponsors", "赞助")}</span>
             <SponsorSlot />

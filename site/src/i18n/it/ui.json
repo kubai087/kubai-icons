@@ -80,7 +80,7 @@
  "Hex color": "Colore esadecimale",
  "Home": "Home",
  "Home & Life": "Casa e vita quotidiana",
- "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and the web.": "Passa il mouse o tocca un'icona per vederla muoversi. Icone animate open source per React, Vue e il web.",
+ "Hover or tap any icon to see it move. Open-source animated icons for React, Vue and plain JavaScript.": "Passa il mouse o tocca un'icona per vederla muoversi. Icone animate open source per React, Vue e JavaScript puro.",
  "Hover or tap to play": "Passa il mouse o tocca per riprodurre",
  "Icon categories": "Categorie di icone",
  "Icon size": "Dimensione",
@@ -126,7 +126,7 @@
  "Off": "Barrato",
  "Open an issue": "Apri una issue",
  "Open this link on another device to add these icons there": "Apri questo link su un altro dispositivo per aggiungervi queste icone",
- "Open-source animated icons for React, Vue and the web.": "Icone animate open source per React, Vue e il web",
+ "Open-source animated icons for React, Vue and plain JavaScript.": "Icone animate open source per React, Vue e JavaScript puro",
  "Open-source layered icons with hover motion for React, Vue, web components and static SVG. Folders open, bells ring and locks unlock.": "Icone a livelli open source con animazione al passaggio del mouse per React, Vue, web component e SVG statico. Le cartelle si aprono, i campanelli suonano e i lucchetti si sbloccano.",
  "Packages": "Pacchetti",
  "Page not found.": "Pagina non trovata",
@@ -214,8 +214,8 @@
  "{count} icons": "Icone: {count}",
  "{count} imported": "Importate: {count}",
  "{count} imported, {size} KB gzipped": "Importate: {count}, {size} KB con gzip",
- "{count} open-source animated icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "{count} icone animate open source per React, Vue e il web, ciascuna con la propria animazione al passaggio del mouse e disponibile come SVG statico.",
- "{count} open-source animated {lower} icons for React, Vue and the web, each with its own hover motion and available as static SVG.": "{count} icone animate open source della categoria «{name}» per React, Vue e il web, ciascuna con la propria animazione al passaggio del mouse e disponibile come SVG statico.",
+ "{count} open-source animated icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "{count} icone animate open source per React, Vue e JavaScript puro, ciascuna con la propria animazione al passaggio del mouse e disponibile come SVG statico.",
+ "{count} open-source animated {lower} icons for React, Vue and plain JavaScript, each with its own hover motion and available as static SVG.": "{count} icone animate open source della categoria «{name}» per React, Vue e JavaScript puro, ciascuna con la propria animazione al passaggio del mouse e disponibile come SVG statico.",
  "{count} saved": "Salvate: {count}",
  "{count} stars on GitHub": "Stelle su GitHub: {count}",
  "{items}, kept in this browser.": "Salvato in questo browser: {items}",
@@ -278,5 +278,7 @@
  "Tabler Icons": "Tabler Icons",
  "Tailwind CSS": "Tailwind CSS",
  "Use in design tools": "Usare negli strumenti di design",
- "shadcn/ui": "shadcn/ui"
+ "shadcn/ui": "shadcn/ui",
+ "{count} downloads": "{count} download",
+ "{count} in the last 7 days": "{count} negli ultimi 7 giorni"
 }

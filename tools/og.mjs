@@ -104,7 +104,7 @@ const page = (bundle) => `<!doctype html><meta charset="utf-8">
 <div class="copy">
   <div class="brand">${logo}<span>Kubai Icons</span></div>
   <h1>Every icon<br>knows its move</h1>
-  <p class="sub">${count} animated icons in 3 styles,<br>for React, Vue and the web.</p>
+  <p class="sub">${count} animated icons in 3 styles,<br>for React, Vue and plain JavaScript.</p>
 </div>
 <script>${bundle.replace(/<\/script/g, '<\\/script')}</script>`;
 
