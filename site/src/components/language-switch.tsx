@@ -6,6 +6,7 @@ import { startNavigation } from "@/components/nav-progress";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { languageOf, LANGUAGES, localeOf, localize } from "@/lib/i18n";
 import { asset } from "@/lib/site";
+import { useResetAcrossLg } from "@/lib/use-reset-across-lg";
 import { useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
@@ -63,8 +64,9 @@ export function LanguageSwitch({ className, iconOnly }: { className?: string; ic
   const { current, links } = useLanguages();
   const tr = useTr();
   const label = tr("Language", "语言");
+  const reset = useResetAcrossLg();
   return (
-    <DropdownMenu>
+    <DropdownMenu key={reset}>
       <DropdownMenuTrigger aria-label={label} title={label} className={className}>
         {iconOnly ? <LanguagesIcon className="size-4" /> : current}
       </DropdownMenuTrigger>

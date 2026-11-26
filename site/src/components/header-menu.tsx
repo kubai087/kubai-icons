@@ -12,6 +12,7 @@ import { absolute } from "@/lib/seo";
 import { AUTHOR, feedbackUrl, REPO } from "@/lib/site";
 import { LanguageItems, useLanguages } from "./language-switch";
 import { ThemeMenuItem } from "./theme-toggle";
+import { useResetAcrossLg } from "@/lib/use-reset-across-lg";
 import { useLocalize, useTr } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +29,10 @@ const header = () => document.querySelector("[data-site-header]");
  * row showing the current one, and open in place below it.
  */
 export function HeaderMenu({ className }: { className?: string }) {
+  return <HeaderMenuPanel key={useResetAcrossLg()} className={className} />;
+}
+
+function HeaderMenuPanel({ className }: { className?: string }) {
   const path = usePathname() ?? "/";
   const tr = useTr();
   const loc = useLocalize();
