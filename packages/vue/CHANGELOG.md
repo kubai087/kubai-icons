@@ -1,5 +1,12 @@
 # kubai-icons-vue
 
+## 0.16.1
+
+### Patch Changes
+
+- Updated dependencies:
+  - kubai-icons@0.16.1
+
 ## 0.16.0
 
 ### Minor Changes

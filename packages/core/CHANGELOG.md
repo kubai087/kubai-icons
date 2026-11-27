@@ -1,5 +1,11 @@
 # kubai-icons
 
+## 0.16.1
+
+### Patch Changes
+
+- Fix rotation center offset for `clipboard-plus` and `clipboard-x` in the line `fill` variant by computing geometric centers from masked path data. ([#154](https://github.com/kubai087/kubai-icons/pull/154), thanks [@douxc](https://github.com/douxc))
+
 ## 0.16.0
 
 ### Minor Changes
