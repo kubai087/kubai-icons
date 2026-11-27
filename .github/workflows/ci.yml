@@ -62,44 +62,71 @@ jobs:
           path: check-out/
           if-no-files-found: ignore
 
-  # Which of the skill's self-checks a pull request needs: the gallery (src/, scripts/,
-  # index.html), the two-tone style (styles/duotone/) or the line style (styles/line/). A change
-  # to this workflow or to the dependencies runs all three, and so does every push to master.
+  # Which of the skill's self-checks a change needs: the gallery (src/, scripts/, index.html),
+  # the two-tone style (styles/duotone/) or the line style. A pull request is compared with its
+  # base, a push to master with the commit it follows, so a merge doesn't rerun what its pull
+  # request already checked. A change to this workflow or to the dependencies runs everything,
+  # and so does a push whose previous commit can't be fetched.
+  #
+  # The line check takes about 25 minutes for the whole set, so it runs in shards, and only as far
+  # as needed: a change to the line engine (anything in styles/line/ but the icon sets and the
+  # docs) checks every icon; a change to the icon sets checks the icons whose icons-line/*.json
+  # changed (tools/line-import.mjs keeps those in step, and npm test fails when they aren't).
   changes:
     name: What changed
     runs-on: ubuntu-latest
     outputs:
       gallery: ${{ steps.diff.outputs.gallery }}
       duotone: ${{ steps.diff.outputs.duotone }}
+      skill: ${{ steps.diff.outputs.skill }}
       line: ${{ steps.diff.outputs.line }}
-      any: ${{ steps.diff.outputs.any }}
+      line_shards: ${{ steps.diff.outputs.line_shards }}
+      line_names: ${{ steps.diff.outputs.line_names }}
     steps:
       - uses: actions/checkout@v7
       - id: diff
         env:
           EVENT: ${{ github.event_name }}
           BASE: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+          SHARDS: 6
         run: |
-          if [ "$EVENT" != pull_request ]; then
-            printf '%s\n' gallery=true duotone=true line=true any=true >> "$GITHUB_OUTPUT"
+          out() { printf '%s\n' "$@" | tee -a "$GITHUB_OUTPUT"; }
+          everything() {
+            out gallery=true duotone=true skill=true line=all line_names= \
+              "line_shards=[$(seq 0 $((SHARDS - 1)) | paste -sd, -)]"
             exit 0
+          }
+          if [ "$EVENT" = pull_request ]; then
+            git fetch --depth=1 origin "$BASE" || everything
+          elif [ "$EVENT" = push ] && [ -n "$BEFORE" ] && [ "$BEFORE" != 0000000000000000000000000000000000000000 ]; then
+            git fetch --depth=1 origin "$BEFORE" || everything
+          else
+            everything
           fi
-          git fetch --depth=1 origin "$BASE"
           files=$(git diff --name-only FETCH_HEAD)
           has() { if printf '%s\n' "$files" | grep -qE "$1"; then echo true; else echo false; fi; }
-          all=$(has '^(\.github/workflows/ci\.yml|package\.json|package-lock\.json)$')
-          gallery=$all; duotone=$all; line=$all
-          [ "$(has '^(src/|scripts/|index\.html$)')" = true ] && gallery=true
-          [ "$(has '^styles/duotone/')" = true ] && duotone=true
-          [ "$(has '^styles/line/')" = true ] && line=true
-          any=false
-          [ "$gallery$duotone$line" != falsefalsefalse ] && any=true
-          printf '%s\n' "gallery=$gallery" "duotone=$duotone" "line=$line" "any=$any" | tee -a "$GITHUB_OUTPUT"
+          [ "$(has '^(\.github/workflows/ci\.yml|package\.json|package-lock\.json)$')" = true ] && everything
+          gallery=$(has '^(src/|scripts/|index\.html$)')
+          duotone=$(has '^styles/duotone/')
+          skill=false
+          [ "$gallery$duotone" != falsefalse ] && skill=true
+          # the line engine: styles/line/ apart from the icon sets and the Markdown docs
+          engine=$(printf '%s\n' "$files" | grep -E '^styles/line/' | grep -vE '^styles/line/(set/|.*\.md$)' || true)
+          names=$(git diff --name-only --diff-filter=d FETCH_HEAD -- icons-line | sed -n 's#^icons-line/\([a-z0-9-]*\)\.json$#\1#p' | paste -sd, -)
+          if [ -n "$engine" ]; then
+            out line=all line_names= "line_shards=[$(seq 0 $((SHARDS - 1)) | paste -sd, -)]"
+          elif [ -n "$names" ]; then
+            out line=some "line_names=$names" 'line_shards=[0]'
+          else
+            out line=none line_names= 'line_shards=[]'
+          fi
+          out "gallery=$gallery" "duotone=$duotone" "skill=$skill"
 
   skill:
     name: Skill self-check
     needs: changes
-    if: needs.changes.outputs.any == 'true'
+    if: needs.changes.outputs.skill == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -107,7 +134,6 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      # The line style's check bundles its preview page with esbuild.
       - run: npm ci
       - name: Allow Chrome's sandbox
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
@@ -123,12 +149,6 @@ jobs:
       - name: Export the two-tone solid examples as SVG
         if: needs.changes.outputs.duotone == 'true'
         run: node styles/duotone/export.mjs
-      - name: Self-check the line examples at every checked stroke width
-        if: needs.changes.outputs.line == 'true'
-        run: node styles/line/check.mjs
-      - name: Export the line examples as SVG
-        if: needs.changes.outputs.line == 'true'
-        run: node styles/line/export.mjs
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -136,19 +156,63 @@ jobs:
           path: |
             check-out/
             styles/duotone/check-out/
-            styles/line/check-out/
+
+  # The line check at every checked stroke width, one shard of the icons per job: every icon is
+  # measured on its own, so the shards together find what one run over the whole set finds.
+  line:
+    name: Line self-check ${{ matrix.shard }}
+    needs: changes
+    if: needs.changes.outputs.line != 'none'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.changes.outputs.line_shards) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      # The line style's check bundles its preview page with esbuild.
+      - run: npm ci
+      - name: Allow Chrome's sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Self-check this shard of the line icons
+        env:
+          MODE: ${{ needs.changes.outputs.line }}
+          NAMES: ${{ needs.changes.outputs.line_names }}
+          SHARD: ${{ matrix.shard }}
+          SHARDS: ${{ strategy.job-total }}
+        run: |
+          if [ "$MODE" = all ]; then
+            NAMES=$(node --input-type=module -e "
+              const { ALL } = await import('./styles/line/icons.mjs');
+              console.log(Object.keys(ALL).filter((_, i) => i % $SHARDS === $SHARD).join(','));")
+          fi
+          echo "Checking $(echo "$NAMES" | tr ',' '\n' | wc -l) icons"
+          node styles/line/check.mjs --only "$NAMES" --out "styles/line/check-out/shard-$SHARD"
+      - name: Export the line examples as SVG
+        if: matrix.shard == 0
+        run: node styles/line/export.mjs
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: line-check-out-${{ matrix.shard }}
+          path: styles/line/check-out/
 
   # The status check required by the branch rule. A job skipped after a failed dependency
-  # counts as passing, so this one always runs and reads the results itself. The skill job may
-  # be skipped only when no part of the skill changed.
+  # counts as passing, so this one always runs and reads the results itself. The skill and line
+  # jobs may be skipped only when the parts they check didn't change.
   check:
     name: check
-    needs: [library, changes, skill]
+    needs: [library, changes, skill, line]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Require the library and skill jobs to pass
+      - name: Require the library, skill and line jobs to pass
         run: |
           test "${{ needs.library.result }}" = success
           test "${{ needs.changes.result }}" = success
-          if [ "${{ needs.changes.outputs.any }}" = true ]; then test "${{ needs.skill.result }}" = success; fi
+          if [ "${{ needs.changes.outputs.skill }}" = true ]; then test "${{ needs.skill.result }}" = success; fi
+          if [ "${{ needs.changes.outputs.line }}" != none ]; then test "${{ needs.line.result }}" = success; fi
