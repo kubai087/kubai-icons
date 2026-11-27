@@ -269,11 +269,50 @@ export function attach(svg, fx) {
   let reduced = false;
   try { reduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* not a browser */ }
   const find = (name) => [...svg.querySelectorAll(`[data-l="${name}"]`)];
-  // The centre of a part, for effects that turn it about itself (a badge).
+  const pathsOf = (el) => (el.tagName === 'path' ? [el] : [...el.querySelectorAll('path')]);
+  const pathCenter = (el) => {
+    const ARGS = { m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0 };
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    const add = (px, py) => {
+      if (px < x0) x0 = px; if (px > x1) x1 = px;
+      if (py < y0) y0 = py; if (py > y1) y1 = py;
+    };
+    for (const p of pathsOf(el)) {
+      const tok = (p.getAttribute('d') || '').match(/[a-z]|-?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/gi) || [];
+      let cmd = '', i = 0, x = 0, y = 0, sx = 0, sy = 0;
+      while (i < tok.length) {
+        if (/[a-z]/i.test(tok[i])) { cmd = tok[i++]; if (cmd.toLowerCase() === 'z') { x = sx; y = sy; continue; } }
+        const c = cmd.toLowerCase(), rel = cmd !== cmd.toUpperCase(), n = ARGS[c];
+        if (!n) break;
+        const a = tok.slice(i, i + n).map(Number);
+        i += n;
+        if (c === 'h') { x = rel ? x + a[0] : a[0]; add(x, y); }
+        else if (c === 'v') { y = rel ? y + a[0] : a[0]; add(x, y); }
+        else if (c === 'a') { x = rel ? x + a[5] : a[5]; y = rel ? y + a[6] : a[6]; add(x, y); }
+        else {
+          for (let j = 0; j < n; j += 2) {
+            const px = rel ? x + a[j] : a[j], py = rel ? y + a[j + 1] : a[j + 1];
+            add(px, py);
+            if (j === n - 2) { x = px; y = py; }
+          }
+          if (c === 'm') { sx = x; sy = y; cmd = rel ? 'l' : 'L'; }
+        }
+      }
+    }
+    return x0 <= x1 ? [f((x0 + x1) / 2), f((y0 + y1) / 2)] : [12, 12];
+  };
+  // The centre of a part, for effects that turn it about itself (a badge or masked mark).
   const centre = (name) => {
-    const el = find(name).find((e) => !e.closest('mask'));
-    if (!el || !el.getBBox) return [12, 12];
-    const b = el.getBBox(); return [b.x + b.width / 2, b.y + b.height / 2];
+    const all = find(name), el = all.find((e) => !e.closest('mask'));
+    if (el && el.getBBox) {
+      try {
+        const b = el.getBBox();
+        if (b.width || b.height) return [b.x + b.width / 2, b.y + b.height / 2];
+      } catch { /* detached or hidden svg */ }
+    }
+    const maskEl = all.find((e) => e.closest('mask'));
+    const target = el || maskEl;
+    return target ? pathCenter(target) : [12, 12];
   };
   const parts = list.map((given) => {
     // spec.fill: settings that differ in the fill variant (a knock-out must keep its rim)
@@ -289,7 +328,6 @@ export function attach(svg, fx) {
   const span = Math.max(...parts.map((p) => p.len));
   // Reshaped paths keep their rest data here; one clip, made on first use, serves every part.
   const rest = new Map();
-  const pathsOf = (el) => (el.tagName === 'path' ? [el] : [...el.querySelectorAll('path')]);
   let clipRect = null;
   const clipTo = (x, y) => {
     if (!clipRect) {
