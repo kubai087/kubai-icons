@@ -568,9 +568,9 @@ Object.assign(more, {
     light: [],
     fx: [{ t: 'keys', on: ['front', 'fold'], x: [1], y: [1] }, { t: 'keys', on: ['back'], x: [-0.9], y: [-0.9] }]
   },
-  'clipboard-x': clipMark('清单未通过', '叉号', (g, x, y, k) => { const a = 2.6 * k; return g.seg(x - a, y - a, x + a, y + a) + g.seg(x + a, y - a, x - a, y + a); }, 2.6, 14.5, { t: 'rotate', on: ['mark'], deg: 90, o: [12, 14.5] }),
+  'clipboard-x': clipMark('清单未通过', '叉号', (g, x, y, k) => { const a = 2.6 * k; return g.seg(x - a, y - a, x + a, y + a) + g.seg(x + a, y - a, x - a, y + a); }, 2.6, 14.5, { t: 'rotate', on: ['mark'], deg: 90, oBadge: true }),
   'clipboard-minus': clipMark('移除记录', '减号', (g, x, y, k) => g.seg(x - 3.2 * k, y, x + 3.2 * k, y), 0, 14, { t: 'keys', on: ['mark'], o: [12, 14], sx: [0.5], ms: 260 }),
-  'clipboard-plus': clipMark('添加记录', '加号', (g, x, y, k) => { const a = 3.2 * k; return g.seg(x - a, y, x + a, y) + g.seg(x, y - a, x, y + a); }, 3.2, 14, { t: 'rotate', on: ['mark'], deg: 90, o: [12, 14] })
+  'clipboard-plus': clipMark('添加记录', '加号', (g, x, y, k) => { const a = 3.2 * k; return g.seg(x - a, y, x + a, y) + g.seg(x, y - a, x, y + a); }, 3.2, 14, { t: 'rotate', on: ['mark'], deg: 90, oBadge: true })
 });
 
 // The folder (folder in icons.mjs): the outline with its tab, and the front line in the outline.

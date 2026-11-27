@@ -130,6 +130,31 @@ describe('kubai-icons/line', () => {
     }
   });
 
+  it('rotates masked fill marks about their actual centre across strokes', () => {
+    const cases = [
+      ['clipboard-plus', 'outline', 2, '12 14'],
+      ['clipboard-plus', 'fill', 1.5, '12 15.238'],
+      ['clipboard-plus', 'fill', 2, '12 15.758'],
+      ['clipboard-plus', 'fill', 2.5, '12 15.278'],
+      ['clipboard-x', 'outline', 2, '12 14.5'],
+      ['clipboard-x', 'fill', 1.5, '12 14.584'],
+      ['clipboard-x', 'fill', 2, '12 15.194'],
+      ['clipboard-x', 'fill', 2.5, '12 14.804']
+    ];
+    for (const [name, variant, s, origin] of cases) {
+      const d = def(name);
+      for (const attach of [pkgMotion.attach, skillMotion.attach]) {
+        const wrap = document.createElement('div');
+        wrap.innerHTML = `<svg data-variant="${variant}">${lineMarkup(d, { s, variant })}</svg>`;
+        const svg = wrap.firstElementChild;
+        const m = attach(svg, d.fx);
+        m.at(120);
+        const tf = svg.querySelector('[data-l="mark"]').getAttribute('transform');
+        expect(tf, `${name} ${variant} s=${s}`).toContain(`translate(${origin})`);
+      }
+    }
+  });
+
   it('loads icons by name', async () => {
     expect((await loadIcon('lock')).name).toBe('lock');
     await expect(loadIcon('nope')).rejects.toThrow();
