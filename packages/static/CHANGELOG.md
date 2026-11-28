@@ -1,5 +1,11 @@
 # kubai-icons-static
 
+## 0.17.0
+
+### Minor Changes
+
+- Add `svg-duotone-mono/`: the two-tone icons in `currentColor`, the light tone at 40% opacity, so they follow the colour of the text around them. Each light shape cuts its outline out of the shapes under it, so on white the files look the same as `svg-duotone/`. ([#157](https://github.com/kubai087/kubai-icons/pull/157))
+
 ## 0.16.1
 
 No changes in this release.
