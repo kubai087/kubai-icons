@@ -15,6 +15,7 @@ Each file includes a margin for the drop shadow, so a 28px image matches a live 
 - `svg/`: the default blue (#5393FF)
 - `svg-soft/`: the soft variant on blue-grey
 - `svg-duotone/`: the two-tone style
+- `svg-duotone-mono/`: the two-tone style in `currentColor`, the light tone at 40% opacity; on white it looks the same as `svg-duotone/`
 - `svg-line/`: the line style, 2px strokes in `currentColor`
 - `icons.json`, `duotone.json`, `line.json`, `categories.json`: metadata
 

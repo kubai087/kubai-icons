@@ -17,7 +17,8 @@ const LIGHT = 'var(--kd-b,color-mix(in srgb,currentColor 40%,#fff))';
  * gap?, part?, clip?, cut?, n }; ids carry the __K__ placeholder. Parts that only show on
  * hover start in their rest pose, so markup rendered on a server never flashes them. With
  * colors: { a, b } the paint is fixed and the parts that exist only for the motion are left out
- * (static files); otherwise the paint follows CSS.
+ * (static files); otherwise the paint follows CSS. colors.light, an opacity, is applied to the
+ * light-tone shapes, so both tones can be one colour told apart only by lightness.
  */
 export function duoMarkup(def, { colors } = {}) {
   const k = FIT[def.key] || 1, id = '__K__';
@@ -52,16 +53,21 @@ export function duoMarkup(def, { colors } = {}) {
       defs.push(`<mask id="${id}-g${i}" ${box}${tag(l, i, shape(l, '#000', l.gap * 2, true))}</mask>`);
       for (const p of pieces) if (p.part !== part) p.svg = `<g mask="url(#${id}-g${i})">${p.svg}</g>`;
     }
+    if (l.clip) defs.push(`<clipPath id="${id}-c${i}" clipPathUnits="userSpaceOnUse"><path d="${l.clip}"/></clipPath>`);
+    if (l.cut?.length) defs.push(`<mask id="${id}-x${i}" ${box}${l.cut.map((c) => shape(c, '#000')).join('')}</mask>`);
+    const trim = (svg) => {
+      if (l.clip) svg = `<g clip-path="url(#${id}-c${i})">${svg}</g>`;
+      return l.cut?.length ? `<g mask="url(#${id}-x${i})">${svg}</g>` : svg;
+    };
     let piece = shape(l, paint(l), 0, true);
-    if (l.clip) {
-      defs.push(`<clipPath id="${id}-c${i}" clipPathUnits="userSpaceOnUse"><path d="${l.clip}"/></clipPath>`);
-      piece = `<g clip-path="url(#${id}-c${i})">${piece}</g>`;
+    if (colors?.light !== undefined && l.tone === 'b') {
+      // A see-through light shape would let what is under it show through, so it first cuts
+      // its own outline out of everything drawn before it.
+      piece = piece.replace('<path ', `<path opacity="${colors.light}" `);
+      if (pieces.length) defs.push(`<mask id="${id}-o${i}" ${box}${trim(shape(l, '#000'))}</mask>`);
+      for (const p of pieces) p.svg = `<g mask="url(#${id}-o${i})">${p.svg}</g>`;
     }
-    if (l.cut?.length) {
-      defs.push(`<mask id="${id}-x${i}" ${box}${l.cut.map((c) => shape(c, '#000')).join('')}</mask>`);
-      piece = `<g mask="url(#${id}-x${i})">${piece}</g>`;
-    }
-    pieces.push({ part, svg: tag(l, i, piece) });
+    pieces.push({ part, svg: tag(l, i, trim(piece)) });
   });
   let out = `<g data-l="all"${rest('all')}>${pieces.map((p) => p.svg).join('')}</g>`;
   if (k !== 1) out = `<g transform="translate(8 8) scale(${n(k)}) translate(-8 -8)">${out}</g>`;

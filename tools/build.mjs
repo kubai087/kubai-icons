@@ -215,9 +215,13 @@ for (const fw of ['react', 'vue']) {
 // ---------- kubai-icons-static ----------
 if (targets.has('static')) {
   const pkg = path.join(root, 'packages/static');
-  for (const d of ['svg', 'svg-soft', 'svg-duotone', 'svg-line']) clean(path.join(pkg, d));
+  for (const d of ['svg', 'svg-soft', 'svg-duotone', 'svg-duotone-mono', 'svg-line']) clean(path.join(pkg, d));
+  const duoFile = (def, colors) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24" fill="none">${duoMarkup(def, { colors }).replace(/<g data-l="[^"]*">/g, '<g>').replace(/ pathLength="1"/g, '').replace(/__K__/g, 'd')}</svg>\n`;
   // Two-tone files in the default colours; the API recolours them (?color=).
-  for (const x of duo) write(path.join(pkg, 'svg-duotone', `${x.def.name}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24" fill="none">${duoMarkup(x.def, { colors: { a: '#5A76F2', b: '#BDC8FA' } }).replace(/<g data-l="[^"]*">/g, '<g>').replace(/ pathLength="1"/g, '').replace(/__K__/g, 'd')}</svg>\n`);
+  for (const x of duo) write(path.join(pkg, 'svg-duotone', `${x.def.name}.svg`), duoFile(x.def, { a: '#5A76F2', b: '#BDC8FA' }));
+  // The same in currentColor, the light tone at 40% opacity: one colour, set by the page, in
+  // two lightnesses. On white it matches the default file.
+  for (const x of duo) write(path.join(pkg, 'svg-duotone-mono', `${x.def.name}.svg`), duoFile(x.def, { a: 'currentColor', b: 'currentColor', light: 0.4 }));
   write(path.join(pkg, 'duotone.json'), JSON.stringify(duoMeta));
   // Line files: the outline variant at the regular stroke, in currentColor so they take the
   // colour of the text around them when inlined (the API recolours them too).
@@ -229,7 +233,7 @@ if (targets.has('static')) {
   }
   write(path.join(pkg, 'icons.json'), JSON.stringify(meta));
   write(path.join(pkg, 'categories.json'), JSON.stringify(publicCategories));
-  console.log(`kubai-icons-static → packages/static (svg/, svg-soft/, svg-duotone/, svg-line/)`);
+  console.log(`kubai-icons-static → packages/static (svg/, svg-soft/, svg-duotone/, svg-duotone-mono/, svg-line/)`);
 }
 
 // ---------- site data ----------
@@ -379,7 +383,7 @@ import { Folder, BellOff } from "kubai-icons-react/duotone";
 <Folder size={24} color="#5A76F2" />
 \`\`\`
 
-Also \`kubai-icons-vue/duotone\`, \`kubai-icons/duotone\`, \`<kubai-icon name="folder" icon-style="duotone">\` and \`kubai-icons-static/svg-duotone/<name>.svg\`. The light tone is the primary at 40% over white; set \`--kd-b\` for another. Two-tone names: ${duo.map((x) => x.def.name).join(', ')}.
+Also \`kubai-icons-vue/duotone\`, \`kubai-icons/duotone\`, \`<kubai-icon name="folder" icon-style="duotone">\` and \`kubai-icons-static/svg-duotone/<name>.svg\` (or \`svg-duotone-mono/\`, in \`currentColor\`). The light tone is the primary at 40% over white; set \`--kd-b\` for another. Two-tone names: ${duo.map((x) => x.def.name).join(', ')}.
 
 ## Line style
 
