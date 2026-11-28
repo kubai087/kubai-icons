@@ -8,6 +8,7 @@ packages/core/.gen/
 packages/static/svg/
 packages/static/svg-soft/
 packages/static/svg-duotone/
+packages/static/svg-duotone-mono/
 packages/static/duotone.json
 packages/static/svg-line/
 packages/static/line.json

@@ -130,4 +130,17 @@ describe('kubai-icons-static svg-duotone', () => {
     expect(bulbSvg).not.toContain('data-l');
     expect(bulbSvg).not.toContain('currentColor');
   });
+
+  it('has a currentColor copy with the light tone as opacity and no fixed colours', () => {
+    const dir = path.join(root, 'packages/static/svg-duotone-mono');
+    expect(fs.readdirSync(dir).length).toBe(sources.length);
+    for (const f of fs.readdirSync(dir)) {
+      const svg = fs.readFileSync(path.join(dir, f), 'utf8');
+      // Mask contents are black and white by definition; every painted colour is currentColor.
+      const painted = svg.replace(/<mask[\s\S]*?<\/mask>/g, '');
+      expect(painted.match(/(?:fill|stroke)="#[0-9A-Fa-f]+"/g), f).toBeNull();
+      expect(svg, f).not.toContain('data-l');
+    }
+    expect(fs.readFileSync(path.join(dir, 'lightbulb.svg'), 'utf8')).toContain('opacity="0.4"');
+  });
 });

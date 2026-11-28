@@ -3,11 +3,12 @@
   "version": "0.16.1",
   "description": "Kubai Icons as standalone SVG files, for <img>, design tools, native apps and CDNs.",
   "license": "MIT",
-  "files": ["svg", "svg-soft", "svg-duotone", "svg-line", "icons.json", "duotone.json", "line.json", "categories.json", "LICENSE", "README.md"],
+  "files": ["svg", "svg-soft", "svg-duotone", "svg-duotone-mono", "svg-line", "icons.json", "duotone.json", "line.json", "categories.json", "LICENSE", "README.md"],
   "exports": {
     "./svg/*": "./svg/*",
     "./svg-soft/*": "./svg-soft/*",
     "./svg-duotone/*": "./svg-duotone/*",
+    "./svg-duotone-mono/*": "./svg-duotone-mono/*",
     "./svg-line/*": "./svg-line/*",
     "./line.json": "./line.json",
     "./duotone.json": "./duotone.json",
